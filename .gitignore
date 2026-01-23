@@ -1,7 +1,27 @@
 # This .gitignore file should be placed at the root of your Unity project directory
-#
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
+
+##################################################################
+#                    SUNSET16 - Unity .gitignore                 #
+##################################################################
+# This file tells Git which files to IGNORE (not commit)
+# 
+# COMMITTED (in version control):
+#   - Assets/ (your game code, scenes, prefabs, sprites)
+#   - Packages/ (package dependencies list)
+#   - ProjectSettings/ (Unity project configuration)
 #
+# IGNORED (not in version control):
+#   - Library/ (Unity's cache - auto-generated)
+#   - Temp/ (temporary build files)
+#   - Logs/ (Unity logs)
+#   - UserSettings/ (your personal Unity preferences)
+#   - Build outputs (.exe, .apk, etc.)
+#
+# Last updated: 2026-01-22
+# Unity Version: 2022.3.12f1
+##################################################################
+
 .utmp/
 /[Ll]ibrary/
 /[Tt]emp/
@@ -97,3 +117,39 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# Additions for SUNSET16 by @azya404 on 2026-01-22
+
+##################################################################
+#                      Operating System Files
+##################################################################
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+##################################################################
+#                         IDE - VSCode
+##################################################################
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+##################################################################
+#                      SUNSET16 Custom
+##################################################################
+
+# Temporary test builds
+/TestBuilds/
