@@ -21,7 +21,7 @@ namespace SUNSET16.Core
             {
                 if (_applicationIsQuitting) 
                 {
-                    Debug.LogWarning($"[SINGELTON] this one '{typeof(T)}' is already/being destroyed"); //cant access a singletong if youre quiting the game bruh
+                    Debug.LogWarning($"[SINGLETON] this one '{typeof(T)}' is already/being destroyed"); //cant access a singletong if youre quiting the game bruh
                     return null;
                 }
                 
@@ -33,10 +33,12 @@ namespace SUNSET16.Core
 
                         if (_instance == null)
                         {
-                            Debug.LogError($"[SINGELTON] cant find '{typeof(T)}' anywhere in the (current?) scene");
+                            Debug.LogError($"[SINGLETON] cant find '{typeof(T)}' anywhere in the (current?) scene");
                         }
                     }
                     return _instance;
+                    /* Examples: DayManager.Instance.CurrentDay or like 
+                    GameManager.Instance.SomeMethod()*/ //note, havent implmented other files yte so these examples are just for explanation and not accurate as i may or may not forget to name it when i get to it
                 }
             }
         }
@@ -54,7 +56,7 @@ namespace SUNSET16.Core
 
             else if (_instance != this)//but if one alr exists then we dont need to make it again as 2 singletons shouldnt exist
             {
-                Debug.LogWarning($"[SINGELTON] you alr created '{typeof(T)}' before, gonna amongus vote this out");
+                Debug.LogWarning($"[SINGLETON] you alr created '{typeof(T)}' before, gonna amongus vote this out");
                 Destroy(gameObject);
             }
         }
