@@ -1,7 +1,7 @@
 /*
 this is the base class that all our managers will inherit from
-most importantly from the lab we saw, how only 1 instance of each manager should exist in the game at any pot*/
-
+most importantly from the lab we saw, how only 1 instance of each manager should exist in the game at any point in time
+*/
 using UnityEngine;
 
 namespace SUNSET16.Core
@@ -16,17 +16,47 @@ namespace SUNSET16.Core
         private static bool _applicationIsQuitting = false; //to prevent creating new instances when the application is quitting but i think also for can help prevent errors when we try to access a manager thats already been destroyed
 
         public static T Instance
-        {
+        { // this will help us to access any manager from any other script, and unity will do it for us (ill add examples right after this function)
             get
             {
-                //gotta add this after planning morre
-                return _instance;
+                if (_applicationIsQuitting) 
+                {
+                    Debug.LogWarning($"[SINGELTON] this one '{typeof(T)}' is already/being destroyed"); //cant access a singletong if youre quiting the game bruh
+                    return null;
+                }
+                
+                lock (_lock) // dont want duplicates of singletones cos that could be quite messy
+                {
+                    if (_instance == null)
+                    {
+                        _instance = FindObjectOfType<T>();
+
+                        if (_instance == null)
+                        {
+                            Debug.LogError($"[SINGELTON] cant find '{typeof(T)}' anywhere in the (current?) scene");
+                        }
+                    }
+                    return _instance;
+                }
             }
         }
 
-        protected virtual void Awake()
+        // child classes shoudl call base.Awake() 
+        //Awake() is called when the GameObject is createdbefore Start()
+        // what i have in mind is Awake -> OnEnable -> Start -> Update (repeating) -> OnDestroy
+        protected virtual void Awake() //virtual so child classes can override it if need be
         {
-            // ADD thiw as well
+            if (_instance == null) //if no insatcne exists of this manager (that is a singleton) then we create
+            {
+                _instance = this as T;
+                DontDestroyOnLoad(gameObject); //MAIN THING THAT ALLOWS OUR GAMEOBKECT TO PERSIST ACROSS SCENES
+            }
+
+            else if (_instance != this)//but if one alr exists then we dont need to make it again as 2 singletons shouldnt exist
+            {
+                Debug.LogWarning($"[SINGELTON] you alr created '{typeof(T)}' before, gonna amongus vote this out");
+                Destroy(gameObject);
+            }
         }
 
         //need to cleanup when application quits 
