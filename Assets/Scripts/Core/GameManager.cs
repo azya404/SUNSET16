@@ -5,7 +5,10 @@ namespace SUNSET16.Core
 {
     public class GameManager : Singleton<GameManager>
     {
-
+        public bool IsInitialized { get; private set; }
+        public event Action OnInitializationComplete;
+        public event Action OnApplicationPaused;
+        public event Action OnApplicationResumed;
         protected override void Awake()
         {
             base.Awake();
@@ -18,7 +21,74 @@ namespace SUNSET16.Core
 
         private void Initialize()
         {
-            //empty for now
+            Debug.Log("[GAMEMANAGER] ===== INITIALIZATION SEQUENCE START =====");
+            if (DayManager.Instance == null ||
+                PillStateManager.Instance == null ||
+                SettingsManager.Instance == null ||
+                SaveManager.Instance == null)
+            {
+                Debug.LogError("[GAMEMANAGER] CRITICAL: One or more managers missing from CoreScene!");
+                return;
+            }
+
+            Debug.Log("[GAMEMANAGER] Phase 1: Initializing state managers...");
+            DayManager.Instance.Initialize();
+            PillStateManager.Instance.Initialize();
+            SettingsManager.Instance.Initialize();
+            Debug.Log("[GAMEMANAGER] Phase 2: Initializing save system...");
+            SaveManager.Instance.Initialize();
+
+            if (SaveManager.Instance.SaveExists)
+            {
+                Debug.Log("[GAMEMANAGER] Loading saved game...");
+                SaveManager.Instance.LoadGame();
+            }
+
+            IsInitialized = true;
+            OnInitializationComplete?.Invoke();
+            Debug.Log("[GAMEMANAGER] ===== INITIALIZATION COMPLETE =====");
+        }
+
+        private void OnApplicationQuit()
+        {
+            if (IsInitialized)
+            {
+                Debug.Log("[GAMEMANAGER] Application quitting - auto-saving...");
+                SaveManager.Instance.SaveGame();
+            }
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (!IsInitialized)
+                return;
+
+            if (pauseStatus)
+            {
+                Debug.Log("[GAMEMANAGER] Application paused - auto-saving...");
+                SaveManager.Instance.SaveGame();
+                OnApplicationPaused?.Invoke();
+            }
+            else
+            {
+                Debug.Log("[GAMEMANAGER] Application resumed");
+                OnApplicationResumed?.Invoke();
+            }
+        }
+
+        public void QuitGame()
+        {
+            SaveManager.Instance.SaveGame();
+            #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                Application.Quit();
+            #endif
+        }
+
+        protected override void OnApplicationQuit()
+        {
+            base.OnApplicationQuit();
         }
     }
 }
