@@ -12,7 +12,6 @@ namespace SUNSET16.Core
 
             if (GameManager.Instance != null && GameManager.Instance.IsInitialized)
             {
-                
                 GUILayout.Label($"Day: {DayManager.Instance.CurrentDay}  |  " +
                                 $"Phase: {DayManager.Instance.CurrentPhase}  |  " +
                                 $"Game Over: {DayManager.Instance.IsGameOver}");
@@ -33,10 +32,11 @@ namespace SUNSET16.Core
                     PillChoice c = PillStateManager.Instance.GetPillChoice(d);
                     string label = c == PillChoice.Taken ? "P" :
                                    c == PillChoice.NotTaken ? "N" : "-";
-                    string forced = d <= 2 ? "*" : " "; 
+                    string forced = d <= 2 ? "*" : " ";
                     history += $"D{d}{forced}:{label}  ";
                 }
-                GUILayout.Label(history);
+                GUILayout.Label(history); 
+
                 GUILayout.Label($"Ending: {PillStateManager.Instance.DetermineEnding()}");
 
                 GUILayout.Space(10);
@@ -50,26 +50,37 @@ namespace SUNSET16.Core
                 GUI.enabled = true;
 
                 GUILayout.Space(5);
-
-                bool canChoose = !isForced
-                              && !PillStateManager.Instance.HasTakenPillToday()
+                bool canChoose = !PillStateManager.Instance.HasTakenPillToday()
                               && DayManager.Instance.CurrentPhase == DayPhase.Morning
                               && !DayManager.Instance.IsGameOver;
 
-                GUI.enabled = canChoose;
-                if (GUILayout.Button("TAKE Pill"))
-                {
-                    PillStateManager.Instance.TakePill(PillChoice.Taken);
-                }
-                if (GUILayout.Button("REFUSE Pill"))
-                {
-                    PillStateManager.Instance.TakePill(PillChoice.NotTaken);
-                }
-                GUI.enabled = true;
-
                 if (isForced)
                 {
-                    GUILayout.Label("(Day 1-2: choice is scripted)");
+                    PillChoice forced = PillStateManager.Instance.GetForcedChoice(currentDay);
+                    string buttonLabel = forced == PillChoice.Taken
+                        ? "TAKE Pill (scripted)"
+                        : "REFUSE Pill (scripted)";
+
+                    GUI.enabled = canChoose;
+                    if (GUILayout.Button(buttonLabel))
+                    {
+                        PillStateManager.Instance.TakePill(forced);
+                    }
+                    GUI.enabled = true;
+                    GUILayout.Label($"(Day {currentDay}: choice is scripted)");
+                }
+                else
+                {
+                    GUI.enabled = canChoose;
+                    if (GUILayout.Button("TAKE Pill"))
+                    {
+                        PillStateManager.Instance.TakePill(PillChoice.Taken);
+                    }
+                    if (GUILayout.Button("REFUSE Pill"))
+                    {
+                        PillStateManager.Instance.TakePill(PillChoice.NotTaken);
+                    }
+                    GUI.enabled = true;
                 }
 
                 GUILayout.Space(5);

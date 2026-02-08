@@ -80,7 +80,6 @@ namespace SUNSET16.Core
                 DayPhase phase = (DayPhase)phaseInt;
                 DayManager.Instance.SetDay(day);
                 DayManager.Instance.SetPhase(phase);
-
                 bool isGameOver = PlayerPrefs.GetInt("SUNSET16_IsGameOver", 0) == 1;
                 DayManager.Instance.SetGameOver(isGameOver);
 
@@ -93,8 +92,6 @@ namespace SUNSET16.Core
                         PillStateManager.Instance.SetPillChoice(i, choice);
                     }
                 }
-
-                PillStateManager.Instance.ApplyForcedChoices();
 
                 OnGameLoaded?.Invoke();
                 Debug.Log($"[SAVEMANAGER] Game loaded - Day {day}, {phase}");
@@ -121,10 +118,10 @@ namespace SUNSET16.Core
             SaveExists = false;
             DayManager.Instance.Initialize();
             PillStateManager.Instance.Initialize();
-            PillStateManager.Instance.ApplyForcedChoices();
+
             OnSaveDeleted?.Invoke();
 
-            Debug.Log("[SAVEMANAGER] Save data deleted");
+            Debug.Log("[SAVEMANAGER] Save data deleted - managers reset to new game state");
         }
 
         protected override void Awake()

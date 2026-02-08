@@ -34,7 +34,7 @@ namespace SUNSET16.Core
             switch (CurrentPhase)
             {
                 case DayPhase.Morning:
-                    if (CurrentDay >= 3 && !PillStateManager.Instance.HasTakenPillToday())
+                    if (!PillStateManager.Instance.HasTakenPillToday())
                     {
                         Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} " +
                             "Morning -> Night: pill choice required first");

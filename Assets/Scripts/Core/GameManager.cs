@@ -35,7 +35,6 @@ namespace SUNSET16.Core
             DayManager.Instance.Initialize();
             PillStateManager.Instance.Initialize();
             SettingsManager.Instance.Initialize();
-            PillStateManager.Instance.ApplyForcedChoices();
             PillStateManager.Instance.OnEndingReached += HandleEndingReached;
             DayManager.Instance.OnGameEndedEarly += HandleGameEndedEarly;
             DayManager.Instance.OnGameComplete += HandleGameComplete;
