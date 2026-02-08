@@ -49,13 +49,14 @@ namespace SUNSET16.Core
             Debug.Log("[GAMEMANAGER] ===== INITIALIZATION COMPLETE =====");
         }
 
-        private void OnApplicationQuit()
+        protected override void OnApplicationQuit()
         {
             if (IsInitialized)
             {
                 Debug.Log("[GAMEMANAGER] Application quitting - auto-saving...");
                 SaveManager.Instance.SaveGame();
             }
+            base.OnApplicationQuit();
         }
 
         private void OnApplicationPause(bool pauseStatus)
@@ -86,9 +87,5 @@ namespace SUNSET16.Core
             #endif
         }
 
-        protected override void OnApplicationQuit()
-        {
-            base.OnApplicationQuit();
-        }
     }
 }
