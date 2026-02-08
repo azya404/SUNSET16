@@ -35,7 +35,7 @@ namespace SUNSET16.Core
             if (!GameManager.Instance.IsInitialized)
             {
                 Debug.LogError("[SAVEMANAGER] Cannot save - managers not initialized");
-                return; 
+                return;
             }
 
             try
@@ -44,6 +44,8 @@ namespace SUNSET16.Core
                 DayPhase currentPhase = DayManager.Instance.CurrentPhase;
                 PlayerPrefs.SetInt("SUNSET16_CurrentDay", currentDay);
                 PlayerPrefs.SetInt("SUNSET16_CurrentPhase", (int)currentPhase);
+                PlayerPrefs.SetInt("SUNSET16_IsGameOver", DayManager.Instance.IsGameOver ? 1 : 0);
+
                 for (int day = 1; day <= 5; day++)
                 {
                     PillChoice choice = PillStateManager.Instance.GetPillChoice(day);
@@ -67,7 +69,7 @@ namespace SUNSET16.Core
             if (!HasSaveData())
             {
                 Debug.LogWarning("[SAVEMANAGER] No save data to load");
-                return; 
+                return;
             }
             try
             {
@@ -78,6 +80,10 @@ namespace SUNSET16.Core
                 DayPhase phase = (DayPhase)phaseInt;
                 DayManager.Instance.SetDay(day);
                 DayManager.Instance.SetPhase(phase);
+
+                bool isGameOver = PlayerPrefs.GetInt("SUNSET16_IsGameOver", 0) == 1;
+                DayManager.Instance.SetGameOver(isGameOver);
+
                 for (int i = 1; i <= 5; i++)
                 {
                     int choiceInt = PlayerPrefs.GetInt($"SUNSET16_PillDay{i}", -1);
@@ -88,7 +94,9 @@ namespace SUNSET16.Core
                     }
                 }
 
-                OnGameLoaded?.Invoke(); 
+                PillStateManager.Instance.ApplyForcedChoices();
+
+                OnGameLoaded?.Invoke();
                 Debug.Log($"[SAVEMANAGER] Game loaded - Day {day}, {phase}");
             }
             catch (System.Exception e)
@@ -102,6 +110,7 @@ namespace SUNSET16.Core
             PlayerPrefs.DeleteKey("SUNSET16_SaveExists");
             PlayerPrefs.DeleteKey("SUNSET16_CurrentDay");
             PlayerPrefs.DeleteKey("SUNSET16_CurrentPhase");
+            PlayerPrefs.DeleteKey("SUNSET16_IsGameOver");
 
             for (int i = 1; i <= 5; i++)
             {
@@ -110,6 +119,9 @@ namespace SUNSET16.Core
 
             PlayerPrefs.Save();
             SaveExists = false;
+            DayManager.Instance.Initialize();
+            PillStateManager.Instance.Initialize();
+            PillStateManager.Instance.ApplyForcedChoices();
             OnSaveDeleted?.Invoke();
 
             Debug.Log("[SAVEMANAGER] Save data deleted");

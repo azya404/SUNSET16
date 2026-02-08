@@ -6,37 +6,70 @@ namespace SUNSET16.Core
     {
         private void OnGUI()
         {
-            GUILayout.BeginArea(new Rect(10, 10, 400, 600));
+            GUILayout.BeginArea(new Rect(10, 10, 420, 700));
 
             GUILayout.Label("=== SUNSET16 Manager Tester ===", GUI.skin.box);
 
             if (GameManager.Instance != null && GameManager.Instance.IsInitialized)
             {
-                GUILayout.Label($"Day: {DayManager.Instance.CurrentDay}");
-                GUILayout.Label($"Phase: {DayManager.Instance.CurrentPhase}");
-                GUILayout.Label($"Pills Taken: {PillStateManager.Instance.GetPillsTakenCount()}");
-                GUILayout.Label($"Pills Refused: {PillStateManager.Instance.GetPillsRefusedCount()}");
-                GUILayout.Label($"Chose Today: {PillStateManager.Instance.HasTakenPillToday()}");
-                GUILayout.Label($"Volume: {SettingsManager.Instance.MasterVolume:F2}");
+                
+                GUILayout.Label($"Day: {DayManager.Instance.CurrentDay}  |  " +
+                                $"Phase: {DayManager.Instance.CurrentPhase}  |  " +
+                                $"Game Over: {DayManager.Instance.IsGameOver}");
+                GUILayout.Label($"Pills Taken: {PillStateManager.Instance.GetPillsTakenCount()}  |  " +
+                                $"Pills Refused: {PillStateManager.Instance.GetPillsRefusedCount()}");
 
-                GUILayout.Label($"Save Exists: {SaveManager.Instance.SaveExists}");
+                int currentDay = DayManager.Instance.CurrentDay;
+                bool isForced = PillStateManager.Instance.IsForcedChoice(currentDay);
+                GUILayout.Label($"Today Forced: {isForced}" +
+                    (isForced ? $" ({PillStateManager.Instance.GetForcedChoice(currentDay)})" : ""));
+                GUILayout.Label($"Chose Today: {PillStateManager.Instance.HasTakenPillToday()}");
+
+                GUILayout.Space(5);
+                GUILayout.Label("--- Pill History ---", GUI.skin.box);
+                string history = "";
+                for (int d = 1; d <= 5; d++)
+                {
+                    PillChoice c = PillStateManager.Instance.GetPillChoice(d);
+                    string label = c == PillChoice.Taken ? "P" :
+                                   c == PillChoice.NotTaken ? "N" : "-";
+                    string forced = d <= 2 ? "*" : " "; 
+                    history += $"D{d}{forced}:{label}  ";
+                }
+                GUILayout.Label(history);
+                GUILayout.Label($"Ending: {PillStateManager.Instance.DetermineEnding()}");
 
                 GUILayout.Space(10);
 
+                bool canAdvance = !DayManager.Instance.IsGameOver;
+                GUI.enabled = canAdvance;
                 if (GUILayout.Button("Advance Phase"))
                 {
                     DayManager.Instance.AdvancePhase();
                 }
+                GUI.enabled = true;
 
                 GUILayout.Space(5);
+
+                bool canChoose = !isForced
+                              && !PillStateManager.Instance.HasTakenPillToday()
+                              && DayManager.Instance.CurrentPhase == DayPhase.Morning
+                              && !DayManager.Instance.IsGameOver;
+
+                GUI.enabled = canChoose;
                 if (GUILayout.Button("TAKE Pill"))
                 {
                     PillStateManager.Instance.TakePill(PillChoice.Taken);
                 }
-
                 if (GUILayout.Button("REFUSE Pill"))
                 {
                     PillStateManager.Instance.TakePill(PillChoice.NotTaken);
+                }
+                GUI.enabled = true;
+
+                if (isForced)
+                {
+                    GUILayout.Label("(Day 1-2: choice is scripted)");
                 }
 
                 GUILayout.Space(5);
@@ -45,35 +78,27 @@ namespace SUNSET16.Core
                 {
                     SaveManager.Instance.SaveGame();
                 }
-
                 if (GUILayout.Button("Load Game"))
                 {
                     SaveManager.Instance.LoadGame();
                 }
-
                 if (GUILayout.Button("Delete Save"))
                 {
                     SaveManager.Instance.DeleteSave();
                 }
 
                 GUILayout.Space(5);
+
+                GUILayout.Label($"Volume: {SettingsManager.Instance.MasterVolume:F2}");
                 if (GUILayout.Button("Volume +0.1"))
                 {
                     float newVolume = SettingsManager.Instance.MasterVolume + 0.1f;
                     SettingsManager.Instance.SetMasterVolume(newVolume);
                 }
-
                 if (GUILayout.Button("Volume -0.1"))
                 {
                     float newVolume = SettingsManager.Instance.MasterVolume - 0.1f;
                     SettingsManager.Instance.SetMasterVolume(newVolume);
-                }
-
-                GUILayout.Space(5);
-                if (GUILayout.Button("Determine Ending"))
-                {
-                    string ending = PillStateManager.Instance.DetermineEnding();
-                    Debug.Log($"Current Ending: {ending}");
                 }
             }
             else

@@ -8,8 +8,16 @@ namespace SUNSET16.Core
     {
         private Dictionary<int, PillChoice> _pillChoices;
 
+        private const int ENDING_THRESHOLD = 3;
+
         public bool IsInitialized { get; private set; }
+
+        public bool IsEndingReached => GetPillsTakenCount() >= ENDING_THRESHOLD
+                                   || GetPillsRefusedCount() >= ENDING_THRESHOLD;
+
         public event Action<int, PillChoice> OnPillTaken;
+        public event Action<string> OnEndingReached;
+
         public void Initialize()
         {
             _pillChoices = new Dictionary<int, PillChoice>();
@@ -22,22 +30,58 @@ namespace SUNSET16.Core
             Debug.Log("[PILLSTATEMANAGER] Initialized");
         }
 
+        public bool IsForcedChoice(int day)
+        {
+            return day <= 2;
+        }
+
+        public PillChoice GetForcedChoice(int day)
+        {
+            switch (day)
+            {
+                case 1: return PillChoice.Taken;  
+                case 2: return PillChoice.NotTaken;   
+                default: return PillChoice.None;      
+            }
+        }
+
         public void TakePill(PillChoice choice)
         {
             int currentDay = DayManager.Instance.CurrentDay;
+
             if (HasTakenPillToday())
             {
-                Debug.LogWarning($"[PILLSTATEMANAGER] Pill already taken on Day {currentDay}");
+                Debug.LogWarning($"[PILLSTATEMANAGER] Pill already chosen on Day {currentDay}");
                 return;
             }
+
             if (choice == PillChoice.None)
             {
                 Debug.LogWarning("[PILLSTATEMANAGER] Cannot take 'None' pill");
                 return;
             }
+
+            if (IsEndingReached)
+            {
+                Debug.LogWarning("[PILLSTATEMANAGER] Game has already reached an ending - no more choices");
+                return;
+            }
+
+            if (IsForcedChoice(currentDay))
+            {
+                PillChoice forced = GetForcedChoice(currentDay);
+                if (choice != forced)
+                {
+                    Debug.LogWarning($"[PILLSTATEMANAGER] Day {currentDay} is scripted - must choose {forced}");
+                    return;
+                }
+            }
+
             _pillChoices[currentDay] = choice;
             OnPillTaken?.Invoke(currentDay, choice);
-            Debug.Log($"[PILLSTATEMANAGER] Day {currentDay}: {choice} pill taken");
+            Debug.Log($"[PILLSTATEMANAGER] Day {currentDay}: {(IsForcedChoice(currentDay) ? "Forced" : "Player chose")} {choice}");
+
+            CheckForEnding();
         }
 
         public bool HasTakenPillToday()
@@ -101,27 +145,28 @@ namespace SUNSET16.Core
         {
             int takenCount = GetPillsTakenCount();
             int refusedCount = GetPillsRefusedCount();
-            if (takenCount == 3)
+
+            if (takenCount >= ENDING_THRESHOLD)
             {
-                return "AlwaysTaken_Conformity";
+                return "Bad"; 
             }
 
-            if (refusedCount == 3)
+            if (refusedCount >= ENDING_THRESHOLD)
             {
-                return "AlwaysRefused_Rebellion";
+                return "Good"; 
             }
 
-            if (takenCount > refusedCount)
-            {
-                return "MostlyTaken_Compliance";
-            }
+            return "Undetermined";
+        }
 
-            if (refusedCount > takenCount)
-            {
-                return "MostlyRefused_Resistance";
-            }
+        public bool CheckForEnding()
+        {
+            if (!IsEndingReached) return false;
 
-            return "Balanced_Undecided";
+            string ending = DetermineEnding();
+            Debug.Log($"[PILLSTATEMANAGER] === ENDING REACHED: {ending} ===");
+            OnEndingReached?.Invoke(ending);
+            return true;
         }
 
         protected override void Awake()

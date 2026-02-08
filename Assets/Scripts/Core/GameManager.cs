@@ -35,6 +35,11 @@ namespace SUNSET16.Core
             DayManager.Instance.Initialize();
             PillStateManager.Instance.Initialize();
             SettingsManager.Instance.Initialize();
+            PillStateManager.Instance.ApplyForcedChoices();
+            PillStateManager.Instance.OnEndingReached += HandleEndingReached;
+            DayManager.Instance.OnGameEndedEarly += HandleGameEndedEarly;
+            DayManager.Instance.OnGameComplete += HandleGameComplete;
+
             Debug.Log("[GAMEMANAGER] Phase 2: Initializing save system...");
             SaveManager.Instance.Initialize();
 
@@ -87,5 +92,19 @@ namespace SUNSET16.Core
             #endif
         }
 
+        private void HandleEndingReached(string ending)
+        {
+            Debug.Log($"[GAMEMANAGER] Ending reached: {ending}");
+        }
+
+        private void HandleGameEndedEarly(int day)
+        {
+            Debug.Log($"[GAMEMANAGER] Game ended early on Day {day}");
+        }
+
+        private void HandleGameComplete()
+        {
+            Debug.Log("[GAMEMANAGER] Game reached natural completion (Day 5)");
+        }
     }
 }
