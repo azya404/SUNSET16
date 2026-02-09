@@ -7,7 +7,7 @@ namespace SUNSET16.Core
     public class LightingController : Singleton<LightingController>
     {
         [Header("Lighting Presets")]
-        [SerializeField] private Color dayAmbientColor = new Color(1f, 0.95f, 0.9f); 
+        [SerializeField] private Color dayAmbientColor = new Color(1f, 0.95f, 0.9f);
         [SerializeField] private Color nightAmbientColor = new Color(0.3f, 0.4f, 0.6f);
         [SerializeField] private float dayIntensity = 1.0f;
         [SerializeField] private float nightIntensity = 0.4f;
@@ -50,6 +50,7 @@ namespace SUNSET16.Core
             }
 
             DayManager.Instance.OnPhaseChanged += OnPhaseChanged;
+            SaveManager.Instance.OnSaveDeleted += OnSaveDeleted;
             if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
             {
                 ApplyDayLighting(instant: true);
@@ -60,6 +61,12 @@ namespace SUNSET16.Core
             }
 
             Debug.Log("[LIGHTINGCONTROLLER] Initialized");
+        }
+
+        private void OnSaveDeleted()
+        {
+            ApplyDayLighting(instant: true);
+            Debug.Log("[LIGHTINGCONTROLLER] Lighting reset to Morning defaults");
         }
 
         private void OnPhaseChanged(DayPhase newPhase)
@@ -159,6 +166,11 @@ namespace SUNSET16.Core
             if (DayManager.Instance != null)
             {
                 DayManager.Instance.OnPhaseChanged -= OnPhaseChanged;
+            }
+
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.OnSaveDeleted -= OnSaveDeleted;
             }
 
             if (GameManager.Instance != null)
