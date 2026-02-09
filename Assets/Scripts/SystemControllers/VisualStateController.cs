@@ -14,15 +14,18 @@ namespace SUNSET16.Core
         private ChromaticAberration _chromaticAberration;
 
         [Header("Pill State Effects")]
-        [SerializeField] private float onPillSaturation = -50f;  
-        [SerializeField] private float offPillSaturation = 20f;  
+        [SerializeField] private float onPillSaturation = -50f;
+        [SerializeField] private float offPillSaturation = 20f;
+        [SerializeField] private float saturationPerRefusal = 10f;
+        [SerializeField] private float maxSaturation = 50f;
         [SerializeField] private float transitionSpeed = 1.0f;
 
         [Header("Vignette Settings")]
-        [SerializeField] private float baseVignette = 0.3f;    
-        [SerializeField] private float vignettePerPill = 0.1f;  
-        [SerializeField] private float maxVignette = 0.7f;    
-        [SerializeField] private float offPillVignette = 0.1f;   
+        [SerializeField] private float baseVignette = 0.3f;
+        [SerializeField] private float vignettePerPill = 0.1f;
+        [SerializeField] private float maxVignette = 0.7f;
+        [SerializeField] private float offPillVignette = 0.1f;
+        [SerializeField] private float vignetteReductionPerRefusal = 0.03f;
 
         [Header("Glitch Settings")]
         [SerializeField] private float glitchIntensity = 0.5f;
@@ -56,6 +59,7 @@ namespace SUNSET16.Core
             PillStateManager.Instance.OnPillTaken += OnPillTaken;
             PillStateManager.Instance.OnEndingReached += OnEndingReached;
             SettingsManager.Instance.OnBrightnessChanged += ApplyBrightness;
+            SaveManager.Instance.OnSaveDeleted += ResetVisuals;
             ApplyBrightness(SettingsManager.Instance.Brightness);
 
             Debug.Log("[VISUALSTATECONTROLLER] Initialized");
@@ -89,7 +93,6 @@ namespace SUNSET16.Core
         private void OnPillTaken(int day, PillChoice choice)
         {
             _lastChoice = choice;
-
             UpdateVisuals(instant: false);
 
             if (choice == PillChoice.NotTaken)
@@ -124,14 +127,22 @@ namespace SUNSET16.Core
         {
             if (_colorAdjustments == null || _vignette == null) return;
 
-            float targetSaturation = _lastChoice == PillChoice.Taken
-                ? onPillSaturation
-                : offPillSaturation;
-
             int pillsTaken = PillStateManager.Instance.GetPillsTakenCount();
-            float targetVignette = _lastChoice == PillChoice.Taken
-                ? Mathf.Clamp(baseVignette + (pillsTaken * vignettePerPill), 0f, maxVignette)
-                : offPillVignette;
+            int pillsRefused = PillStateManager.Instance.GetPillsRefusedCount();
+
+            float targetSaturation;
+            float targetVignette;
+
+            if (_lastChoice == PillChoice.Taken)
+            {
+                targetSaturation = onPillSaturation;
+                targetVignette = Mathf.Clamp(baseVignette + (pillsTaken * vignettePerPill), 0f, maxVignette);
+            }
+            else
+            {
+                targetSaturation = Mathf.Clamp(offPillSaturation + (pillsRefused * saturationPerRefusal), 0f, maxSaturation);
+                targetVignette = Mathf.Clamp(offPillVignette - (pillsRefused * vignetteReductionPerRefusal), 0f, offPillVignette);
+            }
 
             if (instant)
             {
@@ -198,16 +209,12 @@ namespace SUNSET16.Core
             while (true)
             {
                 yield return new WaitForSeconds(Random.Range(glitchMinInterval, glitchMaxInterval));
-
                 _chromaticAberration.intensity.value = glitchIntensity;
                 yield return new WaitForSeconds(0.1f);
-
                 _chromaticAberration.intensity.value = 0;
                 yield return new WaitForSeconds(0.05f);
-
                 _chromaticAberration.intensity.value = glitchIntensity * 0.5f;
                 yield return new WaitForSeconds(0.1f);
-
                 _chromaticAberration.intensity.value = 0;
             }
         }
@@ -215,7 +222,6 @@ namespace SUNSET16.Core
         private void ApplyBrightness(float brightness)
         {
             if (_colorAdjustments == null) return;
-
             _colorAdjustments.postExposure.value = Mathf.Lerp(-1f, 1f, brightness);
         }
 
@@ -226,6 +232,35 @@ namespace SUNSET16.Core
 
             if (_vignette != null)
                 _vignette.intensity.value = vignetteIntensity;
+        }
+
+        public void ResetVisuals()
+        {
+            _lastChoice = PillChoice.None;
+            StopGlitchEffect();
+            if (_transitionCoroutine != null)
+            {
+                StopCoroutine(_transitionCoroutine);
+                _transitionCoroutine = null;
+            }
+
+            if (_colorAdjustments != null)
+            {
+                _colorAdjustments.saturation.value = 0f;
+                _colorAdjustments.postExposure.value = Mathf.Lerp(-1f, 1f, SettingsManager.Instance.Brightness);
+            }
+
+            if (_vignette != null)
+            {
+                _vignette.intensity.value = 0f;
+            }
+
+            if (_chromaticAberration != null)
+            {
+                _chromaticAberration.intensity.value = 0f;
+            }
+
+            Debug.Log("[VISUALSTATECONTROLLER] Visuals reset to defaults");
         }
 
         private void OnDestroy()
@@ -239,6 +274,11 @@ namespace SUNSET16.Core
             if (SettingsManager.Instance != null)
             {
                 SettingsManager.Instance.OnBrightnessChanged -= ApplyBrightness;
+            }
+
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.OnSaveDeleted -= ResetVisuals;
             }
 
             if (GameManager.Instance != null)
