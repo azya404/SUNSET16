@@ -6,16 +6,16 @@ namespace SUNSET16.Core
     public class AudioManager : Singleton<AudioManager>
     {
         [Header("Audio Sources")]
-        [SerializeField] private AudioSource musicSource; 
-        [SerializeField] private AudioSource sfxSource;  
+        [SerializeField] private AudioSource musicSource;    
+        [SerializeField] private AudioSource sfxSource;   
 
         [Header("Music Tracks")]
         [SerializeField] private AudioClip onPillMusic;    
         [SerializeField] private AudioClip offPillMusic;   
-        [SerializeField] private AudioClip nightMusic;    
+        [SerializeField] private AudioClip nightMusic;   
         [SerializeField] private AudioClip menuMusic;    
-        [SerializeField] private AudioClip badEndingMusic; 
-        [SerializeField] private AudioClip goodEndingMusic;   
+        [SerializeField] private AudioClip badEndingMusic;   
+        [SerializeField] private AudioClip goodEndingMusic;  
 
         [Header("Sound Effects")]
         [SerializeField] private AudioClip doorOpen;
@@ -57,9 +57,13 @@ namespace SUNSET16.Core
             SettingsManager.Instance.OnMasterVolumeChanged += OnMasterVolumeChanged;
             SettingsManager.Instance.OnMusicVolumeChanged += OnMusicVolumeChanged;
             SettingsManager.Instance.OnSFXVolumeChanged += OnSFXVolumeChanged;
+
             PillStateManager.Instance.OnPillTaken += OnPillTaken;
+
             DayManager.Instance.OnPhaseChanged += OnPhaseChanged;
+
             PillStateManager.Instance.OnEndingReached += OnEndingReached;
+
             _masterVolume = SettingsManager.Instance.MasterVolume;
             _musicVolume = SettingsManager.Instance.MusicVolume;
             _sfxVolume = SettingsManager.Instance.SFXVolume;
@@ -183,6 +187,7 @@ namespace SUNSET16.Core
 
         private void OnPillTaken(int day, PillChoice choice)
         {
+
             PlayPillTake();
             if (choice == PillChoice.Taken)
             {
@@ -195,7 +200,6 @@ namespace SUNSET16.Core
 
             Debug.Log($"[AUDIOMANAGER] Pill music changed for Day {day}: {choice}");
         }
-
         private void OnPhaseChanged(DayPhase phase)
         {
             switch (phase)
