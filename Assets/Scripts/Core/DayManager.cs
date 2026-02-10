@@ -13,6 +13,8 @@ namespace SUNSET16.Core
         public event Action<DayPhase> OnPhaseChanged;
         public event Action OnGameComplete;
         public event Action<int> OnGameEndedEarly;
+        public event Action OnNightPhaseOnPill;
+        public event Action OnNightPhaseOffPill;
 
         public void Initialize()
         {
@@ -75,6 +77,58 @@ namespace SUNSET16.Core
                     OnPhaseChanged?.Invoke(CurrentPhase);
                     Debug.Log($"[DAYMANAGER] Advanced to Day {CurrentDay} - Morning phase");
                     break;
+            }
+        }
+
+        public void TaskCompleted()
+        {
+            if (IsGameOver)
+            {
+                Debug.LogWarning("[DAYMANAGER] TaskCompleted called but game is already over");
+                return;
+            }
+
+            if (CurrentPhase != DayPhase.Morning)
+            {
+                Debug.LogWarning("[DAYMANAGER] TaskCompleted called but not in Morning phase");
+                return;
+            }
+
+            if (!PillStateManager.Instance.HasTakenPillToday())
+            {
+                Debug.LogWarning("[DAYMANAGER] TaskCompleted called but no pill choice made today");
+                return;
+            }
+
+            CurrentPhase = DayPhase.Night;
+            OnPhaseChanged?.Invoke(CurrentPhase);
+            Debug.Log($"[DAYMANAGER] Task completed - advanced to Day {CurrentDay} Night");
+
+            if (PillStateManager.Instance.IsEndingReached)
+            {
+                Debug.Log($"[DAYMANAGER] Ending reached at Day {CurrentDay} Night!");
+                IsGameOver = true;
+                if (CurrentDay < 5)
+                {
+                    OnGameEndedEarly?.Invoke(CurrentDay);
+                }
+                else
+                {
+                    OnGameComplete?.Invoke();
+                }
+                return;
+            }
+
+            PillChoice todayChoice = PillStateManager.Instance.GetPillChoice(CurrentDay);
+            if (todayChoice == PillChoice.Taken)
+            {
+                OnNightPhaseOnPill?.Invoke();
+                Debug.Log("[DAYMANAGER] Night phase (on-pill): bedroom restriction active");
+            }
+            else if (todayChoice == PillChoice.NotTaken)
+            {
+                OnNightPhaseOffPill?.Invoke();
+                Debug.Log("[DAYMANAGER] Night phase (off-pill): hidden rooms accessible");
             }
         }
 
