@@ -6,7 +6,7 @@ namespace SUNSET16.Core
     {
         private void OnGUI()
         {
-            GUILayout.BeginArea(new Rect(10, 10, 420, 700));
+            GUILayout.BeginArea(new Rect(10, 10, 420, 1000));
 
             GUILayout.Label("=== SUNSET16 Manager Tester ===", GUI.skin.box);
 
@@ -99,6 +99,92 @@ namespace SUNSET16.Core
                 }
 
                 GUILayout.Space(5);
+                GUILayout.Label("--- Task System ---", GUI.skin.box);
+                if (TaskManager.Instance != null && TaskManager.Instance.IsInitialized)
+                {
+                    bool taskDone = TaskManager.Instance.IsTaskCompletedToday;
+                    GUILayout.Label($"Task Today: {(taskDone ? "COMPLETED" : "Not Done")}");
+
+                    string taskHistory = "";
+                    for (int d = 1; d <= 5; d++)
+                    {
+                        string status = TaskManager.Instance.IsTaskCompleted(d) ? "D" : "-";
+                        taskHistory += $"D{d}:{status}  ";
+                    }
+                    GUILayout.Label(taskHistory);
+
+                    bool canSpawnTask = !DayManager.Instance.IsGameOver
+                                     && DayManager.Instance.CurrentPhase == DayPhase.Morning
+                                     && PillStateManager.Instance.HasTakenPillToday()
+                                     && !taskDone
+                                     && TaskManager.Instance.ActiveTask == null;
+
+                    GUI.enabled = canSpawnTask;
+                    if (GUILayout.Button("Spawn Task"))
+                    {
+                        TaskManager.Instance.SpawnTask();
+                    }
+                    GUI.enabled = true;
+
+                    bool canComplete = !DayManager.Instance.IsGameOver
+                                    && DayManager.Instance.CurrentPhase == DayPhase.Morning
+                                    && PillStateManager.Instance.HasTakenPillToday()
+                                    && !taskDone;
+
+                    GUI.enabled = canComplete;
+                    if (GUILayout.Button("Complete Task (instant)"))
+                    {
+                        TaskManager.Instance.CompleteCurrentTask();
+                    }
+                    GUI.enabled = true;
+                }
+                else
+                {
+                    GUILayout.Label("TaskManager not available");
+                }
+
+                GUILayout.Space(5);
+
+                GUILayout.Label("--- Hidden Rooms ---", GUI.skin.box);
+                if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
+                {
+                    string[] roomIds = HiddenRoomManager.Instance.GetAllRoomIds();
+                    string roomStatus = "";
+                    foreach (string id in roomIds)
+                    {
+                        DoorState state = HiddenRoomManager.Instance.GetDoorState(id);
+                        string stateChar = state == DoorState.Locked ? "L" :
+                                           state == DoorState.Discovered ? "D" : "E";
+                        roomStatus += $"{id}:{stateChar}  ";
+                    }
+                    GUILayout.Label(roomStatus);
+                    GUILayout.Label("(L=Locked, D=Discovered, E=Entered)");
+
+                    bool isNight = DayManager.Instance.CurrentPhase == DayPhase.Night
+                                && !DayManager.Instance.IsGameOver;
+                    GUI.enabled = isNight;
+                    if (GUILayout.Button("Discover Next Room (test)"))
+                    {
+                        string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
+                        foreach (string id in allRooms)
+                        {
+                            if (HiddenRoomManager.Instance.GetDoorState(id) == DoorState.Locked)
+                            {
+                                HiddenRoomManager.Instance.DiscoverRoom(id);
+                                break;
+                            }
+                        }
+                    }
+                    GUI.enabled = true;
+                }
+                else
+                {
+                    GUILayout.Label("HiddenRoomManager not available");
+                }
+
+                GUILayout.Space(5);
+
+                GUILayout.Label("--- Settings ---", GUI.skin.box);
 
                 GUILayout.Label($"Volume: {SettingsManager.Instance.MasterVolume:F2}");
                 if (GUILayout.Button("Volume +0.1"))
@@ -110,6 +196,15 @@ namespace SUNSET16.Core
                 {
                     float newVolume = SettingsManager.Instance.MasterVolume - 0.1f;
                     SettingsManager.Instance.SetMasterVolume(newVolume);
+                }
+                GUILayout.Space(5);
+
+                if (TabletUIController.Instance != null && TabletUIController.Instance.IsInitialized)
+                {
+                    if (GUILayout.Button(TabletUIController.Instance.IsVisible ? "Close Tablet" : "Open Tablet"))
+                    {
+                        TabletUIController.Instance.ToggleTablet();
+                    }
                 }
             }
             else

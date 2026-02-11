@@ -61,7 +61,6 @@ namespace SUNSET16.Core
                     }
                 }
 
-                // Save hidden room door states (graceful if HiddenRoomManager not present)
                 if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
                 {
                     Dictionary<string, DoorState> doorStates = HiddenRoomManager.Instance.GetAllDoorStates();
@@ -74,7 +73,6 @@ namespace SUNSET16.Core
                     PlayerPrefs.SetString("SUNSET16_DoorStates", doorData);
                 }
 
-                // Save completed puzzles (graceful if PuzzleManager not present)
                 if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
                 {
                     HashSet<string> completedPuzzles = PuzzleManager.Instance.GetCompletedPuzzles();
@@ -135,7 +133,6 @@ namespace SUNSET16.Core
                     }
                 }
 
-                // Load hidden room door states (graceful if HiddenRoomManager not present)
                 if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
                 {
                     string doorData = PlayerPrefs.GetString("SUNSET16_DoorStates", "");
@@ -153,7 +150,6 @@ namespace SUNSET16.Core
                     }
                 }
 
-                // Load completed puzzles and unlocked lore (graceful if PuzzleManager not present)
                 if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
                 {
                     string puzzleData = PlayerPrefs.GetString("SUNSET16_CompletedPuzzles", "");
@@ -197,17 +193,13 @@ namespace SUNSET16.Core
                 PlayerPrefs.DeleteKey($"SUNSET16_TaskDay{i}Completed");
             }
 
-            // Delete hidden room door states
             PlayerPrefs.DeleteKey("SUNSET16_DoorStates");
 
-            // Delete puzzle and lore data
             PlayerPrefs.DeleteKey("SUNSET16_CompletedPuzzles");
             PlayerPrefs.DeleteKey("SUNSET16_UnlockedLore");
 
             PlayerPrefs.Save();
             SaveExists = false;
-
-            // Reset in-memory manager state back to Day 1 Morning (new game)
             DayManager.Instance.Initialize();
             PillStateManager.Instance.Initialize();
 
