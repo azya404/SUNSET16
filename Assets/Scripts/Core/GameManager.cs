@@ -70,8 +70,8 @@ namespace SUNSET16.Core
 
             if (pauseStatus)
             {
-                Debug.Log("[GAMEMANAGER] Application paused - auto-saving...");
-                SaveManager.Instance.SaveGame();
+                Debug.Log("[GAMEMANAGER] Application paused"); // no longer auto saving
+                // SaveManager.Instance.SaveGame(); //should fix the application pausing right?
                 OnApplicationPaused?.Invoke();
             }
             else

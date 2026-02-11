@@ -60,6 +60,7 @@ namespace SUNSET16.Core
             PillStateManager.Instance.OnEndingReached += OnEndingReached;
             SettingsManager.Instance.OnBrightnessChanged += ApplyBrightness;
             SaveManager.Instance.OnSaveDeleted += ResetVisuals;
+            SaveManager.Instance.OnGameLoaded += OnGameLoaded;
             ApplyBrightness(SettingsManager.Instance.Brightness);
 
             Debug.Log("[VISUALSTATECONTROLLER] Initialized");
@@ -234,6 +235,44 @@ namespace SUNSET16.Core
                 _vignette.intensity.value = vignetteIntensity;
         }
 
+        private void OnGameLoaded()
+        {
+            int currentDay = DayManager.Instance.CurrentDay;
+            PillChoice lastKnownChoice = PillChoice.None;
+
+            for (int d = currentDay; d >= 1; d--)
+            {
+                PillChoice c = PillStateManager.Instance.GetPillChoice(d);
+                if (c != PillChoice.None)
+                {
+                    lastKnownChoice = c;
+                    break;
+                }
+            }
+
+            _lastChoice = lastKnownChoice;
+
+            if (PillStateManager.Instance.IsEndingReached)
+            {
+                OnEndingReached(PillStateManager.Instance.DetermineEnding());
+            }
+            else if (_lastChoice != PillChoice.None)
+            {
+                UpdateVisuals(instant: true);
+
+                if (_lastChoice == PillChoice.NotTaken)
+                    StartGlitchEffect();
+                else
+                    StopGlitchEffect();
+            }
+            else
+            {
+                ResetVisuals();
+            }
+
+            Debug.Log($"[VISUALSTATECONTROLLER] Visuals re-applied after load (lastChoice: {_lastChoice})");
+        }
+
         public void ResetVisuals()
         {
             _lastChoice = PillChoice.None;
@@ -279,6 +318,7 @@ namespace SUNSET16.Core
             if (SaveManager.Instance != null)
             {
                 SaveManager.Instance.OnSaveDeleted -= ResetVisuals;
+                SaveManager.Instance.OnGameLoaded -= OnGameLoaded;
             }
 
             if (GameManager.Instance != null)
