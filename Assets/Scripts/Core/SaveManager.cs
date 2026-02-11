@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace SUNSET16.Core
 {
@@ -51,6 +52,36 @@ namespace SUNSET16.Core
                     PillChoice choice = PillStateManager.Instance.GetPillChoice(day);
                     PlayerPrefs.SetInt($"SUNSET16_PillDay{day}", (int)choice);
                 }
+                if (TaskManager.Instance != null && TaskManager.Instance.IsInitialized)
+                {
+                    for (int day = 1; day <= 5; day++)
+                    {
+                        PlayerPrefs.SetInt($"SUNSET16_TaskDay{day}Completed",
+                            TaskManager.Instance.IsTaskCompleted(day) ? 1 : 0);
+                    }
+                }
+
+                if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
+                {
+                    Dictionary<string, DoorState> doorStates = HiddenRoomManager.Instance.GetAllDoorStates();
+                    string doorData = "";
+                    foreach (var kvp in doorStates)
+                    {
+                        if (doorData.Length > 0) doorData += ",";
+                        doorData += $"{kvp.Key}:{(int)kvp.Value}";
+                    }
+                    PlayerPrefs.SetString("SUNSET16_DoorStates", doorData);
+                }
+
+                if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
+                {
+                    HashSet<string> completedPuzzles = PuzzleManager.Instance.GetCompletedPuzzles();
+                    PlayerPrefs.SetString("SUNSET16_CompletedPuzzles", string.Join(",", completedPuzzles));
+
+                    HashSet<string> unlockedLore = PuzzleManager.Instance.GetUnlockedLore();
+                    PlayerPrefs.SetString("SUNSET16_UnlockedLore", string.Join(",", unlockedLore));
+                }
+
                 PlayerPrefs.SetInt("SUNSET16_SaveExists", 1);
                 PlayerPrefs.Save();
                 SaveExists = true;
@@ -93,6 +124,49 @@ namespace SUNSET16.Core
                     }
                 }
 
+                if (TaskManager.Instance != null && TaskManager.Instance.IsInitialized)
+                {
+                    for (int d = 1; d <= 5; d++)
+                    {
+                        bool completed = PlayerPrefs.GetInt($"SUNSET16_TaskDay{d}Completed", 0) == 1;
+                        TaskManager.Instance.SetTaskCompleted(d, completed);
+                    }
+                }
+
+                if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
+                {
+                    string doorData = PlayerPrefs.GetString("SUNSET16_DoorStates", "");
+                    if (!string.IsNullOrEmpty(doorData))
+                    {
+                        string[] pairs = doorData.Split(',');
+                        foreach (string pair in pairs)
+                        {
+                            string[] parts = pair.Split(':');
+                            if (parts.Length == 2 && int.TryParse(parts[1], out int stateInt))
+                            {
+                                HiddenRoomManager.Instance.SetDoorState(parts[0], (DoorState)stateInt);
+                            }
+                        }
+                    }
+                }
+
+                if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
+                {
+                    string puzzleData = PlayerPrefs.GetString("SUNSET16_CompletedPuzzles", "");
+                    if (!string.IsNullOrEmpty(puzzleData))
+                    {
+                        HashSet<string> puzzleIds = new HashSet<string>(puzzleData.Split(','));
+                        PuzzleManager.Instance.SetCompletedPuzzles(puzzleIds);
+                    }
+
+                    string loreData = PlayerPrefs.GetString("SUNSET16_UnlockedLore", "");
+                    if (!string.IsNullOrEmpty(loreData))
+                    {
+                        HashSet<string> loreIds = new HashSet<string>(loreData.Split(','));
+                        PuzzleManager.Instance.SetUnlockedLore(loreIds);
+                    }
+                }
+
                 OnGameLoaded?.Invoke();
                 Debug.Log($"[SAVEMANAGER] Game loaded - Day {day}, {phase}");
             }
@@ -113,6 +187,16 @@ namespace SUNSET16.Core
             {
                 PlayerPrefs.DeleteKey($"SUNSET16_PillDay{i}");
             }
+
+            for (int i = 1; i <= 5; i++)
+            {
+                PlayerPrefs.DeleteKey($"SUNSET16_TaskDay{i}Completed");
+            }
+
+            PlayerPrefs.DeleteKey("SUNSET16_DoorStates");
+
+            PlayerPrefs.DeleteKey("SUNSET16_CompletedPuzzles");
+            PlayerPrefs.DeleteKey("SUNSET16_UnlockedLore");
 
             PlayerPrefs.Save();
             SaveExists = false;
