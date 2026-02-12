@@ -12,7 +12,7 @@ namespace SUNSET16.UI
         [SerializeField] private Button newGameButton;
         [SerializeField] private Button continueButton;
         [SerializeField] private Button settingsButton;
-        [SerializeField] private Button quitButton;
+        [SerializeField] private Button creditsButton;
 
         [Header("Panels")]
         [SerializeField] private GameObject settingsPanel;
@@ -32,7 +32,7 @@ namespace SUNSET16.UI
             newGameButton.onClick.AddListener(OnNewGameClicked);
             continueButton.onClick.AddListener(OnContinueClicked);
             settingsButton.onClick.AddListener(OnSettingsClicked);
-            quitButton.onClick.AddListener(OnQuitClicked);
+            creditsButton.onClick.AddListener(OnCreditsClicked);
 
             if (newGameConfirmPanel != null)
             {
@@ -42,11 +42,6 @@ namespace SUNSET16.UI
             }
 
             continueButton.interactable = SaveManager.Instance.SaveExists;
-
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-            {
-                quitButton.gameObject.SetActive(false);
-            }
 
             if (settingsPanel != null)
             {
@@ -100,14 +95,9 @@ namespace SUNSET16.UI
             }
         }
 
-        private void OnQuitClicked()
+        private void OnCreditsClicked()
         {
-            Debug.Log("[MAINMENU] Quitting application");
-            #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-            #else
-                Application.Quit();
-            #endif
+            Debug.Log("[MAINMENU] Credits scene not yet implemented");
         }
     }
 }
