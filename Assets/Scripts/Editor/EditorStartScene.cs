@@ -6,23 +6,23 @@ namespace SUNSET16.Core.Editor
     [InitializeOnLoad]
     public static class EditorStartScene
     {
-        private const string CORE_SCENE_PATH = "Assets/Scenes/CoreScene.unity";
+        private const string START_SCENE_PATH = "Assets/Scenes/MainMenuScene.unity";
 
         static EditorStartScene()
         {
-            SceneAsset coreScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(CORE_SCENE_PATH);
+            SceneAsset startScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(START_SCENE_PATH);
 
-            if (coreScene != null)
+            if (startScene != null)
             {
-                EditorSceneManager.playModeStartScene = coreScene;
+                EditorSceneManager.playModeStartScene = startScene;
             }
             else
             {
                 EditorSceneManager.playModeStartScene = null;
                 UnityEngine.Debug.LogWarning(
-                    $"[EditorStartScene] CoreScene not found at '{CORE_SCENE_PATH}'. " +
+                    $"[EditorStartScene] MainMenuScene not found at '{START_SCENE_PATH}'. " +
                     "Play Mode will use the currently open scene. " +
-                    "Create CoreScene or update CORE_SCENE_PATH if it was moved."
+                    "Create MainMenuScene or update START_SCENE_PATH if it was moved."
                 );
             }
         }

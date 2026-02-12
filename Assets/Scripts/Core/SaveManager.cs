@@ -208,6 +208,29 @@ namespace SUNSET16.Core
             Debug.Log("[SAVEMANAGER] Save data deleted - managers reset to new game state");
         }
 
+        public void ClearSaveData()
+        {
+            PlayerPrefs.DeleteKey("SUNSET16_SaveExists");
+            PlayerPrefs.DeleteKey("SUNSET16_CurrentDay");
+            PlayerPrefs.DeleteKey("SUNSET16_CurrentPhase");
+            PlayerPrefs.DeleteKey("SUNSET16_IsGameOver");
+
+            for (int i = 1; i <= 5; i++)
+            {
+                PlayerPrefs.DeleteKey($"SUNSET16_PillDay{i}");
+                PlayerPrefs.DeleteKey($"SUNSET16_TaskDay{i}Completed");
+            }
+
+            PlayerPrefs.DeleteKey("SUNSET16_DoorStates");
+            PlayerPrefs.DeleteKey("SUNSET16_CompletedPuzzles");
+            PlayerPrefs.DeleteKey("SUNSET16_UnlockedLore");
+
+            PlayerPrefs.Save();
+            SaveExists = false;
+
+            Debug.Log("[SAVEMANAGER] Save data cleared from main menu");
+        }
+
         protected override void Awake()
         {
             base.Awake();
