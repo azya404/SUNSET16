@@ -10,11 +10,11 @@ namespace SUNSET16.Core.Editor
 
         static EditorStartScene()
         {
-            SceneAsset coreScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(CORE_SCENE_PATH);
+            SceneAsset startScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(START_SCENE_PATH);
 
-            if (coreScene != null)
+            if (startScene != null)
             {
-                EditorSceneManager.playModeStartScene = coreScene;
+                EditorSceneManager.playModeStartScene = startScene;
             }
             else
             {
