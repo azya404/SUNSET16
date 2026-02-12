@@ -51,6 +51,8 @@ namespace SUNSET16.Core
 
             DayManager.Instance.OnPhaseChanged += OnPhaseChanged;
             SaveManager.Instance.OnSaveDeleted += OnSaveDeleted;
+            SaveManager.Instance.OnGameLoaded += OnGameLoaded;
+
             if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
             {
                 ApplyDayLighting(instant: true);
@@ -67,6 +69,19 @@ namespace SUNSET16.Core
         {
             ApplyDayLighting(instant: true);
             Debug.Log("[LIGHTINGCONTROLLER] Lighting reset to Morning defaults");
+        }
+
+                private void OnGameLoaded()
+        {
+            if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
+            {
+                ApplyDayLighting(instant: true);
+            }
+            else
+            {
+                ApplyNightLighting(instant: true);
+            }
+            Debug.Log($"[LIGHTINGCONTROLLER] Lighting re-applied after load ({DayManager.Instance.CurrentPhase})");
         }
 
         private void OnPhaseChanged(DayPhase newPhase)
@@ -171,6 +186,7 @@ namespace SUNSET16.Core
             if (SaveManager.Instance != null)
             {
                 SaveManager.Instance.OnSaveDeleted -= OnSaveDeleted;
+                SaveManager.Instance.OnGameLoaded -= OnGameLoaded;
             }
 
             if (GameManager.Instance != null)
