@@ -82,6 +82,12 @@ namespace SUNSET16.Core
                     PlayerPrefs.SetString("SUNSET16_UnlockedLore", string.Join(",", unlockedLore));
                 }
 
+                if (TabletUIController.Instance != null && TabletUIController.Instance.IsInitialized)
+                {
+                    PlayerPrefs.SetInt("SUNSET16_TabletUIVisible",
+                        TabletUIController.Instance.IsVisible ? 1 : 0);
+                }
+
                 PlayerPrefs.SetInt("SUNSET16_SaveExists", 1);
                 PlayerPrefs.Save();
                 SaveExists = true;
@@ -167,6 +173,15 @@ namespace SUNSET16.Core
                     }
                 }
 
+                if (TabletUIController.Instance != null && TabletUIController.Instance.IsInitialized)
+                {
+                    bool tabletVisible = PlayerPrefs.GetInt("SUNSET16_TabletUIVisible", 0) == 1;
+                    if (tabletVisible)
+                        TabletUIController.Instance.OpenTablet();
+                    else
+                        TabletUIController.Instance.CloseTablet();
+                }
+
                 OnGameLoaded?.Invoke();
                 Debug.Log($"[SAVEMANAGER] Game loaded - Day {day}, {phase}");
             }
@@ -198,6 +213,8 @@ namespace SUNSET16.Core
             PlayerPrefs.DeleteKey("SUNSET16_CompletedPuzzles");
             PlayerPrefs.DeleteKey("SUNSET16_UnlockedLore");
 
+            PlayerPrefs.DeleteKey("SUNSET16_TabletUIVisible");
+
             PlayerPrefs.Save();
             SaveExists = false;
             DayManager.Instance.Initialize();
@@ -224,6 +241,8 @@ namespace SUNSET16.Core
             PlayerPrefs.DeleteKey("SUNSET16_DoorStates");
             PlayerPrefs.DeleteKey("SUNSET16_CompletedPuzzles");
             PlayerPrefs.DeleteKey("SUNSET16_UnlockedLore");
+
+            PlayerPrefs.DeleteKey("SUNSET16_TabletUIVisible");
 
             PlayerPrefs.Save();
             SaveExists = false;
