@@ -244,6 +244,53 @@ namespace SUNSET16.Core
                 }
 
                 GUILayout.Space(5);
+                GUILayout.Label("--- Puzzle System ---", GUI.skin.box);
+                if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
+                {
+                    string puzzleId = $"puzzle_day_{currentDay}";
+                    bool isPuzzleCompleted = PuzzleManager.Instance.IsPuzzleCompleted(puzzleId);
+                    GUILayout.Label($"Day {currentDay} Puzzle: {(isPuzzleCompleted ? "COMPLETED" : "Not Done")}");
+
+                    string puzzleHistory = "";
+                    for (int d = 1; d <= 5; d++)
+                    {
+                        string pId = $"puzzle_day_{d}";
+                        string status = PuzzleManager.Instance.IsPuzzleCompleted(pId) ? "D" : "-";
+                        puzzleHistory += $"D{d}:{status}  ";
+                    }
+                    GUILayout.Label(puzzleHistory);
+                    bool canSpawnPuzzle = !DayManager.Instance.IsGameOver
+                                       && DayManager.Instance.CurrentPhase == DayPhase.Night
+                                       && !isPuzzleCompleted
+                                       && PuzzleManager.Instance.ActivePuzzle == null;
+
+                    GUI.enabled = canSpawnPuzzle;
+                    if (GUILayout.Button("Spawn Puzzle"))
+                    {
+                        Debug.Log($"[MANAGERTESTER] Manually spawning puzzle for Day {currentDay}");
+                        string roomToEnter = $"room_{currentDay - 1}";
+                        HiddenRoomManager.Instance.EnterRoom(roomToEnter);
+                    }
+                    GUI.enabled = true;
+
+                    bool canCompletePuzzle = !DayManager.Instance.IsGameOver
+                                           && DayManager.Instance.CurrentPhase == DayPhase.Night
+                                           && !isPuzzleCompleted;
+
+                    GUI.enabled = canCompletePuzzle;
+                    if (GUILayout.Button("Complete Puzzle (instant)"))
+                    {
+                        PuzzleManager.Instance.CompletePuzzle(puzzleId);
+                        Debug.Log($"[MANAGERTESTER] Manually completed puzzle: {puzzleId}");
+                    }
+                    GUI.enabled = true;
+                }
+                else
+                {
+                    GUILayout.Label("PuzzleManager not available");
+                }
+
+                GUILayout.Space(5);
 
                 GUILayout.Label("--- Settings ---", GUI.skin.box);
 

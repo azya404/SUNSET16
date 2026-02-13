@@ -43,6 +43,12 @@ namespace SUNSET16.Core
                         return;
                     }
 
+                    if (TaskManager.Instance == null || !TaskManager.Instance.IsTaskCompleted(CurrentDay))
+                    {
+                        Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Morning -> Night: task must be completed first");
+                        return;
+                    }
+
                     CurrentPhase = DayPhase.Night;
                     OnPhaseChanged?.Invoke(CurrentPhase);
                     Debug.Log($"[DAYMANAGER] Advanced to Day {CurrentDay} - Night phase");

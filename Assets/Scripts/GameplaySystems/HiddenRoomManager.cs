@@ -13,6 +13,7 @@ namespace SUNSET16.Core
         public bool IsInitialized { get; private set; }
         private Dictionary<string, DoorState> _doorStates;
         private Dictionary<string, RoomType> _roomTypes;
+        private int _roomsDiscoveredThisNight = 0;
         public event Action<string> OnRoomDiscovered;
         public event Action<string> OnRoomEntered;
         public event Action OnBedroomRestrictionActive;
@@ -54,6 +55,8 @@ namespace SUNSET16.Core
 
         private void OnNightPhaseOffPill()
         {
+            _roomsDiscoveredThisNight = 0;
+
             string nextRoom = GetNextLockedRoom();
             if (nextRoom != null)
             {
@@ -67,6 +70,8 @@ namespace SUNSET16.Core
 
         private void OnNightPhaseOnPill()
         {
+            _roomsDiscoveredThisNight = 0;
+
             OnBedroomRestrictionActive?.Invoke();
             Debug.Log("[HIDDENROOMMANAGER] On-pill night: bedroom restriction active");
         }
@@ -101,6 +106,12 @@ namespace SUNSET16.Core
                 return;
             }
 
+            if (_roomsDiscoveredThisNight >= 1)
+            {
+                Debug.LogWarning($"[HIDDENROOMMANAGER] Cannot discover room '{roomId}': already discovered 1 room this night (limit: 1 per night)");
+                return;
+            }
+
             if (_doorStates[roomId] != DoorState.Locked)
             {
                 Debug.LogWarning($"[HIDDENROOMMANAGER] Room '{roomId}' is already {_doorStates[roomId]}");
@@ -108,8 +119,9 @@ namespace SUNSET16.Core
             }
 
             _doorStates[roomId] = DoorState.Discovered;
+            _roomsDiscoveredThisNight++;
             OnRoomDiscovered?.Invoke(roomId);
-            Debug.Log($"[HIDDENROOMMANAGER] Room '{roomId}' discovered!");
+            Debug.Log($"[HIDDENROOMMANAGER] Room '{roomId}' discovered! (Total this night: {_roomsDiscoveredThisNight})");
         }
 
         public void EnterRoom(string roomId)
