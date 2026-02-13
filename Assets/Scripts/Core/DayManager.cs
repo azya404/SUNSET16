@@ -52,20 +52,6 @@ namespace SUNSET16.Core
                     CurrentPhase = DayPhase.Night;
                     OnPhaseChanged?.Invoke(CurrentPhase);
                     Debug.Log($"[DAYMANAGER] Advanced to Day {CurrentDay} - Night phase");
-                    if (PillStateManager.Instance.IsEndingReached)
-                    {
-                        Debug.Log($"[DAYMANAGER] Ending reached at Day {CurrentDay} Night!");
-                        IsGameOver = true;
-                        if (CurrentDay < 5)
-                        {
-                            OnGameEndedEarly?.Invoke(CurrentDay);
-                        }
-                        else
-                        {
-                            OnGameComplete?.Invoke();
-                        }
-                        return;
-                    }
                     break;
 
                 case DayPhase.Night:
@@ -80,16 +66,26 @@ namespace SUNSET16.Core
                     {
                         if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
                         {
+                            bool discoveredAnyRoom = false;
                             bool enteredAnyRoom = false;
                             string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
                             foreach (string roomId in allRooms)
                             {
                                 DoorState state = HiddenRoomManager.Instance.GetDoorState(roomId);
+                                if (state == DoorState.Discovered || state == DoorState.Entered)
+                                {
+                                    discoveredAnyRoom = true;
+                                }
                                 if (state == DoorState.Entered)
                                 {
                                     enteredAnyRoom = true;
-                                    break;
                                 }
+                            }
+
+                            if (!discoveredAnyRoom)
+                            {
+                                Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: must discover a hidden room first (off-pill restriction)");
+                                return;
                             }
 
                             if (enteredAnyRoom && PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
@@ -102,6 +98,21 @@ namespace SUNSET16.Core
                                 }
                             }
                         }
+                    }
+
+                    if (PillStateManager.Instance.IsEndingReached)
+                    {
+                        Debug.Log($"[DAYMANAGER] Ending reached - game ending at Day {CurrentDay} Night");
+                        IsGameOver = true;
+                        if (CurrentDay < 5)
+                        {
+                            OnGameEndedEarly?.Invoke(CurrentDay);
+                        }
+                        else
+                        {
+                            OnGameComplete?.Invoke();
+                        }
+                        return;
                     }
 
                     if (CurrentDay >= 5)
@@ -150,7 +161,6 @@ namespace SUNSET16.Core
             CurrentPhase = DayPhase.Night;
             OnPhaseChanged?.Invoke(CurrentPhase);
             Debug.Log($"[DAYMANAGER] Task completed - advanced to Day {CurrentDay} Night");
-
             PillChoice todayChoice = PillStateManager.Instance.GetPillChoice(CurrentDay);
             if (todayChoice == PillChoice.Taken)
             {
@@ -161,21 +171,6 @@ namespace SUNSET16.Core
             {
                 OnNightPhaseOffPill?.Invoke();
                 Debug.Log("[DAYMANAGER] Night phase (off-pill): hidden rooms accessible");
-            }
-
-            if (PillStateManager.Instance.IsEndingReached)
-            {
-                Debug.Log($"[DAYMANAGER] Ending reached at Day {CurrentDay} Night!");
-                IsGameOver = true;
-                if (CurrentDay < 5)
-                {
-                    OnGameEndedEarly?.Invoke(CurrentDay);
-                }
-                else
-                {
-                    OnGameComplete?.Invoke();
-                }
-                return;
             }
         }
 

@@ -296,12 +296,30 @@ namespace SUNSET16.Core
                         HiddenRoomManager.Instance.EnterRoom(roomToEnter);
                     }
                     GUI.enabled = true;
+
                     PillChoice currentPillChoice = PillStateManager.Instance.GetPillChoice(currentDay);
                     bool isOffPillDay = currentPillChoice == PillChoice.NotTaken;
+
+                    bool hasEnteredAnyRoom = false;
+                    if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
+                    {
+                        string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
+                        foreach (string roomId in allRooms)
+                        {
+                            DoorState state = HiddenRoomManager.Instance.GetDoorState(roomId);
+                            if (state == DoorState.Entered)
+                            {
+                                hasEnteredAnyRoom = true;
+                                break;
+                            }
+                        }
+                    }
+
                     bool canCompletePuzzle = !DayManager.Instance.IsGameOver
                                            && DayManager.Instance.CurrentPhase == DayPhase.Night
                                            && !isPuzzleCompleted
-                                           && isOffPillDay;
+                                           && isOffPillDay
+                                           && hasEnteredAnyRoom;
 
                     GUI.enabled = canCompletePuzzle;
                     if (GUILayout.Button("Complete Puzzle (instant)"))
