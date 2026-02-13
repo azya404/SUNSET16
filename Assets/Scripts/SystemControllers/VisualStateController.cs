@@ -237,6 +237,18 @@ namespace SUNSET16.Core
 
         private void OnGameLoaded()
         {
+            // Stop any running animations before applying loaded state
+            if (_transitionCoroutine != null)
+            {
+                StopCoroutine(_transitionCoroutine);
+                _transitionCoroutine = null;
+            }
+            if (_glitchCoroutine != null)
+            {
+                StopCoroutine(_glitchCoroutine);
+                _glitchCoroutine = null;
+            }
+
             int currentDay = DayManager.Instance.CurrentDay;
             PillChoice lastKnownChoice = PillChoice.None;
 
