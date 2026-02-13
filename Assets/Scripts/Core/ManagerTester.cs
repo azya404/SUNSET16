@@ -42,6 +42,33 @@ namespace SUNSET16.Core
                 GUILayout.Space(10);
 
                 bool canAdvance = !DayManager.Instance.IsGameOver;
+                string advanceStatus = "";
+
+                if (DayManager.Instance.CurrentPhase == DayPhase.Night)
+                {
+                    bool taskDone = TaskManager.Instance != null && TaskManager.Instance.IsTaskCompleted(currentDay);
+                    bool puzzleDone = true;
+
+                    PillChoice choice = PillStateManager.Instance.GetPillChoice(currentDay);
+                    if (choice == PillChoice.NotTaken && PuzzleManager.Instance != null)
+                    {
+                        string puzzleId = $"puzzle_day_{currentDay}";
+                        puzzleDone = PuzzleManager.Instance.IsPuzzleCompleted(puzzleId);
+                    }
+
+                    bool canSleep = taskDone && puzzleDone;
+                    advanceStatus = canSleep ? "Can Sleep: YES" : "Can Sleep: NO";
+                    if (!canSleep)
+                    {
+                        advanceStatus += " (";
+                        if (!taskDone) advanceStatus += "!Task ";
+                        if (!puzzleDone) advanceStatus += "!Puzzle";
+                        advanceStatus += ")";
+                    }
+
+                    GUILayout.Label(advanceStatus);
+                }
+
                 GUI.enabled = canAdvance;
                 if (GUILayout.Button("Advance Phase"))
                 {
@@ -160,9 +187,24 @@ namespace SUNSET16.Core
                     GUILayout.Label(roomStatus);
                     GUILayout.Label("(L=Locked, D=Discovered, E=Entered)");
 
-                    bool isNight = DayManager.Instance.CurrentPhase == DayPhase.Night
-                                && !DayManager.Instance.IsGameOver;
-                    GUI.enabled = isNight;
+                    bool isNight = DayManager.Instance.CurrentPhase == DayPhase.Night;
+                    bool isOffPill = PillStateManager.Instance.GetPillChoice(currentDay) == PillChoice.NotTaken;
+                    bool taskComplete = TaskManager.Instance != null && TaskManager.Instance.IsTaskCompleted(currentDay);
+                    bool canAccessHiddenRooms = isNight && isOffPill && taskComplete;
+
+                    string validationStatus = $"Access: {(canAccessHiddenRooms ? "ALLOWED" : "BLOCKED")}";
+                    if (!canAccessHiddenRooms)
+                    {
+                        validationStatus += " (";
+                        if (!isNight) validationStatus += "!Night ";
+                        if (!isOffPill) validationStatus += "!OffPill ";
+                        if (!taskComplete) validationStatus += "!TaskDone";
+                        validationStatus += ")";
+                    }
+                    GUILayout.Label(validationStatus);
+
+                    bool canTestDiscover = isNight && !DayManager.Instance.IsGameOver;
+                    GUI.enabled = canTestDiscover;
                     if (GUILayout.Button("Discover Next Room (test)"))
                     {
                         string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
@@ -174,6 +216,22 @@ namespace SUNSET16.Core
                             if (state == DoorState.Locked && type == RoomType.Hidden)
                             {
                                 HiddenRoomManager.Instance.DiscoverRoom(id);
+                                break;
+                            }
+                        }
+                    }
+                    GUI.enabled = true;
+
+                    GUI.enabled = canTestDiscover;
+                    if (GUILayout.Button("Enter First Discovered Room"))
+                    {
+                        string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
+                        foreach (string id in allRooms)
+                        {
+                            DoorState state = HiddenRoomManager.Instance.GetDoorState(id);
+                            if (state == DoorState.Discovered || state == DoorState.Entered)
+                            {
+                                HiddenRoomManager.Instance.EnterRoom(id);
                                 break;
                             }
                         }
