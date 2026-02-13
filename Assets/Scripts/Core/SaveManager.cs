@@ -71,6 +71,14 @@ namespace SUNSET16.Core
                         doorData += $"{kvp.Key}:{(int)kvp.Value}";
                     }
                     PlayerPrefs.SetString("SUNSET16_DoorStates", doorData);
+
+                    string roomTypeData = "";
+                    foreach (string roomId in HiddenRoomManager.Instance.GetAllRoomIds())
+                    {
+                        if (roomTypeData.Length > 0) roomTypeData += ",";
+                        roomTypeData += $"{roomId}:{(int)HiddenRoomManager.Instance.GetRoomType(roomId)}";
+                    }
+                    PlayerPrefs.SetString("SUNSET16_RoomTypes", roomTypeData);
                 }
 
                 if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
@@ -151,6 +159,20 @@ namespace SUNSET16.Core
                             if (parts.Length == 2 && int.TryParse(parts[1], out int stateInt))
                             {
                                 HiddenRoomManager.Instance.SetDoorState(parts[0], (DoorState)stateInt);
+                            }
+                        }
+                    }
+
+                    string roomTypeData = PlayerPrefs.GetString("SUNSET16_RoomTypes", "");
+                    if (!string.IsNullOrEmpty(roomTypeData))
+                    {
+                        string[] pairs = roomTypeData.Split(',');
+                        foreach (string pair in pairs)
+                        {
+                            string[] parts = pair.Split(':');
+                            if (parts.Length == 2 && int.TryParse(parts[1], out int typeInt))
+                            {
+                                HiddenRoomManager.Instance.SetRoomType(parts[0], (RoomType)typeInt);
                             }
                         }
                     }
@@ -239,6 +261,7 @@ namespace SUNSET16.Core
             }
 
             PlayerPrefs.DeleteKey("SUNSET16_DoorStates");
+            PlayerPrefs.DeleteKey("SUNSET16_RoomTypes");
             PlayerPrefs.DeleteKey("SUNSET16_CompletedPuzzles");
             PlayerPrefs.DeleteKey("SUNSET16_UnlockedLore");
 

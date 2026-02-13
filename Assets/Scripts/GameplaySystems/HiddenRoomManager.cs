@@ -12,6 +12,7 @@ namespace SUNSET16.Core
 
         public bool IsInitialized { get; private set; }
         private Dictionary<string, DoorState> _doorStates;
+        private Dictionary<string, RoomType> _roomTypes;
         public event Action<string> OnRoomDiscovered;
         public event Action<string> OnRoomEntered;
         public event Action OnBedroomRestrictionActive;
@@ -36,9 +37,11 @@ namespace SUNSET16.Core
         private void Initialize()
         {
             _doorStates = new Dictionary<string, DoorState>();
+            _roomTypes = new Dictionary<string, RoomType>();
             foreach (string roomId in _roomIds)
             {
                 _doorStates[roomId] = DoorState.Locked;
+                _roomTypes[roomId] = RoomType.Hidden;
             }
 
             DayManager.Instance.OnNightPhaseOffPill += OnNightPhaseOffPill;
@@ -83,6 +86,12 @@ namespace SUNSET16.Core
             if (!_doorStates.ContainsKey(roomId))
             {
                 Debug.LogWarning($"[HIDDENROOMMANAGER] Unknown room ID: {roomId}");
+                return;
+            }
+
+            if (_roomTypes.TryGetValue(roomId, out RoomType type) && type != RoomType.Hidden)
+            {
+                Debug.LogWarning($"[HIDDENROOMMANAGER] Room '{roomId}' is not a hidden room (type: {type})");
                 return;
             }
 
@@ -152,12 +161,23 @@ namespace SUNSET16.Core
         {
             foreach (string roomId in _roomIds)
             {
-                if (_doorStates.ContainsKey(roomId) && _doorStates[roomId] == DoorState.Locked)
+                if (_doorStates.ContainsKey(roomId) && _doorStates[roomId] == DoorState.Locked &&
+                    _roomTypes.TryGetValue(roomId, out RoomType type) && type == RoomType.Hidden)
                 {
                     return roomId;
                 }
             }
             return null;
+        }
+
+        public RoomType GetRoomType(string roomId)
+        {
+            return _roomTypes.TryGetValue(roomId, out RoomType type) ? type : RoomType.Task;
+        }
+
+        public void SetRoomType(string roomId, RoomType type)
+        {
+            _roomTypes[roomId] = type;
         }
 
         private void OnDestroy()
