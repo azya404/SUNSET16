@@ -43,23 +43,15 @@ namespace SUNSET16.Core
                         return;
                     }
 
+                    if (TaskManager.Instance == null || !TaskManager.Instance.IsTaskCompleted(CurrentDay))
+                    {
+                        Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Morning -> Night: task must be completed first");
+                        return;
+                    }
+
                     CurrentPhase = DayPhase.Night;
                     OnPhaseChanged?.Invoke(CurrentPhase);
                     Debug.Log($"[DAYMANAGER] Advanced to Day {CurrentDay} - Night phase");
-                    if (PillStateManager.Instance.IsEndingReached)
-                    {
-                        Debug.Log($"[DAYMANAGER] Ending reached at Day {CurrentDay} Night!");
-                        IsGameOver = true;
-                        if (CurrentDay < 5)
-                        {
-                            OnGameEndedEarly?.Invoke(CurrentDay);
-                        }
-                        else
-                        {
-                            OnGameComplete?.Invoke();
-                        }
-                        return;
-                    }
                     break;
 
                 case DayPhase.Night:
@@ -72,15 +64,39 @@ namespace SUNSET16.Core
                     PillChoice todayChoice = PillStateManager.Instance.GetPillChoice(CurrentDay);
                     if (todayChoice == PillChoice.NotTaken)
                     {
-                        if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
+                        if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
                         {
-                            string expectedPuzzleId = $"puzzle_day_{CurrentDay}";
-                            if (!PuzzleManager.Instance.IsPuzzleCompleted(expectedPuzzleId))
+                            if (!HiddenRoomManager.Instance.HasEnteredRoomThisNight())
                             {
-                                Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: hidden room puzzle must be completed first (off-pill restriction)");
+                                Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: must enter the discovered hidden room first (off-pill restriction)");
                                 return;
                             }
+
+                            if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
+                            {
+                                string expectedPuzzleId = $"puzzle_day_{CurrentDay}";
+                                if (!PuzzleManager.Instance.IsPuzzleCompleted(expectedPuzzleId))
+                                {
+                                    Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: must complete this day's hidden room puzzle first (off-pill restriction)");
+                                    return;
+                                }
+                            }
                         }
+                    }
+
+                    if (PillStateManager.Instance.IsEndingReached)
+                    {
+                        Debug.Log($"[DAYMANAGER] Ending reached - game ending at Day {CurrentDay} Night");
+                        IsGameOver = true;
+                        if (CurrentDay < 5)
+                        {
+                            OnGameEndedEarly?.Invoke(CurrentDay);
+                        }
+                        else
+                        {
+                            OnGameComplete?.Invoke();
+                        }
+                        return;
                     }
 
                     if (CurrentDay >= 5)
@@ -129,7 +145,6 @@ namespace SUNSET16.Core
             CurrentPhase = DayPhase.Night;
             OnPhaseChanged?.Invoke(CurrentPhase);
             Debug.Log($"[DAYMANAGER] Task completed - advanced to Day {CurrentDay} Night");
-
             PillChoice todayChoice = PillStateManager.Instance.GetPillChoice(CurrentDay);
             if (todayChoice == PillChoice.Taken)
             {
@@ -140,21 +155,6 @@ namespace SUNSET16.Core
             {
                 OnNightPhaseOffPill?.Invoke();
                 Debug.Log("[DAYMANAGER] Night phase (off-pill): hidden rooms accessible");
-            }
-
-            if (PillStateManager.Instance.IsEndingReached)
-            {
-                Debug.Log($"[DAYMANAGER] Ending reached at Day {CurrentDay} Night!");
-                IsGameOver = true;
-                if (CurrentDay < 5)
-                {
-                    OnGameEndedEarly?.Invoke(CurrentDay);
-                }
-                else
-                {
-                    OnGameComplete?.Invoke();
-                }
-                return;
             }
         }
 

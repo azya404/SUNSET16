@@ -226,14 +226,34 @@ namespace SUNSET16.Core
                     if (GUILayout.Button("Enter First Discovered Room"))
                     {
                         string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
+
+                        string roomToEnter = null;
                         foreach (string id in allRooms)
                         {
                             DoorState state = HiddenRoomManager.Instance.GetDoorState(id);
-                            if (state == DoorState.Discovered || state == DoorState.Entered)
+                            if (state == DoorState.Discovered)
                             {
-                                HiddenRoomManager.Instance.EnterRoom(id);
+                                roomToEnter = id;
                                 break;
                             }
+                        }
+
+                        if (roomToEnter == null)
+                        {
+                            foreach (string id in allRooms)
+                            {
+                                DoorState state = HiddenRoomManager.Instance.GetDoorState(id);
+                                if (state == DoorState.Entered)
+                                {
+                                    roomToEnter = id;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (roomToEnter != null)
+                        {
+                            HiddenRoomManager.Instance.EnterRoom(roomToEnter);
                         }
                     }
                     GUI.enabled = true;
@@ -241,6 +261,68 @@ namespace SUNSET16.Core
                 else
                 {
                     GUILayout.Label("HiddenRoomManager not available");
+                }
+
+                GUILayout.Space(5);
+                GUILayout.Label("--- Puzzle System ---", GUI.skin.box);
+                if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
+                {
+                    string puzzleId = $"puzzle_day_{currentDay}";
+                    bool isPuzzleCompleted = PuzzleManager.Instance.IsPuzzleCompleted(puzzleId);
+                    GUILayout.Label($"Day {currentDay} Puzzle: {(isPuzzleCompleted ? "COMPLETED" : "Not Done")}");
+
+                    string puzzleHistory = "";
+                    for (int d = 1; d <= 5; d++)
+                    {
+                        string pId = $"puzzle_day_{d}";
+                        string status = PuzzleManager.Instance.IsPuzzleCompleted(pId) ? "D" : "-";
+                        puzzleHistory += $"D{d}:{status}  ";
+                    }
+                    GUILayout.Label(puzzleHistory);
+
+                    PillChoice spawnPillChoice = PillStateManager.Instance.GetPillChoice(currentDay);
+                    bool isOffPillForSpawn = spawnPillChoice == PillChoice.NotTaken;
+                    bool canSpawnPuzzle = !DayManager.Instance.IsGameOver
+                                       && DayManager.Instance.CurrentPhase == DayPhase.Night
+                                       && !isPuzzleCompleted
+                                       && PuzzleManager.Instance.ActivePuzzle == null
+                                       && isOffPillForSpawn;
+
+                    GUI.enabled = canSpawnPuzzle;
+                    if (GUILayout.Button("Spawn Puzzle"))
+                    {
+                        Debug.Log($"[MANAGERTESTER] Manually spawning puzzle for Day {currentDay}");
+                        string roomToEnter = $"room_{currentDay - 1}";
+                        HiddenRoomManager.Instance.EnterRoom(roomToEnter);
+                    }
+                    GUI.enabled = true;
+
+                    PillChoice currentPillChoice = PillStateManager.Instance.GetPillChoice(currentDay);
+                    bool isOffPillDay = currentPillChoice == PillChoice.NotTaken;
+
+                    bool hasEnteredRoomThisNight = false;
+                    if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
+                    {
+                        hasEnteredRoomThisNight = HiddenRoomManager.Instance.HasEnteredRoomThisNight();
+                    }
+
+                    bool canCompletePuzzle = !DayManager.Instance.IsGameOver
+                                           && DayManager.Instance.CurrentPhase == DayPhase.Night
+                                           && !isPuzzleCompleted
+                                           && isOffPillDay
+                                           && hasEnteredRoomThisNight;
+
+                    GUI.enabled = canCompletePuzzle;
+                    if (GUILayout.Button("Complete Puzzle (instant)"))
+                    {
+                        PuzzleManager.Instance.CompletePuzzle(puzzleId);
+                        Debug.Log($"[MANAGERTESTER] Manually completed puzzle: {puzzleId}");
+                    }
+                    GUI.enabled = true;
+                }
+                else
+                {
+                    GUILayout.Label("PuzzleManager not available");
                 }
 
                 GUILayout.Space(5);
