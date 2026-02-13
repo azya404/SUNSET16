@@ -95,6 +95,12 @@ namespace SUNSET16.Core
                 return;
             }
 
+            if (!CanAccessHiddenRooms())
+            {
+                Debug.LogWarning($"[HIDDENROOMMANAGER] Cannot discover room '{roomId}': hidden room access not allowed (must be night phase, off pill, and task completed)");
+                return;
+            }
+
             if (_doorStates[roomId] != DoorState.Locked)
             {
                 Debug.LogWarning($"[HIDDENROOMMANAGER] Room '{roomId}' is already {_doorStates[roomId]}");
@@ -114,15 +120,28 @@ namespace SUNSET16.Core
                 return;
             }
 
-            if (_doorStates[roomId] != DoorState.Discovered)
+            if (!CanAccessHiddenRooms())
+            {
+                Debug.LogWarning($"[HIDDENROOMMANAGER] Cannot enter room '{roomId}': hidden room access not allowed (must be night phase, off pill, and task completed)");
+                return;
+            }
+
+            if (_doorStates[roomId] != DoorState.Discovered && _doorStates[roomId] != DoorState.Entered)
             {
                 Debug.LogWarning($"[HIDDENROOMMANAGER] Room '{roomId}' must be Discovered before entering (current: {_doorStates[roomId]})");
                 return;
             }
 
-            _doorStates[roomId] = DoorState.Entered;
-            OnRoomEntered?.Invoke(roomId);
-            Debug.Log($"[HIDDENROOMMANAGER] Room '{roomId}' entered!");
+            if (_doorStates[roomId] == DoorState.Discovered)
+            {
+                _doorStates[roomId] = DoorState.Entered;
+                OnRoomEntered?.Invoke(roomId);
+                Debug.Log($"[HIDDENROOMMANAGER] Room '{roomId}' entered for the first time!");
+            }
+            else
+            {
+                Debug.Log($"[HIDDENROOMMANAGER] Re-entering room '{roomId}' (already completed)");
+            }
         }
 
         public DoorState GetDoorState(string roomId)
@@ -168,6 +187,36 @@ namespace SUNSET16.Core
                 }
             }
             return null;
+        }
+
+        private bool CanAccessHiddenRooms()
+        {
+            if (DayManager.Instance == null || PillStateManager.Instance == null || TaskManager.Instance == null)
+            {
+                Debug.LogWarning("[HIDDENROOMMANAGER] Cannot validate access: required managers not initialized");
+                return false;
+            }
+
+            if (DayManager.Instance.CurrentPhase != DayPhase.Night)
+            {
+                Debug.Log("[HIDDENROOMMANAGER] Hidden rooms only accessible during Night phase");
+                return false;
+            }
+
+            PillChoice todaysPillChoice = PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay);
+            if (todaysPillChoice != PillChoice.NotTaken)
+            {
+                Debug.Log("[HIDDENROOMMANAGER] Hidden rooms only accessible when OFF pill");
+                return false;
+            }
+
+            if (!TaskManager.Instance.IsTaskCompleted(DayManager.Instance.CurrentDay))
+            {
+                Debug.Log("[HIDDENROOMMANAGER] Hidden rooms only accessible after completing daily task");
+                return false;
+            }
+
+            return true;
         }
 
         public RoomType GetRoomType(string roomId)
