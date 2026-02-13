@@ -66,34 +66,18 @@ namespace SUNSET16.Core
                     {
                         if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
                         {
-                            bool discoveredAnyRoom = false;
-                            bool enteredAnyRoom = false;
-                            string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
-                            foreach (string roomId in allRooms)
+                            if (!HiddenRoomManager.Instance.HasEnteredRoomThisNight())
                             {
-                                DoorState state = HiddenRoomManager.Instance.GetDoorState(roomId);
-                                if (state == DoorState.Discovered || state == DoorState.Entered)
-                                {
-                                    discoveredAnyRoom = true;
-                                }
-                                if (state == DoorState.Entered)
-                                {
-                                    enteredAnyRoom = true;
-                                }
-                            }
-
-                            if (!discoveredAnyRoom)
-                            {
-                                Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: must discover a hidden room first (off-pill restriction)");
+                                Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: must enter the discovered hidden room first (off-pill restriction)");
                                 return;
                             }
 
-                            if (enteredAnyRoom && PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
+                            if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
                             {
                                 string expectedPuzzleId = $"puzzle_day_{CurrentDay}";
                                 if (!PuzzleManager.Instance.IsPuzzleCompleted(expectedPuzzleId))
                                 {
-                                    Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: hidden room puzzle must be completed first (off-pill restriction)");
+                                    Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: must complete this day's hidden room puzzle first (off-pill restriction)");
                                     return;
                                 }
                             }

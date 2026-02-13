@@ -14,6 +14,7 @@ namespace SUNSET16.Core
         private Dictionary<string, DoorState> _doorStates;
         private Dictionary<string, RoomType> _roomTypes;
         private int _roomsDiscoveredThisNight = 0;
+        private int _roomsEnteredThisNight = 0;
         public event Action<string> OnRoomDiscovered;
         public event Action<string> OnRoomEntered;
         public event Action OnBedroomRestrictionActive;
@@ -56,6 +57,7 @@ namespace SUNSET16.Core
         private void OnNightPhaseOffPill()
         {
             _roomsDiscoveredThisNight = 0;
+            _roomsEnteredThisNight = 0;
 
             string nextRoom = GetNextLockedRoom();
             if (nextRoom != null)
@@ -71,6 +73,7 @@ namespace SUNSET16.Core
         private void OnNightPhaseOnPill()
         {
             _roomsDiscoveredThisNight = 0;
+            _roomsEnteredThisNight = 0;
 
             OnBedroomRestrictionActive?.Invoke();
             Debug.Log("[HIDDENROOMMANAGER] On-pill night: bedroom restriction active");
@@ -144,6 +147,8 @@ namespace SUNSET16.Core
                 return;
             }
 
+            _roomsEnteredThisNight++;
+
             if (_doorStates[roomId] == DoorState.Discovered)
             {
                 _doorStates[roomId] = DoorState.Entered;
@@ -186,6 +191,11 @@ namespace SUNSET16.Core
         public Dictionary<string, DoorState> GetAllDoorStates()
         {
             return new Dictionary<string, DoorState>(_doorStates);
+        }
+
+        public bool HasEnteredRoomThisNight()
+        {
+            return _roomsEnteredThisNight > 0;
         }
 
         private string GetNextLockedRoom()

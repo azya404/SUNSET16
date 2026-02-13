@@ -300,26 +300,17 @@ namespace SUNSET16.Core
                     PillChoice currentPillChoice = PillStateManager.Instance.GetPillChoice(currentDay);
                     bool isOffPillDay = currentPillChoice == PillChoice.NotTaken;
 
-                    bool hasEnteredAnyRoom = false;
+                    bool hasEnteredRoomThisNight = false;
                     if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
                     {
-                        string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
-                        foreach (string roomId in allRooms)
-                        {
-                            DoorState state = HiddenRoomManager.Instance.GetDoorState(roomId);
-                            if (state == DoorState.Entered)
-                            {
-                                hasEnteredAnyRoom = true;
-                                break;
-                            }
-                        }
+                        hasEnteredRoomThisNight = HiddenRoomManager.Instance.HasEnteredRoomThisNight();
                     }
 
                     bool canCompletePuzzle = !DayManager.Instance.IsGameOver
                                            && DayManager.Instance.CurrentPhase == DayPhase.Night
                                            && !isPuzzleCompleted
                                            && isOffPillDay
-                                           && hasEnteredAnyRoom;
+                                           && hasEnteredRoomThisNight;
 
                     GUI.enabled = canCompletePuzzle;
                     if (GUILayout.Button("Complete Puzzle (instant)"))
