@@ -168,7 +168,10 @@ namespace SUNSET16.Core
                         string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
                         foreach (string id in allRooms)
                         {
-                            if (HiddenRoomManager.Instance.GetDoorState(id) == DoorState.Locked)
+                            DoorState state = HiddenRoomManager.Instance.GetDoorState(id);
+                            RoomType type = HiddenRoomManager.Instance.GetRoomType(id);
+
+                            if (state == DoorState.Locked && type == RoomType.Hidden)
                             {
                                 HiddenRoomManager.Instance.DiscoverRoom(id);
                                 break;

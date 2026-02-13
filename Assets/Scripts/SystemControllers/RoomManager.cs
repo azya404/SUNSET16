@@ -26,12 +26,63 @@ namespace SUNSET16.Core
 
         public void LoadRoom(string roomSceneName)
         {
-            throw new NotImplementedException();
+            if (_isTransitioning)
+            {
+                Debug.LogWarning("[ROOMMANAGER] Already transitioning - cannot load another room");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(roomSceneName))
+            {
+                Debug.LogError("[ROOMMANAGER] Room scene name is null or empty");
+                return;
+            }
+
+            StartCoroutine(LoadRoomCoroutine(roomSceneName));
         }
 
         private IEnumerator LoadRoomCoroutine(string roomSceneName)
         {
-            yield break; //fade out -> unload -> load additive -> set active -> fade in
+            _isTransitioning = true;
+
+            string roomId = ExtractRoomIdFromSceneName(roomSceneName);
+
+            yield return StartCoroutine(FadeOut());
+
+            if (!string.IsNullOrEmpty(_currentRoomScene))
+            {
+                yield return SceneManager.UnloadSceneAsync(_currentRoomScene);
+                OnRoomUnloaded?.Invoke(_currentRoomScene);
+            }
+
+            yield return SceneManager.LoadSceneAsync(roomSceneName, LoadSceneMode.Additive);
+
+            _currentRoomScene = roomSceneName;
+            SetCurrentRoomName(roomSceneName);
+
+            if (!string.IsNullOrEmpty(roomId) && HiddenRoomManager.Instance != null)
+            {
+                HiddenRoomManager.Instance.EnterRoom(roomId);
+            }
+
+            OnRoomLoaded?.Invoke(roomSceneName);
+            yield return StartCoroutine(FadeIn());
+
+            _isTransitioning = false;
+            Debug.Log($"[ROOMMANAGER] Room loaded: {roomSceneName}");
+        }
+
+        private string ExtractRoomIdFromSceneName(string sceneName)
+        {
+            if (sceneName.Contains("_"))
+            {
+                string[] parts = sceneName.Split('_');
+                if (parts.Length >= 2)
+                {
+                    return parts[parts.Length - 1];
+                }
+            }
+            return sceneName;
         }
 
         private IEnumerator FadeOut()

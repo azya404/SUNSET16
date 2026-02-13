@@ -71,6 +71,14 @@ namespace SUNSET16.Core
                         doorData += $"{kvp.Key}:{(int)kvp.Value}";
                     }
                     PlayerPrefs.SetString("SUNSET16_DoorStates", doorData);
+
+                    string roomTypeData = "";
+                    foreach (string roomId in HiddenRoomManager.Instance.GetAllRoomIds())
+                    {
+                        if (roomTypeData.Length > 0) roomTypeData += ",";
+                        roomTypeData += $"{roomId}:{(int)HiddenRoomManager.Instance.GetRoomType(roomId)}";
+                    }
+                    PlayerPrefs.SetString("SUNSET16_RoomTypes", roomTypeData);
                 }
 
                 if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
@@ -80,6 +88,12 @@ namespace SUNSET16.Core
 
                     HashSet<string> unlockedLore = PuzzleManager.Instance.GetUnlockedLore();
                     PlayerPrefs.SetString("SUNSET16_UnlockedLore", string.Join(",", unlockedLore));
+                }
+
+                if (TabletUIController.Instance != null && TabletUIController.Instance.IsInitialized)
+                {
+                    PlayerPrefs.SetInt("SUNSET16_TabletUIVisible",
+                        TabletUIController.Instance.IsVisible ? 1 : 0);
                 }
 
                 PlayerPrefs.SetInt("SUNSET16_SaveExists", 1);
@@ -148,6 +162,20 @@ namespace SUNSET16.Core
                             }
                         }
                     }
+
+                    string roomTypeData = PlayerPrefs.GetString("SUNSET16_RoomTypes", "");
+                    if (!string.IsNullOrEmpty(roomTypeData))
+                    {
+                        string[] pairs = roomTypeData.Split(',');
+                        foreach (string pair in pairs)
+                        {
+                            string[] parts = pair.Split(':');
+                            if (parts.Length == 2 && int.TryParse(parts[1], out int typeInt))
+                            {
+                                HiddenRoomManager.Instance.SetRoomType(parts[0], (RoomType)typeInt);
+                            }
+                        }
+                    }
                 }
 
                 if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
@@ -165,6 +193,15 @@ namespace SUNSET16.Core
                         HashSet<string> loreIds = new HashSet<string>(loreData.Split(','));
                         PuzzleManager.Instance.SetUnlockedLore(loreIds);
                     }
+                }
+
+                if (TabletUIController.Instance != null && TabletUIController.Instance.IsInitialized)
+                {
+                    bool tabletVisible = PlayerPrefs.GetInt("SUNSET16_TabletUIVisible", 0) == 1;
+                    if (tabletVisible)
+                        TabletUIController.Instance.OpenTablet();
+                    else
+                        TabletUIController.Instance.CloseTablet();
                 }
 
                 OnGameLoaded?.Invoke();
@@ -198,6 +235,8 @@ namespace SUNSET16.Core
             PlayerPrefs.DeleteKey("SUNSET16_CompletedPuzzles");
             PlayerPrefs.DeleteKey("SUNSET16_UnlockedLore");
 
+            PlayerPrefs.DeleteKey("SUNSET16_TabletUIVisible");
+
             PlayerPrefs.Save();
             SaveExists = false;
             DayManager.Instance.Initialize();
@@ -222,8 +261,11 @@ namespace SUNSET16.Core
             }
 
             PlayerPrefs.DeleteKey("SUNSET16_DoorStates");
+            PlayerPrefs.DeleteKey("SUNSET16_RoomTypes");
             PlayerPrefs.DeleteKey("SUNSET16_CompletedPuzzles");
             PlayerPrefs.DeleteKey("SUNSET16_UnlockedLore");
+
+            PlayerPrefs.DeleteKey("SUNSET16_TabletUIVisible");
 
             PlayerPrefs.Save();
             SaveExists = false;
