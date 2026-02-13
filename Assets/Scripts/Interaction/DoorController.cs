@@ -82,7 +82,7 @@ namespace SUNSET16.Core
                     return "Locked";
                 }
 
-                if (PillStateManager.Instance != null && PillStateManager.Instance.IsPillTakenToday())
+            if (PillStateManager.Instance != null && PillStateManager.Instance.HasTakenPillToday())
                 {
                     return "Too drowsy...";
                 }
@@ -110,7 +110,7 @@ namespace SUNSET16.Core
                 return false;
             }
 
-            if (PillStateManager.Instance != null && PillStateManager.Instance.IsPillTakenToday())
+            if (PillStateManager.Instance != null && PillStateManager.Instance.HasTakenPillToday())
             {
                 ShowLockedMessage("You feel too drowsy to explore...");
                 return false;
