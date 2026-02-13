@@ -4,6 +4,7 @@ namespace SUNSET16.Core
     {
         Task = 0,
         Hidden = 1,
-        EscapePod = 2
+        EscapePod = 2,
+        Normal = 3
     }
 }

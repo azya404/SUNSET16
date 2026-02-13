@@ -16,6 +16,10 @@ namespace SUNSET16.Core
 
         private bool _isTransitioning = false;
 
+        [Header("Spawn Position Management")]
+        private Vector3 _nextSpawnPosition = Vector3.zero;
+        private bool _hasCustomSpawnPosition = false;
+
         public event Action<string> OnRoomLoaded;
         public event Action<string> OnRoomUnloaded;
 
@@ -63,6 +67,13 @@ namespace SUNSET16.Core
             if (!string.IsNullOrEmpty(roomId) && HiddenRoomManager.Instance != null)
             {
                 HiddenRoomManager.Instance.EnterRoom(roomId);
+            }
+
+            if (PlayerController.Instance != null)
+            {
+                Vector3 spawnPos = GetSpawnPosition();
+                PlayerController.Instance.SetPosition(spawnPos);
+                Debug.Log($"[ROOMMANAGER] Player spawned at {spawnPos}");
             }
 
             OnRoomLoaded?.Invoke(roomSceneName);
@@ -113,6 +124,25 @@ namespace SUNSET16.Core
         {
             _currentRoomScene = roomName;
             // reminder for self, VALIDATION
+        }
+
+        public void SetNextSpawnPosition(Vector3 position)
+        {
+            _nextSpawnPosition = position;
+            _hasCustomSpawnPosition = true;
+            Debug.Log($"[ROOMMANAGER] Next spawn position set to {position}");
+        }
+
+        public Vector3 GetSpawnPosition()
+        {
+            if (_hasCustomSpawnPosition)
+            {
+                Vector3 pos = _nextSpawnPosition;
+                _hasCustomSpawnPosition = false;
+                return pos;
+            }
+
+            return Vector3.zero;
         }
     }
 }

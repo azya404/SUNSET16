@@ -104,6 +104,16 @@ namespace SUNSET16.Core
                 Debug.Log($"[PUZZLEMANAGER] Puzzle '{puzzleData.puzzleId}' ready - no prefab assigned (tech demo)");
             }
 
+            if (PlayerController.Instance != null)
+            {
+                PlayerController.Instance.LockMovement(true);
+                Debug.Log("[PUZZLEMANAGER] Player input locked (puzzle active)");
+            }
+            else
+            {
+                Debug.LogWarning("[PUZZLEMANAGER] PlayerController not found - cannot lock input");
+            }
+
             OnPuzzleSpawned?.Invoke(puzzleData);
         }
 
@@ -130,6 +140,13 @@ namespace SUNSET16.Core
             }
 
             DestroyActivePuzzle();
+
+            if (PlayerController.Instance != null)
+            {
+                PlayerController.Instance.LockMovement(false);
+                Debug.Log("[PUZZLEMANAGER] Player input unlocked (puzzle complete)");
+            }
+
             OnPuzzleCompleted?.Invoke(puzzleId);
             Debug.Log($"[PUZZLEMANAGER] Puzzle '{puzzleId}' completed!");
         }
