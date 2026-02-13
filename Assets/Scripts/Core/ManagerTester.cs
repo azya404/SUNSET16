@@ -226,14 +226,34 @@ namespace SUNSET16.Core
                     if (GUILayout.Button("Enter First Discovered Room"))
                     {
                         string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
+
+                        string roomToEnter = null;
                         foreach (string id in allRooms)
                         {
                             DoorState state = HiddenRoomManager.Instance.GetDoorState(id);
-                            if (state == DoorState.Discovered || state == DoorState.Entered)
+                            if (state == DoorState.Discovered)
                             {
-                                HiddenRoomManager.Instance.EnterRoom(id);
+                                roomToEnter = id;
                                 break;
                             }
+                        }
+
+                        if (roomToEnter == null)
+                        {
+                            foreach (string id in allRooms)
+                            {
+                                DoorState state = HiddenRoomManager.Instance.GetDoorState(id);
+                                if (state == DoorState.Entered)
+                                {
+                                    roomToEnter = id;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (roomToEnter != null)
+                        {
+                            HiddenRoomManager.Instance.EnterRoom(roomToEnter);
                         }
                     }
                     GUI.enabled = true;
@@ -259,10 +279,14 @@ namespace SUNSET16.Core
                         puzzleHistory += $"D{d}:{status}  ";
                     }
                     GUILayout.Label(puzzleHistory);
+
+                    PillChoice spawnPillChoice = PillStateManager.Instance.GetPillChoice(currentDay);
+                    bool isOffPillForSpawn = spawnPillChoice == PillChoice.NotTaken;
                     bool canSpawnPuzzle = !DayManager.Instance.IsGameOver
                                        && DayManager.Instance.CurrentPhase == DayPhase.Night
                                        && !isPuzzleCompleted
-                                       && PuzzleManager.Instance.ActivePuzzle == null;
+                                       && PuzzleManager.Instance.ActivePuzzle == null
+                                       && isOffPillForSpawn;
 
                     GUI.enabled = canSpawnPuzzle;
                     if (GUILayout.Button("Spawn Puzzle"))
@@ -272,10 +296,12 @@ namespace SUNSET16.Core
                         HiddenRoomManager.Instance.EnterRoom(roomToEnter);
                     }
                     GUI.enabled = true;
-
+                    PillChoice currentPillChoice = PillStateManager.Instance.GetPillChoice(currentDay);
+                    bool isOffPillDay = currentPillChoice == PillChoice.NotTaken;
                     bool canCompletePuzzle = !DayManager.Instance.IsGameOver
                                            && DayManager.Instance.CurrentPhase == DayPhase.Night
-                                           && !isPuzzleCompleted;
+                                           && !isPuzzleCompleted
+                                           && isOffPillDay;
 
                     GUI.enabled = canCompletePuzzle;
                     if (GUILayout.Button("Complete Puzzle (instant)"))

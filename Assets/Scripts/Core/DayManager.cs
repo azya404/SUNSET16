@@ -78,13 +78,28 @@ namespace SUNSET16.Core
                     PillChoice todayChoice = PillStateManager.Instance.GetPillChoice(CurrentDay);
                     if (todayChoice == PillChoice.NotTaken)
                     {
-                        if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
+                        if (HiddenRoomManager.Instance != null && HiddenRoomManager.Instance.IsInitialized)
                         {
-                            string expectedPuzzleId = $"puzzle_day_{CurrentDay}";
-                            if (!PuzzleManager.Instance.IsPuzzleCompleted(expectedPuzzleId))
+                            bool enteredAnyRoom = false;
+                            string[] allRooms = HiddenRoomManager.Instance.GetAllRoomIds();
+                            foreach (string roomId in allRooms)
                             {
-                                Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: hidden room puzzle must be completed first (off-pill restriction)");
-                                return;
+                                DoorState state = HiddenRoomManager.Instance.GetDoorState(roomId);
+                                if (state == DoorState.Entered)
+                                {
+                                    enteredAnyRoom = true;
+                                    break;
+                                }
+                            }
+
+                            if (enteredAnyRoom && PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
+                            {
+                                string expectedPuzzleId = $"puzzle_day_{CurrentDay}";
+                                if (!PuzzleManager.Instance.IsPuzzleCompleted(expectedPuzzleId))
+                                {
+                                    Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: hidden room puzzle must be completed first (off-pill restriction)");
+                                    return;
+                                }
                             }
                         }
                     }
