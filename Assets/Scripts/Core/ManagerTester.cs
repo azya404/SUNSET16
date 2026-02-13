@@ -42,6 +42,33 @@ namespace SUNSET16.Core
                 GUILayout.Space(10);
 
                 bool canAdvance = !DayManager.Instance.IsGameOver;
+                string advanceStatus = "";
+
+                if (DayManager.Instance.CurrentPhase == DayPhase.Night)
+                {
+                    bool taskDone = TaskManager.Instance != null && TaskManager.Instance.IsTaskCompleted(currentDay);
+                    bool puzzleDone = true;
+
+                    PillChoice choice = PillStateManager.Instance.GetPillChoice(currentDay);
+                    if (choice == PillChoice.NotTaken && PuzzleManager.Instance != null)
+                    {
+                        string puzzleId = $"puzzle_day_{currentDay}";
+                        puzzleDone = PuzzleManager.Instance.IsPuzzleCompleted(puzzleId);
+                    }
+
+                    bool canSleep = taskDone && puzzleDone;
+                    advanceStatus = canSleep ? "Can Sleep: YES" : "Can Sleep: NO";
+                    if (!canSleep)
+                    {
+                        advanceStatus += " (";
+                        if (!taskDone) advanceStatus += "!Task ";
+                        if (!puzzleDone) advanceStatus += "!Puzzle";
+                        advanceStatus += ")";
+                    }
+
+                    GUILayout.Label(advanceStatus);
+                }
+
                 GUI.enabled = canAdvance;
                 if (GUILayout.Button("Advance Phase"))
                 {
