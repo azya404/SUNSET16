@@ -1,3 +1,24 @@
+/*
+settings UI panel - sliders for volume (master, music, sfx) and brightness
+opened from the main menu rn, eventually from an in-game pause menu too
+
+each slider calls SettingsManager when you drag it, and SettingsManager
+fires events that AudioManager and VisualStateController pick up
+so the chain is: slider drag -> SettingsManager -> events -> systems react
+
+we use OnEnable/OnDisable to subscribe/unsubscribe the slider listeners
+instead of Start/OnDestroy cos this panel gets toggled on and off a lot
+if we used OnDestroy the listeners would stack up every time you open it
+and youd get duplicate callbacks which is no good
+
+when the panel opens it syncs all slider positions to whatever
+SettingsManager currently has so they always show the right values
+
+TODO: resolution/quality dropdown
+TODO: fullscreen toggle
+TODO: keybinding remapping
+TODO: play an sfx sample when adjusting sfx volume so you can hear the change
+*/
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -29,6 +50,8 @@ namespace SUNSET16.UI
         {
             if (SettingsManager.Instance == null) return;
 
+            //sync sliders to whatever SettingsManager currently has
+            //so if the player changed something and closed/reopened, its all still right
             masterVolumeSlider.value = SettingsManager.Instance.MasterVolume;
             musicVolumeSlider.value = SettingsManager.Instance.MusicVolume;
             sfxVolumeSlider.value = SettingsManager.Instance.SFXVolume;
@@ -36,6 +59,7 @@ namespace SUNSET16.UI
 
             UpdateLabels();
 
+            //subscribe to slider changes - these fire every time the slider moves
             masterVolumeSlider.onValueChanged.AddListener(OnMasterVolumeChanged);
             musicVolumeSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
             sfxVolumeSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
@@ -49,6 +73,7 @@ namespace SUNSET16.UI
 
         private void OnDisable()
         {
+            //MUST unsub here or youll get ghost callbacks and eventual memory leaks
             masterVolumeSlider.onValueChanged.RemoveListener(OnMasterVolumeChanged);
             musicVolumeSlider.onValueChanged.RemoveListener(OnMusicVolumeChanged);
             sfxVolumeSlider.onValueChanged.RemoveListener(OnSFXVolumeChanged);
@@ -62,7 +87,7 @@ namespace SUNSET16.UI
 
         private void OnMasterVolumeChanged(float value)
         {
-            SettingsManager.Instance.SetMasterVolume(value);
+            SettingsManager.Instance.SetMasterVolume(value); //this fires an event that AudioManager picks up
             UpdateLabels();
         }
 
@@ -86,6 +111,7 @@ namespace SUNSET16.UI
 
         private void UpdateLabels()
         {
+            //multiply by 100 and round so it shows as a nice percentage
             if (masterVolumeLabel != null)
                 masterVolumeLabel.text = $"Master: {Mathf.RoundToInt(masterVolumeSlider.value * 100)}%";
             if (musicVolumeLabel != null)
@@ -100,6 +126,7 @@ namespace SUNSET16.UI
         {
             SettingsManager.Instance.ResetToDefaults();
 
+            //resync the sliders to the new default values
             masterVolumeSlider.value = SettingsManager.Instance.MasterVolume;
             musicVolumeSlider.value = SettingsManager.Instance.MusicVolume;
             sfxVolumeSlider.value = SettingsManager.Instance.SFXVolume;
@@ -110,7 +137,7 @@ namespace SUNSET16.UI
 
         private void OnClose()
         {
-            gameObject.SetActive(false);
+            gameObject.SetActive(false); //just hide the panel, OnDisable handles cleanup
         }
     }
 }
