@@ -1,3 +1,23 @@
+/*
+manages hidden room discovery and access
+hidden rooms are the reward for refusing the pill - they have puzzles
+and USB drive lore that reveals whats really going on
+
+station has 3 hidden rooms, all start locked. when you refuse the pill
+and night comes, ONE room gets auto-discovered (in order: room_1, room_2, room_3)
+so refusing on 3 different nights = all 3 rooms found
+
+theres a 1-per-night limit on discovery to pace the content out
+and you can only actually enter if its night + off-pill + daily task done
+that triple check prevents any shortcuts
+
+on-pill nights fire OnBedroomRestrictionActive instead which tells
+DoorController to lock everything except the bedroom door
+
+TODO: visual effects when a room is discovered (camera pan, door glow)
+TODO: room IDs are hardcoded - should match scene naming convention
+TODO: re-entering a completed room should skip the puzzle
+*/
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -38,6 +58,7 @@ namespace SUNSET16.Core
 
         private void Initialize()
         {
+            //set up dictionaries - all rooms start locked
             _doorStates = new Dictionary<string, DoorState>();
             _roomTypes = new Dictionary<string, RoomType>();
             foreach (string roomId in _roomIds)
@@ -46,6 +67,7 @@ namespace SUNSET16.Core
                 _roomTypes[roomId] = RoomType.Hidden;
             }
 
+            //listen for night phase events to know when to discover rooms
             DayManager.Instance.OnNightPhaseOffPill += OnNightPhaseOffPill;
             DayManager.Instance.OnNightPhaseOnPill += OnNightPhaseOnPill;
             SaveManager.Instance.OnSaveDeleted += OnSaveDeleted;
@@ -54,11 +76,13 @@ namespace SUNSET16.Core
             Debug.Log("[HIDDENROOMMANAGER] Initialized");
         }
 
+        //off-pill night = time to discover the next room
         private void OnNightPhaseOffPill()
         {
-            _roomsDiscoveredThisNight = 0;
+            _roomsDiscoveredThisNight = 0; //reset per-night counters
             _roomsEnteredThisNight = 0;
 
+            //find the next room thats still locked and discover it
             string nextRoom = GetNextLockedRoom();
             if (nextRoom != null)
             {
@@ -70,15 +94,17 @@ namespace SUNSET16.Core
             }
         }
 
+        //on-pill night = no exploring, bedroom only
         private void OnNightPhaseOnPill()
         {
             _roomsDiscoveredThisNight = 0;
             _roomsEnteredThisNight = 0;
 
-            OnBedroomRestrictionActive?.Invoke();
+            OnBedroomRestrictionActive?.Invoke(); //tells DoorController to lock non-bedroom doors
             Debug.Log("[HIDDENROOMMANAGER] On-pill night: bedroom restriction active");
         }
 
+        //save got wiped, lock everything back up
         private void OnSaveDeleted()
         {
             foreach (string roomId in _roomIds)
@@ -89,6 +115,8 @@ namespace SUNSET16.Core
             Debug.Log("[HIDDENROOMMANAGER] All door states reset (save deleted)");
         }
 
+        //marks a room as discovered (Locked -> Discovered)
+        //has a bunch of validation - must be night, off-pill, task done, max 1 per night
         public void DiscoverRoom(string roomId)
         {
             if (!_doorStates.ContainsKey(roomId))
@@ -97,6 +125,7 @@ namespace SUNSET16.Core
                 return;
             }
 
+            //make sure its actually a hidden room and not a normal one
             if (_roomTypes.TryGetValue(roomId, out RoomType type) && type != RoomType.Hidden)
             {
                 Debug.LogWarning($"[HIDDENROOMMANAGER] Room '{roomId}' is not a hidden room (type: {type})");
@@ -109,6 +138,7 @@ namespace SUNSET16.Core
                 return;
             }
 
+            //only 1 discovery per night to pace the content
             if (_roomsDiscoveredThisNight >= 1)
             {
                 Debug.LogWarning($"[HIDDENROOMMANAGER] Cannot discover room '{roomId}': already discovered 1 room this night (limit: 1 per night)");
@@ -121,12 +151,13 @@ namespace SUNSET16.Core
                 return;
             }
 
-            _doorStates[roomId] = DoorState.Discovered;
+            _doorStates[roomId] = DoorState.Discovered; //door light turns on
             _roomsDiscoveredThisNight++;
             OnRoomDiscovered?.Invoke(roomId);
             Debug.Log($"[HIDDENROOMMANAGER] Room '{roomId}' discovered! (Total this night: {_roomsDiscoveredThisNight})");
         }
 
+        //player walks into a discovered room (Discovered -> Entered)
         public void EnterRoom(string roomId)
         {
             if (!_doorStates.ContainsKey(roomId))
@@ -141,6 +172,7 @@ namespace SUNSET16.Core
                 return;
             }
 
+            //can only enter if its been discovered first
             if (_doorStates[roomId] != DoorState.Discovered && _doorStates[roomId] != DoorState.Entered)
             {
                 Debug.LogWarning($"[HIDDENROOMMANAGER] Room '{roomId}' must be Discovered before entering (current: {_doorStates[roomId]})");
@@ -149,10 +181,11 @@ namespace SUNSET16.Core
 
             _roomsEnteredThisNight++;
 
+            //only fire the event on first entry, not re-entries
             if (_doorStates[roomId] == DoorState.Discovered)
             {
                 _doorStates[roomId] = DoorState.Entered;
-                OnRoomEntered?.Invoke(roomId);
+                OnRoomEntered?.Invoke(roomId); //PuzzleManager listens to this
                 Debug.Log($"[HIDDENROOMMANAGER] Room '{roomId}' entered for the first time!");
             }
             else
@@ -161,13 +194,14 @@ namespace SUNSET16.Core
             }
         }
 
+        //returns the door state, defaults to Locked if not found
         public DoorState GetDoorState(string roomId)
         {
             if (_doorStates != null && _doorStates.ContainsKey(roomId))
             {
                 return _doorStates[roomId];
             }
-            return DoorState.Locked;
+            return DoorState.Locked; //safe default
         }
 
         public void SetDoorState(string roomId, DoorState state)
@@ -188,6 +222,7 @@ namespace SUNSET16.Core
             return _roomIds;
         }
 
+        //returns a COPY so the caller cant mess with our internal state
         public Dictionary<string, DoorState> GetAllDoorStates()
         {
             return new Dictionary<string, DoorState>(_doorStates);
@@ -198,13 +233,15 @@ namespace SUNSET16.Core
             return _roomsEnteredThisNight > 0;
         }
 
+        //DoorController calls this to check if a specific room can be entered rn
         public bool CanAccessRoom(string roomId)
         {
             if (!CanAccessHiddenRooms())
             {
-                return false;
+                return false; //fails the global check
             }
 
+            //room needs to be at least Discovered to enter
             DoorState state = GetDoorState(roomId);
             return state == DoorState.Discovered || state == DoorState.Entered;
         }
@@ -215,6 +252,8 @@ namespace SUNSET16.Core
             return state == DoorState.Discovered || state == DoorState.Entered;
         }
 
+        //walks the room list in order and returns the first one thats still locked
+        //this is how we ensure rooms are discovered in sequence
         private string GetNextLockedRoom()
         {
             foreach (string roomId in _roomIds)
@@ -225,9 +264,11 @@ namespace SUNSET16.Core
                     return roomId;
                 }
             }
-            return null;
+            return null; //all rooms already discovered
         }
 
+        //the triple check: night + off-pill + task done
+        //all three must pass or you cant access hidden rooms
         private bool CanAccessHiddenRooms()
         {
             if (DayManager.Instance == null || PillStateManager.Instance == null || TaskManager.Instance == null)
@@ -239,23 +280,23 @@ namespace SUNSET16.Core
             if (DayManager.Instance.CurrentPhase != DayPhase.Night)
             {
                 Debug.Log("[HIDDENROOMMANAGER] Hidden rooms only accessible during Night phase");
-                return false;
+                return false; //daytime = no exploring
             }
 
             PillChoice todaysPillChoice = PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay);
             if (todaysPillChoice != PillChoice.NotTaken)
             {
                 Debug.Log("[HIDDENROOMMANAGER] Hidden rooms only accessible when OFF pill");
-                return false;
+                return false; //took the pill = no access
             }
 
             if (!TaskManager.Instance.IsTaskCompleted(DayManager.Instance.CurrentDay))
             {
                 Debug.Log("[HIDDENROOMMANAGER] Hidden rooms only accessible after completing daily task");
-                return false;
+                return false; //do your chores first
             }
 
-            return true;
+            return true; //all good
         }
 
         public RoomType GetRoomType(string roomId)
@@ -268,6 +309,7 @@ namespace SUNSET16.Core
             _roomTypes[roomId] = type;
         }
 
+        //unsub from everything
         private void OnDestroy()
         {
             if (DayManager.Instance != null)
