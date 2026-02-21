@@ -22,6 +22,8 @@ namespace SUNSET16.UI
         [SerializeField] private Button confirmNewGameButton;
         [SerializeField] private Button cancelNewGameButton;
 
+        [Header("Scene Names")]
+        [SerializeField] private string newGameSceneName = "Bedroom"; // Tech demo starts in bedroom
         private const string CORE_SCENE_NAME = "CoreScene";
 
         private void Start()
@@ -77,8 +79,8 @@ namespace SUNSET16.UI
         private void StartNewGame()
         {
             SaveManager.Instance.ClearSaveData();
-            Debug.Log("[MAINMENU] Starting new game");
-            SceneManager.LoadScene(CORE_SCENE_NAME);
+            Debug.Log($"[MAINMENU] Starting new game - Loading {newGameSceneName}");
+            SceneManager.LoadScene(newGameSceneName);
         }
 
         private void OnContinueClicked()
