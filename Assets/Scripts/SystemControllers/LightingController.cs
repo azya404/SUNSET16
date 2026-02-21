@@ -1,3 +1,23 @@
+/*
+controls the global lighting based on time of day (morning vs night)
+uses URPs Light2D component - the globalLight is set to "Global" type
+so it affects every sprite and tilemap in the scene
+
+morning = warm bright lights, night = cool dim blue tint
+transitions between them smoothly with a coroutine that lerps
+color and intensity over transitionDuration seconds
+
+also snaps lighting instantly on init and save/load so you dont
+get a weird transition when the game first starts or when loading
+a save thats mid-night
+
+same event subscription pattern as AudioManager - defers until
+GameManager finishes init then subscribes to phase changes
+
+TODO: per-room lighting presets (different ambient for bedroom vs hallway vs hidden rooms)
+TODO: flickering light effect for hidden rooms (creepy atmosphere)
+TODO: pill state should affect lighting (on-pill = sterile, off-pill = warmer)
+*/
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using System.Collections;
@@ -25,6 +45,7 @@ namespace SUNSET16.Core
             base.Awake();
         }
 
+        //same deferred init pattern as AudioManager
         private void Start()
         {
             if (GameManager.Instance != null && GameManager.Instance.IsInitialized)
@@ -39,6 +60,7 @@ namespace SUNSET16.Core
 
         private void Initialize()
         {
+            //try to find a Light2D in the scene if one isnt assigned
             if (globalLight == null)
             {
                 globalLight = FindObjectOfType<Light2D>();
@@ -49,10 +71,12 @@ namespace SUNSET16.Core
                 }
             }
 
+            //hook into phase changes + save/load events
             DayManager.Instance.OnPhaseChanged += OnPhaseChanged;
             SaveManager.Instance.OnSaveDeleted += OnSaveDeleted;
             SaveManager.Instance.OnGameLoaded += OnGameLoaded;
 
+            //snap to the correct lighting state immediately (no transition on startup)
             if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
             {
                 ApplyDayLighting(instant: true);
@@ -65,12 +89,14 @@ namespace SUNSET16.Core
             Debug.Log("[LIGHTINGCONTROLLER] Initialized");
         }
 
+        //save got deleted = fresh game, snap back to morning defaults
         private void OnSaveDeleted()
         {
             ApplyDayLighting(instant: true);
             Debug.Log("[LIGHTINGCONTROLLER] Lighting reset to Morning defaults");
         }
 
+        //loaded a save - snap to whatever phase we loaded into without transition
                 private void OnGameLoaded()
         {
             if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
@@ -84,16 +110,17 @@ namespace SUNSET16.Core
             Debug.Log($"[LIGHTINGCONTROLLER] Lighting re-applied after load ({DayManager.Instance.CurrentPhase})");
         }
 
+        //phase changed during gameplay - smooth transition so it looks nice
         private void OnPhaseChanged(DayPhase newPhase)
         {
             switch (newPhase)
             {
                 case DayPhase.Morning:
-                    ApplyDayLighting(instant: false);
+                    ApplyDayLighting(instant: false); //smooth fade to warm
                     break;
 
                 case DayPhase.Night:
-                    ApplyNightLighting(instant: false);
+                    ApplyNightLighting(instant: false); //smooth fade to cool blue
                     break;
             }
         }
@@ -132,6 +159,8 @@ namespace SUNSET16.Core
             Debug.Log($"[LIGHTINGCONTROLLER] Night lighting applied (instant: {instant})");
         }
 
+        //kills any running transition and starts a new one
+        //only one can run at a time or theyd fight each other
         private void StartTransition(Color targetColor, float targetIntensity)
         {
             if (_transitionCoroutine != null)
@@ -140,6 +169,7 @@ namespace SUNSET16.Core
             _transitionCoroutine = StartCoroutine(TransitionLighting(targetColor, targetIntensity));
         }
 
+        //lerps both color and intensity over transitionDuration
         private IEnumerator TransitionLighting(Color targetColor, float targetIntensity)
         {
             Color startColor = globalLight.color;
@@ -157,25 +187,28 @@ namespace SUNSET16.Core
                 yield return null;
             }
 
+            //snap to exact values at the end so theres no floating point drift
             globalLight.color = targetColor;
             globalLight.intensity = targetIntensity;
 
             _transitionCoroutine = null;
         }
 
+        //these two are for other scripts to override lighting (like for endings)
         public void SetCustomLighting(Color color, float intensity)
         {
             if (globalLight == null) return;
-            StartTransition(color, intensity);
+            StartTransition(color, intensity); //smooth version
         }
 
         public void SetCustomLightingInstant(Color color, float intensity)
         {
             if (globalLight == null) return;
-            globalLight.color = color;
+            globalLight.color = color; //snap version
             globalLight.intensity = intensity;
         }
 
+        //unsub from everything so we dont get ghost callbacks
         private void OnDestroy()
         {
             if (DayManager.Instance != null)

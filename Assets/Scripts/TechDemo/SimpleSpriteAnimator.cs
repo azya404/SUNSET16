@@ -1,12 +1,19 @@
+/*
+barebones sprite animation - just cycles through sprites like a flipbook
+we use this for the computer screen in the bedroom to make it look alive
+
+drag your sprites into the frames array in the Inspector, set the speed,
+and it loops forever. resets when the object gets enabled so it always
+starts clean. uses modulo to wrap around to the first frame
+
+only works on UI Images (not SpriteRenderers) - if you need to animate
+gameplay sprites use the Animator instead
+*/
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SUNSET16.TechDemo
 {
-    /// <summary>
-    /// Simple sprite animator for looping UI images.
-    /// Cycles through sprites at specified frame rate.
-    /// </summary>
     [RequireComponent(typeof(Image))]
     public class SimpleSpriteAnimator : MonoBehaviour
     {
@@ -25,7 +32,7 @@ namespace SUNSET16.TechDemo
 
         void OnEnable()
         {
-            // Reset animation when enabled
+            //start from the beginning whenever this gets turned on
             currentFrame = 0;
             timer = 0f;
             if (frames.Length > 0 && image != null)
@@ -40,7 +47,7 @@ namespace SUNSET16.TechDemo
 
             timer += Time.deltaTime;
 
-            // Check if it's time to advance to next frame
+            //time to swap to the next frame?
             if (timer >= 1f / framesPerSecond)
             {
                 timer = 0f;

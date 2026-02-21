@@ -1,3 +1,30 @@
+/*
+controls post-processing to visually show the pill state
+probably the most narratively important system cos it SHOWS the player
+what the pill does without telling them
+
+on-pill: world gets desaturated and gray, vignette closes in (tunnel vision)
+the more pills you take the worse it gets - by ending its near grayscale
+with heavy vignette, feels claustrophobic and lifeless
+
+off-pill: colors get MORE vibrant, vignette opens up, but you get these
+chromatic aberration glitches randomly (represents withdrawal/awakening)
+the more you refuse the more colorful it gets until the good ending
+which is full vivid color with no vignette at all
+
+uses URPs Volume component with ColorAdjustments, Vignette, and
+ChromaticAberration overrides. the glitch is a coroutine that fires
+chromatic bursts at random intervals (3-7 seconds) in a
+full -> off -> half -> off pattern that looks like a camera malfunction
+
+the progressive system is key - effects accumulate across days
+not just the current day. 2 pills = more gray than 1 pill etc
+makes the visual difference between paths more dramatic over time
+
+TODO: color grading LUT swap for more dramatic visual difference
+TODO: screen distortion for ending sequences
+TODO: brightness goes through postExposure here - might want to separate
+*/
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -56,16 +83,18 @@ namespace SUNSET16.Core
         private void Initialize()
         {
             InitializePostProcessing();
+            //subscribe to pill events, settings, and save/load
             PillStateManager.Instance.OnPillTaken += OnPillTaken;
             PillStateManager.Instance.OnEndingReached += OnEndingReached;
             SettingsManager.Instance.OnBrightnessChanged += ApplyBrightness;
             SaveManager.Instance.OnSaveDeleted += ResetVisuals;
             SaveManager.Instance.OnGameLoaded += OnGameLoaded;
-            ApplyBrightness(SettingsManager.Instance.Brightness);
+            ApplyBrightness(SettingsManager.Instance.Brightness); //apply current brightness immediately
 
             Debug.Log("[VISUALSTATECONTROLLER] Initialized");
         }
 
+        //grab the post-processing overrides from the Volume profile
         private void InitializePostProcessing()
         {
             if (postProcessVolume == null)
@@ -78,6 +107,7 @@ namespace SUNSET16.Core
                 }
             }
 
+            //TryGet pulls the override from the volume profile if it exists
             if (postProcessVolume.profile.TryGet(out _colorAdjustments))
             {
                 Debug.Log("[VISUALSTATECONTROLLER] ColorAdjustments found");
@@ -91,11 +121,13 @@ namespace SUNSET16.Core
             postProcessVolume.profile.TryGet(out _chromaticAberration);
         }
 
+        //fires when the player makes their pill choice
         private void OnPillTaken(int day, PillChoice choice)
         {
             _lastChoice = choice;
-            UpdateVisuals(instant: false);
+            UpdateVisuals(instant: false); //smooth transition to new visual state
 
+            //off-pill = start the glitch effect, on-pill = stop it
             if (choice == PillChoice.NotTaken)
             {
                 StartGlitchEffect();
@@ -108,22 +140,26 @@ namespace SUNSET16.Core
             Debug.Log($"[VISUALSTATECONTROLLER] Visuals updated for Day {day}: {choice}");
         }
 
+        //ending reached - slam to extreme values
         private void OnEndingReached(string ending)
         {
-            StopGlitchEffect();
+            StopGlitchEffect(); //no more random glitches during ending
 
             if (ending == "Bad")
             {
-                SetCustomEffect(-100f, 0.8f);
+                SetCustomEffect(-100f, 0.8f); //full grayscale + heavy vignette = oppressive
             }
             else if (ending == "Good")
             {
-                SetCustomEffect(50f, 0f);
+                SetCustomEffect(50f, 0f); //full vibrant color + no vignette = free
             }
 
             Debug.Log($"[VISUALSTATECONTROLLER] Ending visuals applied: {ending}");
         }
 
+        //calculates target saturation and vignette based on pill history
+        //on-pill = more pills = more gray + more vignette
+        //off-pill = more refusals = more vibrant + less vignette
         private void UpdateVisuals(bool instant)
         {
             if (_colorAdjustments == null || _vignette == null) return;
@@ -136,13 +172,13 @@ namespace SUNSET16.Core
 
             if (_lastChoice == PillChoice.Taken)
             {
-                targetSaturation = onPillSaturation;
-                targetVignette = Mathf.Clamp(baseVignette + (pillsTaken * vignettePerPill), 0f, maxVignette);
+                targetSaturation = onPillSaturation; //base gray
+                targetVignette = Mathf.Clamp(baseVignette + (pillsTaken * vignettePerPill), 0f, maxVignette); //progressively worse
             }
             else
             {
-                targetSaturation = Mathf.Clamp(offPillSaturation + (pillsRefused * saturationPerRefusal), 0f, maxSaturation);
-                targetVignette = Mathf.Clamp(offPillVignette - (pillsRefused * vignetteReductionPerRefusal), 0f, offPillVignette);
+                targetSaturation = Mathf.Clamp(offPillSaturation + (pillsRefused * saturationPerRefusal), 0f, maxSaturation); //progressively more vibrant
+                targetVignette = Mathf.Clamp(offPillVignette - (pillsRefused * vignetteReductionPerRefusal), 0f, offPillVignette); //progressively clearer
             }
 
             if (instant)
@@ -205,21 +241,24 @@ namespace SUNSET16.Core
             }
         }
 
+        //the glitch: chromatic aberration bursts that look like camera malfunction
+        //full -> off -> half -> off pattern at random intervals
         private IEnumerator GlitchRoutine()
         {
             while (true)
             {
                 yield return new WaitForSeconds(Random.Range(glitchMinInterval, glitchMaxInterval));
-                _chromaticAberration.intensity.value = glitchIntensity;
+                _chromaticAberration.intensity.value = glitchIntensity; //BURST
                 yield return new WaitForSeconds(0.1f);
-                _chromaticAberration.intensity.value = 0;
+                _chromaticAberration.intensity.value = 0; //off
                 yield return new WaitForSeconds(0.05f);
-                _chromaticAberration.intensity.value = glitchIntensity * 0.5f;
+                _chromaticAberration.intensity.value = glitchIntensity * 0.5f; //half burst
                 yield return new WaitForSeconds(0.1f);
-                _chromaticAberration.intensity.value = 0;
+                _chromaticAberration.intensity.value = 0; //off again
             }
         }
 
+        //brightness slider maps 0-1 to -1 to +1 exposure
         private void ApplyBrightness(float brightness)
         {
             if (_colorAdjustments == null) return;
@@ -235,9 +274,11 @@ namespace SUNSET16.Core
                 _vignette.intensity.value = vignetteIntensity;
         }
 
+        //loaded a save - need to figure out what visual state we should be in
+        //walks backwards through days to find the last pill choice
         private void OnGameLoaded()
         {
-            // Stop any running animations before applying loaded state
+            //kill any running animations first
             if (_transitionCoroutine != null)
             {
                 StopCoroutine(_transitionCoroutine);
@@ -249,6 +290,7 @@ namespace SUNSET16.Core
                 _glitchCoroutine = null;
             }
 
+            //walk backwards through days to find the most recent pill choice
             int currentDay = DayManager.Instance.CurrentDay;
             PillChoice lastKnownChoice = PillChoice.None;
 
@@ -258,33 +300,35 @@ namespace SUNSET16.Core
                 if (c != PillChoice.None)
                 {
                     lastKnownChoice = c;
-                    break;
+                    break; //found it, stop looking
                 }
             }
 
             _lastChoice = lastKnownChoice;
 
+            //apply the appropriate visual state based on what we found
             if (PillStateManager.Instance.IsEndingReached)
             {
                 OnEndingReached(PillStateManager.Instance.DetermineEnding());
             }
             else if (_lastChoice != PillChoice.None)
             {
-                UpdateVisuals(instant: true);
+                UpdateVisuals(instant: true); //snap to correct state, no smooth transition on load
 
                 if (_lastChoice == PillChoice.NotTaken)
-                    StartGlitchEffect();
+                    StartGlitchEffect(); //was off-pill, bring the glitches back
                 else
                     StopGlitchEffect();
             }
             else
             {
-                ResetVisuals();
+                ResetVisuals(); //no pill history = clean slate
             }
 
             Debug.Log($"[VISUALSTATECONTROLLER] Visuals re-applied after load (lastChoice: {_lastChoice})");
         }
 
+        //back to factory settings - zero everything out
         public void ResetVisuals()
         {
             _lastChoice = PillChoice.None;
@@ -297,23 +341,24 @@ namespace SUNSET16.Core
 
             if (_colorAdjustments != null)
             {
-                _colorAdjustments.saturation.value = 0f;
+                _colorAdjustments.saturation.value = 0f; //normal color
                 _colorAdjustments.postExposure.value = Mathf.Lerp(-1f, 1f, SettingsManager.Instance.Brightness);
             }
 
             if (_vignette != null)
             {
-                _vignette.intensity.value = 0f;
+                _vignette.intensity.value = 0f; //no vignette
             }
 
             if (_chromaticAberration != null)
             {
-                _chromaticAberration.intensity.value = 0f;
+                _chromaticAberration.intensity.value = 0f; //no glitch
             }
 
             Debug.Log("[VISUALSTATECONTROLLER] Visuals reset to defaults");
         }
 
+        //unsub from everything
         private void OnDestroy()
         {
             if (PillStateManager.Instance != null)
