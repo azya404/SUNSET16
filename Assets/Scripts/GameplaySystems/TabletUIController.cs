@@ -1,3 +1,23 @@
+/*
+the in-game tablet that shows the current task name, instructions, and status
+this is how the player knows what they need to do each morning
+
+subscribes to TaskManager events - when a task spawns it grabs the
+task name, difficulty, and instructions. when task completes it marks
+the status as COMPLETED. player can toggle it with Tab
+
+uses OnGUI (immediate-mode debug UI) rn which is a placeholder
+the real version should be a Canvas-based UI with TextMeshPro
+and proper styling, maybe a slide-in animation
+
+SetInstructions exists as an alternative to events for direct control
+used when loading from save or when we need manual tablet updates
+
+TODO: replace OnGUI with proper Canvas-based UI (Panel, TMP, ScrollView)
+TODO: lore collection tab (show unlocked USB drive entries)
+TODO: station map tab
+TODO: tablet open/close animation
+*/
 using UnityEngine;
 using System;
 
@@ -39,6 +59,7 @@ namespace SUNSET16.Core
 
         private void Initialize()
         {
+            //wire up to TaskManager events so we update when tasks spawn/complete
             if (TaskManager.Instance != null)
             {
                 TaskManager.Instance.OnTaskSpawned += OnTaskSpawned;
@@ -51,6 +72,7 @@ namespace SUNSET16.Core
             Debug.Log("[TABLETUICONTROLLER] Initialized (instructions-only mode)");
         }
 
+        //new task came in, store its info for display
         private void OnTaskSpawned(TaskData taskData)
         {
             _currentTaskName = taskData.taskName;
@@ -66,12 +88,13 @@ namespace SUNSET16.Core
             Debug.Log($"[TABLETUICONTROLLER] Task marked complete for Day {day}");
         }
 
+        //wipe the display back to blank
         private void OnSaveDeleted()
         {
             _currentTaskName = "";
             _currentInstructions = "No task assigned.";
             _currentTaskCompleted = false;
-            IsVisible = false;
+            IsVisible = false; //close the tablet too
             Debug.Log("[TABLETUICONTROLLER] Display reset (save deleted)");
         }
 
@@ -100,6 +123,7 @@ namespace SUNSET16.Core
             }
         }
 
+        //alternative to events for direct control (save loading, manual updates)
         public void SetInstructions(string taskName, string instructions, TaskDifficulty difficulty)
         {
             _currentTaskName = taskName;
@@ -108,10 +132,13 @@ namespace SUNSET16.Core
             _currentTaskCompleted = false;
         }
 
+        //TODO: replace this entire OnGUI with a proper Canvas-based UI
+        //this is just a debug placeholder so we can see task info during testing
         private void OnGUI()
         {
             if (!IsInitialized || !IsVisible) return;
 
+            //center a box on screen
             float panelWidth = 350f;
             float panelHeight = 250f;
             float x = (Screen.width - panelWidth) / 2f;
@@ -146,6 +173,7 @@ namespace SUNSET16.Core
             GUILayout.EndArea();
         }
 
+        //unsub from everything
         private void OnDestroy()
         {
             if (TaskManager.Instance != null)

@@ -1,3 +1,26 @@
+/*
+manages the puzzles inside hidden rooms and their lore rewards
+puzzles are optional content you get for exploring off-pill nights
+
+when PuzzleManager hears OnRoomEntered from HiddenRoomManager it
+looks up the PuzzleData ScriptableObject for that room, spawns the
+puzzle prefab at the spawn point, and locks the player in place
+the prefab has to implement IPuzzle or it gets destroyed immediately
+
+when the puzzle is solved (CompletePuzzle called) the player gets
+unlocked and if theres a lore reward (LoreEntryData) it gets added
+to the unlocked lore collection
+
+everything is data-driven - designers make PuzzleData assets in the
+Inspector and the puzzle logic lives in the prefab, not here
+
+completed puzzles and unlocked lore are tracked with HashSets
+and saved/loaded by SaveManager as comma-separated strings
+
+TODO: FindPuzzleForRoom uses .Contains which could match wrong rooms (room_1 matches room_10)
+TODO: puzzle hints/clue system for the tablet
+TODO: puzzle timer for speed-run mode
+*/
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -43,6 +66,7 @@ namespace SUNSET16.Core
             _completedPuzzles = new HashSet<string>();
             _unlockedLore = new HashSet<string>();
 
+            //listen for room entries so we know when to spawn puzzles
             if (HiddenRoomManager.Instance != null)
             {
                 HiddenRoomManager.Instance.OnRoomEntered += OnRoomEntered;
@@ -53,6 +77,7 @@ namespace SUNSET16.Core
             Debug.Log("[PUZZLEMANAGER] Initialized");
         }
 
+        //HiddenRoomManager says a room was entered, check if theres a puzzle for it
         private void OnRoomEntered(string roomId)
         {
             PuzzleData puzzleData = FindPuzzleForRoom(roomId);
@@ -62,6 +87,7 @@ namespace SUNSET16.Core
                 return;
             }
 
+            //dont respawn if already solved
             if (_completedPuzzles.Contains(puzzleData.puzzleId))
             {
                 Debug.Log($"[PUZZLEMANAGER] Puzzle '{puzzleData.puzzleId}' already completed");
@@ -79,9 +105,10 @@ namespace SUNSET16.Core
             Debug.Log("[PUZZLEMANAGER] All puzzle/lore state reset (save deleted)");
         }
 
+        //spawns the puzzle prefab and locks the player in place
         private void SpawnPuzzle(PuzzleData puzzleData)
         {
-            DestroyActivePuzzle();
+            DestroyActivePuzzle(); //clean up any leftover puzzle
 
             if (puzzleData.puzzlePrefab != null && _puzzleSpawnPoint != null)
             {
@@ -95,6 +122,7 @@ namespace SUNSET16.Core
                 }
                 else
                 {
+                    //prefab exists but doesnt implement IPuzzle, thats a setup error
                     Debug.LogWarning("[PUZZLEMANAGER] Puzzle prefab does not implement IPuzzle interface");
                     Destroy(puzzleObj);
                 }
@@ -104,6 +132,7 @@ namespace SUNSET16.Core
                 Debug.Log($"[PUZZLEMANAGER] Puzzle '{puzzleData.puzzleId}' ready - no prefab assigned (tech demo)");
             }
 
+            //freeze the player so they cant walk away from the puzzle
             if (PlayerController.Instance != null)
             {
                 PlayerController.Instance.LockMovement(true);
@@ -117,6 +146,7 @@ namespace SUNSET16.Core
             OnPuzzleSpawned?.Invoke(puzzleData);
         }
 
+        //called when the puzzle is solved - marks it done, gives lore reward, unlocks player
         public void CompletePuzzle(string puzzleId)
         {
             if (!IsInitialized)
@@ -133,14 +163,16 @@ namespace SUNSET16.Core
 
             _completedPuzzles.Add(puzzleId);
 
+            //check if this puzzle has a lore reward attached
             PuzzleData puzzleData = FindPuzzleById(puzzleId);
             if (puzzleData != null && puzzleData.loreReward != null)
             {
-                UnlockLore(puzzleData.loreReward);
+                UnlockLore(puzzleData.loreReward); //add it to the collection
             }
 
             DestroyActivePuzzle();
 
+            //unfreeze the player
             if (PlayerController.Instance != null)
             {
                 PlayerController.Instance.LockMovement(false);
@@ -151,15 +183,16 @@ namespace SUNSET16.Core
             Debug.Log($"[PUZZLEMANAGER] Puzzle '{puzzleId}' completed!");
         }
 
+        //adds lore to the unlocked set if we havent already got it
         private void UnlockLore(LoreEntryData loreEntry)
         {
             if (_unlockedLore.Contains(loreEntry.loreId))
             {
-                return;
+                return; //already have this one
             }
 
             _unlockedLore.Add(loreEntry.loreId);
-            OnLoreUnlocked?.Invoke(loreEntry);
+            OnLoreUnlocked?.Invoke(loreEntry); //TabletUIController will pick this up eventually
             Debug.Log($"[PUZZLEMANAGER] Lore unlocked: '{loreEntry.title}'");
         }
 
@@ -183,6 +216,7 @@ namespace SUNSET16.Core
             return new HashSet<string>(_unlockedLore);
         }
 
+        //SaveManager calls these to restore state from save data
         public void SetCompletedPuzzles(HashSet<string> puzzleIds)
         {
             _completedPuzzles = new HashSet<string>(puzzleIds);
@@ -193,6 +227,8 @@ namespace SUNSET16.Core
             _unlockedLore = new HashSet<string>(loreIds);
         }
 
+        //uses .Contains which is a bit loose - "room_1" could match "room_10"
+        //TODO: should probably be exact match or use a dictionary
         private PuzzleData FindPuzzleForRoom(string roomId)
         {
             if (_puzzleDataAssets == null) return null;
@@ -221,6 +257,8 @@ namespace SUNSET16.Core
             return null;
         }
 
+        //cast to MonoBehaviour so we can Destroy the gameObject
+        //IPuzzle is an interface so we cant destroy it directly
         private void DestroyActivePuzzle()
         {
             if (ActivePuzzle != null)
@@ -234,6 +272,7 @@ namespace SUNSET16.Core
             }
         }
 
+        //unsub from everything
         private void OnDestroy()
         {
             if (HiddenRoomManager.Instance != null)

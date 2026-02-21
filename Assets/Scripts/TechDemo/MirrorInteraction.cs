@@ -1,12 +1,24 @@
+/*
+the pill choice mirror - most important interactable in the bedroom scene
+player walks up, presses E, and gets a UI overlay with Take Pill / Hide Pill buttons
+
+rn in the tech demo this just swaps the music track and doesnt actually
+tell PillStateManager anything - so the choice has no real game effect yet
+in the real game the buttons need to call PillStateManager.Instance.TakePill()
+which would then trigger the whole cascade of visual/audio/difficulty changes
+
+also has its own AudioSource instead of going through AudioManager
+which is a bit janky but fine for demo purposes
+
+follows the same overlay pattern as ComputerInteraction:
+open -> lock player + disable interaction + show canvas
+close -> hide canvas + unlock player + re-enable interaction
+*/
 using UnityEngine;
 using SUNSET16.Core;
 
 namespace SUNSET16.TechDemo
 {
-    /// <summary>
-    /// Handles mirror interaction for tech demo.
-    /// Press E to interact, shows overlay with choices.
-    /// </summary>
     public class MirrorInteraction : MonoBehaviour, IInteractable
     {
         [Header("UI References")]
@@ -25,13 +37,13 @@ namespace SUNSET16.TechDemo
 
         void Awake()
         {
-            // Ensure overlay is hidden at start
+            //hide it on startup
             if (mirrorOverlayCanvas != null)
             {
                 mirrorOverlayCanvas.SetActive(false);
             }
 
-            // Get reference to InteractionSystem
+            //grab our InteractionSystem so we can disable it during the overlay
             interactionSystem = GetComponent<InteractionSystem>();
         }
 
@@ -43,19 +55,19 @@ namespace SUNSET16.TechDemo
                 return;
             }
 
-            // Disable InteractionSystem to prevent repeated interactions
+            //stop the player from mashing E while overlay is up
             if (interactionSystem != null)
             {
                 interactionSystem.SetInteractionEnabled(false);
             }
 
-            // Lock player movement
+            //freeze the player in place while theyre looking at the mirror
             if (PlayerController.Instance != null)
             {
                 PlayerController.Instance.LockMovement(true);
             }
 
-            // Show mirror overlay
+            //show the pill choice UI
             if (mirrorOverlayCanvas != null)
             {
                 mirrorOverlayCanvas.SetActive(true);
@@ -69,21 +81,21 @@ namespace SUNSET16.TechDemo
             return interactionPrompt;
         }
 
-        // Called by Take Pill button
+        //wired to the Take Pill button via OnClick in the Inspector
         public void OnTakePillClicked()
         {
             PlayMusic(onPillMusic);
             CloseOverlay();
         }
 
-        // Called by Hide Pill button
+        //wired to the Hide Pill button via OnClick
         public void OnHidePillClicked()
         {
             PlayMusic(offPillMusic);
             CloseOverlay();
         }
 
-        // Called by Close Mirror button (no music)
+        //just closes without changing music (the X button basically)
         public void OnButtonClicked()
         {
             CloseOverlay();
@@ -107,19 +119,19 @@ namespace SUNSET16.TechDemo
         {
             if (!isOverlayActive) return;
 
-            // Hide overlay
+            //kill the overlay
             if (mirrorOverlayCanvas != null)
             {
                 mirrorOverlayCanvas.SetActive(false);
             }
 
-            // Unlock player movement
+            //let them walk again
             if (PlayerController.Instance != null)
             {
                 PlayerController.Instance.LockMovement(false);
             }
 
-            // Re-enable InteractionSystem
+            //turn interaction back on
             if (interactionSystem != null)
             {
                 interactionSystem.SetInteractionEnabled(true);

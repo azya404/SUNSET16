@@ -1,12 +1,18 @@
+/*
+placeholder computer - rn it just logs a message when you press E on it lol
+the overlay canvas and close button logic are already wired up tho
+so when we actually need to show something on the computer screen
+(lore entries, station logs, whatever) we just uncomment the overlay
+activation in Interact() and itll work
+
+the close button already handles unlocking the player and re-enabling
+interaction so thats taken care of at least
+*/
 using UnityEngine;
 using SUNSET16.Core;
 
 namespace SUNSET16.TechDemo
 {
-    /// <summary>
-    /// Handles computer interaction for tech demo.
-    /// Press E to interact, shows computer overlay.
-    /// </summary>
     public class ComputerInteraction : MonoBehaviour, IInteractable
     {
         [Header("UI References")]
@@ -20,23 +26,22 @@ namespace SUNSET16.TechDemo
 
         void Awake()
         {
-            // Ensure overlay is hidden at start
+            //hide the overlay on startup so its not just sitting there
             if (computerOverlayCanvas != null)
             {
                 computerOverlayCanvas.SetActive(false);
             }
 
-            // Get reference to InteractionSystem
+            //grab the InteractionSystem on this same GameObject
             interactionSystem = GetComponent<InteractionSystem>();
         }
 
         public void Interact()
         {
-            // For tech demo: just log interaction, no overlay needed
+            //for now just log it - no overlay needed in the tech demo
             Debug.Log("[COMPUTER] Computer interacted - skipping overlay for tech demo");
 
-            // Interaction happens instantly, no locking needed
-            // Player can immediately walk away
+            //player can just walk away, no locking needed rn
         }
 
         public string GetInteractionPrompt()
@@ -44,24 +49,24 @@ namespace SUNSET16.TechDemo
             return interactionPrompt;
         }
 
-        // Called by close button OnClick event
+        //the close button in the overlay calls this via OnClick event
         public void OnCloseButtonClicked()
         {
             if (!isOverlayActive) return;
 
-            // Hide overlay
+            //kill the overlay
             if (computerOverlayCanvas != null)
             {
                 computerOverlayCanvas.SetActive(false);
             }
 
-            // Unlock player movement
+            //let the player move again
             if (PlayerController.Instance != null)
             {
                 PlayerController.Instance.LockMovement(false);
             }
 
-            // Re-enable InteractionSystem
+            //turn interaction back on so they can press E on stuff again
             if (interactionSystem != null)
             {
                 interactionSystem.SetInteractionEnabled(true);

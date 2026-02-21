@@ -1,13 +1,20 @@
+/*
+the simplest door in the project - just loads a scene when you press E
+we need this cos the tech demo bedroom is standalone and doesnt use the
+full CoreScene + additive loading setup that the real DoorController uses
+
+its basically a throwaway - once all the room scenes exist this gets
+replaced by DoorController which has all the hidden room checks,
+bedroom restriction, visual feedback etc
+
+still implements IInteractable tho so InteractionSystem works exactly the same
+*/
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using SUNSET16.Core;
 
 namespace SUNSET16.TechDemo
 {
-    /// <summary>
-    /// Simple bedroom door for tech demo.
-    /// Press E to transition to Core scene.
-    /// </summary>
     public class BedroomDoorInteraction : MonoBehaviour, IInteractable
     {
         [Header("Scene Transition")]
@@ -20,13 +27,13 @@ namespace SUNSET16.TechDemo
         {
             Debug.Log($"[BEDROOM DOOR] Transitioning to {targetSceneName} scene...");
 
-            // Lock player movement during transition (optional)
+            //freeze the player so they dont walk around during the scene load
             if (PlayerController.Instance != null)
             {
                 PlayerController.Instance.LockMovement(true);
             }
 
-            // Load the target scene
+            //straight up scene load - no fancy additive stuff
             SceneManager.LoadScene(targetSceneName);
         }
 

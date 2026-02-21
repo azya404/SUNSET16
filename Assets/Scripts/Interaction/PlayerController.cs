@@ -1,3 +1,27 @@
+/*
+player movement - WASD top-down 2D with rigidbody physics
+
+doesnt use our Singleton<T> base class cos the player lives in room scenes
+not CoreScene, so it gets destroyed when rooms unload - meaning
+DontDestroyOnLoad would cause problems. uses a manual singleton
+pattern instead (Instance property + destroy duplicate in Awake)
+
+movement uses Rigidbody2D with zero gravity cos its top-down not a platformer
+GetAxisRaw gives snappy -1, 0, 1 input (no smoothing like GetAxis)
+.normalized prevents diagonal movement being faster (sqrt(2) without it)
+FixedUpdate for the actual physics, Update for reading input
+
+LockMovement() freezes the player completely - TaskManager and PuzzleManager
+call this when youre doing a task or puzzle so you cant just walk away lol
+also zeroes the velocity so you dont slide after being locked
+
+animator is optional - if ones assigned it passes MoveX, MoveY, IsMoving
+parameters for walk/idle animations. if not assigned it just skips that
+
+TODO: sprint (hold Shift)
+TODO: footstep sfx thru AudioManager
+TODO: face the direction youre moving (flip sprite or animation direction)
+*/
 using UnityEngine;
 
 namespace SUNSET16.Core
@@ -21,24 +45,25 @@ namespace SUNSET16.Core
 
         void Awake()
         {
+            //manual singleton - same idea as Singleton<T> but without DontDestroyOnLoad
             if (Instance == null)
             {
                 Instance = this;
             }
             else
             {
-                Destroy(gameObject);
+                Destroy(gameObject); //already got one, bye
                 return;
             }
 
             if (rb == null)
             {
-                rb = GetComponent<Rigidbody2D>();
+                rb = GetComponent<Rigidbody2D>(); //grab it if not assigned in Inspector
             }
 
-            rb.gravityScale = 0f;
-            rb.freezeRotation = true;
-            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            rb.gravityScale = 0f; //top-down so no gravity
+            rb.freezeRotation = true; //dont spin on collision
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous; //prevents phasing thru walls at high speed
             hasAnimator = animator != null;
 
             Debug.Log("[PLAYERCONTROLLER] Initialized");
@@ -48,12 +73,13 @@ namespace SUNSET16.Core
         {
             if (!inputLocked)
             {
+                //GetAxisRaw = -1, 0, or 1 (no smoothing, snappy feel)
                 moveInput.x = Input.GetAxisRaw("Horizontal");
                 moveInput.y = Input.GetAxisRaw("Vertical");
             }
             else
             {
-                moveInput = Vector2.zero;
+                moveInput = Vector2.zero; //locked = no input at all
             }
 
             if (hasAnimator)
@@ -64,15 +90,18 @@ namespace SUNSET16.Core
 
         void FixedUpdate()
         {
+            //.normalized so diagonal isnt faster (would be ~1.4x without it)
             rb.velocity = moveInput.normalized * moveSpeed;
         }
 
+        //TaskManager, PuzzleManager, overlays etc call this to freeze/unfreeze the player
         public void LockMovement(bool locked)
         {
             inputLocked = locked;
 
             if (locked)
             {
+                //zero everything so the player doesnt keep sliding from residual velocity
                 moveInput = Vector2.zero;
                 rb.velocity = Vector2.zero;
             }
@@ -85,6 +114,8 @@ namespace SUNSET16.Core
             return inputLocked;
         }
 
+        //pass movement data to the animator if one exists
+        //the Animator Controller uses these to pick walk/idle animations
         void UpdateAnimations()
         {
             float moveX = moveInput.x;
@@ -92,7 +123,7 @@ namespace SUNSET16.Core
 
             animator.SetFloat("MoveX", moveX);
             animator.SetFloat("MoveY", moveY);
-            animator.SetBool("IsMoving", moveInput.magnitude > 0.1f);
+            animator.SetBool("IsMoving", moveInput.magnitude > 0.1f); //small threshold so tiny drift doesnt count as moving
         }
 
         public float GetMoveSpeed()
@@ -114,7 +145,7 @@ namespace SUNSET16.Core
         public void SetPosition(Vector3 position)
         {
             transform.position = position;
-            rb.velocity = Vector2.zero;
+            rb.velocity = Vector2.zero; //stop any movement when teleporting
             Debug.Log($"[PLAYERCONTROLLER] Position set to {position}");
         }
     }
