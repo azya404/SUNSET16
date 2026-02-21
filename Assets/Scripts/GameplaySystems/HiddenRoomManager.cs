@@ -198,6 +198,23 @@ namespace SUNSET16.Core
             return _roomsEnteredThisNight > 0;
         }
 
+        public bool CanAccessRoom(string roomId)
+        {
+            if (!CanAccessHiddenRooms())
+            {
+                return false;
+            }
+
+            DoorState state = GetDoorState(roomId);
+            return state == DoorState.Discovered || state == DoorState.Entered;
+        }
+
+        public bool IsRoomDiscovered(string roomId)
+        {
+            DoorState state = GetDoorState(roomId);
+            return state == DoorState.Discovered || state == DoorState.Entered;
+        }
+
         private string GetNextLockedRoom()
         {
             foreach (string roomId in _roomIds)

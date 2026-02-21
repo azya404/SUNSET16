@@ -145,6 +145,16 @@ namespace SUNSET16.Core
                 Debug.Log($"[TASKMANAGER] Task ready for Day {currentDay} ({difficulty}) - no prefab assigned (tech demo)");
             }
 
+            if (PlayerController.Instance != null)
+            {
+                PlayerController.Instance.LockMovement(true);
+                Debug.Log("[TASKMANAGER] Player input locked (task active)");
+            }
+            else
+            {
+                Debug.LogWarning("[TASKMANAGER] PlayerController not found - cannot lock input");
+            }
+
             OnTaskSpawned?.Invoke(taskData);
         }
 
@@ -177,6 +187,12 @@ namespace SUNSET16.Core
                 ActiveTask.CompleteTask();
             }
             DestroyActiveTask();
+
+            if (PlayerController.Instance != null)
+            {
+                PlayerController.Instance.LockMovement(false);
+                Debug.Log("[TASKMANAGER] Player input unlocked (task complete)");
+            }
 
             OnTaskCompleted?.Invoke(currentDay);
             Debug.Log($"[TASKMANAGER] Day {currentDay} task completed");

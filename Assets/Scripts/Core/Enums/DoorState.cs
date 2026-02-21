@@ -4,6 +4,7 @@ namespace SUNSET16.Core
     {
         Locked = 0,
         Discovered = 1,
-        Entered = 2
+        Entered = 2,
+        Normal = 3
     }
 }

@@ -18,7 +18,7 @@
 #   - UserSettings/ (your personal Unity preferences)
 #   - Build outputs (.exe, .apk, etc.)
 #
-# Last updated: 2026-01-22
+# Last updated: 2026-02-20
 # Unity Version: 2022.3.12f1
 ##################################################################
 
@@ -27,7 +27,6 @@
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/
-/[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 *.log
