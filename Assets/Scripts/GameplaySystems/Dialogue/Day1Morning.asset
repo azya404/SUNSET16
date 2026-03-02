@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a64b12025a6f524d8c3d83cb1de9282, type: 3}
+  m_Name: Day1Morning
+  m_EditorClassIdentifier: 
+  RootNode:
+    dialogueText: "Morning, Andy. Welcome to another beautiful day on the SUNSET16.
+      You\u2019ve been assigned maintenance on Section C-12 of the ship again for
+      the foreseeable future. Wire duty. It\u2019s up your alley as a Technician.
+      Your efficiency ratings have been stellar these past 5 years. DOLOS is pleased."
+    repeat: 0
+    repeatNum: 0
+    responses:
+    - responseText: "It\u2019s what I\u2019m here for."
+      nextNode:
+        dialogueText: Exactly. Now, need a refresher on wiring protocols, or are
+          you good on that front?
+        repeat: 0
+        repeatNum: 0
+        responses:
+        - responseText: "A refresher wouldn\u2019t hurt."
+          nextNode:
+            dialogueText: "It\u2019s the standard grid-based alignment. Connect the
+              correctly coloured endpoints without allowing the paths to cross. Watch
+              out for weird edge cases. Don\u2019t improvise the wiring.It\u2019s
+              the standard grid-based alignment. Connect the correctly coloured endpoints
+              without allowing the paths to cross. Watch out for weird edge cases.
+              Don\u2019t improvise the wiring."
+            repeat: 0
+            repeatNum: 0
+            responses:
+            - responseText: Affirmative.
+              nextNode:
+                dialogueText: 
+                repeat: 0
+                repeatNum: 0
+                responses: []
+        - responseText: "I\u2019m good. Red to red, don\u2019t cross the streams.
+            Simple."
+          nextNode:
+            dialogueText: "Heh. You\u2019ve done this a thousand times. Still, check
+              the manual whenever you need to. Always good to keep your mind sharp."
+            repeat: 0
+            repeatNum: 0
+            responses: []
