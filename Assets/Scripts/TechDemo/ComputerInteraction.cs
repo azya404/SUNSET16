@@ -24,6 +24,8 @@ namespace SUNSET16.TechDemo
         private bool isOverlayActive = false;
         private InteractionSystem interactionSystem;
 
+        public Dialogue Dialogue;
+
         void Awake()
         {
             //hide the overlay on startup so its not just sitting there
@@ -38,10 +40,32 @@ namespace SUNSET16.TechDemo
 
         public void Interact()
         {
-            //for now just log it - no overlay needed in the tech demo
-            Debug.Log("[COMPUTER] Computer interacted - skipping overlay for tech demo");
+            if (isOverlayActive)
+            {
+                Debug.LogWarning("[COMPUTER] Computer overlay already active");
+                return;
+            }
 
-            //player can just walk away, no locking needed rn
+            //stop the player from mashing E while overlay is up
+            if (interactionSystem != null)
+            {
+                interactionSystem.SetInteractionEnabled(false);
+            }
+
+            //freeze the player in place while theyre looking at the mirror
+            if (PlayerController.Instance != null)
+            {
+                PlayerController.Instance.LockMovement(true);
+            }
+
+            //show the pill choice UI
+            if (computerOverlayCanvas != null)
+            {
+                computerOverlayCanvas.SetActive(true);
+                isOverlayActive = true;
+                StartConvo();
+                Debug.Log("[COMPUTER] Computer overlay shown");
+            }
         }
 
         public string GetInteractionPrompt()
@@ -74,6 +98,77 @@ namespace SUNSET16.TechDemo
 
             isOverlayActive = false;
             Debug.Log("[COMPUTER] Computer overlay closed");
+        }
+
+        public void SelectDialogue()
+        {
+            // Finds current day and phase
+            int day = DayManager.Instance.CurrentDay;
+            DayPhase phase = DayManager.Instance.CurrentPhase;
+
+            // Determines which dialogue tree should be used
+            if (day == 1)
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    
+                }
+                else if (phase == DayPhase.Night)
+                {
+                    
+                }
+            }
+            else if (day == 2)
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    
+                }
+                else if (phase == DayPhase.Night)
+                {
+                    
+                }
+            }
+            else if (day == 3)
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    
+                }
+                else if (phase == DayPhase.Night)
+                {
+                    
+                }
+            }
+            else if (day == 4)
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    
+                }
+                else if (phase == DayPhase.Night)
+                {
+                    
+                }
+            }
+            else if (day == 5)
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    
+                }
+                else if (phase == DayPhase.Night)
+                {
+                    
+                }
+            }
+
+        }
+        
+        public void StartConvo()
+        {
+            DialogueManager.Instance.OnUIOpen();
+            DialogueManager.Instance.StartDialogue(Dialogue.RootNode);
         }
     }
 }
