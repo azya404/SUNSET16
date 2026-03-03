@@ -19,6 +19,7 @@ TODO: multiple interaction types per object (like E to open, F to examine)
 */
 using UnityEngine;
 using TMPro;
+using SUNSET16.UI;
 
 namespace SUNSET16.Core
 {
@@ -65,12 +66,20 @@ namespace SUNSET16.Core
 
         void Update()
         {
+            //dont let the player interact if theyre locked (mid-puzzle, mid-task, etc)
             if (playerInRange && Input.GetKeyDown(interactionKey))
             {
-                //dont let the player interact if theyre locked (mid-puzzle, mid-task, etc)
                 if (PlayerController.Instance != null && PlayerController.Instance.IsMovementLocked())
                 {
                     Debug.Log($"[INTERACTIONSYSTEM] Input locked - cannot interact with {gameObject.name}");
+                    return;
+                }
+
+                // Block world-object interactions during DOLOS announcements
+                // (player can still move, but cannot trigger interactables)
+                if (DOLOSManager.Instance != null && DOLOSManager.Instance.IsAnnouncementActive)
+                {
+                    Debug.Log($"[INTERACTIONSYSTEM] DOLOS active — interaction with {gameObject.name} blocked");
                     return;
                 }
 
