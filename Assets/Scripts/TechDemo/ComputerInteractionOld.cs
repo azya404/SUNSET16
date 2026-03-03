@@ -13,7 +13,7 @@ using SUNSET16.Core;
 
 namespace SUNSET16.TechDemo
 {
-    public class ComputerInteraction : MonoBehaviour, IInteractable
+    public class ComputerInteractionOld : MonoBehaviour, IInteractable
     {
         [Header("UI References")]
         [SerializeField] private GameObject computerOverlayCanvas;

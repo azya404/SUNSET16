@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7c527a6f66a8c49a6fab10a94681fc, type: 3}
+  m_Name: Day1Morning
+  m_EditorClassIdentifier: 
+  sequenceId: 
+  lines:
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Morning, Andy. Welcome to another beautiful day on the SUNSET16. You\u2019ve
+      been assigned maintenance on Section C-12 of the ship again for the foreseeable
+      future. Wire duty. It\u2019s up your alley as a Technician. Your efficiency
+      ratings have been stellar these past 5 years. DOLOS is pleased."
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "It\u2019s what I\u2019m here for."
+      nextLineIndex: 1
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Exactly. Now, need a refresher on wiring protocols, or are you good on
+      that front?
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "A refresher wouldn\u2019t hurt."
+      nextLineIndex: 2
+    - choiceText: "I\u2019m good. Red to red, don\u2019t cross the streams. Simple."
+      nextLineIndex: 3
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "It\u2019s the standard grid-based alignment. Connect the correctly coloured
+      endpoints without allowing the paths to cross. Watch out for weird edge cases.
+      Don\u2019t improvise the wiring."
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Affirmative.
+      nextLineIndex: 4
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Heh. You\u2019ve done this a thousand times. Still, check the manual whenever
+      you need to. Always good to keep your mind sharp."
+    autoAdvanceDelay: 0
+    choices: []
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Any other questions before you start? My shift at Section M-67 doesn\u2019t
+      begin for another 20."
+    autoAdvanceDelay: 0
+    choices: []
