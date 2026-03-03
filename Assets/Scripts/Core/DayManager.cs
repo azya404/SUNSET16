@@ -38,6 +38,11 @@ namespace SUNSET16.Core
     //inherits from Singleton so we get global access via DayManager.Instance
     public class DayManager : Singleton<DayManager>
     {
+        [Header("Vertical Slice Settings")]
+        [Tooltip("Which day the game starts on. Set to 3 for the vertical slice demo (covers Day 3 only). " +
+                 "Set to 1 for the full game.")]
+        [SerializeField] private int _startingDay = 3;
+
         public int CurrentDay { get; private set; }       //what day it is (1-5), private set so only WE can change it
         public DayPhase CurrentPhase { get; private set; } //Morning or Night, drives the entire game flow
         public bool IsInitialized { get; private set; }    //true after Initialize() runs, other systems check this
@@ -55,11 +60,11 @@ namespace SUNSET16.Core
         //sets everything to the start-of-game state
         public void Initialize()
         {
-            CurrentDay = 1;
+            CurrentDay = Mathf.Clamp(_startingDay, 1, 5);
             CurrentPhase = DayPhase.Morning;
             IsGameOver = false;
             IsInitialized = true;
-            Debug.Log("[DAYMANAGER] Initialized - Day 1, Morning");
+            Debug.Log($"[DAYMANAGER] Initialized - Day {CurrentDay}, Morning");
         }
 
         /*

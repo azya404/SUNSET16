@@ -37,11 +37,14 @@ namespace SUNSET16.Core
         [SerializeField] private Transform _taskSpawnPoint;
 
         public bool IsInitialized { get; private set; }
-        public bool IsTaskCompletedToday { get; private set; }
+        public bool IsTaskCompletedToday { get; private set; }  //true only after BOTH tasks are done
+        public bool AreAllTasksCompleted { get; private set; }  //same as IsTaskCompletedToday, for external callers
+        public int CurrentTaskIndex { get; private set; }       //1 or 2 - which task we're on this day
         public ITask ActiveTask { get; private set; }
         private Dictionary<int, bool> _taskCompletionByDay;
         public event Action<TaskData> OnTaskSpawned;
-        public event Action<int> OnTaskCompleted;
+        public event Action<int> OnTaskCompleted;               //fires after BOTH tasks done (passes day number)
+        public event Action OnTask1Completed;                   //fires after task 1 done - signals task 2 to activate
 
         protected override void Awake()
         {
@@ -70,6 +73,8 @@ namespace SUNSET16.Core
             }
 
             IsTaskCompletedToday = false;
+            AreAllTasksCompleted = false;
+            CurrentTaskIndex = 1; //always start on task 1
             DayManager.Instance.OnDayChanged += OnDayChanged; //reset task state each new day
             SaveManager.Instance.OnSaveDeleted += OnSaveDeleted;
 
@@ -81,6 +86,8 @@ namespace SUNSET16.Core
         private void OnDayChanged(int newDay)
         {
             IsTaskCompletedToday = _taskCompletionByDay.ContainsKey(newDay) && _taskCompletionByDay[newDay];
+            AreAllTasksCompleted = IsTaskCompletedToday;
+            CurrentTaskIndex = IsTaskCompletedToday ? 2 : 1; //if already done (from save), stay at 2
             DestroyActiveTask(); //clean up any leftover task from previous day
             Debug.Log($"[TASKMANAGER] Day changed to {newDay} - task completed today: {IsTaskCompletedToday}");
         }
@@ -93,6 +100,8 @@ namespace SUNSET16.Core
             }
 
             IsTaskCompletedToday = false;
+            AreAllTasksCompleted = false;
+            CurrentTaskIndex = 1;
             DestroyActiveTask();
             Debug.Log("[TASKMANAGER] All task state reset (save deleted)");
         }
@@ -137,12 +146,16 @@ namespace SUNSET16.Core
                 return;
             }
 
-            //pill choice -> difficulty mapping (THE key mechanic)
+            //pill choice + task index -> difficulty mapping (THE key mechanic, extended for two tasks)
+            //Task 1: on-pill = Easy,   off-pill = Medium
+            //Task 2: on-pill = Medium, off-pill = Hard
             int currentDay = DayManager.Instance.CurrentDay;
             PillChoice todayChoice = PillStateManager.Instance.GetPillChoice(currentDay);
-            TaskDifficulty difficulty = (todayChoice == PillChoice.Taken)
-                ? TaskDifficulty.Easy   //compliant worker = easy tasks
-                : TaskDifficulty.Hard;  //free thinker = harder tasks
+            TaskDifficulty difficulty;
+            if (CurrentTaskIndex == 1)
+                difficulty = (todayChoice == PillChoice.Taken) ? TaskDifficulty.Easy : TaskDifficulty.Medium;
+            else
+                difficulty = (todayChoice == PillChoice.Taken) ? TaskDifficulty.Medium : TaskDifficulty.Hard;
 
             //find the right TaskData for this day+difficulty combo
             TaskData taskData = FindTaskData(currentDay, difficulty);
@@ -161,7 +174,7 @@ namespace SUNSET16.Core
                 if (ActiveTask != null)
                 {
                     ActiveTask.InitializeTask(taskData);
-                    Debug.Log($"[TASKMANAGER] Spawned task prefab for Day {currentDay} ({difficulty})");
+                    Debug.Log($"[TASKMANAGER] Spawned task prefab for Day {currentDay} Task {CurrentTaskIndex} ({difficulty})");
                 }
                 else
                 {
@@ -172,7 +185,7 @@ namespace SUNSET16.Core
             }
             else
             {
-                Debug.Log($"[TASKMANAGER] Task ready for Day {currentDay} ({difficulty}) - no prefab assigned (tech demo)");
+                Debug.Log($"[TASKMANAGER] Task ready for Day {currentDay} Task {CurrentTaskIndex} ({difficulty}) - no prefab assigned (tech demo)");
             }
 
             // Movement is NOT locked here.
@@ -181,8 +194,9 @@ namespace SUNSET16.Core
             OnTaskSpawned?.Invoke(taskData);
         }
 
-        //marks the current task as done, unlocks player, and advances to Night
-        //this is the link between task system and day progression
+        //marks the current task as done
+        //task 1: increments to task 2, fires OnTask1Completed so scene activates Task2Object
+        //task 2: marks day complete and tells DayManager to advance to Night
         public void CompleteCurrentTask()
         {
             if (!IsInitialized)
@@ -193,7 +207,7 @@ namespace SUNSET16.Core
 
             if (IsTaskCompletedToday)
             {
-                Debug.LogWarning("[TASKMANAGER] Task already completed today");
+                Debug.LogWarning("[TASKMANAGER] All tasks already completed today");
                 return;
             }
 
@@ -204,8 +218,6 @@ namespace SUNSET16.Core
             }
 
             int currentDay = DayManager.Instance.CurrentDay;
-            IsTaskCompletedToday = true;
-            _taskCompletionByDay[currentDay] = true;
 
             if (ActiveTask != null)
             {
@@ -214,10 +226,28 @@ namespace SUNSET16.Core
             DestroyActiveTask(); //remove the task object from the scene
 
             // Movement is unlocked by TaskUIManager.HideOverlay() when the overlay closes.
-            OnTaskCompleted?.Invoke(currentDay);
-            Debug.Log($"[TASKMANAGER] Day {currentDay} task completed");
 
-            DayManager.Instance.TaskCompleted(); //tell DayManager to advance to Night
+            if (CurrentTaskIndex == 1)
+            {
+                //task 1 done - move to task 2, don't advance the day yet
+                CurrentTaskIndex = 2;
+                Debug.Log($"[TASKMANAGER] Day {currentDay} Task 1 completed - moving to Task 2");
+                OnTask1Completed?.Invoke(); //TaskWorldObject on Task2Object listens to this and activates itself
+
+                //if task 2 has a prefab in the data assets, spawn it now
+                SpawnTask();
+            }
+            else
+            {
+                //task 2 done - all tasks complete, advance the day
+                IsTaskCompletedToday = true;
+                AreAllTasksCompleted = true;
+                _taskCompletionByDay[currentDay] = true;
+                Debug.Log($"[TASKMANAGER] Day {currentDay} Task 2 completed - all tasks done");
+                OnTaskCompleted?.Invoke(currentDay);
+
+                DayManager.Instance.TaskCompleted(); //tell DayManager to advance to Night
+            }
         }
 
         public bool IsTaskCompleted(int day)
