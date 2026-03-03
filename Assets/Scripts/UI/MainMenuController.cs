@@ -40,8 +40,13 @@ namespace SUNSET16.UI
         [SerializeField] private Button confirmNewGameButton;
         [SerializeField] private Button cancelNewGameButton;
 
+        [Header("Audio")]
+        [SerializeField] private AudioSource sfxSource;
+        [SerializeField] private AudioClip   startButtonSFX;
+        [SerializeField] private AudioClip   menuClickSFX;
+
         [Header("Scene Names")]
-        [SerializeField] private string newGameSceneName = "Bedroom"; // Tech demo starts in bedroom
+        [SerializeField] private string newGameSceneName = "CoreScene";
         private const string CORE_SCENE_NAME = "CoreScene";
 
         private void Start()
@@ -78,6 +83,8 @@ namespace SUNSET16.UI
 
         private void OnNewGameClicked()
         {
+            sfxSource?.PlayOneShot(startButtonSFX);
+
             //if they already have a save, make sure they actually wanna overwrite it
             if (SaveManager.Instance.SaveExists && newGameConfirmPanel != null)
             {
@@ -109,6 +116,7 @@ namespace SUNSET16.UI
 
         private void OnContinueClicked()
         {
+            sfxSource?.PlayOneShot(menuClickSFX);
             //load CoreScene and let the managers handle everything from there
             Debug.Log("[MAINMENU] Continuing saved game");
             SceneManager.LoadScene(CORE_SCENE_NAME);
@@ -116,6 +124,7 @@ namespace SUNSET16.UI
 
         private void OnSettingsClicked()
         {
+            sfxSource?.PlayOneShot(menuClickSFX);
             //just flip the panel on/off, SettingsPanel.cs handles everything inside it
             if (settingsPanel != null)
             {
@@ -125,6 +134,7 @@ namespace SUNSET16.UI
 
         private void OnCreditsClicked()
         {
+            sfxSource?.PlayOneShot(menuClickSFX);
             Debug.Log("[MAINMENU] Credits scene not yet implemented");
         }
     }
