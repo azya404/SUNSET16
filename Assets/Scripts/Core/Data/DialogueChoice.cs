@@ -1,20 +1,20 @@
+/*
+a branching choice shown as a button during an Albert dialogue
+choiceText is what appears on the button, nextLineIndex is where we jump to
+
+nextLineIndex -1 means end the conversation immediately
+nextLineIndex >=0 jumps to that line in the parent DialogueSequence array
+
+choices dont affect any game state - theyre purely for navigating the dialogue tree
+*/
 namespace SUNSET16.Core
 {
-    /// <summary>
-    /// A branching choice presented to the player during an Albert dialogue session.
-    /// Choices are session-scoped and inert — they do not affect any game state outside
-    /// the current dialogue tree.
-    /// </summary>
     [System.Serializable]
     public class DialogueChoice
     {
-        /// <summary>Text displayed on the choice button.</summary>
         public string choiceText;
 
-        /// <summary>
-        /// Index of the DialogueLine to jump to when this choice is selected.
-        /// Use -1 to end the dialogue immediately after selection.
-        /// </summary>
+        //-1 = close dialogue, anything else = jump to that line index
         public int nextLineIndex = -1;
     }
 }

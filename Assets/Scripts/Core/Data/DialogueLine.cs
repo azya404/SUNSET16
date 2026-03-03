@@ -1,11 +1,16 @@
+/*
+single line of dialogue for Albert (or whoever is speaking)
+holds the speaker name, optional portrait, the actual text, and an optional
+list of player choices for branching
+
+HasChoices tells DialogueUIManager whether to show choice buttons or just
+a continue prompt. used by DialogueSequence which is the ScriptableObject
+that groups these into a full conversation
+*/
 using UnityEngine;
 
 namespace SUNSET16.Core
 {
-    /// <summary>
-    /// A single line of dialogue spoken by one character.
-    /// Part of a DialogueSequence ScriptableObject.
-    /// </summary>
     [System.Serializable]
     public class DialogueLine
     {
@@ -25,7 +30,7 @@ namespace SUNSET16.Core
         [Tooltip("Leave empty for linear flow. Populate for branching choice buttons (up to 3).")]
         public DialogueChoice[] choices;
 
-        /// <summary>True if this line presents player choices rather than auto/manual advance.</summary>
+        //true if this line has choices, false if its just a continue prompt
         public bool HasChoices => choices != null && choices.Length > 0;
     }
 }

@@ -1,12 +1,14 @@
+/*
+ScriptableObject that holds a full Albert conversation as an array of DialogueLines
+one of these per conversation - create them in the editor under SUNSET16/Dialogue Sequence
+
+ComputerInteraction picks which one to use based on the current day (daySequences[0] = day 1 etc)
+sequenceId is there for identification if we need to look one up by name later
+*/
 using UnityEngine;
 
 namespace SUNSET16.Core
 {
-    /// <summary>
-    /// A complete dialogue tree for Albert (the computer terminal).
-    /// Which sequence is active is determined externally (by day, pill state, task completion).
-    /// Assign via the Unity asset menu: SUNSET16 > Dialogue Sequence.
-    /// </summary>
     [CreateAssetMenu(fileName = "NewDialogueSequence", menuName = "SUNSET16/Dialogue Sequence")]
     public class DialogueSequence : ScriptableObject
     {
