@@ -1,19 +1,22 @@
+/*
+drop this on any scene's root setup object to point the camera at the player
+and set the room clamp bounds
+
+either auto-detects bounds from the background sprite (recommended) or falls
+back to the manual min/max values if autoDetectBounds is off or no sprite assigned
+
+fires 0.1s after Start so PlayerController has time to finish its own Awake/Start
+before we try to call SetTarget on it
+
+replaces TechDemo/CameraSetup.cs - same logic, proper namespace
+
+TODO: smooth camera transition when entering a new room would be nice
+*/
 using UnityEngine;
 using SUNSET16.Core;
 
 namespace SUNSET16.Interaction
 {
-    /// <summary>
-    /// Per-scene camera configuration helper.
-    /// Assigns the camera target (player) and calculates clamp bounds from the room's
-    /// background sprite or from manually-entered values.
-    ///
-    /// Drop this component on any scene's root Setup object.
-    /// After a 0.1 s delay the CameraController is pointed at the PlayerController
-    /// and the room bounds are applied.
-    ///
-    /// Replaces TechDemo/CameraSetup.cs — identical logic, proper namespace.
-    /// </summary>
     public class SceneCameraSetup : MonoBehaviour
     {
         [Header("Bounds Mode")]
@@ -29,7 +32,7 @@ namespace SUNSET16.Interaction
 
         private void Start()
         {
-            // Small delay — lets PlayerController finish its own Awake/Start initialisation
+            //small delay so PlayerController finishes its own Awake/Start first
             Invoke(nameof(ApplyCameraSetup), 0.1f);
         }
 
@@ -70,7 +73,7 @@ namespace SUNSET16.Interaction
             float y0 = b.min.y + camH / 2f;
             float y1 = b.max.y - camH / 2f;
 
-            // If the camera is wider/taller than the background, centre it
+            //if camera is wider/taller than the background, just centre it
             if (x0 > x1) x0 = x1 = (x0 + x1) / 2f;
             if (y0 > y1) y0 = y1 = (y0 + y1) / 2f;
 

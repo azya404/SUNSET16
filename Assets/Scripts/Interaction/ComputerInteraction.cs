@@ -1,24 +1,24 @@
+/*
+the computer terminal in Andy's room - press E to start Albert's dialogue
+assign one DialogueSequence per day in the Inspector (index 0 = day 1, index 1 = day 2 etc)
+
+guards against opening if another dialogue is already showing or DOLOS is running
+(InteractionSystem also blocks DOLOS upstream but we double-check here just in case)
+
+DialogueUIManager handles all the movement locking and Escape key stuff once
+the dialogue is open - this script just picks the right sequence and hands it over
+
+replaces TechDemo/ComputerInteraction.cs which just logged to console and did nothing
+
+TODO: different sequences based on pill state too (not just day)?
+TODO: computer screen glow effect when player is in range
+*/
 using UnityEngine;
 using SUNSET16.Core;
 using SUNSET16.UI;
 
 namespace SUNSET16.Interaction
 {
-    /// <summary>
-    /// Computer terminal world-space interaction object (Albert's computer).
-    /// Press E to open a branching dialogue via DialogueUIManager.
-    ///
-    /// Sequences are assigned per day in the Inspector:
-    ///   daySequences[0] = Day 1, daySequences[1] = Day 2, etc.
-    ///
-    /// DialogueUIManager owns movement locking and Escape handling for the
-    /// duration of the conversation — ComputerInteraction does nothing beyond
-    /// selecting and starting the sequence.
-    ///
-    /// Guards (all silently drop the interaction):
-    ///   • Dialogue already active   (prevents double-open)
-    ///   • DOLOS announcement active (also blocked upstream by InteractionSystem)
-    /// </summary>
     public class ComputerInteraction : MonoBehaviour, IInteractable
     {
         [Header("Dialogue Sequences")]
@@ -32,14 +32,14 @@ namespace SUNSET16.Interaction
 
         public void Interact()
         {
-            // Guard: another dialogue is already open
+            //dialogue already open, dont stack another one on top
             if (DialogueUIManager.Instance != null && DialogueUIManager.Instance.IsDialogueActive)
             {
                 Debug.LogWarning("[COMPUTER] Dialogue already active — ignoring interaction");
                 return;
             }
 
-            // Guard: DOLOS announcement running (defensive; also blocked by InteractionSystem)
+            //DOLOS is talking, not a great time to open Albert's terminal
             if (DOLOSManager.Instance != null && DOLOSManager.Instance.IsAnnouncementActive)
             {
                 Debug.LogWarning("[COMPUTER] DOLOS active — ignoring interaction");
@@ -67,10 +67,10 @@ namespace SUNSET16.Interaction
         {
             if (daySequences == null || daySequences.Length == 0) return null;
 
-            // Fallback to first entry if DayManager is not yet available
+            //fallback to first entry if DayManager isnt up yet
             if (DayManager.Instance == null) return daySequences[0];
 
-            int index = DayManager.Instance.CurrentDay - 1; // Day 1 → index 0
+            int index = DayManager.Instance.CurrentDay - 1; //day 1 → index 0
             if (index < 0 || index >= daySequences.Length)  return null;
 
             return daySequences[index];

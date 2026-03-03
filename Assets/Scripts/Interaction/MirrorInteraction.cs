@@ -1,28 +1,24 @@
+/*
+the bathroom mirror - press E to decide whether to take the pill or not
+shows an overlay with Take Pill / Hide Pill buttons
+
+calling PillStateManager.TakePill() is the IMPORTANT bit here - the old TechDemo
+version only played music and never actually recorded the choice which was a bug
+
+AudioManager listens to OnPillTaken and crossfades the music automatically
+so we dont need to touch it here, the event chain handles it
+
+DOLOS and dialogue blocking is handled upstream by InteractionSystem so we
+dont need to guard against those, just the overlay-already-open and
+already-chose-today cases
+
+replaces TechDemo/MirrorInteraction.cs
+*/
 using UnityEngine;
 using SUNSET16.Core;
 
 namespace SUNSET16.Interaction
 {
-    /// <summary>
-    /// Bathroom mirror world-space interaction object.
-    /// Press E to open the pill-choice overlay (Take / Hide pill buttons).
-    ///
-    /// Pill recording:
-    ///   OnTakePillClicked  → PillStateManager.TakePill(PillChoice.Taken)
-    ///   OnHidePillClicked  → PillStateManager.TakePill(PillChoice.NotTaken)
-    ///
-    ///   PillStateManager fires OnPillTaken, which AudioManager subscribes to and uses
-    ///   to cross-fade to the correct music track.  MirrorInteraction does NOT call
-    ///   AudioManager directly — the event chain handles it.
-    ///
-    /// Guards (all silently drop the interaction):
-    ///   • Pill already chosen today  → log and return
-    ///   • Overlay already showing    → return
-    ///   (DOLOS/dialogue are blocked upstream by InteractionSystem)
-    ///
-    /// Replaces TechDemo/MirrorInteraction.cs — critical fix: actually records
-    /// the pill choice via PillStateManager instead of only playing music.
-    /// </summary>
     public class MirrorInteraction : MonoBehaviour, IInteractable
     {
         [Header("UI References")]
@@ -52,7 +48,7 @@ namespace SUNSET16.Interaction
                 return;
             }
 
-            // Guard: pill already chosen today — nothing left to decide
+            //pill already decided for today, nothing to show
             if (PillStateManager.Instance != null && PillStateManager.Instance.HasTakenPillToday())
             {
                 Debug.Log("[MIRROR] Pill choice already made today — interaction skipped");
@@ -66,20 +62,16 @@ namespace SUNSET16.Interaction
 
         // ─── Button Callbacks (wired via Inspector OnClick) ───────────────────────
 
-        /// <summary>Player chose to take the pill.</summary>
         public void OnTakePillClicked()
         {
-            // TakePill validates forced days (1-2), fires OnPillTaken →
-            // AudioManager cross-fades to onPillMusic automatically.
+            //TakePill fires OnPillTaken → AudioManager crossfades to onPillMusic
             PillStateManager.Instance?.TakePill(PillChoice.Taken);
             CloseOverlay();
         }
 
-        /// <summary>Player chose to hide the pill.</summary>
         public void OnHidePillClicked()
         {
-            // TakePill validates forced days (1-2), fires OnPillTaken →
-            // AudioManager cross-fades to offPillMusic automatically.
+            //TakePill fires OnPillTaken → AudioManager crossfades to offPillMusic
             PillStateManager.Instance?.TakePill(PillChoice.NotTaken);
             CloseOverlay();
         }
