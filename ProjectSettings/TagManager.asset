@@ -12,9 +12,9 @@ TagManager:
   - Water
   - UI
   - Player
+  - Walls
+  - Props
   - Interactable
-  - 
-  - 
   - 
   - 
   - 
@@ -40,4 +40,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 626470131
+    locked: 0
+  - name: Midground
+    uniqueID: 2062743671
+    locked: 0
+  - name: Props
+    uniqueID: 567096521
+    locked: 0
+  - name: Player
+    uniqueID: 719561539
+    locked: 0
+  - name: Foreground
+    uniqueID: 918922669
     locked: 0
