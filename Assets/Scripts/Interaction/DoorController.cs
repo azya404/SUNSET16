@@ -23,6 +23,7 @@ TODO: HUD locked message display (needs HUDManager which doesnt exist yet)
 */
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using SUNSET16.UI;
 
 namespace SUNSET16.Core
 {
@@ -70,6 +71,12 @@ namespace SUNSET16.Core
         {
             Debug.Log($"[DOORCONTROLLER] Attempting to interact with door to {targetSceneName}");
 
+            // andy can move, but not change rooms when DOLOS is announcing things
+            if (DOLOSManager.Instance != null && DOLOSManager.Instance.IsAnnouncementActive)
+            {
+                Debug.Log("[DOORCONTROLLER] DOLOS announcement active — door transition blocked");
+                return;
+            }
             //chain of checks - if any fail we bail early with a message
             if (isLocked)
             {
@@ -81,48 +88,73 @@ namespace SUNSET16.Core
             if (isHiddenRoomDoor)
             {
                 if (!ValidateHiddenRoomAccess())
-                {
                     return;
-                }
             }
 
             //on-pill nights you can ONLY use the bedroom door, everything else is blocked
-            if (!isBedroomDoor && IsBedroomRestrictionActive())
+            if (!isBedroomDoor && IsNightRestrictionActive())
             {
-                ShowLockedMessage("You feel too drowsy to explore... You should head back to your room.");
+                ShowSleepyLockedMessage();
                 return;
             }
 
-            TransitionToRoom(); //all checks passed, lets go
+            TransitionToRoom(); //all checks passed, LSFFGGGG
         }
 
         public string GetInteractionPrompt()
         {
             //prompt changes based on whether you can actually use the door
             if (isLocked)
-            {
                 return "Locked";
-            }
 
             if (isHiddenRoomDoor && HiddenRoomManager.Instance != null)
             {
                 if (!HiddenRoomManager.Instance.IsRoomDiscovered(hiddenRoomID))
-                {
                     return "Locked"; //havent found this room yet
-                }
 
-            if (PillStateManager.Instance != null && PillStateManager.Instance.HasTakenPillToday())
-                {
+                if (PillStateManager.Instance != null && PillStateManager.Instance.HasTakenPillToday())
                     return "Too drowsy..."; //took the pill so no exploring tonight
-                }
             }
 
-            if (!isBedroomDoor && IsBedroomRestrictionActive())
-            {
-                return "Too tired to explore...";
-            }
+            if (!isBedroomDoor && IsNightRestrictionActive())
+                return "Too tired...";
 
             return "Press E to open";
+        }
+
+        // ─── Door Restriction Logic ───────────────────────────────────────────────
+
+        /// <summary>
+        /// Returns true when a non-bedroom door should block passage.
+        ///
+        /// On-pill night:   always restricted — the ship controls her immediately.
+        /// Off-pill night:  FREE movement until the day's hidden-room puzzle is completed.
+        ///                  After puzzle completion, restriction activates — her window of
+        ///                  agency closes naturally rather than being imposed by the ship.
+        /// </summary>
+        private bool IsNightRestrictionActive()
+        {
+            if (DayManager.Instance == null || PillStateManager.Instance == null)
+                return false; //cant restrict if managers dont exist
+
+            if (DayManager.Instance.CurrentPhase != DayPhase.Night)
+                return false; //only applies at night
+
+            int currentDay         = DayManager.Instance.CurrentDay;
+            PillChoice todayChoice = PillStateManager.Instance.GetPillChoice(currentDay);
+
+            if (todayChoice == PillChoice.Taken)
+                return true; //didnt take the pill so theyre free to roam
+
+            if (todayChoice == PillChoice.NotTaken)
+            {
+                // Off-pill: restricted only AFTER the hidden-room puzzle for today is solved
+                string expectedPuzzleId = $"puzzle_day_{currentDay}";
+                return PuzzleManager.Instance != null
+                    && PuzzleManager.Instance.IsPuzzleCompleted(expectedPuzzleId);
+            }
+
+            return false;
         }
 
         //runs through all the checks for hidden room access
@@ -143,7 +175,7 @@ namespace SUNSET16.Core
 
             if (PillStateManager.Instance != null && PillStateManager.Instance.HasTakenPillToday())
             {
-                ShowLockedMessage("You feel too drowsy to explore...");
+                ShowSleepyLockedMessage();
                 return false;
             }
 
@@ -154,54 +186,40 @@ namespace SUNSET16.Core
                 return false;
             }
 
-            return true; //all good, let em in
+            return true;
         }
 
-        //checks if the player took the pill today and its night
-        //if so only the bedroom door should work (on-pill restriction)
-        private bool IsBedroomRestrictionActive()
+        // ─── Feedback Helpers ─────────────────────────────────────────────────────
+
+        private void ShowLockedMessage(string message)
         {
-            if (DayManager.Instance == null || PillStateManager.Instance == null)
-            {
-                return false; //cant restrict if managers dont exist
-            }
-
-            if (DayManager.Instance.CurrentPhase != DayPhase.Night)
-            {
-                return false; //only applies at night
-            }
-
-            int currentDay = DayManager.Instance.CurrentDay;
-            PillChoice todayChoice = PillStateManager.Instance.GetPillChoice(currentDay);
-            if (todayChoice != PillChoice.Taken)
-            {
-                return false; //didnt take the pill so theyre free to roam
-            }
-
-            return true; //took the pill + night = bedroom only
+            Debug.Log($"[DOORCONTROLLER] {message}");
+            if (HUDController.Instance != null)
+                HUDController.Instance.ShowMessage(message, 2f);
         }
+
+        private void ShowSleepyLockedMessage()
+        {
+            Debug.Log("[DOORCONTROLLER] Night restriction — showing sleepy message");
+            if (HUDController.Instance != null)
+                HUDController.Instance.ShowSleepyMessage();
+        }
+
+        // ─── Room Transition ──────────────────────────────────────────────────────
 
         void TransitionToRoom()
         {
-            //TODO: uncomment when we have the audio asset
             if (AudioManager.Instance != null)
             {
                 // AudioManager.Instance.PlayDoorOpen();
             }
 
-            //tell RoomManager where to put the player in the next scene
             if (RoomManager.Instance != null)
-            {
                 RoomManager.Instance.SetNextSpawnPosition(spawnPositionInTargetScene);
-            }
 
-            //actually load the room
             if (RoomManager.Instance != null)
-            {
                 RoomManager.Instance.LoadRoom(targetSceneName);
-            }
 
-            //if its a hidden room door, mark it as entered
             if (isHiddenRoomDoor && HiddenRoomManager.Instance != null)
             {
                 HiddenRoomManager.Instance.EnterRoom(hiddenRoomID);
@@ -211,8 +229,8 @@ namespace SUNSET16.Core
             Debug.Log($"[DOORCONTROLLER] Transitioning to {targetSceneName}");
         }
 
-        //changes the visual appearance of the door based on its state
-        //red = locked, yellow = found it but havent gone in, green = good to go
+        // ─── State Management ─────────────────────────────────────────────────────
+
         public void SetDoorState(DoorState state)
         {
             currentState = state;
@@ -220,87 +238,44 @@ namespace SUNSET16.Core
             switch (state)
             {
                 case DoorState.Locked:
-                    if (doorLight != null)
-                        doorLight.color = Color.red;
-                    if (doorSprite != null)
-                        doorSprite.color = new Color(1f, 0.5f, 0.5f); //pinkish tint
+                    if (doorLight  != null) doorLight.color  = Color.red;
+                    if (doorSprite != null) doorSprite.color = new Color(1f, 0.5f, 0.5f);
                     isLocked = true;
                     break;
 
                 case DoorState.Discovered:
-                    if (doorLight != null)
-                        doorLight.color = Color.yellow;
-                    if (doorSprite != null)
-                        doorSprite.color = new Color(1f, 1f, 0.7f); //warm yellow tint
+                    if (doorLight  != null) doorLight.color  = Color.yellow;
+                    if (doorSprite != null) doorSprite.color = new Color(1f, 1f, 0.7f);
                     isLocked = false;
                     break;
 
                 case DoorState.Normal:
-                    if (doorLight != null)
-                        doorLight.color = Color.green;
-                    if (doorSprite != null)
-                        doorSprite.color = Color.white; //no tint
+                    if (doorLight  != null) doorLight.color  = Color.green;
+                    if (doorSprite != null) doorSprite.color = Color.white;
                     isLocked = false;
                     break;
+
+                // DoorState.Entered: no separate visual — door reverts to Normal on re-use
             }
 
-            //update the interaction prompt to match the new state
             if (interactionSystem != null)
-            {
                 interactionSystem.RefreshPrompt();
-            }
 
             Debug.Log($"[DOORCONTROLLER] {gameObject.name} set to {state}");
         }
 
-        public DoorState GetDoorState()
-        {
-            return currentState;
-        }
-
-        void ShowLockedMessage(string message)
-        {
-            Debug.Log($"[DOORCONTROLLER] {message}");
-            //TODO: need to build HUDManager first, then we can show this on screen
-            // if (HUDManager.Instance != null)
-            // {
-            //     HUDManager.Instance.ShowMessage(message, 2f);
-            // }
-        }
+        public DoorState GetDoorState()       => currentState;
+        public bool      IsLocked()           => isLocked;
+        public string    GetTargetSceneName() => targetSceneName;
+        public RoomType  GetRoomType()        => roomType;
+        public bool      IsBedroomDoor()      => isBedroomDoor;
+        public bool      IsHiddenRoomDoor()   => isHiddenRoomDoor;
 
         public void SetLocked(bool locked)
         {
             isLocked = locked;
-
             if (locked && currentState != DoorState.Locked)
-            {
                 SetDoorState(DoorState.Locked);
-            }
-        }
-
-        public bool IsLocked()
-        {
-            return isLocked;
-        }
-
-        public string GetTargetSceneName()
-        {
-            return targetSceneName;
-        }
-
-        public RoomType GetRoomType()
-        {
-            return roomType;
-        }
-
-        public bool IsBedroomDoor()
-        {
-            return isBedroomDoor;
-        }
-
-        public bool IsHiddenRoomDoor()
-        {
-            return isHiddenRoomDoor;
         }
     }
 }
