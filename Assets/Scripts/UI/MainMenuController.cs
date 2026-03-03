@@ -20,6 +20,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 using SUNSET16.Core;
 
 namespace SUNSET16.UI
@@ -109,9 +110,16 @@ namespace SUNSET16.UI
 
         private void StartNewGame()
         {
-            SaveManager.Instance.ClearSaveData(); //wipe the old save first
-            Debug.Log($"[MAINMENU] Starting new game - Loading {newGameSceneName}");
-            SceneManager.LoadScene(newGameSceneName); //straight to bedroom for tech demo
+            SaveManager.Instance.ClearSaveData();
+            StartCoroutine(LoadSceneAfterSFX(newGameSceneName));
+        }
+
+        private IEnumerator LoadSceneAfterSFX(string sceneName)
+        {
+            float delay = (startButtonSFX != null && sfxSource != null) ? startButtonSFX.length : 0f;
+            yield return new WaitForSeconds(delay);
+            Debug.Log($"[MAINMENU] Starting new game - Loading {sceneName}");
+            SceneManager.LoadScene(sceneName);
         }
 
         private void OnContinueClicked()
