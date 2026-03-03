@@ -161,8 +161,11 @@ MonoBehaviour:
   AlbertY: 160
   PlayerX: 70
   PlayerY: 100
-  offset: 120
+  offset: 60
   messageNum: 0
+  morning1_database: {fileID: 11400000, guid: d388ea96e54256d4caea7d8f071ae3f7, type: 2}
+  currentID: 1
+  started: 0
 --- !u!4 &8409003
 Transform:
   m_ObjectHideFlags: 0
@@ -1873,7 +1876,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   computerOverlayCanvas: {fileID: 1271564500}
   interactionPrompt: Press E to use computer
-  Dialogue: {fileID: 11400000, guid: 58a8307fb968eca408719044faab1d94, type: 2}
 --- !u!1 &1509491110
 GameObject:
   m_ObjectHideFlags: 0

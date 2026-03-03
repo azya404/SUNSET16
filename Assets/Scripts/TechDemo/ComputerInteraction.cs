@@ -24,8 +24,6 @@ namespace SUNSET16.TechDemo
         private bool isOverlayActive = false;
         private InteractionSystem interactionSystem;
 
-        public Dialogue Dialogue;
-
         void Awake()
         {
             //hide the overlay on startup so its not just sitting there
@@ -99,76 +97,17 @@ namespace SUNSET16.TechDemo
             isOverlayActive = false;
             Debug.Log("[COMPUTER] Computer overlay closed");
         }
-
-        public void SelectDialogue()
-        {
-            // Finds current day and phase
-            int day = DayManager.Instance.CurrentDay;
-            DayPhase phase = DayManager.Instance.CurrentPhase;
-
-            // Determines which dialogue tree should be used
-            if (day == 1)
-            {
-                if (phase == DayPhase.Morning)
-                {
-                    
-                }
-                else if (phase == DayPhase.Night)
-                {
-                    
-                }
-            }
-            else if (day == 2)
-            {
-                if (phase == DayPhase.Morning)
-                {
-                    
-                }
-                else if (phase == DayPhase.Night)
-                {
-                    
-                }
-            }
-            else if (day == 3)
-            {
-                if (phase == DayPhase.Morning)
-                {
-                    
-                }
-                else if (phase == DayPhase.Night)
-                {
-                    
-                }
-            }
-            else if (day == 4)
-            {
-                if (phase == DayPhase.Morning)
-                {
-                    
-                }
-                else if (phase == DayPhase.Night)
-                {
-                    
-                }
-            }
-            else if (day == 5)
-            {
-                if (phase == DayPhase.Morning)
-                {
-                    
-                }
-                else if (phase == DayPhase.Night)
-                {
-                    
-                }
-            }
-
-        }
         
         public void StartConvo()
         {
             DialogueManager.Instance.OnUIOpen();
-            DialogueManager.Instance.StartDialogue(Dialogue.RootNode);
+            Dialogue dialogue = DialogueManager.Instance.SelectDialogue();
+            int id = DialogueManager.Instance.GetCurrentID();
+            bool start = DialogueManager.Instance.ChatStarted();
+            if (!start)
+            {
+                DialogueManager.Instance.StartDialogue(id);
+            }
         }
     }
 }

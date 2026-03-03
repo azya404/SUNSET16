@@ -21,10 +21,12 @@ TODO:
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using UnityEditor.VersionControl;
+using System.Reflection;
 
 namespace SUNSET16.Core
 {
@@ -56,10 +58,16 @@ namespace SUNSET16.Core
         public int offset = 120;
         public int messageNum = 0;
         private List<GameObject> messages = new List<GameObject>();
+        [SerializeField] private Dialogue morning1_database;
+        private Dialogue activeDatabase;
+        private Dictionary<int, DialogueNode> nodeLookup;
+        public int currentID = 1;
+        public bool started = false;
 
         protected override void Awake()
         {
             base.Awake();
+            BuildDictionary();
         }
 
         private void Start()
@@ -131,20 +139,178 @@ namespace SUNSET16.Core
             }
         }
 
-        public void StartDialogue(DialogueNode node)
+        public Dialogue SelectDialogue()
         {
-            // Set message text
-            //Message.text = node.dialogueText;
+            // Finds current day and phase
+            //int day = DayManager.Instance.CurrentDay;
+            //DayPhase phase = DayManager.Instance.CurrentPhase;
+            Dialogue currentDialogue;
+
+            currentDialogue = morning1_database;
+
+            // Determines which dialogue tree should be used
+            /*if (day == 1)
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    
+                }
+                else if (phase == DayPhase.Night)
+                {
+                    
+                }
+            }
+            else if (day == 2)
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    
+                }
+                else if (phase == DayPhase.Night)
+                {
+                    
+                }
+            }
+            else if (day == 3)
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    
+                }
+                else if (phase == DayPhase.Night)
+                {
+                    
+                }
+            }
+            else if (day == 4)
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    
+                }
+                else if (phase == DayPhase.Night)
+                {
+                    
+                }
+            }
+            else if (day == 5)
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    
+                }
+                else if (phase == DayPhase.Night)
+                {
+                    
+                }
+            }*/
+
+            return currentDialogue;
+        }
+
+        private void BuildDictionary()
+        {
+            activeDatabase = SelectDialogue();
+            nodeLookup = new Dictionary<int, DialogueNode>();
+            foreach(DialogueNode node in activeDatabase.nodes)
+            {
+                nodeLookup[node.id] = node;
+            }
+        }
+
+        public int GetCurrentID()
+        {
+            return currentID;
+        }
+
+        public bool ChatStarted()
+        {
+            return started;
+        }
+
+        public void StartDialogue(int nodeID)
+        {
             Debug.Log("Starting Dialogue");
+            if (!started)
+            {
+                started = true;
+            }
+
+            DialogueNode node = nodeLookup[nodeID];
+            
+            if (currentID != nodeID)
+            {
+                currentID = nodeID;
+                messageNum++;
+            }
+            
             GameObject chatBubble;
             int bubbleY;
-            if (messageNum < 3)
+            if (messageNum < 5)
             {
                 bubbleY = AlbertY - (messageNum * offset);
             }
             else
             {
-                bubbleY = AlbertY - (2 * offset);
+                bubbleY = AlbertY - (4 * offset);
+                Debug.Log("Shifting A");
+                foreach (GameObject mes in messages)
+                {
+                    RectTransform rt = mes.GetComponent<RectTransform>();
+                    rt.anchoredPosition += new Vector2(0, 60);
+                    if (rt.anchoredPosition.y > AlbertY)
+                    {
+                        Destroy(mes.gameObject);
+                    }
+                }
+                StartCoroutine(RemoveCells());
+            }
+            Vector3 bubblePos = new Vector3(AlbertX, bubbleY, 0);
+            Quaternion rot = Quaternion.identity;
+
+            chatBubble = Instantiate(AlbertMessage, DialogueParent.transform);
+            messages.Add(chatBubble);
+            chatBubble.transform.localPosition = bubblePos;
+            chatBubble.GetComponentInChildren<TextMeshProUGUI>().text = node.dialogueText;
+            
+
+            //Remove any existing response buttons
+            foreach (Transform child in responseButtonContainer)
+            {
+                Destroy(child.gameObject);
+            }
+
+            // Create and set up response buttons based on current dialogue node
+            if (node.anotherMessage)
+            {
+                StartDialogue(node.otherMessageID);
+            }
+            else
+            {
+                foreach (DialogueResponse response in node.responses)
+                {
+                    GameObject buttonObj = Instantiate(responseButtonPrefab, responseButtonContainer);
+                    buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = response.responseText;
+
+                    // Set up button to trigger SelectResponse when clicked
+                    buttonObj.GetComponent<Button>().onClick.AddListener(() => SelectResponse(response));
+                }
+            }
+        }
+
+        // Handles response selection and triggers next dialogue node
+        public void SelectResponse(DialogueResponse response)
+        {
+            GameObject responseBubble;
+            int responseY;
+            if (messageNum < 4)
+            {
+                responseY = PlayerY - (messageNum * offset);
+            }
+            else
+            {
+                responseY = PlayerY - (3 * offset);
+                Debug.Log("Shifting P");
                 foreach (GameObject mes in messages)
                 {
                     RectTransform rt = mes.GetComponent<RectTransform>();
@@ -154,63 +320,37 @@ namespace SUNSET16.Core
                         Destroy (mes.gameObject);
                     }
                 }
-            }
-            Vector3 bubblePos = new Vector3(AlbertX, bubbleY, 0);
-            Quaternion rot = Quaternion.identity;
-
-            if (node.dialogueText != "")
-            {
-                chatBubble = Instantiate(AlbertMessage, DialogueParent.transform);
-                messages.Add(chatBubble);
-                chatBubble.transform.localPosition = bubblePos;
-                chatBubble.GetComponentInChildren<TextMeshProUGUI>().text = node.dialogueText;
-            }
-            
-            messageNum++;
-
-            //Remove any existing response buttons
-            foreach (Transform child in responseButtonContainer)
-            {
-                Destroy(child.gameObject);
-            }
-
-            // Create and set up response buttons based on current dialogue node
-            foreach (DialogueResponse response in node.responses)
-            {
-                GameObject buttonObj = Instantiate(responseButtonPrefab, responseButtonContainer);
-                buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = response.responseText;
-
-                // Set up button to trigger SelectResponse when clicked
-                buttonObj.GetComponent<Button>().onClick.AddListener(() => SelectResponse(response));
-            }
-        }
-
-        // Handles response selection and triggers next dialogue node
-        public void SelectResponse(DialogueResponse response)
-        {
-            GameObject responseBubble;
-            int responseY;
-            if (messageNum < 3)
-            {
-                responseY = PlayerY - ((messageNum - 1) * offset);
-            }
-            else
-            {
-                responseY = PlayerY - (2 * offset);
+                StartCoroutine(RemoveCells());
             }
             Vector3 bubblePos = new Vector3(PlayerX, responseY, 0);
             Quaternion rot = Quaternion.identity;
 
             responseBubble = Instantiate(PlayerMessage, DialogueParent.transform);
+            messageNum++;
             messages.Add(responseBubble);
             responseBubble.transform.localPosition = bubblePos;
             responseBubble.GetComponentInChildren<TextMeshProUGUI>().text = response.responseText;
 
             // Check if there's a follow-up node
-            if (response.nextNode != null)
+            DialogueNode nextNode = nodeLookup[response.nextNodeID];
+            if (nextNode != null && nextNode.id != -1)
             {
-                StartDialogue(response.nextNode); // Start next dialogue
+                StartDialogue(nextNode.id); // Start next dialogue
             }
+            if (nextNode.id == -1)
+            {
+                foreach (Transform child in responseButtonContainer)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+        }
+
+        public IEnumerator RemoveCells()
+        {
+            yield return 0;
+
+            messages.RemoveAll(item => item == null);
         }
 
         [ContextMenu("Test")]
@@ -229,6 +369,12 @@ namespace SUNSET16.Core
             {
                 Debug.Log("Container is here");
             }
+        }
+
+        [ContextMenu("MessageNum")]
+        public void GetMessageNum()
+        {
+            Debug.Log("Message num: " + messageNum);
         }
     }
 }
