@@ -1,3 +1,28 @@
+/*
+albert's computer terminal dialogue system - handles all the branching conversation UI
+
+the choices are INERT - they branch the dialogue tree for flavor/lore but dont touch
+any game state, pill tracking, endings, or anything outside this script. purely cosmetic
+branching. which sequence even shows up is determined by ComputerInteraction based on
+day/pill state/task completion, not here
+
+session rules:
+- player can exit with Escape or the Close button at literally any point (unlike the
+  task overlay which makes you wait). this was intentional
+- exiting and re-entering resets to line 0 - sessions are cheap, no resume
+- full scene unload clears the session from ComputerInteraction's side
+
+while dialogue is open, movement is locked which also means InteractionSystem rejects
+E presses, so world interactions are naturally blocked without any extra checks here
+DOLOS checks IsDialogueActive before triggering so they cant overlap
+
+typewriter effect runs per character with a configurable delay. clicking Continue
+while its still typing skips to the end of the current line, second click advances
+
+TODO: portrait animations - speakerPortrait slot is there but static right now
+TODO: typewriter sound effects - the coroutine is the right place to add those
+TODO: albert voice lines? would be cool, no timeline for this
+*/
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -7,28 +32,6 @@ using SUNSET16.Core;
 
 namespace SUNSET16.UI
 {
-    /// <summary>
-    /// Albert — the ship's AI computer terminal dialogue system.
-    ///
-    /// Albert conversations are branching and interactive. The player can select from
-    /// up to 3 choices per line. Choices are SESSION-SCOPED AND INERT: they never
-    /// affect game state, pill tracking, endings, or any system outside this dialogue.
-    ///
-    /// Session rules:
-    ///   • Player can exit at any time with Escape or the Close button.
-    ///   • Exiting and re-entering the same session resets to line 0.
-    ///   • Leaving the bedroom scene fully erases the session (ComputerInteraction handles this).
-    ///   • Which sequence is active is determined by ComputerInteraction based on
-    ///     current day, pill state, and task completion.
-    ///
-    /// During dialogue:
-    ///   • Player movement is locked.
-    ///   • World interactions are blocked (movement is locked → InteractionSystem rejects E).
-    ///   • DOLOS cannot trigger (DOLOSManager checks IsDialogueActive).
-    ///
-    /// Lives in CoreScene (DontDestroyOnLoad via Singleton).
-    /// Called directly by: ComputerInteraction (ShowDialogue / HideDialogue).
-    /// </summary>
     public class DialogueUIManager : Singleton<DialogueUIManager>
     {
         [Header("Panel")]
@@ -60,7 +63,7 @@ namespace SUNSET16.UI
         private Coroutine       _playCoroutine;
         private Coroutine       _typewriterCoroutine;
 
-        /// <summary>True while a dialogue sequence is open. DOLOS checks this before triggering.</summary>
+        //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
 
         // ─── Lifecycle ────────────────────────────────────────────────────────────
@@ -76,7 +79,7 @@ namespace SUNSET16.UI
         {
             if (!IsDialogueActive) return;
 
-            // Player can exit Albert at any time via Escape
+            //player can bail out of albert at any time, no forced reading
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 HideDialogue();
@@ -85,10 +88,6 @@ namespace SUNSET16.UI
 
         // ─── Public API ───────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// Begin a dialogue session from a ScriptableObject sequence.
-        /// Silently ignored if dialogue is already active.
-        /// </summary>
         public void ShowDialogue(DialogueSequence sequence)
         {
             if (sequence == null || sequence.lines == null || sequence.lines.Length == 0)
@@ -103,7 +102,7 @@ namespace SUNSET16.UI
                 return;
             }
 
-            // DOLOS cannot interrupt Albert (but Albert must not start during DOLOS — caller guards this)
+            //DOLOS cannot interrupt albert (but albert must not start during DOLOS — caller guards this)
             _lines     = sequence.lines;
             _lineIndex = 0;
 
@@ -118,10 +117,6 @@ namespace SUNSET16.UI
             _playCoroutine = StartCoroutine(PlayFromCurrentLine());
         }
 
-        /// <summary>
-        /// Close the dialogue immediately (player-initiated via Escape or Close button).
-        /// Resets line index — re-opening the same session will restart from line 0.
-        /// </summary>
         public void HideDialogue()
         {
             if (!IsDialogueActive) return;
@@ -145,24 +140,19 @@ namespace SUNSET16.UI
 
         // ─── Button Callbacks (wired via Inspector OnClick) ───────────────────────
 
-        /// <summary>
-        /// Called by the "Continue" button.
-        /// • If typewriter is still running: shows full text instantly.
-        /// • If text is complete: advances to next line.
-        /// </summary>
         public void OnAdvanceClicked()
         {
             if (!IsDialogueActive) return;
 
             if (_isTypewriting)
             {
-                // Skip to end of current line
+                //typewriter still running - skip to end of this line immediately
                 if (_typewriterCoroutine != null) StopCoroutine(_typewriterCoroutine);
                 _isTypewriting = false;
                 if (_lines != null && _lineIndex < _lines.Length)
                     dialogueBodyText.text = _lines[_lineIndex].text;
 
-                // Show appropriate controls for this line
+                //show whatever controls belong on this line (choices or continue button)
                 ShowControlsForCurrentLine();
                 return;
             }
@@ -178,10 +168,6 @@ namespace SUNSET16.UI
             }
         }
 
-        /// <summary>
-        /// Called by a choice button (index 0, 1, or 2).
-        /// Branches to the target line defined in DialogueChoice.nextLineIndex.
-        /// </summary>
         public void OnChoiceSelected(int choiceIndex)
         {
             if (!IsDialogueActive || _lines == null) return;
@@ -195,6 +181,7 @@ namespace SUNSET16.UI
 
             HideAllChoiceButtons();
 
+            //nextLineIndex < 0 is the convention for "this choice ends the conversation"
             if (choice.nextLineIndex < 0)
             {
                 FinishDialogue();
@@ -220,37 +207,36 @@ namespace SUNSET16.UI
 
             DialogueLine line = _lines[_lineIndex];
 
-            // Speaker
             if (speakerNameText != null)
                 speakerNameText.text = line.speakerName ?? "";
 
-            // Portrait
+            //only enable portrait if the line actually has one assigned
             if (speakerPortrait != null)
             {
                 speakerPortrait.sprite  = line.portrait;
                 speakerPortrait.enabled = line.portrait != null;
             }
 
-            // Hide controls while typewriting
+            //hide controls while the typewriter is doing its thing
             if (advanceButton != null) advanceButton.SetActive(false);
             HideAllChoiceButtons();
 
-            // Typewriter
+            //run the typewriter, then wait for it to fully finish before showing controls
             _typewriterCoroutine = StartCoroutine(TypewriterEffect(line.text));
             yield return _typewriterCoroutine;
             _typewriterCoroutine = null;
 
-            // After typewriter finishes
             ShowControlsForCurrentLine();
 
             if (line.HasChoices)
             {
-                // Wait for player to click a choice button — handled by OnChoiceSelected
+                //hand off control to OnChoiceSelected - coroutine stops here
                 yield break;
             }
 
             if (line.autoAdvanceDelay > 0f)
             {
+                //auto-advance after a delay - no player input needed
                 yield return new WaitForSeconds(line.autoAdvanceDelay);
                 _lineIndex++;
                 if (_lineIndex < _lines.Length)
@@ -260,7 +246,7 @@ namespace SUNSET16.UI
             }
             else
             {
-                // Wait for player to click Continue — handled by OnAdvanceClicked
+                //wait for player to click Continue - handled by OnAdvanceClicked
                 _waitingForAdvance = true;
             }
         }
@@ -270,6 +256,7 @@ namespace SUNSET16.UI
             _isTypewriting    = true;
             dialogueBodyText.text = "";
 
+            //append one character at a time with a small delay between each
             foreach (char c in fullText)
             {
                 dialogueBodyText.text += c;
@@ -287,6 +274,7 @@ namespace SUNSET16.UI
 
             if (line.HasChoices)
             {
+                //choices and continue are mutually exclusive - never show both
                 if (advanceButton != null) advanceButton.SetActive(false);
                 ShowChoiceButtons(line.choices);
             }
@@ -331,3 +319,4 @@ namespace SUNSET16.UI
         }
     }
 }
+

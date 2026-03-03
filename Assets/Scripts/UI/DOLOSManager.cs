@@ -1,3 +1,25 @@
+/*
+DOLOS - the ship's public address system
+makes announcements that play over everything else on the ship
+
+one-directional by design: the player can still move around during an announcement
+but they cant interact with objects, open doors, open the map, or start albert dialogue
+while its active. InteractionSystem and DoorController both check IsAnnouncementActive
+before doing anything
+
+only one announcement at a time - if something tries to trigger a new one while another
+is already playing it just gets silently dropped. no queue, no interruption
+DOLOS also wont fire if albert dialogue is open - theyre mutually exclusive so they
+dont step on each other
+
+settings queue: PauseMenuController can call QueueSettings() if the player tries to
+open settings mid-announcement. DOLOS will fire OnSettingsRequested the moment it
+finishes so the menu opens naturally right after, instead of interrupting or being lost
+
+TODO: actual audio playback - announcementAudioSource is wired up but the clips
+arent in yet, itll just show text for now
+TODO: visual panel for the announcement text - panel exists but needs art
+*/
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -7,24 +29,6 @@ using SUNSET16.Core;
 
 namespace SUNSET16.UI
 {
-    /// <summary>
-    /// DOLOS — the ship's public address system.
-    ///
-    /// DOLOS makes one-directional announcements (audio + text). The player can move
-    /// freely during an announcement, but the following are locked for its duration:
-    ///   • Scene transitions (DoorController checks IsAnnouncementActive)
-    ///   • Object interactions (InteractionSystem checks IsAnnouncementActive)
-    ///   • Map overlay (MapUIController checks IsAnnouncementActive)
-    ///   • Albert dialogue (DialogueUIManager checks IsAnnouncementActive before starting)
-    ///
-    /// Only one announcement plays at a time. New triggers are silently dropped if active.
-    /// DOLOS will not fire if Albert dialogue is currently active.
-    ///
-    /// Settings queue: if the player presses a queued settings action while DOLOS is
-    /// speaking, OnSettingsRequested fires when the announcement ends.
-    ///
-    /// Lives in CoreScene (DontDestroyOnLoad via Singleton).
-    /// </summary>
     public class DOLOSManager : Singleton<DOLOSManager>
     {
         [Header("Announcement Display")]
@@ -44,16 +48,10 @@ namespace SUNSET16.UI
 
         // ─── Events ───────────────────────────────────────────────────────────────
 
-        /// <summary>Fires when an announcement begins playing.</summary>
         public event Action<string> OnAnnouncementStarted;
-
-        /// <summary>Fires when an announcement finishes. Delivers the announcementId.</summary>
         public event Action<string> OnAnnouncementEnded;
 
-        /// <summary>
-        /// Fires at end of announcement if the player queued a settings-open while DOLOS was active.
-        /// PauseMenuController should subscribe to open settings on this event.
-        /// </summary>
+        //PauseMenuController subscribes to this so it knows when its safe to open settings
         public event Action OnSettingsRequested;
 
         // ─── Lifecycle ────────────────────────────────────────────────────────────
@@ -67,11 +65,6 @@ namespace SUNSET16.UI
 
         // ─── Public API ───────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// Attempt to play an announcement. Silently dropped if:
-        ///   • Another announcement is already active.
-        ///   • Albert dialogue is currently active.
-        /// </summary>
         public void TriggerAnnouncement(DOLOSAnnouncement announcement)
         {
             if (announcement == null)
@@ -80,13 +73,14 @@ namespace SUNSET16.UI
                 return;
             }
 
+            //already running - drop the new one, dont interrupt
             if (IsAnnouncementActive)
             {
                 Debug.Log($"[DOLOS] Already active — dropping '{announcement.announcementId}'");
                 return;
             }
 
-            // Albert takes exclusive audio/attention priority
+            //albert takes exclusive attention priority - dont talk over him
             if (DialogueUIManager.Instance != null && DialogueUIManager.Instance.IsDialogueActive)
             {
                 Debug.Log($"[DOLOS] Albert dialogue active — dropping '{announcement.announcementId}'");
@@ -96,9 +90,6 @@ namespace SUNSET16.UI
             _announcementCoroutine = StartCoroutine(PlayAnnouncement(announcement));
         }
 
-        /// <summary>
-        /// Immediately stop any active announcement (e.g. for scene changes or game-over).
-        /// </summary>
         public void StopAnnouncement()
         {
             if (_announcementCoroutine != null)
@@ -110,12 +101,9 @@ namespace SUNSET16.UI
             FinishAnnouncement(null);
         }
 
-        /// <summary>
-        /// Call when the player attempts to open settings while DOLOS is speaking.
-        /// Settings will be opened automatically once the announcement ends.
-        /// </summary>
         public void QueueSettings()
         {
+            //only meaningful if DOLOS is actually speaking right now
             if (IsAnnouncementActive)
                 _settingsQueued = true;
         }
@@ -159,7 +147,7 @@ namespace SUNSET16.UI
                 Debug.Log($"[DOLOS] Finished '{announcementId}'");
             }
 
-            // Honor queued settings request
+            //honor any settings request that came in while we were speaking
             if (_settingsQueued)
             {
                 _settingsQueued = false;
@@ -169,3 +157,4 @@ namespace SUNSET16.UI
         }
     }
 }
+

@@ -1,3 +1,27 @@
+/*
+ship map - press M during normal gameplay to see where you've been
+
+tracks three room states:
+- normal rooms: always visible on the map, no discovery needed (hallways, main areas, etc)
+- discovered hidden rooms: the player found the entrance off-pill, shown in yellow
+- entered hidden rooms: been inside, shown in green
+
+hidden rooms NEVER appear on the map until OnRoomDiscovered fires from HiddenRoomManager
+they don't show up as "???" or "locked" or anything like that - they just don't exist
+on the map until you find them, no spoilers
+
+can't open during dialogue, while the task overlay is up, or during a DOLOS announcement
+M also closes the map, Escape is handled upstream in PauseMenuController
+
+the visual right now is just a text list in a VerticalLayoutGroup - placeholder until
+proper ship map art lands on the assets branch
+subscribes to HiddenRoomManager and RoomManager events to keep state in sync with saves
+
+lives in CoreScene as a Singleton (DontDestroyOnLoad)
+
+TODO: actual ship map visual with rooms at real positions
+TODO: animated dots or icons to show room states instead of colour-coded text
+*/
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -6,25 +30,6 @@ using SUNSET16.Core;
 
 namespace SUNSET16.UI
 {
-    /// <summary>
-    /// Ship Map Overlay — accessed with the M key during normal gameplay.
-    ///
-    /// Tracks and displays room discovery states: Locked, Discovered, Entered.
-    /// Art assets for the ship layout are in progress; this implementation uses a
-    /// text-based room list as a placeholder that slots in visually when art arrives.
-    ///
-    /// Availability guards (map cannot open when):
-    ///   • Albert dialogue is active (DialogueUIManager.IsDialogueActive)
-    ///   • Task/puzzle overlay is active (TaskUIManager.IsOverlayActive)
-    ///   • DOLOS announcement is active (DOLOSManager.IsAnnouncementActive)
-    ///
-    /// M key also closes the map. Escape closes it via PauseMenuController's logic.
-    ///
-    /// Hidden rooms only appear on the map AFTER the player discovers them off-pill.
-    /// They never appear as "Locked" or "Unknown" — they are simply absent until found.
-    ///
-    /// Lives in CoreScene (DontDestroyOnLoad via Singleton).
-    /// </summary>
     public class MapUIController : Singleton<MapUIController>
     {
         [Header("Map Panel")]
@@ -49,10 +54,10 @@ namespace SUNSET16.UI
 
         public bool IsMapOpen { get; private set; }
 
-        // Tracks ALL rooms this session: hidden rooms only added once discovered
+        // tracks ALL rooms this session: hidden rooms only added once discovered
         private readonly Dictionary<string, DoorState> _roomStates = new Dictionary<string, DoorState>();
 
-        // Non-hidden rooms are always visible on the map
+        // normal rooms are always visible, no discovery required
         private readonly HashSet<string> _knownNormalRooms = new HashSet<string>();
 
         // ─── Lifecycle ────────────────────────────────────────────────────────────
@@ -122,7 +127,7 @@ namespace SUNSET16.UI
 
         public void OpenMap()
         {
-            // Guard: cannot open during dialogue, task overlay, or DOLOS
+            // guard: don't open during dialogue, task overlay, or DOLOS
             if (DialogueUIManager.Instance != null && DialogueUIManager.Instance.IsDialogueActive)
             {
                 Debug.Log("[MAP] Cannot open — Albert dialogue is active");
@@ -154,7 +159,7 @@ namespace SUNSET16.UI
             Debug.Log("[MAP] Closed");
         }
 
-        /// <summary>Rebuild the room list display with current discovery state.</summary>
+        // rebuilds the room list from scratch with current discovery state
         public void RefreshMapDisplay()
         {
             if (roomListContainer == null) return;
@@ -162,14 +167,14 @@ namespace SUNSET16.UI
             foreach (Transform child in roomListContainer)
                 Destroy(child.gameObject);
 
-            // Normal rooms (always visible)
+            // normal rooms always show up
             foreach (string roomName in _knownNormalRooms)
             {
                 DoorState state = _roomStates.ContainsKey(roomName) ? _roomStates[roomName] : DoorState.Normal;
                 CreateRoomEntry(FormatRoomName(roomName), colorNormal, state);
             }
 
-            // Hidden rooms (only appear after discovery)
+            // hidden rooms only appear once the player has discovered them
             foreach (var pair in _roomStates)
             {
                 if (_knownNormalRooms.Contains(pair.Key)) continue; // Already shown above
@@ -184,7 +189,7 @@ namespace SUNSET16.UI
 
         private void HandleRoomDiscovered(string roomId)
         {
-            // Hidden room appears on map for the first time
+            // first time this hidden room appears on the map
             if (!_roomStates.ContainsKey(roomId))
                 _roomStates[roomId] = DoorState.Discovered;
 
@@ -199,7 +204,7 @@ namespace SUNSET16.UI
 
         private void HandleRoomLoaded(string roomName)
         {
-            // Track normal rooms visited (non-hidden rooms are always shown)
+            // normal rooms get added to the known set as soon as you visit them
             if (!string.IsNullOrEmpty(roomName))
             {
                 _knownNormalRooms.Add(roomName);
@@ -217,8 +222,8 @@ namespace SUNSET16.UI
 
         private void HandleGameLoaded()
         {
-            // Room states restored via HiddenRoomManager save data.
-            // Re-query to sync map with loaded save.
+            // room states come back through HiddenRoomManager's save data
+            // just refresh the display so the map matches the loaded save
             if (IsMapOpen) RefreshMapDisplay();
         }
 
@@ -232,7 +237,7 @@ namespace SUNSET16.UI
             Image[]    imgs = go.GetComponentsInChildren<Image>();
             TMP_Text   txt  = go.GetComponentInChildren<TMP_Text>();
 
-            // First Image component used as status dot
+            // first Image component used as status dot
             if (imgs.Length > 0)
                 imgs[0].color = dotColor;
 

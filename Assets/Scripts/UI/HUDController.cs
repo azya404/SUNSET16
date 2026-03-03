@@ -1,3 +1,24 @@
+/*
+the persistent in-game overlay - lives in CoreScene via DontDestroyOnLoad
+
+three things it shows:
+- day counter (top corner, updates automatically via DayManager.OnDayChanged)
+- fading message panel (bottom-center) - used for locked door feedback ("The door is locked.")
+  and sleepy messages when the player tries doors they shouldnt at night
+- brief status text (top-center) - things like "Task Complete!" that auto-clear quickly
+
+DoorController calls ShowMessage/ShowSleepyMessage directly on this
+SaveManager events (OnGameLoaded, OnSaveDeleted) also feed in so the counter
+stays accurate across saves and resets
+
+design note on sleepy messages: they only fire when the player ATTEMPTS a door at night,
+NOT when night starts. we deliberately didnt add a "you feel sleepy" popup at phase change
+because it felt too hand-holdy. the door attempt is a natural moment for that feedback
+
+TODO: actual panel animations - the CanvasGroup fade logic is in place but the
+message panel itself still needs art/background treatment
+TODO: day counter visual polish - its just raw text right now
+*/
 using UnityEngine;
 using TMPro;
 using System;
@@ -6,15 +27,6 @@ using SUNSET16.Core;
 
 namespace SUNSET16.UI
 {
-    /// <summary>
-    /// Persistent in-game HUD overlay.
-    /// Displays: day counter, fading messages (locked door feedback, sleepy messages),
-    /// and brief status notifications (Task Complete, Puzzle Solved).
-    ///
-    /// Lives in CoreScene (DontDestroyOnLoad via Singleton).
-    /// Called directly by: DoorController (ShowMessage / ShowSleepyMessage).
-    /// Called indirectly via events: TaskManager, PuzzleManager, DayManager.
-    /// </summary>
     public class HUDController : Singleton<HUDController>
     {
         [Header("Day Counter")]
@@ -134,26 +146,19 @@ namespace SUNSET16.UI
 
         // ─── Public API ───────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// Show a fading message. Called by DoorController for specific locked-door strings.
-        /// Auto-fades after duration. Interrupts any currently showing message.
-        /// </summary>
         public void ShowMessage(string message, float duration = 0f)
         {
             if (messageText == null || messageCanvasGroup == null) return;
 
             if (duration <= 0f) duration = messageDisplayDuration;
 
+            //interrupt any in-progress message and start fresh
             if (_messageCoroutine != null)
                 StopCoroutine(_messageCoroutine);
 
             _messageCoroutine = StartCoroutine(ShowMessageCoroutine(message, duration));
         }
 
-        /// <summary>
-        /// Show a random message from the sleepy pool.
-        /// Called by DoorController when a night-restricted door is attempted.
-        /// </summary>
         public void ShowSleepyMessage()
         {
             if (sleepyMessages == null || sleepyMessages.Length == 0) return;
@@ -162,10 +167,6 @@ namespace SUNSET16.UI
             ShowMessage(msg, messageDisplayDuration);
         }
 
-        /// <summary>
-        /// Brief status notification (e.g. "Task Complete!", "Puzzle Solved!").
-        /// Auto-clears after statusDisplayDuration.
-        /// </summary>
         public void ShowStatus(string status)
         {
             if (statusText == null) return;
@@ -175,7 +176,6 @@ namespace SUNSET16.UI
             Invoke(nameof(ClearStatus), statusDisplayDuration);
         }
 
-        /// <summary>Immediately clear any active fading message.</summary>
         public void ClearMessage()
         {
             if (_messageCoroutine != null)
@@ -188,7 +188,6 @@ namespace SUNSET16.UI
             if (messageText != null)        messageText.text = "";
         }
 
-        /// <summary>Show or hide the entire HUD (e.g. during cutscenes or game-over).</summary>
         public void SetHUDVisible(bool visible)
         {
             gameObject.SetActive(visible);
@@ -200,7 +199,7 @@ namespace SUNSET16.UI
         {
             messageText.text = message;
 
-            // Fade in
+            //fade in - lerp alpha from 0 to 1 over messageFadeDuration seconds
             float elapsed = 0f;
             while (elapsed < messageFadeDuration)
             {
@@ -210,10 +209,10 @@ namespace SUNSET16.UI
             }
             messageCanvasGroup.alpha = 1f;
 
-            // Hold
+            //hold at full opacity
             yield return new WaitForSeconds(duration);
 
-            // Fade out
+            //fade out - same thing in reverse
             elapsed = 0f;
             while (elapsed < messageFadeDuration)
             {

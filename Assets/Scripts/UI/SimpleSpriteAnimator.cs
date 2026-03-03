@@ -1,14 +1,22 @@
+/*
+dead simple sprite animation for UI Images
+cycles through a Sprite array at a set fps, loops forever
+nothing fancy - if you need it to do something fancier use a proper animator
+
+resets to frame 0 on re-enable so it always starts from the beginning
+useful for UI elements that get toggled on and off repeatedly
+
+moved here from TechDemo/SimpleSpriteAnimator.cs - only change is the namespace
+logic is 100% identical, now lives in SUNSET16.UI with the rest of the UI scripts
+
+TODO: option to pause when Time.timeScale = 0 (so animations freeze with the game)
+TODO: ping-pong mode (play forward then backward) instead of just looping
+*/
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SUNSET16.UI
 {
-    /// <summary>
-    /// Cycles through a Sprite array on a UI Image at a configurable frame rate.
-    /// The animation loops continuously and resets to frame 0 on re-enable.
-    ///
-    /// Moved from TechDemo/SimpleSpriteAnimator.cs — logic unchanged, namespace updated.
-    /// </summary>
     [RequireComponent(typeof(Image))]
     public class SimpleSpriteAnimator : MonoBehaviour
     {
@@ -29,7 +37,7 @@ namespace SUNSET16.UI
 
         private void OnEnable()
         {
-            // Reset to first frame whenever the GameObject becomes active
+            // reset to first frame whenever the GameObject becomes active
             _currentFrame = 0;
             _timer        = 0f;
             if (frames != null && frames.Length > 0 && _image != null)

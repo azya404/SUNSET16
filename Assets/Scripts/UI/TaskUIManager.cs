@@ -1,3 +1,24 @@
+/*
+task overlay - the full-screen split UI that blocks the world when the player presses E on a task or puzzle object
+
+left 40% is the "tablet" pane: task name header + static instructions
+the layout is set up in Unity, nothing is hardcoded here - just fill in the text fields
+right 60% is where the puzzle Canvas prefab gets instantiated at runtime
+the puzzle prefab is handed in by whatever world object triggered the overlay,
+so this script has no idea what the puzzle is - it just parents it into puzzleArea and stretches it to fill
+
+no early exit - by design the player HAS to finish the task to close the overlay
+escape does nothing, we block it in PauseMenuController's priority chain
+TaskManager used to call LockMovement but that got pulled out - movement locking lives here now
+
+IsOverlayActive is a public flag checked by MapUIController and PauseMenuController
+so they know to back off while a task is running
+
+lives in CoreScene as a Singleton (DontDestroyOnLoad)
+
+TODO: slide-in/out animation for opening and closing
+TODO: actual tablet art for the left panel (right now its just text on a placeholder rect)
+*/
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -5,27 +26,6 @@ using SUNSET16.Core;
 
 namespace SUNSET16.UI
 {
-    /// <summary>
-    /// Task and Puzzle Overlay — the full-screen split UI that appears when the player
-    /// presses E on a world-space task or puzzle object.
-    ///
-    /// Layout:
-    ///   Left 40%  — TabletArea: static task instructions (never changes mid-task).
-    ///   Right 60% — PuzzleArea: interactive puzzle Canvas prefab instantiated at runtime.
-    ///   Background — semi-transparent black overlay, blocks world click-through.
-    ///
-    /// Rules (by design):
-    ///   • No early exit. Once the overlay is open, the player works until task is complete.
-    ///   • Puzzle UI is provided as a Canvas prefab by the interactable task/puzzle object.
-    ///   • DOLOS announcements are suppressed while the overlay is active.
-    ///   • Player movement is locked for the duration.
-    ///
-    /// Called directly by: task/puzzle world objects (IInteractable.Interact()).
-    /// Calls back to: TaskManager.CompleteCurrentTask() when puzzle signals completion,
-    ///                PuzzleManager.CompletePuzzle(id) for puzzle objects.
-    ///
-    /// Lives in CoreScene (DontDestroyOnLoad via Singleton).
-    /// </summary>
     public class TaskUIManager : Singleton<TaskUIManager>
     {
         [Header("Overlay Root")]
@@ -44,7 +44,7 @@ namespace SUNSET16.UI
 
         // ─── Runtime State ────────────────────────────────────────────────────────
 
-        /// <summary>True while the task/puzzle overlay is open. PauseMenu and Map check this.</summary>
+        // checked by MapUIController and PauseMenuController before they do anything
         public bool IsOverlayActive { get; private set; }
 
         private GameObject _currentPuzzleUI;
@@ -59,15 +59,6 @@ namespace SUNSET16.UI
 
         // ─── Public API ───────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// Open the task overlay.
-        /// Called by IInteractable.Interact() on a world-space task or puzzle object.
-        ///
-        /// <param name="taskName">Header shown at the top of the tablet pane.</param>
-        /// <param name="instructions">Full static instructions for this task (shown immediately).</param>
-        /// <param name="puzzleUIPrefab">Canvas prefab instantiated into the right region.
-        ///                              Pass null if the task has no interactive UI element yet.</param>
-        /// </summary>
         public void ShowOverlay(string taskName, string instructions, GameObject puzzleUIPrefab = null)
         {
             if (IsOverlayActive)
@@ -78,27 +69,23 @@ namespace SUNSET16.UI
 
             IsOverlayActive = true;
 
-            // Populate tablet pane
+            // populate the tablet pane with whatever the world object passed in
             if (taskNameText         != null) taskNameText.text         = taskName    ?? "";
             if (taskInstructionsText != null) taskInstructionsText.text = instructions ?? "";
 
-            // Instantiate puzzle UI into right region
+            // instantiate the puzzle prefab into the right region
             SetPuzzleUI(puzzleUIPrefab);
 
             if (overlayRoot != null) overlayRoot.SetActive(true);
 
-            // Lock player movement — no early exit while overlay is open
+            // lock movement - no early exit while overlay is open
             if (PlayerController.Instance != null)
                 PlayerController.Instance.LockMovement(true);
 
             Debug.Log($"[TASKUI] Overlay opened for task: '{taskName}'");
         }
 
-        /// <summary>
-        /// Close the task overlay and clean up.
-        /// Called by the puzzle UI component when the puzzle/task is completed.
-        /// Not intended to be called before task completion.
-        /// </summary>
+        // called by the puzzle UI prefab when the player finishes - not before
         public void HideOverlay()
         {
             if (!IsOverlayActive) return;
@@ -115,10 +102,7 @@ namespace SUNSET16.UI
             Debug.Log("[TASKUI] Overlay closed (task/puzzle complete)");
         }
 
-        /// <summary>
-        /// Convenience: complete the current day's task and close the overlay.
-        /// Call this from the puzzle UI prefab once the player solves the puzzle.
-        /// </summary>
+        // shortcut for puzzle UIs to call when the player solves the day's main task
         public void CompleteTaskAndClose()
         {
             if (HUDController.Instance != null)
@@ -130,9 +114,7 @@ namespace SUNSET16.UI
             HideOverlay();
         }
 
-        /// <summary>
-        /// Convenience: complete a hidden-room puzzle and close the overlay.
-        /// </summary>
+        // shortcut for hidden-room puzzle UIs
         public void CompletePuzzleAndClose(string puzzleId)
         {
             if (HUDController.Instance != null)
@@ -144,7 +126,6 @@ namespace SUNSET16.UI
             HideOverlay();
         }
 
-        /// <summary>Returns the RectTransform of the puzzle area (right 60% region).</summary>
         public RectTransform GetPuzzleArea() => puzzleArea;
 
         // ─── Internal ─────────────────────────────────────────────────────────────
@@ -157,7 +138,7 @@ namespace SUNSET16.UI
 
             _currentPuzzleUI = Instantiate(prefab, puzzleArea);
 
-            // Stretch to fill the puzzle area
+            // stretch to fill the puzzle area so whatever prefab we get looks right
             RectTransform rt = _currentPuzzleUI.GetComponent<RectTransform>();
             if (rt != null)
             {

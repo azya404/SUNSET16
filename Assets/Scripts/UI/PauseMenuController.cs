@@ -1,3 +1,27 @@
+/*
+pause menu - Escape key with a priority chain so it always does the right thing
+
+priority order when Escape is pressed:
+1. DOLOS announcement running -> do nothing, DOLOS owns the screen right now
+2. Albert dialogue active -> do nothing, DialogueUIManager handles its own Escape
+3. task overlay active -> do nothing, no early exit from tasks by design
+4. map is open -> close map (don't pause)
+5. settings panel is open -> close settings (don't pause)
+6. pause menu is open -> resume
+7. nothing else -> open pause menu
+
+NOT a Singleton - nothing external ever needs to call PauseMenuController directly
+it just sits in the scene and listens to Escape, no references needed
+
+subscribes to DOLOSManager.OnSettingsRequested so if the player tries to open settings
+during an announcement it gets queued and fires as soon as the announcement ends
+
+WaitForSecondsRealtime for save feedback because Time.timeScale is 0 while paused
+using WaitForSeconds here would wait forever
+
+TODO: pause menu art
+TODO: keybindings display
+*/
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
@@ -6,23 +30,6 @@ using SUNSET16.Core;
 
 namespace SUNSET16.UI
 {
-    /// <summary>
-    /// Pause Menu — toggled with Escape during normal gameplay.
-    ///
-    /// Escape priority order:
-    ///   1. DOLOS active         → ignore (do nothing)
-    ///   2. Albert dialogue active → ignored (DialogueUIManager handles its own Escape)
-    ///   3. Task overlay active  → ignored (no early exit from tasks)
-    ///   4. Map is open          → close map (don't pause)
-    ///   5. Settings open        → close settings (don't pause)
-    ///   6. Pause menu open      → resume (close pause menu)
-    ///   7. Default              → open pause menu
-    ///
-    /// Also subscribes to DOLOSManager.OnSettingsRequested to open settings after
-    /// an announcement ends (if the player pressed the settings key during DOLOS).
-    ///
-    /// Lives in CoreScene. Does NOT need to be a Singleton — no external system calls it.
-    /// </summary>
     public class PauseMenuController : MonoBehaviour
     {
         [Header("Pause Panel")]
@@ -58,7 +65,7 @@ namespace SUNSET16.UI
             DayManager.Instance.OnGameComplete   += HandleGameOver;
             DayManager.Instance.OnGameEndedEarly += HandleGameEndedEarly;
 
-            // Honor settings requests that were queued during a DOLOS announcement
+            // open settings after a DOLOS announcement ends if the player tried during it
             if (DOLOSManager.Instance != null)
                 DOLOSManager.Instance.OnSettingsRequested += OpenSettings;
         }
@@ -152,7 +159,7 @@ namespace SUNSET16.UI
 
         public void OnQuitToMainMenuClicked()
         {
-            // Restore normal time before scene change
+            // restore time before changing scenes or the game will load paused
             Time.timeScale = 1f;
             _isPaused      = false;
             SceneManager.LoadScene("MainMenu");
@@ -169,7 +176,7 @@ namespace SUNSET16.UI
         private void HandleGameOver()
         {
             _isGameOver = true;
-            // If paused when game ends, restore time and hide the menu
+            // if we happened to be paused when the game ended, clean up
             if (_isPaused)
             {
                 Time.timeScale = 1f;
