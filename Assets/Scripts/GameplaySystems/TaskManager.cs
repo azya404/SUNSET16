@@ -165,7 +165,7 @@ namespace SUNSET16.Core
                 }
                 else
                 {
-                    //prefab exists but doesnt implement ITask, setup error
+                    //if the prefab doesn't have an ITask script, destroy it and log an error
                     Debug.LogWarning("[TASKMANAGER] Task prefab does not implement ITask interface");
                     Destroy(taskObj);
                 }
@@ -175,18 +175,10 @@ namespace SUNSET16.Core
                 Debug.Log($"[TASKMANAGER] Task ready for Day {currentDay} ({difficulty}) - no prefab assigned (tech demo)");
             }
 
-            //freeze the player so they cant walk away
-            if (PlayerController.Instance != null)
-            {
-                PlayerController.Instance.LockMovement(true);
-                Debug.Log("[TASKMANAGER] Player input locked (task active)");
-            }
-            else
-            {
-                Debug.LogWarning("[TASKMANAGER] PlayerController not found - cannot lock input");
-            }
-
-            OnTaskSpawned?.Invoke(taskData); //TabletUIController picks this up
+            // Movement is NOT locked here.
+            // The player walks up to the spawned task object and presses E to open the overlay.
+            // TaskUIManager.ShowOverlay() handles movement locking when the interaction begins.
+            OnTaskSpawned?.Invoke(taskData);
         }
 
         //marks the current task as done, unlocks player, and advances to Night
@@ -217,21 +209,15 @@ namespace SUNSET16.Core
 
             if (ActiveTask != null)
             {
-                ActiveTask.CompleteTask(); //let the task do any cleanup
+                ActiveTask.CompleteTask(); //tell the task script to finish itself
             }
-            DestroyActiveTask();
+            DestroyActiveTask(); //remove the task object from the scene
 
-            //unfreeze the player
-            if (PlayerController.Instance != null)
-            {
-                PlayerController.Instance.LockMovement(false);
-                Debug.Log("[TASKMANAGER] Player input unlocked (task complete)");
-            }
-
+            // Movement is unlocked by TaskUIManager.HideOverlay() when the overlay closes.
             OnTaskCompleted?.Invoke(currentDay);
             Debug.Log($"[TASKMANAGER] Day {currentDay} task completed");
 
-            DayManager.Instance.TaskCompleted(); //THIS triggers Morning -> Night transition
+            DayManager.Instance.TaskCompleted(); //tell DayManager to advance to Night
         }
 
         public bool IsTaskCompleted(int day)
@@ -261,7 +247,7 @@ namespace SUNSET16.Core
             }
         }
 
-        //searches the TaskData array for a match on day + difficulty
+        //find the right TaskData for this day+difficulty combo
         private TaskData FindTaskData(int day, TaskDifficulty difficulty)
         {
             if (_taskDataAssets == null) return null;
