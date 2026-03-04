@@ -18,9 +18,13 @@ also zeroes the velocity so you dont slide after being locked
 animator is optional - if ones assigned it passes MoveX, MoveY, IsMoving
 parameters for walk/idle animations. if not assigned it just skips that
 
+spriteRenderer is optional - if assigned, flipX is set when moving left
+so we can reuse the right-walk animation frames for left movement
+lastFacingX tracks the last horizontal direction so the sprite doesnt
+snap back to un-flipped when moving purely up or down
+
 TODO: sprint (hold Shift)
 TODO: footstep sfx thru AudioManager
-TODO: face the direction youre moving (flip sprite or animation direction)
 */
 using UnityEngine;
 
@@ -41,7 +45,9 @@ namespace SUNSET16.Core
 
         [Header("Animation (Optional)")]
         [SerializeField] private Animator animator;
+        [SerializeField] private SpriteRenderer spriteRenderer;
         private bool hasAnimator = false;
+        private float lastFacingX = 1f; //default facing right
 
         void Awake()
         {
@@ -124,6 +130,19 @@ namespace SUNSET16.Core
             animator.SetFloat("MoveX", moveX);
             animator.SetFloat("MoveY", moveY);
             animator.SetBool("IsMoving", moveInput.magnitude > 0.1f); //small threshold so tiny drift doesnt count as moving
+
+            //flip sprite for left movement - reuses right-walk frames, no extra sprites needed
+            //only update lastFacingX when actually moving horizontally so
+            //the sprite doesnt un-flip when you switch to moving up/down
+            if (moveX != 0f)
+            {
+                lastFacingX = moveX;
+            }
+
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.flipX = (lastFacingX < 0f);
+            }
         }
 
         public float GetMoveSpeed()
