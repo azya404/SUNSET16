@@ -102,7 +102,27 @@ namespace SUNSET16.Core
             //put the player at the right spawn point
             if (PlayerController.Instance != null)
             {
-                Vector3 spawnPos = GetSpawnPosition();
+                Vector3 spawnPos;
+                if (_hasCustomSpawnPosition)
+                {
+                    //door transition - use the position set by DoorController
+                    spawnPos = GetSpawnPosition();
+                }
+                else
+                {
+                    //initial load - look for a SpawnPoint GO in the newly loaded scene
+                    GameObject spawnPoint = GameObject.Find("SpawnPoint");
+                    if (spawnPoint != null)
+                    {
+                        spawnPos = spawnPoint.transform.position;
+                        Debug.Log($"[ROOMMANAGER] Using scene SpawnPoint at {spawnPos}");
+                    }
+                    else
+                    {
+                        spawnPos = Vector3.zero;
+                        Debug.LogWarning($"[ROOMMANAGER] No SpawnPoint found in {roomSceneName} - spawning at origin");
+                    }
+                }
                 PlayerController.Instance.SetPosition(spawnPos);
                 Debug.Log($"[ROOMMANAGER] Player spawned at {spawnPos}");
             }
