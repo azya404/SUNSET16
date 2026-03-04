@@ -1,17 +1,27 @@
 /*
 bathroom mirror interaction — player presses E to decide pill choice
-shows animated overlay, player clicks Take Pill or Hide Pill
+shows animated overlay, player clicks Consume Pill or Conceal Pill
 
-button click sequence:
-  1. disable buttons immediately (prevent double-click)
-  2. fade screen to black (PillChoiceFade CanvasGroup alpha 0 → 1)
-  3. play pill-specific SFX and wait for clip to finish
-  4. record the pill choice (fires OnPillTaken → AudioManager crossfades music)
-  5. fade screen back in (alpha 1 → 0)
-  6. unfreeze player, close overlay
+PROXIMITY AUDIO
+  on enter range  → bedroom ambient softens to ambientSoftenVolume
+  on exit range   → bedroom ambient restores (if overlay not active)
 
-ambient pause/resume stubbed out as TODOs — wired in 4f when AudioManager gets
-ambient support
+OVERLAY OPEN
+  bedroom ambient fades to 0 then pauses
+  mirror ambient fades in from 0
+
+BUTTON CLICK SEQUENCE
+  1. disable buttons (prevent double-click)
+  2. screen fades to black + mirror ambient fades out (parallel)
+  3. pill SFX fades in on the black screen
+  4. SFX plays at full volume
+  5. SFX fades out + screen fades back in (parallel)
+  6. record pill choice (fires OnPillTaken → AudioManager crossfades music)
+  7. close overlay + resume bedroom ambient with fade in
+  8. disable interaction prompt (choice made for today)
+
+INTERACTION PROMPT
+  disabled after choice — re-enabled when DayManager fires Morning phase
 
 DOLOS and movement-lock blocking handled upstream by InteractionSystem
 
@@ -27,7 +37,7 @@ namespace SUNSET16.Interaction
     public class MirrorInteraction : MonoBehaviour, IInteractable
     {
         [Header("UI References")]
-        [Tooltip("Canvas or panel containing the Take Pill / Hide Pill buttons.")]
+        [Tooltip("Canvas or panel containing the Consume Pill / Conceal Pill buttons.")]
         [SerializeField] private GameObject mirrorOverlayCanvas;
         [Tooltip("CanvasGroup on the PillChoiceFade child GO — fades to black on button click.")]
         [SerializeField] private CanvasGroup pillChoiceFade;
@@ -38,14 +48,31 @@ namespace SUNSET16.Interaction
         [Tooltip("Sound played when the player hides the pill.")]
         [SerializeField] private AudioClip pillHideSFX;
 
-        [Header("Fade Settings")]
+        [Header("Screen Fade Settings")]
         [SerializeField] private float fadeOutDuration = 0.8f;
         [SerializeField] private float fadeInDuration  = 1.2f;
+
+        [Header("SFX Fade Settings")]
+        [Tooltip("How long the pill SFX fades in after the screen goes black.")]
+        [SerializeField] private float sfxFadeInDuration  = 0.4f;
+        [Tooltip("How long the pill SFX fades out (synced with screen fade-in).")]
+        [SerializeField] private float sfxFadeOutDuration = 0.6f;
+
+        [Header("Mirror Ambient")]
+        [Tooltip("How long the mirror ambient fades in when the overlay opens.")]
+        [SerializeField] private float mirrorAmbientFadeInDuration = 0.6f;
+
+        [Header("Proximity Audio")]
+        [Tooltip("Volume bedroom ambient softens to when player is near the mirror.")]
+        [SerializeField] private float ambientSoftenVolume   = 0.3f;
+        [Tooltip("Duration of the ambient soften/restore fade.")]
+        [SerializeField] private float ambientSoftenDuration = 1.0f;
 
         [Header("Settings")]
         [SerializeField] private string interactionPrompt = "Press E to look in mirror";
 
-        private bool _isOverlayActive = false;
+        private bool              _isOverlayActive    = false;
+        private InteractionSystem _interactionSystem;
 
         // ─── Lifecycle ────────────────────────────────────────────────────────────
 
@@ -53,6 +80,39 @@ namespace SUNSET16.Interaction
         {
             if (mirrorOverlayCanvas != null)
                 mirrorOverlayCanvas.SetActive(false);
+
+            _interactionSystem = GetComponent<InteractionSystem>();
+        }
+
+        private void Start()
+        {
+            //subscribe to day changes so we can re-enable the prompt on a new morning
+            if (DayManager.Instance != null)
+                DayManager.Instance.OnPhaseChanged += OnDayPhaseChanged;
+        }
+
+        private void OnDestroy()
+        {
+            if (DayManager.Instance != null)
+                DayManager.Instance.OnPhaseChanged -= OnDayPhaseChanged;
+        }
+
+        // ─── Proximity Audio ──────────────────────────────────────────────────────
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!other.CompareTag("Player")) return;
+            //only soften if the player hasnt made their choice yet
+            if (PillStateManager.Instance != null && PillStateManager.Instance.HasTakenPillToday()) return;
+            AudioManager.Instance?.SoftenAmbient(ambientSoftenVolume, ambientSoftenDuration);
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (!other.CompareTag("Player")) return;
+            //dont restore if overlay is active - the overlay handles ambient itself
+            if (!_isOverlayActive)
+                AudioManager.Instance?.RestoreAmbient(ambientSoftenDuration);
         }
 
         // ─── IInteractable ────────────────────────────────────────────────────────
@@ -92,28 +152,36 @@ namespace SUNSET16.Interaction
 
         private IEnumerator PillChoiceSequence(PillChoice choice)
         {
-            // prevent double-click while sequence is running
             SetButtonsInteractable(false);
 
-            // 1. fade screen to black AND fade mirror audio out simultaneously
+            // 1. screen fades to black AND mirror ambient fades out simultaneously
             AudioManager.Instance?.FadeMirrorAmbientOut(fadeOutDuration); //fire and forget
-            yield return StartCoroutine(FadePillOverlay(0f, 1f, fadeOutDuration)); //wait for screen
+            yield return StartCoroutine(FadePillOverlay(0f, 1f, fadeOutDuration));
 
-            // 2. play pill-specific SFX and wait for it to finish
+            // 2. pill SFX fades in on the black screen
             AudioClip clip = (choice == PillChoice.Taken) ? pillTakeSFX : pillHideSFX;
             if (clip != null)
             {
-                AudioManager.Instance?.PlaySFX(clip);
-                yield return new WaitForSeconds(clip.length);
+                float fullVolumeDuration = Mathf.Max(0f, clip.length - sfxFadeInDuration - sfxFadeOutDuration);
+
+                AudioManager.Instance?.PlayPillSFX(clip);
+                AudioManager.Instance?.FadePillSFXIn(sfxFadeInDuration); //fire and forget
+                yield return new WaitForSeconds(sfxFadeInDuration + fullVolumeDuration);
+
+                // 3. SFX fades out AND screen fades back in simultaneously
+                AudioManager.Instance?.FadePillSFXOut(sfxFadeOutDuration); //fire and forget
+                yield return StartCoroutine(FadePillOverlay(1f, 0f, fadeInDuration));
+            }
+            else
+            {
+                //no SFX - just fade screen back in
+                yield return StartCoroutine(FadePillOverlay(1f, 0f, fadeInDuration));
             }
 
-            // 3. record the choice — fires OnPillTaken → AudioManager crossfades music
+            // 4. record choice - fires OnPillTaken → AudioManager crossfades music
             PillStateManager.Instance?.TakePill(choice);
 
-            // 4. fade back in
-            yield return StartCoroutine(FadePillOverlay(1f, 0f, fadeInDuration));
-
-            // 5. close overlay and unfreeze player
+            // 5. close overlay, resume ambient, disable prompt
             CloseOverlay();
         }
 
@@ -121,7 +189,6 @@ namespace SUNSET16.Interaction
         {
             if (pillChoiceFade == null) yield break;
 
-            // block input while fading to black, unblock while fading back in
             pillChoiceFade.blocksRaycasts = (to >= 1f);
 
             float timer = 0f;
@@ -147,10 +214,12 @@ namespace SUNSET16.Interaction
         {
             _isOverlayActive = true;
 
+            //hide the interaction prompt immediately so it doesnt show during the sequence
+            _interactionSystem?.SetInteractionEnabled(false);
+
             if (mirrorOverlayCanvas != null)
                 mirrorOverlayCanvas.SetActive(true);
 
-            // ensure fade layer starts transparent and non-blocking
             if (pillChoiceFade != null)
             {
                 pillChoiceFade.alpha          = 0f;
@@ -160,8 +229,10 @@ namespace SUNSET16.Interaction
             if (PlayerController.Instance != null)
                 PlayerController.Instance.LockMovement(true);
 
-            AudioManager.Instance?.PauseAmbient();      //pause Albert's theme (preserves position)
-            AudioManager.Instance?.PlayMirrorAmbient(); //start mirror scene audio
+            //smooth bedroom ambient fade out, then mirror ambient fades in
+            AudioManager.Instance?.FadeOutAndPauseAmbient();
+            AudioManager.Instance?.FadeMirrorAmbientIn(mirrorAmbientFadeInDuration);
+
             Debug.Log("[MIRROR] Pill-choice overlay shown");
         }
 
@@ -171,15 +242,34 @@ namespace SUNSET16.Interaction
 
             _isOverlayActive = false;
 
+            //disable interaction FIRST — before unlocking movement to avoid any physics re-trigger
+            if (_interactionSystem != null)
+                _interactionSystem.SetInteractionEnabled(false);
+            else
+                Debug.LogError("[MIRROR] _interactionSystem is NULL — prompt will not be hidden. Check MirrorInteract GO has InteractionSystem component.");
+
             if (mirrorOverlayCanvas != null)
                 mirrorOverlayCanvas.SetActive(false);
 
             if (PlayerController.Instance != null)
                 PlayerController.Instance.LockMovement(false);
 
-            AudioManager.Instance?.StopMirrorAmbient(); //safety stop in case fade didn't finish
-            AudioManager.Instance?.ResumeAmbient();     //resume Albert's theme from where it paused
+            AudioManager.Instance?.StopMirrorAmbient();       //safety stop
+            AudioManager.Instance?.ResumeAmbientWithFadeIn(); //bedroom fades back in
+
             Debug.Log("[MIRROR] Pill-choice overlay closed");
+        }
+
+        // ─── Day Change ───────────────────────────────────────────────────────────
+
+        private void OnDayPhaseChanged(DayPhase phase)
+        {
+            if (phase == DayPhase.Morning)
+            {
+                //new day — re-enable so prompt shows and E key works again
+                _interactionSystem?.SetInteractionEnabled(true);
+                Debug.Log("[MIRROR] New day — mirror interaction re-enabled");
+            }
         }
     }
 }

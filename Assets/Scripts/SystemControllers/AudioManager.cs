@@ -13,18 +13,22 @@ so other scripts dont have to manage clips themselves
 
 ambient is a separate looping AudioSource independent of music
 starts automatically when BedroomScene loads (via OnRoomLoaded event)
-PauseAmbient/ResumeAmbient called by MirrorInteraction during pill sequence
+SoftenAmbient/RestoreAmbient called by MirrorInteraction on proximity
+FadeOutAndPauseAmbient/ResumeAmbientWithFadeIn called during pill sequence
 volume tracks masterVolume only - can add dedicated ambient slider later
+
+mirrorSource plays the mirror overlay audio and fades out on button click
+pillSFXSource plays the pill choice SFX with independent fade in/out control
 
 subscribes to events in Start or defers to OnInitializationComplete
 if GameManager hasnt finished yet (same pattern as other system controllers)
 OnDestroy unsubs from everything cos singletons can outlive what they sub to
 
-TODO: most AudioClip fields are empty rn - need actual audio assets
 TODO: morning music should change based on pill choice
 TODO: audio ducking (lower music when sfx plays)
 TODO: per-room ambient clip dictionary instead of single bedroomAmbientClip
 */
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -40,6 +44,7 @@ namespace SUNSET16.Core
         [SerializeField] private AudioSource sfxSource;       //one-shot sound effects player
         [SerializeField] private AudioSource ambientSource;   //looping ambient (Albert's theme, etc)
         [SerializeField] private AudioSource mirrorSource;    //mirror overlay audio - fades out on button click
+        [SerializeField] private AudioSource pillSFXSource;   //pill choice SFX - independent fade in/out
 
         [Header("Ambient")]
         [SerializeField] private AudioClip bedroomAmbientClip; //ambient loop for BedroomScene (Albert's theme)
@@ -64,13 +69,21 @@ namespace SUNSET16.Core
         [Header("Crossfade Settings")]
         [SerializeField] private float crossfadeDuration = 1.0f; //how long the fade between tracks takes
 
+        [Header("Ambient Fade Settings")]
+        [SerializeField] private float ambientFadeOutDuration = 0.8f; //bedroom fade-out before overlay pauses it
+        [SerializeField] private float ambientFadeInDuration  = 1.5f; //bedroom fade-in when overlay closes
+
         //local volume caches - updated when SettingsManager fires events
         private float _masterVolume = 1.0f;
-        private float _musicVolume = 1.0f;
-        private float _sfxVolume = 1.0f;
+        private float _musicVolume  = 1.0f;
+        private float _sfxVolume    = 1.0f;
 
-        private Coroutine _crossfadeCoroutine; //reference to running crossfade so we can cancel it
-        private bool _ambientPaused = false;   //tracks whether ambient was paused by an interaction
+        private Coroutine _crossfadeCoroutine;   //reference to running crossfade so we can cancel it
+        private Coroutine _ambientFadeCoroutine; //reference to ambient fade so new fades cancel old ones
+        private Coroutine _mirrorFadeCoroutine;  //reference to mirror fade so fade-in and fade-out dont clash
+        private Coroutine _pillSFXFadeCoroutine; //reference to pill SFX fade
+
+        private bool _ambientPaused = false; //tracks whether ambient was paused by an interaction
 
         protected override void Awake()
         {
@@ -97,20 +110,19 @@ namespace SUNSET16.Core
         private void SubscribeToEvents()
         {
             SettingsManager.Instance.OnMasterVolumeChanged += OnMasterVolumeChanged;
-            SettingsManager.Instance.OnMusicVolumeChanged += OnMusicVolumeChanged;
-            SettingsManager.Instance.OnSFXVolumeChanged += OnSFXVolumeChanged;
+            SettingsManager.Instance.OnMusicVolumeChanged  += OnMusicVolumeChanged;
+            SettingsManager.Instance.OnSFXVolumeChanged    += OnSFXVolumeChanged;
 
-            PillStateManager.Instance.OnPillTaken += OnPillTaken;
+            PillStateManager.Instance.OnPillTaken    += OnPillTaken;
+            PillStateManager.Instance.OnEndingReached += OnEndingReached;
 
             DayManager.Instance.OnPhaseChanged += OnPhaseChanged;
-
-            PillStateManager.Instance.OnEndingReached += OnEndingReached;
 
             RoomManager.Instance.OnRoomLoaded += OnRoomLoaded;
 
             _masterVolume = SettingsManager.Instance.MasterVolume;
-            _musicVolume = SettingsManager.Instance.MusicVolume;
-            _sfxVolume = SettingsManager.Instance.SFXVolume;
+            _musicVolume  = SettingsManager.Instance.MusicVolume;
+            _sfxVolume    = SettingsManager.Instance.SFXVolume;
             ApplyMusicVolume();
             ApplyAmbientVolume();
 
@@ -124,31 +136,41 @@ namespace SUNSET16.Core
             if (musicSource == null)
             {
                 musicSource = gameObject.AddComponent<AudioSource>();
-                musicSource.loop = true;        //music loops forever
-                musicSource.playOnAwake = false; //dont play until we tell it to
+                musicSource.loop        = true;
+                musicSource.playOnAwake = false;
             }
 
             if (sfxSource == null)
             {
                 sfxSource = gameObject.AddComponent<AudioSource>();
-                sfxSource.loop = false;         //sfx plays once
+                sfxSource.loop        = false;
                 sfxSource.playOnAwake = false;
             }
 
             if (ambientSource == null)
             {
                 ambientSource = gameObject.AddComponent<AudioSource>();
-                ambientSource.loop = true;          //ambient loops forever
+                ambientSource.loop        = true;
                 ambientSource.playOnAwake = false;
             }
 
             if (mirrorSource == null)
             {
                 mirrorSource = gameObject.AddComponent<AudioSource>();
-                mirrorSource.loop = true;           //mirror ambient loops while overlay is open
+                mirrorSource.loop        = true;
                 mirrorSource.playOnAwake = false;
             }
+
+            if (pillSFXSource == null)
+            {
+                pillSFXSource = gameObject.AddComponent<AudioSource>();
+                pillSFXSource.loop        = false;
+                pillSFXSource.playOnAwake = false;
+                pillSFXSource.volume      = 0f;
+            }
         }
+
+        // ─── MUSIC ────────────────────────────────────────────────────────────────
 
         //plays a music track, optionally crossfading from the current track
         //if the same clip is already playing, does nothing (prevents restart)
@@ -178,25 +200,21 @@ namespace SUNSET16.Core
         }
 
         //crossfade coroutine: fade old track out -> swap clips -> fade new track in
-        //this avoids the jarring hard-cut between music tracks
         private IEnumerator CrossfadeMusic(AudioClip newClip)
         {
-            float timer = 0;
+            float timer       = 0;
             float startVolume = musicSource.volume;
 
-            //PHASE 1: fade OUT the current track
             while (timer < crossfadeDuration)
             {
                 timer += Time.deltaTime;
                 musicSource.volume = Mathf.Lerp(startVolume, 0, timer / crossfadeDuration);
-                yield return null; //wait one frame then continue
+                yield return null;
             }
 
-            //swap to new clip while volume is at 0 (inaudible transition)
             musicSource.clip = newClip;
             musicSource.Play();
 
-            //PHASE 2: fade IN the new track
             timer = 0;
             float targetVolume = _musicVolume * _masterVolume;
             while (timer < crossfadeDuration)
@@ -206,12 +224,13 @@ namespace SUNSET16.Core
                 yield return null;
             }
 
-            musicSource.volume = targetVolume;
-            _crossfadeCoroutine = null; //done, clear the reference
+            musicSource.volume  = targetVolume;
+            _crossfadeCoroutine = null;
         }
 
-        //plays a one-shot SFX at the given volume (calculated with master + sfx volumes)
-        //PlayOneShot is better than Play() for SFX cos it allows overlapping sounds
+        // ─── SFX ──────────────────────────────────────────────────────────────────
+
+        //plays a one-shot SFX - allows overlapping sounds
         public void PlaySFX(AudioClip clip, float volumeScale = 1.0f)
         {
             if (clip == null)
@@ -219,20 +238,246 @@ namespace SUNSET16.Core
                 Debug.LogWarning("[AUDIOMANAGER] Attempted to play null SFX clip");
                 return;
             }
-
             sfxSource.PlayOneShot(clip, volumeScale * _sfxVolume * _masterVolume);
         }
 
-        //convenience methods - other scripts call these instead of managing clips directly
-        //this way if we want to change the door sound, we only change it in the Inspector once
-        public void PlayDoorOpen() => PlaySFX(doorOpen);
-        public void PlayDoorClose() => PlaySFX(doorClose);
-        public void PlayPillTake() => PlaySFX(pillTake);
-        public void PlayTaskComplete() => PlaySFX(taskComplete);
-        public void PlayUIClick() => PlaySFX(uiClick);
-        public void PlayFootstep() => PlaySFX(footstep, 0.5f); //footsteps at half volume
+        public void PlayDoorOpen()    => PlaySFX(doorOpen);
+        public void PlayDoorClose()   => PlaySFX(doorClose);
+        public void PlayPillTake()    => PlaySFX(pillTake);
+        public void PlayTaskComplete()=> PlaySFX(taskComplete);
+        public void PlayUIClick()     => PlaySFX(uiClick);
+        public void PlayFootstep()    => PlaySFX(footstep, 0.5f);
 
-        //EVENT HANDLERS - these fire when SettingsManager volume events come in
+        // ─── PILL SFX (independent fade control) ─────────────────────────────────
+
+        //plays the pill choice SFX at volume 0 ready for FadePillSFXIn
+        public void PlayPillSFX(AudioClip clip)
+        {
+            if (clip == null || pillSFXSource == null) return;
+            pillSFXSource.clip   = clip;
+            pillSFXSource.volume = 0f;
+            pillSFXSource.Play();
+        }
+
+        //fades pill SFX from 0 to full volume - fire and forget
+        public void FadePillSFXIn(float duration)
+        {
+            if (_pillSFXFadeCoroutine != null) StopCoroutine(_pillSFXFadeCoroutine);
+            _pillSFXFadeCoroutine = StartCoroutine(FadePillSFXCoroutine(_sfxVolume * _masterVolume, duration));
+        }
+
+        //fades pill SFX to 0 - fire and forget
+        public void FadePillSFXOut(float duration)
+        {
+            if (_pillSFXFadeCoroutine != null) StopCoroutine(_pillSFXFadeCoroutine);
+            _pillSFXFadeCoroutine = StartCoroutine(FadePillSFXCoroutine(0f, duration));
+        }
+
+        private IEnumerator FadePillSFXCoroutine(float targetVolume, float duration)
+        {
+            float startVolume = pillSFXSource != null ? pillSFXSource.volume : 0f;
+            float timer       = 0f;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                if (pillSFXSource != null)
+                    pillSFXSource.volume = Mathf.Lerp(startVolume, targetVolume, timer / duration);
+                yield return null;
+            }
+            if (pillSFXSource != null) pillSFXSource.volume = targetVolume;
+            _pillSFXFadeCoroutine = null;
+        }
+
+        // ─── AMBIENT (bedroom) ────────────────────────────────────────────────────
+
+        //called by RoomManager.OnRoomLoaded — starts the right ambient for each room
+        private void OnRoomLoaded(string roomName)
+        {
+            StopAmbient();
+            if (roomName.Contains("Bedroom") && bedroomAmbientClip != null)
+            {
+                PlayAmbient(bedroomAmbientClip);
+                Debug.Log("[AUDIOMANAGER] Bedroom ambient started");
+            }
+        }
+
+        //starts an ambient loop at full volume
+        public void PlayAmbient(AudioClip clip)
+        {
+            if (clip == null)
+            {
+                Debug.LogWarning("[AUDIOMANAGER] Attempted to play null ambient clip");
+                return;
+            }
+            ambientSource.clip   = clip;
+            ambientSource.volume = _masterVolume;
+            ambientSource.Play();
+            _ambientPaused = false;
+        }
+
+        //fades ambient down to a partial volume when player is near an interactable
+        //called by MirrorInteraction.OnTriggerEnter2D
+        public void SoftenAmbient(float targetVolume, float duration)
+        {
+            if (_ambientFadeCoroutine != null) StopCoroutine(_ambientFadeCoroutine);
+            _ambientFadeCoroutine = StartCoroutine(FadeAmbientCoroutine(targetVolume, duration, null));
+        }
+
+        //restores ambient to full master volume when player leaves proximity
+        //called by MirrorInteraction.OnTriggerExit2D
+        public void RestoreAmbient(float duration)
+        {
+            if (_ambientFadeCoroutine != null) StopCoroutine(_ambientFadeCoroutine);
+            _ambientFadeCoroutine = StartCoroutine(FadeAmbientCoroutine(_masterVolume, duration, null));
+        }
+
+        //fades ambient to 0 then pauses it - called when mirror overlay opens
+        public void FadeOutAndPauseAmbient()
+        {
+            if (_ambientFadeCoroutine != null) StopCoroutine(_ambientFadeCoroutine);
+            _ambientFadeCoroutine = StartCoroutine(FadeAmbientCoroutine(0f, ambientFadeOutDuration, () =>
+            {
+                if (ambientSource != null) ambientSource.Pause();
+                _ambientPaused = true;
+                _ambientFadeCoroutine = null;
+                Debug.Log("[AUDIOMANAGER] Ambient faded out and paused");
+            }));
+        }
+
+        //unpauses ambient at volume 0 then fades it back in - called when overlay closes
+        public void ResumeAmbientWithFadeIn()
+        {
+            if (ambientSource == null || !_ambientPaused) return;
+            ambientSource.volume = 0f;
+            ambientSource.UnPause();
+            _ambientPaused = false;
+            if (_ambientFadeCoroutine != null) StopCoroutine(_ambientFadeCoroutine);
+            _ambientFadeCoroutine = StartCoroutine(FadeAmbientCoroutine(_masterVolume, ambientFadeInDuration, () =>
+            {
+                _ambientFadeCoroutine = null;
+                Debug.Log("[AUDIOMANAGER] Ambient resumed and faded in");
+            }));
+        }
+
+        //pauses ambient immediately (no fade) - kept for non-mirror contexts
+        public void PauseAmbient()
+        {
+            if (ambientSource != null && ambientSource.isPlaying)
+            {
+                ambientSource.Pause();
+                _ambientPaused = true;
+                Debug.Log("[AUDIOMANAGER] Ambient paused");
+            }
+        }
+
+        //resumes ambient immediately (no fade) - kept for non-mirror contexts
+        public void ResumeAmbient()
+        {
+            if (ambientSource != null && _ambientPaused)
+            {
+                ambientSource.UnPause();
+                _ambientPaused = false;
+                Debug.Log("[AUDIOMANAGER] Ambient resumed");
+            }
+        }
+
+        //stops ambient completely - next PlayAmbient restarts from the beginning
+        public void StopAmbient()
+        {
+            if (_ambientFadeCoroutine != null) StopCoroutine(_ambientFadeCoroutine);
+            if (ambientSource != null)
+            {
+                ambientSource.Stop();
+                _ambientPaused = false;
+            }
+        }
+
+        private IEnumerator FadeAmbientCoroutine(float targetVolume, float duration, Action onComplete)
+        {
+            float startVolume = ambientSource != null ? ambientSource.volume : 0f;
+            float timer       = 0f;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                if (ambientSource != null)
+                    ambientSource.volume = Mathf.Lerp(startVolume, targetVolume, timer / duration);
+                yield return null;
+            }
+            if (ambientSource != null) ambientSource.volume = targetVolume;
+            onComplete?.Invoke();
+        }
+
+        // ─── MIRROR AMBIENT ───────────────────────────────────────────────────────
+
+        //starts mirror ambient at 0 and fades it in - called when overlay opens
+        public void FadeMirrorAmbientIn(float duration)
+        {
+            if (mirrorAmbientClip == null)
+            {
+                Debug.LogWarning("[AUDIOMANAGER] mirrorAmbientClip not assigned");
+                return;
+            }
+            if (_mirrorFadeCoroutine != null) StopCoroutine(_mirrorFadeCoroutine);
+            mirrorSource.clip   = mirrorAmbientClip;
+            mirrorSource.volume = 0f;
+            mirrorSource.Play();
+            _mirrorFadeCoroutine = StartCoroutine(FadeMirrorCoroutine(_masterVolume, duration, false));
+        }
+
+        //fades mirror ambient to 0 then stops - called on button click (fire and forget)
+        public void FadeMirrorAmbientOut(float duration)
+        {
+            if (mirrorSource == null || !mirrorSource.isPlaying) return;
+            if (_mirrorFadeCoroutine != null) StopCoroutine(_mirrorFadeCoroutine);
+            _mirrorFadeCoroutine = StartCoroutine(FadeMirrorCoroutine(0f, duration, true));
+        }
+
+        //immediate stop - safety net called by CloseOverlay
+        public void StopMirrorAmbient()
+        {
+            if (_mirrorFadeCoroutine != null) StopCoroutine(_mirrorFadeCoroutine);
+            if (mirrorSource != null)
+            {
+                mirrorSource.Stop();
+                mirrorSource.volume = _masterVolume;
+            }
+        }
+
+        private IEnumerator FadeMirrorCoroutine(float targetVolume, float duration, bool stopOnComplete)
+        {
+            float startVolume = mirrorSource.volume;
+            float timer       = 0f;
+            while (timer < duration)
+            {
+                timer              += Time.deltaTime;
+                mirrorSource.volume = Mathf.Lerp(startVolume, targetVolume, timer / duration);
+                yield return null;
+            }
+            mirrorSource.volume = targetVolume;
+            if (stopOnComplete)
+            {
+                mirrorSource.Stop();
+                mirrorSource.volume = _masterVolume; //reset for next use
+            }
+            _mirrorFadeCoroutine = null;
+        }
+
+        // ─── VOLUME APPLICATION ───────────────────────────────────────────────────
+
+        private void ApplyMusicVolume()
+        {
+            if (musicSource != null && _crossfadeCoroutine == null)
+                musicSource.volume = _musicVolume * _masterVolume;
+        }
+
+        private void ApplyAmbientVolume()
+        {
+            if (ambientSource != null && !_ambientPaused)
+                ambientSource.volume = _masterVolume;
+        }
+
+        // ─── EVENT HANDLERS ───────────────────────────────────────────────────────
+
         private void OnMasterVolumeChanged(float volume)
         {
             _masterVolume = volume;
@@ -251,152 +496,19 @@ namespace SUNSET16.Core
             _sfxVolume = volume;
         }
 
-        private void ApplyMusicVolume()
-        {
-            if (musicSource != null && _crossfadeCoroutine == null)
-            {
-                musicSource.volume = _musicVolume * _masterVolume;
-            }
-        }
-
-        private void ApplyAmbientVolume()
-        {
-            if (ambientSource != null && !_ambientPaused)
-            {
-                ambientSource.volume = _masterVolume;
-            }
-        }
-
-        //called by RoomManager.OnRoomLoaded — starts the right ambient for each room
-        //stops any current ambient first so rooms dont bleed into each other
-        private void OnRoomLoaded(string roomName)
-        {
-            StopAmbient();
-
-            if (roomName.Contains("Bedroom") && bedroomAmbientClip != null)
-            {
-                PlayAmbient(bedroomAmbientClip);
-                Debug.Log("[AUDIOMANAGER] Bedroom ambient started");
-            }
-        }
-
-        //starts an ambient loop — replaces whatever was playing
-        public void PlayAmbient(AudioClip clip)
-        {
-            if (clip == null)
-            {
-                Debug.LogWarning("[AUDIOMANAGER] Attempted to play null ambient clip");
-                return;
-            }
-
-            ambientSource.clip = clip;
-            ambientSource.volume = _masterVolume;
-            ambientSource.Play();
-            _ambientPaused = false;
-        }
-
-        //pauses ambient without losing playback position
-        //called by MirrorInteraction (and future: ComputerInteraction, PodInteraction)
-        public void PauseAmbient()
-        {
-            if (ambientSource != null && ambientSource.isPlaying)
-            {
-                ambientSource.Pause();
-                _ambientPaused = true;
-                Debug.Log("[AUDIOMANAGER] Ambient paused");
-            }
-        }
-
-        //resumes ambient from where it was paused
-        public void ResumeAmbient()
-        {
-            if (ambientSource != null && _ambientPaused)
-            {
-                ambientSource.UnPause();
-                _ambientPaused = false;
-                Debug.Log("[AUDIOMANAGER] Ambient resumed");
-            }
-        }
-
-        //stops ambient completely (used when leaving a room)
-        //next PlayAmbient call will restart from the beginning
-        public void StopAmbient()
-        {
-            if (ambientSource != null)
-            {
-                ambientSource.Stop();
-                _ambientPaused = false;
-            }
-        }
-
-        //starts the mirror overlay audio loop
-        //called by MirrorInteraction.ShowOverlay
-        public void PlayMirrorAmbient()
-        {
-            if (mirrorAmbientClip == null)
-            {
-                Debug.LogWarning("[AUDIOMANAGER] mirrorAmbientClip not assigned");
-                return;
-            }
-
-            mirrorSource.clip   = mirrorAmbientClip;
-            mirrorSource.volume = _masterVolume;
-            mirrorSource.Play();
-        }
-
-        //starts a coroutine to fade mirror audio out over duration
-        //called just before the screen fade — runs in parallel, fire-and-forget
-        public void FadeMirrorAmbientOut(float duration)
-        {
-            if (mirrorSource != null && mirrorSource.isPlaying)
-                StartCoroutine(FadeMirrorAmbientCoroutine(duration));
-        }
-
-        private IEnumerator FadeMirrorAmbientCoroutine(float duration)
-        {
-            float startVolume = mirrorSource.volume;
-            float timer       = 0f;
-
-            while (timer < duration)
-            {
-                timer            += Time.deltaTime;
-                mirrorSource.volume = Mathf.Lerp(startVolume, 0f, timer / duration);
-                yield return null;
-            }
-
-            mirrorSource.Stop();
-            mirrorSource.volume = _masterVolume; //reset volume for next use
-        }
-
-        //immediate stop — called by MirrorInteraction.CloseOverlay as a safety net
-        //in case the overlay is dismissed before the fade completes
-        public void StopMirrorAmbient()
-        {
-            if (mirrorSource != null)
-            {
-                mirrorSource.Stop();
-                mirrorSource.volume = _masterVolume;
-            }
-        }
-
         //fires when the player makes their pill choice
-        //immediately plays the pill SFX and switches to the appropriate music
+        //MirrorInteraction plays the choice-specific SFX directly via PlayPillSFX
+        //pillTake here is for any future non-mirror pill context
         private void OnPillTaken(int day, PillChoice choice)
         {
-            PlayPillTake(); //pill bottle sfx
             if (choice == PillChoice.Taken)
-            {
-                PlayMusic(onPillMusic); //switch to dull, compliant music
-            }
+                PlayMusic(onPillMusic);
             else if (choice == PillChoice.NotTaken)
-            {
-                PlayMusic(offPillMusic); //switch to tense, awakening music
-            }
+                PlayMusic(offPillMusic);
 
             Debug.Log($"[AUDIOMANAGER] Pill music changed for Day {day}: {choice}");
         }
 
-        //fires when the day phase changes
         private void OnPhaseChanged(DayPhase phase)
         {
             switch (phase)
@@ -404,59 +516,46 @@ namespace SUNSET16.Core
                 case DayPhase.Night:
                     PlayMusic(nightMusic);
                     break;
-
                 case DayPhase.Morning:
-                    break; //morning music is handled by OnPillTaken (plays after pill choice)
+                    break; //morning music handled by OnPillTaken
             }
         }
 
-        //fires when the pill threshold is met (3+ of same choice)
-        //plays the appropriate ending music
         private void OnEndingReached(string ending)
         {
             if (ending == "Bad")
-            {
-                PlayMusic(badEndingMusic, fade: true); //somber, hopeless
-            }
+                PlayMusic(badEndingMusic, fade: true);
             else if (ending == "Good")
-            {
-                PlayMusic(goodEndingMusic, fade: true); //triumphant, hopeful
-            }
+                PlayMusic(goodEndingMusic, fade: true);
 
             Debug.Log($"[AUDIOMANAGER] Playing {ending} ending music");
         }
 
-        //CLEANUP: unsubscribe from ALL events to prevent memory leaks
-        //this is critical cos singletons can outlive the objects they subscribe to
+        // ─── CLEANUP ──────────────────────────────────────────────────────────────
+
         private void OnDestroy()
         {
             if (SettingsManager.Instance != null)
             {
                 SettingsManager.Instance.OnMasterVolumeChanged -= OnMasterVolumeChanged;
-                SettingsManager.Instance.OnMusicVolumeChanged -= OnMusicVolumeChanged;
-                SettingsManager.Instance.OnSFXVolumeChanged -= OnSFXVolumeChanged;
+                SettingsManager.Instance.OnMusicVolumeChanged  -= OnMusicVolumeChanged;
+                SettingsManager.Instance.OnSFXVolumeChanged    -= OnSFXVolumeChanged;
             }
 
             if (PillStateManager.Instance != null)
             {
-                PillStateManager.Instance.OnPillTaken -= OnPillTaken;
+                PillStateManager.Instance.OnPillTaken     -= OnPillTaken;
                 PillStateManager.Instance.OnEndingReached -= OnEndingReached;
             }
 
             if (DayManager.Instance != null)
-            {
                 DayManager.Instance.OnPhaseChanged -= OnPhaseChanged;
-            }
 
             if (RoomManager.Instance != null)
-            {
                 RoomManager.Instance.OnRoomLoaded -= OnRoomLoaded;
-            }
 
             if (GameManager.Instance != null)
-            {
                 GameManager.Instance.OnInitializationComplete -= SubscribeToEvents;
-            }
         }
     }
 }
