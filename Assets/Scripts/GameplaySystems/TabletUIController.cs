@@ -132,46 +132,9 @@ namespace SUNSET16.Core
             _currentTaskCompleted = false;
         }
 
-        //TODO: replace this entire OnGUI with a proper Canvas-based UI
-        //this is just a debug placeholder so we can see task info during testing
-        private void OnGUI()
-        {
-            if (!IsInitialized || !IsVisible) return;
-
-            //center a box on screen
-            float panelWidth = 350f;
-            float panelHeight = 250f;
-            float x = (Screen.width - panelWidth) / 2f;
-            float y = (Screen.height - panelHeight) / 2f;
-
-            GUILayout.BeginArea(new Rect(x, y, panelWidth, panelHeight), GUI.skin.box);
-
-            GUILayout.Label("=== TABLET ===", GUI.skin.box);
-
-            if (!string.IsNullOrEmpty(_currentTaskName))
-            {
-                GUILayout.Label($"Task: {_currentTaskName}");
-                GUILayout.Label($"Difficulty: {_currentDifficulty}");
-                GUILayout.Label($"Status: {(_currentTaskCompleted ? "COMPLETED" : "IN PROGRESS")}");
-                GUILayout.Space(5);
-                GUILayout.Label("--- Instructions ---");
-                GUILayout.Label(_currentInstructions);
-            }
-            else
-            {
-                GUILayout.Label("No task assigned.");
-                GUILayout.Label("Tasks appear during Morning phase after choosing your pill.");
-            }
-
-            GUILayout.Space(10);
-
-            if (GUILayout.Button("Close Tablet"))
-            {
-                CloseTablet();
-            }
-
-            GUILayout.EndArea();
-        }
+        // OnGUI() retired — tablet rendering is now handled by TaskUIManager
+        // TaskUIManager.ShowOverlay() populates its left-pane TMP_Text with the
+        // task name and instructions when the player interacts with a world object
 
         //unsub from everything
         private void OnDestroy()
