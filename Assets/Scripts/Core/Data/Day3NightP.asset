@@ -17,6 +17,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Evening, Andy. Logs show that all systems are functional. How was the fix-up?
+    sendDelay: 0
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
     - choiceText: "The fuse was blown. But the real issue was the boiler room. Fixed
@@ -30,6 +32,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Good catch. Some of the older panels can be deceptive.
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices: []
     advanceToLine: 3
@@ -38,6 +42,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Efficient as always. Good work.
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices: []
     advanceToLine: 3
@@ -46,6 +52,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Any interesting thoughts today while on the clock?
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices:
     - choiceText: How are company stocks doing these days?
@@ -60,6 +68,8 @@ MonoBehaviour:
     text: Steady, from what I can see. Profits are up, efficiency metrics are at
       an all-time high across many divisions, and the shareholders are happy. Which
       means we keep our jobs.
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0
     choices:
     - choiceText: "That\u2019s good to hear. Any other stocks I should look out for?"
@@ -74,6 +84,8 @@ MonoBehaviour:
     text: "Some tech companies from Shanghai and New Tokyo are on the rise after
       the cybercrash of 2101, but they\u2019re leagues behind what we produce at
       the DOLOS Corporation."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -83,6 +95,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: "We have our fair share of rival companies, both domestic and international,
       but we hold the majority when it comes to\u2026 well\u2026 everything."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -93,6 +107,8 @@ MonoBehaviour:
     text: "You know, I used to ask that too, at least early on in my employment here.
       Higher-ups kept saying \u201Cnext quarter\u201D or \u201Cafter some restructuring,\u201D
       but it\u2019s been years now."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.5
     choices: []
     advanceToLine: 8
@@ -102,6 +118,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: "They concluded that a smaller team is easier to manage. It\u2019s just
       us and DOLOS. Has been for a while, and probably will be for a while longer."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -110,6 +128,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: 
+    sendDelay: 0
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
     - choiceText: "I\u2019m getting tired. Ready for some shut-eye."
@@ -120,6 +140,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Rest well, Andy.
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices: []
     advanceToLine: -1

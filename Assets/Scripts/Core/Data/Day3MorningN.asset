@@ -19,20 +19,27 @@ MonoBehaviour:
     text: Morning, Andy. Another beautiful day aboard the SUNSET16. DOLOS assigned
       you a task at the boiler room. A fuse broke late last night there, and needs
       some maintenance. You know the drill. Do your task and keep DOLOS happy.
+    sendDelay: 0
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
     - choiceText: Sounds good to me.
       nextLineIndex: 1
+      offPillChoice: 0
     - choiceText: Another day, another wire.
       nextLineIndex: 2
+      offPillChoice: 0
     - choiceText: A fuse blew last night? What caused it?
       nextLineIndex: 13
+      offPillChoice: 1
     advanceToLine: 0
     repeat: 0
     repeated: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s the spirit. Just keep on with those designated tasks."
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices: []
     advanceToLine: 3
@@ -41,6 +48,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "How it usually is. It\u2019s good you\u2019re like that."
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices: []
     advanceToLine: 3
@@ -50,18 +59,24 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: Any questions before you head out? My shift starts soon, but I have some
       time to burn.
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices:
     - choiceText: Any word on when more passengers are supposed to arrive? The ship
         feels empty sometimes.
       nextLineIndex: 4
+      offPillChoice: 0
     - choiceText: "How\u2019s the nuclear core these days?"
       nextLineIndex: 5
+      offPillChoice: 0
     - choiceText: Heard anything about that NUSA CEO? After the bankruptcy scandal?
       nextLineIndex: 8
+      offPillChoice: 0
     - choiceText: I found something weird in the system yesterday. Old technician
         log. The name was Fiske. Mean anything to you?
       nextLineIndex: 14
+      offPillChoice: 1
     advanceToLine: 11
     repeat: 1
     repeated: 0
@@ -70,6 +85,8 @@ MonoBehaviour:
     text: "Last I checked, passenger rotations were delayed indefinitely. Corporate
       restructuring, I think. However, that was a few months ago. There\u2019s no
       need to pay it any mind now."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -80,12 +97,16 @@ MonoBehaviour:
     text: "Smooth sailing as usual. The graphs are flat, and the readings are stable.
       Boring, but that\u2019s the goal. There was a time when the core was\u2026
       malfunctioning."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0
     choices:
     - choiceText: Really? How so?
       nextLineIndex: 6
+      offPillChoice: 0
     - choiceText: "Nothing you can\u2019t handle."
       nextLineIndex: 7
+      offPillChoice: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -93,6 +114,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: "The cooling system was starting to fail. Worked my magic and turned things
       around. That\u2019s why they hired me."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -101,6 +124,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s for certain. It\u2019s part of the job package."
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -111,6 +136,8 @@ MonoBehaviour:
     text: "Last I heard, she had connections in China. After that, I don\u2019t know
       much. The rest of the shareholders scattered to other conglomerates in North
       America and Europe."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.5
     choices: []
     advanceToLine: 9
@@ -119,10 +146,13 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Why\u2019d you ask?"
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
     - choiceText: Could the same happen here?
       nextLineIndex: 10
+      offPillChoice: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -130,6 +160,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: "DOLOS is different. More structured than other mega corporations. We\u2019re
       not going anywhere. And neither are you."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -138,16 +170,21 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: 
+    sendDelay: 0
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
     - choiceText: I have no more questions.
       nextLineIndex: 12
+      offPillChoice: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Alright, I\u2019ll catch you later then."
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices: []
     advanceToLine: -1
@@ -157,6 +194,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: The initial DOLOS report cited a minor power fluctuation. Probably some
       wear and tear. Nothing too serious.
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.5
     choices: []
     advanceToLine: 3
@@ -166,10 +205,13 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: "\u2026That\u2019s a name I haven\u2019t seen in a while. Where\u2019d
       you find those?"
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
     - choiceText: A terminal in C-12, behind a panel.
       nextLineIndex: 15
+      offPillChoice: 1
     advanceToLine: 3
     repeat: 0
     repeated: 0
@@ -179,10 +221,13 @@ MonoBehaviour:
       with malware. You\u2019ll get your tablet infected if you keep interacting
       with it. DOLOS issued an announcement a while ago on matters like this. You
       should brush up on it."
+    sendDelay: 1
+    delayRepeats: 2
     autoAdvanceDelay: 0
     choices:
     - choiceText: "Then\u2026 who was Fiske?"
       nextLineIndex: 16
+      offPillChoice: 1
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -192,6 +237,8 @@ MonoBehaviour:
       leave for an undisclosed amount of time. We shouldn\u2019t talk about him anymore.
       Listen to DOLOS and adhere to your contract, as you have been doing these past
       5 years."
+    sendDelay: 1
+    delayRepeats: 2
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3

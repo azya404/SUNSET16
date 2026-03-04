@@ -109,6 +109,7 @@ namespace SUNSET16.Interaction
 
                     newChoice.choiceText = choice.choiceText;
                     newChoice.nextLineIndex = choice.nextLineIndex;
+                    newChoice.offPillChoice = choice.offPillChoice;
 
                     newLine.choices.Add(newChoice);
                 }

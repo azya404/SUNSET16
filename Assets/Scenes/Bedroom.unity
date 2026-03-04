@@ -889,6 +889,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 5d6019083ab17424f81b2da0d0f2945d, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: ResponseButton4
@@ -1397,6 +1401,16 @@ MonoBehaviour:
   - {fileID: 1255338281}
   - {fileID: 2038322377}
   - {fileID: 1002256898}
+  choiceButtonImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  glitchInterval: 0.16
+  dispProbability: 0.15
+  dispIntensity: 0.5
+  colorProbability: 0.1
+  colorIntensity: 0.5
   typewriterCharDelay: 0.03
   AlbertDelayAmt: 0.3
   playerDelay: 0.5
@@ -1649,6 +1663,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 5e43c846e99e4ad4eaa838c7bc038b4f, type: 3}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 5d6019083ab17424f81b2da0d0f2945d, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: ResponseButton2
@@ -2345,6 +2363,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 5e43c846e99e4ad4eaa838c7bc038b4f, type: 3}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 5d6019083ab17424f81b2da0d0f2945d, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: ResponseButton3
@@ -2578,6 +2600,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 5e43c846e99e4ad4eaa838c7bc038b4f, type: 3}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 5d6019083ab17424f81b2da0d0f2945d, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: ResponseButton1
@@ -3089,8 +3115,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   daySequences:
-  - {fileID: 11400000, guid: 261d9ecce0261704b9b26cfc3f271c26, type: 2}
   - {fileID: 11400000, guid: ea5f372b77bfc7e46bb919f4c6eb61fa, type: 2}
+  - {fileID: 11400000, guid: 261d9ecce0261704b9b26cfc3f271c26, type: 2}
   - {fileID: 11400000, guid: dd1b7866b5be09c41bbaf7cf4e541d2c, type: 2}
   - {fileID: 11400000, guid: c2810fc8787708140b9eda2656d03126, type: 2}
   - {fileID: 11400000, guid: 974503572fc43284db65b50a6f32521f, type: 2}

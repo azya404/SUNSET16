@@ -16,5 +16,7 @@ namespace SUNSET16.Core
 
         //-1 = close dialogue, anything else = jump to that line index
         public int nextLineIndex = -1;
+
+        public bool offPillChoice;
     }
 }

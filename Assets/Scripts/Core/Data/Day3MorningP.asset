@@ -19,6 +19,8 @@ MonoBehaviour:
     text: Morning, Andy. Another beautiful day aboard the SUNSET16. DOLOS assigned
       you a task at the boiler room. A fuse broke late last night there, and needs
       some maintenance. You know the drill. Do your task and keep DOLOS happy.
+    sendDelay: 0
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
     - choiceText: Sounds good to me.
@@ -31,6 +33,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s the spirit. Just keep on with those designated tasks."
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices: []
     advanceToLine: 3
@@ -39,6 +43,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "How it usually is. It\u2019s good you\u2019re like that."
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices: []
     advanceToLine: 3
@@ -48,6 +54,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: Any questions before you head out? My shift starts soon, but I have some
       time to burn.
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices:
     - choiceText: Any word on when more passengers are supposed to arrive? The ship
@@ -65,6 +73,8 @@ MonoBehaviour:
     text: "Last I checked, passenger rotations were delayed indefinitely. Corporate
       restructuring, I think. However, that was a few months ago. There\u2019s no
       need to pay it any mind now."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -75,6 +85,8 @@ MonoBehaviour:
     text: "Smooth sailing as usual. The graphs are flat, and the readings are stable.
       Boring, but that\u2019s the goal. There was a time when the core was\u2026
       malfunctioning."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0
     choices:
     - choiceText: Really? How so?
@@ -88,6 +100,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: "The cooling system was starting to fail. Worked my magic and turned things
       around. That\u2019s why they hired me."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -96,6 +110,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s for certain. It\u2019s part of the job package."
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -106,6 +122,8 @@ MonoBehaviour:
     text: "Last I heard, she had connections in China. After that, I don\u2019t know
       much. The rest of the shareholders scattered to other conglomerates in North
       America and Europe."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.5
     choices: []
     advanceToLine: 9
@@ -114,6 +132,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Why\u2019d you ask?"
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
     - choiceText: Could the same happen here?
@@ -125,6 +145,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: "DOLOS is different. More structured than other mega corporations. We\u2019re
       not going anywhere. And neither are you."
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
@@ -133,6 +155,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: 
+    sendDelay: 0
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
     - choiceText: I have no more questions.
@@ -143,8 +167,10 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Alright, I\u2019ll catch you later then."
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices: []
-    advanceToLine: 0
+    advanceToLine: -1
     repeat: 0
     repeated: 0

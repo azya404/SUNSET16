@@ -51,8 +51,8 @@ namespace SUNSET16.UI
         [SerializeField] private TMP_Text speakerNameText;
         [SerializeField] private Image    speakerPortrait;
         [SerializeField] private TMP_Text dialogueBodyText;
-        [SerializeField] private Sprite    messagebox;
-        [SerializeField] private Sprite    playerMessagebox;
+        [SerializeField] private Sprite   messagebox;
+        [SerializeField] private Sprite   playerMessagebox;
 
         [Header("Controls")]
         [SerializeField] private GameObject advanceButton;     // "▶ Continue" — visible after typewriter finishes
@@ -61,6 +61,12 @@ namespace SUNSET16.UI
         [Header("Choice Buttons (max 4)")]
         [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[4];  // Parent GOs per choice
         [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[4];    // Labels per choice
+        [SerializeField] private Image[]      choiceButtonImages = new Image[4];
+        [SerializeField] private float        glitchInterval;
+        [SerializeField] private float        dispProbability;
+        [SerializeField] private float        dispIntensity;
+        [SerializeField] private float        colorProbability;
+        [SerializeField] private float        colorIntensity;
 
         [Header("Typewriter")]
         [SerializeField] private float typewriterCharDelay = 0.03f;
@@ -147,6 +153,21 @@ namespace SUNSET16.UI
             AlbertDelay.SetActive(false);
             advanceButton = dialogueParent.transform.GetChild(4).gameObject;
 
+            choiceButtonImages[0] = responseButtonContainer.GetChild(0).GetComponent<Image>();
+            Material globalMat = choiceButtonImages[0].material;
+            globalMat.SetFloat("_GlitchInterval", glitchInterval);
+            globalMat.SetFloat("_DispProbability", dispProbability);
+            globalMat.SetFloat("_DispIntensity", dispIntensity);
+            globalMat.SetFloat("_ColorProbability", colorProbability);
+            globalMat.SetFloat("_ColorIntensity", colorIntensity);
+            for (int i = 0; i < 4; i++)
+            {
+                choiceButtonImages[i] = responseButtonContainer.GetChild(i).GetComponent<Image>();
+                choiceButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
+                choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
+                choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
+            }
+
             if (PlayerController.Instance != null)
                 PlayerController.Instance.LockMovement(true);
 
@@ -207,7 +228,7 @@ namespace SUNSET16.UI
                 _waitingForAdvance = false;
                 if (_lines[_lineIndex].advanceToLine > 0)
                     _lineIndex = _lines[_lineIndex].advanceToLine;
-                else
+                else if (_lines[_lineIndex].advanceToLine != -1)
                     _lineIndex++;
                 if (_lineIndex < _lines.Count)
                     _playCoroutine = StartCoroutine(PlayFromCurrentLine());
@@ -227,6 +248,11 @@ namespace SUNSET16.UI
             RuntimeChoice choice = currentLine.choices[choiceIndex];
             Debug.Log($"[DIALOGUE] Choice selected: '{choice.choiceText}' → line {choice.nextLineIndex}");
 
+            for (int i = 0; i < 4; i++)
+            {
+                choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
+                choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
+            }
             audioSource.PlayOneShot(menuClick);
             _messageCoroutine = StartCoroutine(SendMessage(choiceIndex, currentLine, choice));
             HideAllChoiceButtons();
@@ -481,6 +507,12 @@ namespace SUNSET16.UI
 
                 if (show && choiceButtonTexts[i] != null)
                     choiceButtonTexts[i].text = choices[i].choiceText;
+
+                if (show && choices[i].offPillChoice)
+                {
+                    choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 1f);
+                    choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 1f);
+                }
             }
         }
 
