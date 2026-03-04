@@ -110,12 +110,14 @@ namespace SUNSET16.Core
             Debug.Log("[GAMEMANAGER] ===== INITIALIZATION COMPLETE =====");
 
             //STEP 7: load the starting room
-            //vertical slice always starts in BedroomScene - RoomManager handles additive loading
-            //CoreScene stays underneath, BedroomScene loads on top
+            //new game (no save) = play intro cutscene first, then bedroom
+            //continue (save exists) = skip cutscene, go straight to bedroom
+            //CoreScene stays loaded underneath either way - RoomManager handles additive loading
             if (RoomManager.Instance != null)
             {
-                Debug.Log("[GAMEMANAGER] Loading starting room: BedroomScene");
-                RoomManager.Instance.LoadRoom("BedroomScene");
+                string startingRoom = SaveManager.Instance.SaveExists ? "BedroomScene" : "CutSceneDay1";
+                Debug.Log($"[GAMEMANAGER] Loading starting room: {startingRoom}");
+                RoomManager.Instance.LoadRoom(startingRoom);
             }
             else
             {
