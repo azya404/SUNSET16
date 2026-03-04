@@ -1,7 +1,7 @@
 /*
-handles all the audio - music tracks and sound effects
-listens to events from PillStateManager, DayManager, SettingsManager
-and reacts by switching music or adjusting volume
+handles all the audio - music tracks, sound effects, and ambient loops
+listens to events from PillStateManager, DayManager, SettingsManager, RoomManager
+and reacts by switching music, adjusting volume, or swapping ambient
 
 music crossfades between tracks using a coroutine so theres no jarring
 hard cuts when the pill state changes or night hits
@@ -11,14 +11,19 @@ sfx uses PlayOneShot so multiple sounds can overlap without cutting
 each other off - theres convenience methods (PlayDoorOpen, PlayPillTake, etc)
 so other scripts dont have to manage clips themselves
 
+ambient is a separate looping AudioSource independent of music
+starts automatically when BedroomScene loads (via OnRoomLoaded event)
+PauseAmbient/ResumeAmbient called by MirrorInteraction during pill sequence
+volume tracks masterVolume only - can add dedicated ambient slider later
+
 subscribes to events in Start or defers to OnInitializationComplete
 if GameManager hasnt finished yet (same pattern as other system controllers)
 OnDestroy unsubs from everything cos singletons can outlive what they sub to
 
 TODO: most AudioClip fields are empty rn - need actual audio assets
-TODO: ambient sound layers (station hum, ventilation, etc)
 TODO: morning music should change based on pill choice
 TODO: audio ducking (lower music when sfx plays)
+TODO: per-room ambient clip dictionary instead of single bedroomAmbientClip
 */
 using UnityEngine;
 using System.Collections;
@@ -33,6 +38,12 @@ namespace SUNSET16.Core
         [Header("Audio Sources")]
         [SerializeField] private AudioSource musicSource;     //looping music player
         [SerializeField] private AudioSource sfxSource;       //one-shot sound effects player
+        [SerializeField] private AudioSource ambientSource;   //looping ambient (Albert's theme, etc)
+        [SerializeField] private AudioSource mirrorSource;    //mirror overlay audio - fades out on button click
+
+        [Header("Ambient")]
+        [SerializeField] private AudioClip bedroomAmbientClip; //ambient loop for BedroomScene (Albert's theme)
+        [SerializeField] private AudioClip mirrorAmbientClip;  //plays while mirror overlay is open
 
         [Header("Music Tracks")]
         [SerializeField] private AudioClip onPillMusic;       //dull, atmospheric, drowsy feeling
@@ -59,6 +70,7 @@ namespace SUNSET16.Core
         private float _sfxVolume = 1.0f;
 
         private Coroutine _crossfadeCoroutine; //reference to running crossfade so we can cancel it
+        private bool _ambientPaused = false;   //tracks whether ambient was paused by an interaction
 
         protected override void Awake()
         {
@@ -94,10 +106,13 @@ namespace SUNSET16.Core
 
             PillStateManager.Instance.OnEndingReached += OnEndingReached;
 
+            RoomManager.Instance.OnRoomLoaded += OnRoomLoaded;
+
             _masterVolume = SettingsManager.Instance.MasterVolume;
             _musicVolume = SettingsManager.Instance.MusicVolume;
             _sfxVolume = SettingsManager.Instance.SFXVolume;
             ApplyMusicVolume();
+            ApplyAmbientVolume();
 
             Debug.Log("[AUDIOMANAGER] Subscribed to events and initialized");
         }
@@ -118,6 +133,20 @@ namespace SUNSET16.Core
                 sfxSource = gameObject.AddComponent<AudioSource>();
                 sfxSource.loop = false;         //sfx plays once
                 sfxSource.playOnAwake = false;
+            }
+
+            if (ambientSource == null)
+            {
+                ambientSource = gameObject.AddComponent<AudioSource>();
+                ambientSource.loop = true;          //ambient loops forever
+                ambientSource.playOnAwake = false;
+            }
+
+            if (mirrorSource == null)
+            {
+                mirrorSource = gameObject.AddComponent<AudioSource>();
+                mirrorSource.loop = true;           //mirror ambient loops while overlay is open
+                mirrorSource.playOnAwake = false;
             }
         }
 
@@ -208,6 +237,7 @@ namespace SUNSET16.Core
         {
             _masterVolume = volume;
             ApplyMusicVolume();
+            ApplyAmbientVolume();
         }
 
         private void OnMusicVolumeChanged(float volume)
@@ -226,6 +256,126 @@ namespace SUNSET16.Core
             if (musicSource != null && _crossfadeCoroutine == null)
             {
                 musicSource.volume = _musicVolume * _masterVolume;
+            }
+        }
+
+        private void ApplyAmbientVolume()
+        {
+            if (ambientSource != null && !_ambientPaused)
+            {
+                ambientSource.volume = _masterVolume;
+            }
+        }
+
+        //called by RoomManager.OnRoomLoaded — starts the right ambient for each room
+        //stops any current ambient first so rooms dont bleed into each other
+        private void OnRoomLoaded(string roomName)
+        {
+            StopAmbient();
+
+            if (roomName.Contains("Bedroom") && bedroomAmbientClip != null)
+            {
+                PlayAmbient(bedroomAmbientClip);
+                Debug.Log("[AUDIOMANAGER] Bedroom ambient started");
+            }
+        }
+
+        //starts an ambient loop — replaces whatever was playing
+        public void PlayAmbient(AudioClip clip)
+        {
+            if (clip == null)
+            {
+                Debug.LogWarning("[AUDIOMANAGER] Attempted to play null ambient clip");
+                return;
+            }
+
+            ambientSource.clip = clip;
+            ambientSource.volume = _masterVolume;
+            ambientSource.Play();
+            _ambientPaused = false;
+        }
+
+        //pauses ambient without losing playback position
+        //called by MirrorInteraction (and future: ComputerInteraction, PodInteraction)
+        public void PauseAmbient()
+        {
+            if (ambientSource != null && ambientSource.isPlaying)
+            {
+                ambientSource.Pause();
+                _ambientPaused = true;
+                Debug.Log("[AUDIOMANAGER] Ambient paused");
+            }
+        }
+
+        //resumes ambient from where it was paused
+        public void ResumeAmbient()
+        {
+            if (ambientSource != null && _ambientPaused)
+            {
+                ambientSource.UnPause();
+                _ambientPaused = false;
+                Debug.Log("[AUDIOMANAGER] Ambient resumed");
+            }
+        }
+
+        //stops ambient completely (used when leaving a room)
+        //next PlayAmbient call will restart from the beginning
+        public void StopAmbient()
+        {
+            if (ambientSource != null)
+            {
+                ambientSource.Stop();
+                _ambientPaused = false;
+            }
+        }
+
+        //starts the mirror overlay audio loop
+        //called by MirrorInteraction.ShowOverlay
+        public void PlayMirrorAmbient()
+        {
+            if (mirrorAmbientClip == null)
+            {
+                Debug.LogWarning("[AUDIOMANAGER] mirrorAmbientClip not assigned");
+                return;
+            }
+
+            mirrorSource.clip   = mirrorAmbientClip;
+            mirrorSource.volume = _masterVolume;
+            mirrorSource.Play();
+        }
+
+        //starts a coroutine to fade mirror audio out over duration
+        //called just before the screen fade — runs in parallel, fire-and-forget
+        public void FadeMirrorAmbientOut(float duration)
+        {
+            if (mirrorSource != null && mirrorSource.isPlaying)
+                StartCoroutine(FadeMirrorAmbientCoroutine(duration));
+        }
+
+        private IEnumerator FadeMirrorAmbientCoroutine(float duration)
+        {
+            float startVolume = mirrorSource.volume;
+            float timer       = 0f;
+
+            while (timer < duration)
+            {
+                timer            += Time.deltaTime;
+                mirrorSource.volume = Mathf.Lerp(startVolume, 0f, timer / duration);
+                yield return null;
+            }
+
+            mirrorSource.Stop();
+            mirrorSource.volume = _masterVolume; //reset volume for next use
+        }
+
+        //immediate stop — called by MirrorInteraction.CloseOverlay as a safety net
+        //in case the overlay is dismissed before the fade completes
+        public void StopMirrorAmbient()
+        {
+            if (mirrorSource != null)
+            {
+                mirrorSource.Stop();
+                mirrorSource.volume = _masterVolume;
             }
         }
 
@@ -296,6 +446,11 @@ namespace SUNSET16.Core
             if (DayManager.Instance != null)
             {
                 DayManager.Instance.OnPhaseChanged -= OnPhaseChanged;
+            }
+
+            if (RoomManager.Instance != null)
+            {
+                RoomManager.Instance.OnRoomLoaded -= OnRoomLoaded;
             }
 
             if (GameManager.Instance != null)

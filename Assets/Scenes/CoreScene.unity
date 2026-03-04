@@ -1636,6 +1636,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 0}
   sfxSource: {fileID: 0}
+  ambientSource: {fileID: 0}
+  mirrorSource: {fileID: 0}
+  bedroomAmbientClip: {fileID: 8300000, guid: 47b0ca149059cab45b7cd5e3346c318c, type: 3}
+  mirrorAmbientClip: {fileID: 8300000, guid: 5e91785b7079eaf439adc17e0b33e99b, type: 3}
   onPillMusic: {fileID: 0}
   offPillMusic: {fileID: 0}
   nightMusic: {fileID: 0}
