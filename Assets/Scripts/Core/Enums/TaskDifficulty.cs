@@ -20,7 +20,8 @@ namespace SUNSET16.Core
 {
     public enum TaskDifficulty
     {
-        Easy = 0,  //on-pill: labeled wires, visible hints, fewer steps - player is a compliant worker
-        Hard = 1   //off-pill: unlabeled, no hints, more complex - player is thinking for themselves
+        Easy   = 0,  //on-pill task 1: labeled, hints available - compliant worker
+        Medium   = 1,  //off-pill task 2 / on-pill task 2: moderate complexity
+        Hard   = 2   //off-pill task 1: unlabeled, no hints, most complex - thinking for themselves
     }
 }

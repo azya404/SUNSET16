@@ -76,9 +76,17 @@ namespace SUNSET16.Core
 
             //STEP 2: initialize state managers first (they dont depend on each other)
             Debug.Log("[GAMEMANAGER] Phase 1: Initializing state managers...");
-            DayManager.Instance.Initialize();         //sets day 1, morning phase
+            DayManager.Instance.Initialize();         //sets starting day (3 for vertical slice), morning phase
             PillStateManager.Instance.Initialize();   //clears all pill choices
             SettingsManager.Instance.Initialize();    //loads volume/brightness from PlayerPrefs
+
+            //VERTICAL SLICE: pre-fill forced pill choices for days before the starting day
+            //Day 1 = forced Taken, Day 2 = forced NotTaken (simulates the scripted tutorial days)
+            //these get overwritten by SaveManager.LoadGame() if a save exists, so no conflict
+            if (DayManager.Instance.CurrentDay > 1)
+                PillStateManager.Instance.SetPillChoice(1, PillChoice.Taken);
+            if (DayManager.Instance.CurrentDay > 2)
+                PillStateManager.Instance.SetPillChoice(2, PillChoice.NotTaken);
 
             //STEP 3: subscribe to game-ending events so we can handle them centrally
             PillStateManager.Instance.OnEndingReached += HandleEndingReached;
@@ -100,6 +108,19 @@ namespace SUNSET16.Core
             IsInitialized = true;
             OnInitializationComplete?.Invoke(); //other systems waiting for this can now start
             Debug.Log("[GAMEMANAGER] ===== INITIALIZATION COMPLETE =====");
+
+            //STEP 7: load the starting room
+            //vertical slice always starts in BedroomScene - RoomManager handles additive loading
+            //CoreScene stays underneath, BedroomScene loads on top
+            if (RoomManager.Instance != null)
+            {
+                Debug.Log("[GAMEMANAGER] Loading starting room: BedroomScene");
+                RoomManager.Instance.LoadRoom("BedroomScene");
+            }
+            else
+            {
+                Debug.LogError("[GAMEMANAGER] RoomManager missing from CoreScene - cannot load starting room!");
+            }
         }
 
         //auto-save when the application is closing (important for WebGL where closing = closing browser tab)

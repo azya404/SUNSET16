@@ -20,6 +20,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 using SUNSET16.Core;
 
 namespace SUNSET16.UI
@@ -40,8 +41,18 @@ namespace SUNSET16.UI
         [SerializeField] private Button confirmNewGameButton;
         [SerializeField] private Button cancelNewGameButton;
 
+        [Header("Audio")]
+        [SerializeField] private AudioSource sfxSource;
+        [SerializeField] private AudioClip   startButtonSFX;
+        [SerializeField] private AudioClip   menuClickSFX;
+        [SerializeField] private AudioSource musicSource;
+        [SerializeField] private float       musicFadeDuration = 1.5f;
+
+        private Coroutine _musicLoopCoroutine;
+        private bool      _sceneFadeActive = false;
+
         [Header("Scene Names")]
-        [SerializeField] private string newGameSceneName = "Bedroom"; // Tech demo starts in bedroom
+        [SerializeField] private string newGameSceneName = "CoreScene";
         private const string CORE_SCENE_NAME = "CoreScene";
 
         private void Start()
@@ -73,11 +84,62 @@ namespace SUNSET16.UI
                 settingsPanel.SetActive(false);
             }
 
+            if (musicSource != null)
+            {
+                musicSource.loop   = false; // MusicLoopWithFade manages looping manually
+                musicSource.volume = 0f;
+                musicSource.Play();
+                _musicLoopCoroutine = StartCoroutine(MusicLoopWithFade());
+            }
+
             Debug.Log("[MAINMENU] Main menu initialized");
+        }
+
+        // fade in → wait → fade out → restart → repeat until _sceneFadeActive
+        private IEnumerator MusicLoopWithFade()
+        {
+            while (!_sceneFadeActive)
+            {
+                // fade in
+                yield return StartCoroutine(FadeMusic(0f, 1f, musicFadeDuration));
+
+                // wait until musicFadeDuration seconds before the track ends
+                float waitTime = musicSource.clip.length - musicSource.time - musicFadeDuration;
+                if (waitTime > 0f)
+                    yield return new WaitForSeconds(waitTime);
+
+                if (_sceneFadeActive) yield break;
+
+                // fade out to end of track
+                float timeLeft = Mathf.Max(musicSource.clip.length - musicSource.time, 0.1f);
+                yield return StartCoroutine(FadeMusic(musicSource.volume, 0f, timeLeft));
+
+                if (_sceneFadeActive) yield break;
+
+                // restart from the top
+                musicSource.Stop();
+                musicSource.volume = 0f;
+                musicSource.Play();
+            }
+        }
+
+        private IEnumerator FadeMusic(float from, float to, float duration)
+        {
+            float timer = 0f;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                if (musicSource != null)
+                    musicSource.volume = Mathf.Lerp(from, to, timer / duration);
+                yield return null;
+            }
+            if (musicSource != null) musicSource.volume = to;
         }
 
         private void OnNewGameClicked()
         {
+            sfxSource?.PlayOneShot(startButtonSFX);
+
             //if they already have a save, make sure they actually wanna overwrite it
             if (SaveManager.Instance.SaveExists && newGameConfirmPanel != null)
             {
@@ -92,23 +154,40 @@ namespace SUNSET16.UI
         private void OnConfirmNewGame()
         {
             newGameConfirmPanel.SetActive(false);
+            sfxSource?.PlayOneShot(menuClickSFX);
             StartNewGame();
         }
 
         private void OnCancelNewGame()
         {
+            sfxSource?.PlayOneShot(menuClickSFX);
             newGameConfirmPanel.SetActive(false);
         }
 
         private void StartNewGame()
         {
-            SaveManager.Instance.ClearSaveData(); //wipe the old save first
-            Debug.Log($"[MAINMENU] Starting new game - Loading {newGameSceneName}");
-            SceneManager.LoadScene(newGameSceneName); //straight to bedroom for tech demo
+            SaveManager.Instance.ClearSaveData();
+            StartCoroutine(LoadSceneAfterSFX(newGameSceneName));
+        }
+
+        private IEnumerator LoadSceneAfterSFX(string sceneName)
+        {
+            float delay = (startButtonSFX != null && sfxSource != null) ? startButtonSFX.length : 0f;
+
+            // stop the loop coroutine and fade out over the SFX duration
+            _sceneFadeActive = true;
+            if (_musicLoopCoroutine != null) StopCoroutine(_musicLoopCoroutine);
+            if (musicSource != null && musicSource.isPlaying)
+                StartCoroutine(FadeMusic(musicSource.volume, 0f, delay));
+
+            yield return new WaitForSeconds(delay);
+            Debug.Log($"[MAINMENU] Starting new game - Loading {sceneName}");
+            SceneManager.LoadScene(sceneName);
         }
 
         private void OnContinueClicked()
         {
+            sfxSource?.PlayOneShot(menuClickSFX);
             //load CoreScene and let the managers handle everything from there
             Debug.Log("[MAINMENU] Continuing saved game");
             SceneManager.LoadScene(CORE_SCENE_NAME);
@@ -116,6 +195,7 @@ namespace SUNSET16.UI
 
         private void OnSettingsClicked()
         {
+            sfxSource?.PlayOneShot(menuClickSFX);
             //just flip the panel on/off, SettingsPanel.cs handles everything inside it
             if (settingsPanel != null)
             {
@@ -125,6 +205,7 @@ namespace SUNSET16.UI
 
         private void OnCreditsClicked()
         {
+            sfxSource?.PlayOneShot(menuClickSFX);
             Debug.Log("[MAINMENU] Credits scene not yet implemented");
         }
     }
