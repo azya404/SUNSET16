@@ -46,6 +46,10 @@ namespace SUNSET16.UI
         [SerializeField] private Button resetDefaultsButton;
         [SerializeField] private Button closeButton;
 
+        [Header("Audio")]
+        [SerializeField] private AudioSource sfxSource;
+        [SerializeField] private AudioClip   clickSFX;
+
         private void OnEnable()
         {
             if (SettingsManager.Instance == null) return;
@@ -124,6 +128,7 @@ namespace SUNSET16.UI
 
         private void OnResetDefaults()
         {
+            sfxSource?.PlayOneShot(clickSFX);
             SettingsManager.Instance.ResetToDefaults();
 
             //resync the sliders to the new default values
@@ -137,6 +142,7 @@ namespace SUNSET16.UI
 
         private void OnClose()
         {
+            sfxSource?.PlayOneShot(clickSFX);
             gameObject.SetActive(false); //just hide the panel, OnDisable handles cleanup
         }
     }
