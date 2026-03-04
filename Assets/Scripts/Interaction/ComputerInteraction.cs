@@ -99,6 +99,8 @@ namespace SUNSET16.Interaction
                 newLine.speakerName = line.speakerName;
                 newLine.portrait = line.portrait;
                 newLine.text = line.text;
+                newLine.sendDelay = line.sendDelay;
+                newLine.delayRepeats = line.delayRepeats;
                 newLine.autoAdvanceDelay = line.autoAdvanceDelay;
                 newLine.choices = new List<RuntimeChoice>();
                 foreach(var choice in line.choices)

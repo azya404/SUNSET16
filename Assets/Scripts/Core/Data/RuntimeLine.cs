@@ -21,6 +21,9 @@ namespace SUNSET16.Core
 
         public string text;
 
+        public bool sendDelay = true;
+
+        public int delayRepeats;
         public float autoAdvanceDelay = 0f;
 
         public List<RuntimeChoice> choices;

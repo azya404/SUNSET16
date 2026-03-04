@@ -25,6 +25,10 @@ namespace SUNSET16.Core
         [TextArea(3, 6)]
         public string text;
 
+        public bool sendDelay = true;
+        
+        public int delayRepeats;
+
         [Tooltip("0 = wait for player to press Continue. >0 = auto-advance after this many seconds.")]
         public float autoAdvanceDelay = 0f;
 

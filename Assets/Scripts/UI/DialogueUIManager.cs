@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using SUNSET16.Core;
 using System.Collections.Generic;
+using UnityEditor;
 
 namespace SUNSET16.UI
 {
@@ -40,6 +41,7 @@ namespace SUNSET16.UI
         [SerializeField] private GameObject dialogueParent;
         [SerializeField] private Transform responseButtonContainer;
         [SerializeField] private CanvasGroup dialogueCanvasGroup;
+        [SerializeField] private GameObject AlbertDelay;
 
         [Header("Prefabs")]
         [SerializeField] private GameObject  AlbertMessage;
@@ -49,6 +51,8 @@ namespace SUNSET16.UI
         [SerializeField] private TMP_Text speakerNameText;
         [SerializeField] private Image    speakerPortrait;
         [SerializeField] private TMP_Text dialogueBodyText;
+        [SerializeField] private Sprite    messagebox;
+        [SerializeField] private Sprite    playerMessagebox;
 
         [Header("Controls")]
         [SerializeField] private GameObject advanceButton;     // "▶ Continue" — visible after typewriter finishes
@@ -56,10 +60,12 @@ namespace SUNSET16.UI
 
         [Header("Choice Buttons (max 4)")]
         [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[4];  // Parent GOs per choice
-        [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[3];    // Labels per choice
+        [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[4];    // Labels per choice
 
         [Header("Typewriter")]
         [SerializeField] private float typewriterCharDelay = 0.03f;
+        [SerializeField] private float AlbertDelayAmt = 0.5f;
+        [SerializeField] private float playerDelay = 0.5f;
 
         [Header("UI Coordinates")]
         [SerializeField] private int albertX;
@@ -68,6 +74,13 @@ namespace SUNSET16.UI
         [SerializeField] private int playerY;
         [SerializeField] private int offset;
 
+        [Header("Sound Effects")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip keyboard;
+        [SerializeField] private AudioClip menuClick;
+        [SerializeField] private AudioClip msgSend;
+        [SerializeField] private AudioClip msgGet;
+
         // ─── Runtime State ────────────────────────────────────────────────────────
 
         private List<RuntimeLine> _lines;
@@ -75,8 +88,10 @@ namespace SUNSET16.UI
         private bool            _isTypewriting;
         private bool            _waitingForAdvance;
         private Coroutine       _playCoroutine;
+        private Coroutine       _messageCoroutine;
         private Coroutine       _typewriterCoroutine;
         private bool            started = false;
+        private bool            _isResponding = false;
 
         private int             messageNum = 0;
         private List<GameObject> messages = new List<GameObject>();
@@ -128,7 +143,9 @@ namespace SUNSET16.UI
 
             dialogueParent = GameObject.FindGameObjectWithTag("MessagingUI");
             responseButtonContainer = dialogueParent.transform.GetChild(1);
-            advanceButton = dialogueParent.transform.GetChild(3).gameObject;
+            AlbertDelay = dialogueParent.transform.GetChild(2).gameObject;
+            AlbertDelay.SetActive(false);
+            advanceButton = dialogueParent.transform.GetChild(4).gameObject;
 
             if (PlayerController.Instance != null)
                 PlayerController.Instance.LockMovement(true);
@@ -147,7 +164,7 @@ namespace SUNSET16.UI
 
         public void HideDialogue()
         {
-            if (!IsDialogueActive || _isTypewriting) return;
+            if (!IsDialogueActive || _isTypewriting || _isResponding) return;
 
             StopAllCoroutines();
             _playCoroutine      = null;
@@ -210,68 +227,16 @@ namespace SUNSET16.UI
             RuntimeChoice choice = currentLine.choices[choiceIndex];
             Debug.Log($"[DIALOGUE] Choice selected: '{choice.choiceText}' → line {choice.nextLineIndex}");
 
-            GameObject message;
-            
-            int messageY;
-            if (messageNum < 5)
-            {
-                messageY = playerY - ((messageNum-1) * offset);
-            }
-            else
-            {
-                messageY = playerY - (3 * offset);
-                Debug.Log("Shifting P");
-                foreach (GameObject mes in messages)
-                {
-                    RectTransform rt = mes.GetComponent<RectTransform>();
-                    rt.anchoredPosition += new Vector2(0, offset);
-                    if (rt.anchoredPosition.y > playerY)
-                    {
-                        Destroy(mes.gameObject);
-                    }
-                }
-                StartCoroutine(RemoveCells());
-            }
-
-            Vector3 messagePos = new Vector3(albertX, messageY, 0);
-            Quaternion rotation = Quaternion.identity;
-
-            message = Instantiate(PlayerMessage, dialogueParent.transform);
-            messages.Add(message);
-            message.transform.localPosition = messagePos;
-            message.GetComponentInChildren<TextMeshProUGUI>().text = choice.choiceText;
-            //dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
-
-            /*_typewriterCoroutine = StartCoroutine(TypewriterEffect(choice.choiceText));
-            yield return _typewriterCoroutine;
-            _typewriterCoroutine = null;*/
-
-            messageNum++;
-
+            audioSource.PlayOneShot(menuClick);
+            _messageCoroutine = StartCoroutine(SendMessage(choiceIndex, currentLine, choice));
             HideAllChoiceButtons();
-
-            if (currentLine.repeat)
-                currentLine.choices.Remove(currentLine.choices[choiceIndex]);
-
-            //nextLineIndex < 0 is the convention for "this choice ends the conversation"
-            if (choice.nextLineIndex < 0)
-            {
-                FinishDialogue();
-                return;
-            }
-
-            _lineIndex = choice.nextLineIndex;
-            if (_lineIndex < _lines.Count)
-                _playCoroutine = StartCoroutine(PlayFromCurrentLine());
-            else
-                FinishDialogue();
         }
 
         // ─── Internal Playback ────────────────────────────────────────────────────
 
         private IEnumerator PlayFromCurrentLine()
         {
-            if (_lines == null || _lineIndex >= _lines.Count)
+            if (_lines == null || _lineIndex >= _lines.Count || _lineIndex == -1)
             {
                 FinishDialogue();
                 yield break;
@@ -281,6 +246,23 @@ namespace SUNSET16.UI
 
             if (!line.repeated && line.text != "")
             {
+                if (line.sendDelay)
+                {
+                    AlbertDelay.SetActive(true);
+                    dialogueBodyText = AlbertDelay.GetComponentInChildren<TextMeshProUGUI>();
+                    typewriterCharDelay = AlbertDelayAmt;
+                    //typewriterCharDelay = 1f;
+                    for(int i = 0; i <= line.delayRepeats; i++)
+                    {
+                        _typewriterCoroutine = StartCoroutine(TypewriterEffect("..."));
+                        yield return _typewriterCoroutine;
+                        _typewriterCoroutine = null;
+                    }
+
+                    AlbertDelay.SetActive(false);
+                    typewriterCharDelay = 0.03f;
+                }
+
                 line.repeated = true;
 
                 GameObject message;
@@ -307,15 +289,14 @@ namespace SUNSET16.UI
                 }
 
                 Vector3 messagePos = new Vector3(albertX, messageY, 0);
-                Quaternion rotation = Quaternion.identity;
 
                 message = Instantiate(AlbertMessage, dialogueParent.transform);
                 messages.Add(message);
                 message.transform.localPosition = messagePos;
                 dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
+                audioSource.PlayOneShot(msgGet);
 
                 messageNum++;
-                
 
                 if (speakerNameText != null)
                     speakerNameText.text = line.speakerName ?? "";
@@ -327,14 +308,18 @@ namespace SUNSET16.UI
                     speakerPortrait.enabled = line.portrait != null;
                 }
 
+                if (line.advanceToLine == -1)
+                    _isResponding = false;
+
                 //hide controls while the typewriter is doing its thing
                 if (advanceButton != null) advanceButton.SetActive(false);
                 HideAllChoiceButtons();
 
                 //run the typewriter, then wait for it to fully finish before showing controls
-                _typewriterCoroutine = StartCoroutine(TypewriterEffect(line.text));
+                /*_typewriterCoroutine = StartCoroutine(TypewriterEffect(line.text));
                 yield return _typewriterCoroutine;
-                _typewriterCoroutine = null;
+                _typewriterCoroutine = null;*/
+                dialogueBodyText.text = line.text;
             }
 
             ShowControlsForCurrentLine();
@@ -365,11 +350,90 @@ namespace SUNSET16.UI
             }
         }
 
+        private IEnumerator SendMessage(int choiceIndex, RuntimeLine currentLine, RuntimeChoice choice)
+        {
+            GameObject message;
+            
+            int messageY;
+            if (messageNum < 5)
+            {
+                messageY = playerY - ((messageNum-1) * offset);
+            }
+            else
+            {
+                messageY = playerY - (3 * offset);
+                Debug.Log("Shifting P");
+                foreach (GameObject mes in messages)
+                {
+                    RectTransform rt = mes.GetComponent<RectTransform>();
+                    rt.anchoredPosition += new Vector2(0, offset);
+                    if (rt.anchoredPosition.y > albertY)
+                    {
+                        Destroy(mes.gameObject);
+                    }
+                }
+                StartCoroutine(RemoveCells());
+            }
+
+            Vector3 messagePos = new Vector3(playerX, messageY, 0);
+
+            message = Instantiate(PlayerMessage, dialogueParent.transform);
+            messages.Add(message);
+            dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
+            message.GetComponentInChildren<TextMeshProUGUI>().text = choice.choiceText;
+
+            _typewriterCoroutine = StartCoroutine(TypewriterEffect(choice.choiceText));
+            yield return _typewriterCoroutine;
+            _typewriterCoroutine = null;
+
+            audioSource.PlayOneShot(msgSend);
+            RectTransform mrt = message.GetComponent<RectTransform>();
+            _isResponding = true;
+            while (mrt.anchoredPosition.y < messageY)
+            {
+                yield return new WaitForSeconds(0.01f);
+                mrt.anchoredPosition += new Vector2(0, 10);
+            }
+
+            Transform box = message.transform.GetChild(1);
+            Image img = box.GetComponent<Image>();
+            img.sprite = playerMessagebox;
+            Transform pfp = message.transform.GetChild(0);
+            pfp.gameObject.SetActive(true);
+            message.transform.localPosition = messagePos;
+
+            messageNum++;
+
+            if (currentLine.repeat)
+                currentLine.choices.Remove(currentLine.choices[choiceIndex]);
+
+            //yield return new WaitForSeconds(playerDelay);
+
+            //nextLineIndex < 0 is the convention for "this choice ends the conversation"
+            if (choice.nextLineIndex < 0)
+            {
+                FinishDialogue();
+                yield break;
+            }
+
+            _lineIndex = choice.nextLineIndex;
+            if (_lineIndex < _lines.Count)
+                _playCoroutine = StartCoroutine(PlayFromCurrentLine());
+            else
+                FinishDialogue();
+        }
+
         private IEnumerator TypewriterEffect(string fullText)
         {
             _isTypewriting    = true;
             dialogueBodyText.text = "";
 
+            if (fullText != "...")
+            {
+                audioSource.clip = keyboard;
+                audioSource.Play();
+            }
+            
             //append one character at a time with a small delay between each
             foreach (char c in fullText)
             {
@@ -377,6 +441,7 @@ namespace SUNSET16.UI
                 yield return new WaitForSeconds(typewriterCharDelay);
             }
 
+            audioSource.Stop();
             _isTypewriting = false;
         }
 
@@ -395,6 +460,7 @@ namespace SUNSET16.UI
 
             if (line.HasChoices)
             {
+                _isResponding = false;
                 //choices and continue are mutually exclusive - never show both
                 if (advanceButton != null) advanceButton.SetActive(false);
                 ShowChoiceButtons(line.choices);
@@ -429,6 +495,7 @@ namespace SUNSET16.UI
             IsDialogueActive   = false;
             _isTypewriting     = false;
             _waitingForAdvance = false;
+            _isResponding = false;
 
             dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();
@@ -437,6 +504,11 @@ namespace SUNSET16.UI
                 PlayerController.Instance.LockMovement(false);
 
             Debug.Log("[DIALOGUE] Sequence complete");
+        }
+
+        public void menuSound()
+        {
+            audioSource.PlayOneShot(menuClick);
         }
     }
 }
