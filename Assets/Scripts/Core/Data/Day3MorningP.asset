@@ -1,0 +1,150 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7c527a6f66a8c49a6fab10a94681fc, type: 3}
+  m_Name: Day3MorningP
+  m_EditorClassIdentifier: 
+  sequenceId: albert_day3_morning_pill
+  lines:
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Morning, Andy. Another beautiful day aboard the SUNSET16. DOLOS assigned
+      you a task at the boiler room. A fuse broke late last night there, and needs
+      some maintenance. You know the drill. Do your task and keep DOLOS happy.
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Sounds good to me.
+      nextLineIndex: 1
+    - choiceText: Another day, another wire.
+      nextLineIndex: 2
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "That\u2019s the spirit. Just keep on with those designated tasks."
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "How it usually is. It\u2019s good you\u2019re like that."
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Any questions before you head out? My shift starts soon, but I have some
+      time to burn.
+    autoAdvanceDelay: 0.5
+    choices:
+    - choiceText: Any word on when more passengers are supposed to arrive? The ship
+        feels empty sometimes.
+      nextLineIndex: 4
+    - choiceText: "How\u2019s the nuclear core these days?"
+      nextLineIndex: 5
+    - choiceText: Heard anything about that NUSA CEO? After the bankruptcy scandal?
+      nextLineIndex: 8
+    advanceToLine: 11
+    repeat: 1
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Last I checked, passenger rotations were delayed indefinitely. Corporate
+      restructuring, I think. However, that was a few months ago. There\u2019s no
+      need to pay it any mind now."
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Smooth sailing as usual. The graphs are flat, and the readings are stable.
+      Boring, but that\u2019s the goal. There was a time when the core was\u2026
+      malfunctioning."
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Really? How so?
+      nextLineIndex: 6
+    - choiceText: "Nothing you can\u2019t handle."
+      nextLineIndex: 7
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "The cooling system was starting to fail. Worked my magic and turned things
+      around. That\u2019s why they hired me."
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "That\u2019s for certain. It\u2019s part of the job package."
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Last I heard, she had connections in China. After that, I don\u2019t know
+      much. The rest of the shareholders scattered to other conglomerates in North
+      America and Europe."
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 9
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Why\u2019d you ask?"
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Could the same happen here?
+      nextLineIndex: 10
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "DOLOS is different. More structured than other mega corporations. We\u2019re
+      not going anywhere. And neither are you."
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: 
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: I have no more questions.
+      nextLineIndex: 12
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Alright, I\u2019ll catch you later then."
+    autoAdvanceDelay: 0
+    choices: []
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0

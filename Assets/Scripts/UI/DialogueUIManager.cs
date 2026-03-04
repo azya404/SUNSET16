@@ -54,8 +54,8 @@ namespace SUNSET16.UI
         [SerializeField] private GameObject advanceButton;     // "▶ Continue" — visible after typewriter finishes
         [SerializeField] private GameObject closeButton;       // "Close" — always visible (player can exit)
 
-        [Header("Choice Buttons (max 3)")]
-        [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[3];  // Parent GOs per choice
+        [Header("Choice Buttons (max 4)")]
+        [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[4];  // Parent GOs per choice
         [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[3];    // Labels per choice
 
         [Header("Typewriter")]
@@ -70,12 +70,13 @@ namespace SUNSET16.UI
 
         // ─── Runtime State ────────────────────────────────────────────────────────
 
-        private DialogueLine[] _lines;
+        private List<RuntimeLine> _lines;
         private int             _lineIndex;
         private bool            _isTypewriting;
         private bool            _waitingForAdvance;
         private Coroutine       _playCoroutine;
         private Coroutine       _typewriterCoroutine;
+        private bool            started = false;
 
         private int             messageNum = 0;
         private List<GameObject> messages = new List<GameObject>();
@@ -105,9 +106,9 @@ namespace SUNSET16.UI
 
         // ─── Public API ───────────────────────────────────────────────────────────
 
-        public void ShowDialogue(DialogueSequence sequence)
+        public void ShowDialogue(RuntimeSequence sequence)
         {
-            if (sequence == null || sequence.lines == null || sequence.lines.Length == 0)
+            if (sequence == null || sequence.lines == null || sequence.lines.Count == 0)
             {
                 Debug.LogWarning("[DIALOGUE] Sequence is null or empty — nothing to show.");
                 return;
@@ -121,7 +122,6 @@ namespace SUNSET16.UI
 
             //DOLOS cannot interrupt albert (but albert must not start during DOLOS — caller guards this)
             _lines     = sequence.lines;
-            _lineIndex = 0;
 
             IsDialogueActive = true;
             dialoguePanel?.SetActive(true);
@@ -135,12 +135,19 @@ namespace SUNSET16.UI
 
             Debug.Log($"[DIALOGUE] Starting sequence '{sequence.sequenceId}'");
 
-            _playCoroutine = StartCoroutine(PlayFromCurrentLine());
+            if (!started)
+            {
+                _lineIndex = 0;
+                _playCoroutine = StartCoroutine(PlayFromCurrentLine());
+                started = true;
+            }
+            else
+                ShowControlsForCurrentLine();
         }
 
         public void HideDialogue()
         {
-            if (!IsDialogueActive) return;
+            if (!IsDialogueActive || _isTypewriting) return;
 
             StopAllCoroutines();
             _playCoroutine      = null;
@@ -170,7 +177,7 @@ namespace SUNSET16.UI
                 //typewriter still running - skip to end of this line immediately
                 if (_typewriterCoroutine != null) StopCoroutine(_typewriterCoroutine);
                 _isTypewriting = false;
-                if (_lines != null && _lineIndex < _lines.Length)
+                if (_lines != null && _lineIndex < _lines.Count)
                     dialogueBodyText.text = _lines[_lineIndex].text;
 
                 //show whatever controls belong on this line (choices or continue button)
@@ -181,35 +188,32 @@ namespace SUNSET16.UI
             if (_waitingForAdvance)
             {
                 _waitingForAdvance = false;
-                _lineIndex++;
-                if (_lineIndex < _lines.Length)
+                if (_lines[_lineIndex].advanceToLine > 0)
+                    _lineIndex = _lines[_lineIndex].advanceToLine;
+                else
+                    _lineIndex++;
+                if (_lineIndex < _lines.Count)
                     _playCoroutine = StartCoroutine(PlayFromCurrentLine());
                 else
                     FinishDialogue();
             }
         }
 
-        [SerializeField] private int choiceValue;
-        [ContextMenu("Choice")]
-        private void ChoiceTest()
-        {
-            OnChoiceSelected(choiceValue);
-        }
         public void OnChoiceSelected(int choiceIndex)
         {
             if (!IsDialogueActive || _lines == null) return;
-            if (_lineIndex >= _lines.Length)         return;
+            if (_lineIndex >= _lines.Count)         return;
 
-            DialogueLine currentLine = _lines[_lineIndex];
-            if (currentLine.choices == null || choiceIndex >= currentLine.choices.Length) return;
+            RuntimeLine currentLine = _lines[_lineIndex];
+            if (currentLine.choices == null || choiceIndex >= currentLine.choices.Count) return;
 
-            DialogueChoice choice = currentLine.choices[choiceIndex];
+            RuntimeChoice choice = currentLine.choices[choiceIndex];
             Debug.Log($"[DIALOGUE] Choice selected: '{choice.choiceText}' → line {choice.nextLineIndex}");
 
             GameObject message;
             
             int messageY;
-            if (messageNum < 4)
+            if (messageNum < 5)
             {
                 messageY = playerY - ((messageNum-1) * offset);
             }
@@ -246,6 +250,9 @@ namespace SUNSET16.UI
 
             HideAllChoiceButtons();
 
+            if (currentLine.repeat)
+                currentLine.choices.Remove(currentLine.choices[choiceIndex]);
+
             //nextLineIndex < 0 is the convention for "this choice ends the conversation"
             if (choice.nextLineIndex < 0)
             {
@@ -254,7 +261,7 @@ namespace SUNSET16.UI
             }
 
             _lineIndex = choice.nextLineIndex;
-            if (_lineIndex < _lines.Length)
+            if (_lineIndex < _lines.Count)
                 _playCoroutine = StartCoroutine(PlayFromCurrentLine());
             else
                 FinishDialogue();
@@ -264,64 +271,71 @@ namespace SUNSET16.UI
 
         private IEnumerator PlayFromCurrentLine()
         {
-            if (_lines == null || _lineIndex >= _lines.Length)
+            if (_lines == null || _lineIndex >= _lines.Count)
             {
                 FinishDialogue();
                 yield break;
             }
 
-            DialogueLine line = _lines[_lineIndex];
-            GameObject message;
-            
-            int messageY;
-            if (messageNum < 5)
+            RuntimeLine line = _lines[_lineIndex];
+
+            if (!line.repeated && line.text != "")
             {
-                messageY = albertY - (messageNum * offset);
-            }
-            else
-            {
-                messageY = albertY - (4 * offset);
-                Debug.Log("Shifting A");
-                foreach (GameObject mes in messages)
+                line.repeated = true;
+
+                GameObject message;
+                
+                int messageY;
+                if (messageNum < 5)
                 {
-                    RectTransform rt = mes.GetComponent<RectTransform>();
-                    rt.anchoredPosition += new Vector2(0, offset);
-                    if (rt.anchoredPosition.y > albertY)
-                    {
-                        Destroy(mes.gameObject);
-                    }
+                    messageY = albertY - (messageNum * offset);
                 }
-                StartCoroutine(RemoveCells());
+                else
+                {
+                    messageY = albertY - (4 * offset);
+                    Debug.Log("Shifting A");
+                    foreach (GameObject mes in messages)
+                    {
+                        RectTransform rt = mes.GetComponent<RectTransform>();
+                        rt.anchoredPosition += new Vector2(0, offset);
+                        if (rt.anchoredPosition.y > albertY)
+                        {
+                            Destroy(mes.gameObject);
+                        }
+                    }
+                    StartCoroutine(RemoveCells());
+                }
+
+                Vector3 messagePos = new Vector3(albertX, messageY, 0);
+                Quaternion rotation = Quaternion.identity;
+
+                message = Instantiate(AlbertMessage, dialogueParent.transform);
+                messages.Add(message);
+                message.transform.localPosition = messagePos;
+                dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
+
+                messageNum++;
+                
+
+                if (speakerNameText != null)
+                    speakerNameText.text = line.speakerName ?? "";
+
+                //only enable portrait if the line actually has one assigned
+                if (speakerPortrait != null)
+                {
+                    speakerPortrait.sprite  = line.portrait;
+                    speakerPortrait.enabled = line.portrait != null;
+                }
+
+                //hide controls while the typewriter is doing its thing
+                if (advanceButton != null) advanceButton.SetActive(false);
+                HideAllChoiceButtons();
+
+                //run the typewriter, then wait for it to fully finish before showing controls
+                _typewriterCoroutine = StartCoroutine(TypewriterEffect(line.text));
+                yield return _typewriterCoroutine;
+                _typewriterCoroutine = null;
             }
-
-            Vector3 messagePos = new Vector3(albertX, messageY, 0);
-            Quaternion rotation = Quaternion.identity;
-
-            message = Instantiate(AlbertMessage, dialogueParent.transform);
-            messages.Add(message);
-            message.transform.localPosition = messagePos;
-            dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
-
-            messageNum++;
-
-            if (speakerNameText != null)
-                speakerNameText.text = line.speakerName ?? "";
-
-            //only enable portrait if the line actually has one assigned
-            if (speakerPortrait != null)
-            {
-                speakerPortrait.sprite  = line.portrait;
-                speakerPortrait.enabled = line.portrait != null;
-            }
-
-            //hide controls while the typewriter is doing its thing
-            if (advanceButton != null) advanceButton.SetActive(false);
-            HideAllChoiceButtons();
-
-            //run the typewriter, then wait for it to fully finish before showing controls
-            _typewriterCoroutine = StartCoroutine(TypewriterEffect(line.text));
-            yield return _typewriterCoroutine;
-            _typewriterCoroutine = null;
 
             ShowControlsForCurrentLine();
 
@@ -335,8 +349,11 @@ namespace SUNSET16.UI
             {
                 //auto-advance after a delay - no player input needed
                 yield return new WaitForSeconds(line.autoAdvanceDelay);
-                _lineIndex++;
-                if (_lineIndex < _lines.Length)
+                if (line.advanceToLine > 0)
+                    _lineIndex = line.advanceToLine;
+                else
+                    _lineIndex++;
+                if (_lineIndex < _lines.Count)
                     _playCoroutine = StartCoroutine(PlayFromCurrentLine());
                 else
                     FinishDialogue();
@@ -372,9 +389,9 @@ namespace SUNSET16.UI
 
         private void ShowControlsForCurrentLine()
         {
-            if (_lines == null || _lineIndex >= _lines.Length) return;
+            if (_lines == null || _lineIndex >= _lines.Count) return;
 
-            DialogueLine line = _lines[_lineIndex];
+            RuntimeLine line = _lines[_lineIndex];
 
             if (line.HasChoices)
             {
@@ -382,17 +399,17 @@ namespace SUNSET16.UI
                 if (advanceButton != null) advanceButton.SetActive(false);
                 ShowChoiceButtons(line.choices);
             }
-            else
+            else if (line.autoAdvanceDelay <= 0)
             {
                 if (advanceButton != null) advanceButton.SetActive(true);
             }
         }
 
-        private void ShowChoiceButtons(DialogueChoice[] choices)
+        private void ShowChoiceButtons(List<RuntimeChoice> choices)
         {
             for (int i = 0; i < choiceButtonRoots.Length; i++)
             {
-                bool show = i < choices.Length;
+                bool show = i < choices.Count;
                 if (choiceButtonRoots[i] != null)
                     choiceButtonRoots[i].SetActive(show);
 
