@@ -35,8 +35,10 @@ namespace SUNSET16.Core
         private string _currentRoomScene = "";
 
         [Header("Transition Settings")]
-        [SerializeField] private float fadeOutDuration = 0.5f;
-        [SerializeField] private float fadeInDuration = 0.5f;
+        [SerializeField] private float fadeOutDuration = 0.4f;
+        [SerializeField] private float fadeInDuration  = 0.8f;
+        [Tooltip("Full-screen black CanvasGroup in CoreScene — alpha 0 at rest, driven up/down during transitions.")]
+        [SerializeField] private CanvasGroup screenFadePanel;
 
         private bool _isTransitioning = false;
 
@@ -149,15 +151,30 @@ namespace SUNSET16.Core
             return sceneName;
         }
 
-        //TODO: replace with actual screen fade (CanvasGroup + alpha lerp)
         private IEnumerator FadeOut()
         {
-            yield break; //does nothing rn lol
+            if (screenFadePanel == null) yield break;
+            float timer = 0f;
+            while (timer < fadeOutDuration)
+            {
+                timer += Time.deltaTime;
+                screenFadePanel.alpha = Mathf.Lerp(0f, 1f, timer / fadeOutDuration);
+                yield return null;
+            }
+            screenFadePanel.alpha = 1f;
         }
 
         private IEnumerator FadeIn()
         {
-            yield break; //same
+            if (screenFadePanel == null) yield break;
+            float timer = 0f;
+            while (timer < fadeInDuration)
+            {
+                timer += Time.deltaTime;
+                screenFadePanel.alpha = Mathf.Lerp(1f, 0f, timer / fadeInDuration);
+                yield return null;
+            }
+            screenFadePanel.alpha = 0f;
         }
         public string GetCurrentRoomName()
         {

@@ -51,6 +51,11 @@ namespace SUNSET16.UI
         private Coroutine _musicLoopCoroutine;
         private bool      _sceneFadeActive = false;
 
+        [Header("Screen Transition")]
+        [Tooltip("Full-screen black CanvasGroup — starts transparent, fades to black on scene exit.")]
+        [SerializeField] private CanvasGroup screenFadePanel;
+        [SerializeField] private float       screenFadeDuration = 1.2f;
+
         [Header("Scene Names")]
         [SerializeField] private string newGameSceneName = "CoreScene";
         private const string CORE_SCENE_NAME = "CoreScene";
@@ -172,25 +177,40 @@ namespace SUNSET16.UI
 
         private IEnumerator LoadSceneAfterSFX(string sceneName)
         {
-            float delay = (startButtonSFX != null && sfxSource != null) ? startButtonSFX.length : 0f;
+            float sfxDuration = (startButtonSFX != null && sfxSource != null) ? startButtonSFX.length : 0f;
+            // screen fade drives the timing — music and SFX play underneath it
+            float totalDuration = Mathf.Max(sfxDuration, screenFadeDuration);
 
-            // stop the loop coroutine and fade out over the SFX duration
             _sceneFadeActive = true;
             if (_musicLoopCoroutine != null) StopCoroutine(_musicLoopCoroutine);
             if (musicSource != null && musicSource.isPlaying)
-                StartCoroutine(FadeMusic(musicSource.volume, 0f, delay));
+                StartCoroutine(FadeMusic(musicSource.volume, 0f, totalDuration));
+            if (screenFadePanel != null)
+                StartCoroutine(FadeScreen(0f, 1f, totalDuration));
 
-            yield return new WaitForSeconds(delay);
-            Debug.Log($"[MAINMENU] Starting new game - Loading {sceneName}");
+            yield return new WaitForSeconds(totalDuration);
+            Debug.Log($"[MAINMENU] Loading {sceneName}");
             SceneManager.LoadScene(sceneName);
+        }
+
+        private IEnumerator FadeScreen(float from, float to, float duration)
+        {
+            float timer = 0f;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                if (screenFadePanel != null)
+                    screenFadePanel.alpha = Mathf.Lerp(from, to, timer / duration);
+                yield return null;
+            }
+            if (screenFadePanel != null) screenFadePanel.alpha = to;
         }
 
         private void OnContinueClicked()
         {
             sfxSource?.PlayOneShot(menuClickSFX);
-            //load CoreScene and let the managers handle everything from there
             Debug.Log("[MAINMENU] Continuing saved game");
-            SceneManager.LoadScene(CORE_SCENE_NAME);
+            StartCoroutine(LoadSceneAfterSFX(CORE_SCENE_NAME));
         }
 
         private void OnSettingsClicked()
