@@ -108,6 +108,19 @@ namespace SUNSET16.Core
             IsInitialized = true;
             OnInitializationComplete?.Invoke(); //other systems waiting for this can now start
             Debug.Log("[GAMEMANAGER] ===== INITIALIZATION COMPLETE =====");
+
+            //STEP 7: load the starting room
+            //vertical slice always starts in BedroomScene - RoomManager handles additive loading
+            //CoreScene stays underneath, BedroomScene loads on top
+            if (RoomManager.Instance != null)
+            {
+                Debug.Log("[GAMEMANAGER] Loading starting room: BedroomScene");
+                RoomManager.Instance.LoadRoom("BedroomScene");
+            }
+            else
+            {
+                Debug.LogError("[GAMEMANAGER] RoomManager missing from CoreScene - cannot load starting room!");
+            }
         }
 
         //auto-save when the application is closing (important for WebGL where closing = closing browser tab)
