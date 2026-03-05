@@ -29,6 +29,7 @@ using System.Collections;
 using UnityEngine;
 using SUNSET16.Core;
 using SUNSET16.UI;
+using UnityEngine.UIElements;
 
 namespace SUNSET16.Interaction
 {
@@ -61,6 +62,8 @@ namespace SUNSET16.Interaction
         private InteractionSystem _interactionSystem;
         private bool _mirrorCompleted = false;
         private bool _sequenceActive  = false;
+        private bool _sequenceCreated = false;
+        RuntimeSequence runtimeSequence;
 
         // --- Lifecycle ---------------------------------------------------------------
 
@@ -163,7 +166,15 @@ namespace SUNSET16.Interaction
             // if no SOs assigned yet, log warning and leave overlay open - expected during development
             DialogueSequence sequence = GetSequenceForToday();
             if (sequence != null && DialogueUIManager.Instance != null)
-                DialogueUIManager.Instance.ShowDialogue(CreateRuntimeSequence(sequence));
+            {
+                if (!_sequenceCreated)
+                {
+                    runtimeSequence = CreateRuntimeSequence(sequence);
+                    Debug.Log("sequence created!");
+                    _sequenceCreated = true;
+                }
+                DialogueUIManager.Instance.ShowDialogue(runtimeSequence);
+            }
             else
                 Debug.LogWarning("[COMPUTER] No dialogue sequence for today - overlay open, no dialogue started (expected if SOs not yet assigned)");
         }
@@ -243,10 +254,10 @@ namespace SUNSET16.Interaction
 
             int dayOffset = (daySequences.Length)/4;
             int index = DayManager.Instance.CurrentDay - 1; // day 1 -> index 0
-            bool pill = PillStateManager.Instance.HasTakenPillToday();
+            PillChoice pill = PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay);
             DayPhase phase = DayManager.Instance.CurrentPhase;
 
-            if (!pill)
+            if (pill == PillChoice.NotTaken)
                 index += dayOffset;
             if (phase == DayPhase.Night)
                 index += 2*dayOffset;

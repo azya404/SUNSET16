@@ -31,13 +31,14 @@ using System.Collections;
 using SUNSET16.Core;
 using SUNSET16.Interaction;
 using System.Collections.Generic;
+using UnityEditor.Advertisements;
 
 namespace SUNSET16.UI
 {
     public class DialogueUIManager : Singleton<DialogueUIManager>
     {
         [Header("Panel")]
-        [SerializeField] private GameObject  dialoguePanel;
+        //[SerializeField] private GameObject  dialoguePanel;
         [SerializeField] private GameObject dialogueParent;
         [SerializeField] private Transform responseButtonContainer;
         [SerializeField] private CanvasGroup dialogueCanvasGroup;
@@ -110,7 +111,8 @@ namespace SUNSET16.UI
         protected override void Awake()
         {
             base.Awake();
-            if (dialoguePanel != null) dialoguePanel.SetActive(false);
+            //dialoguePanel = GameObject.FindGameObjectWithTag("DialoguePanel");
+            //if (dialoguePanel != null) dialoguePanel.SetActive(false);
             HideAllChoiceButtons();
         }
 
@@ -129,6 +131,7 @@ namespace SUNSET16.UI
 
         public void ShowDialogue(RuntimeSequence sequence)
         {
+            Debug.Log("dialogue started!");
             if (sequence == null || sequence.lines == null || sequence.lines.Count == 0)
             {
                 Debug.LogWarning("[DIALOGUE] Sequence is null or empty — nothing to show.");
@@ -141,44 +144,55 @@ namespace SUNSET16.UI
                 return;
             }
 
-            //DOLOS cannot interrupt albert (but albert must not start during DOLOS — caller guards this)
-            _lines     = sequence.lines;
+                //DOLOS cannot interrupt albert (but albert must not start during DOLOS — caller guards this)
+                _lines     = sequence.lines;
 
-            IsDialogueActive = true;
-            dialoguePanel?.SetActive(true);
-
-            dialogueParent = GameObject.FindGameObjectWithTag("MessagingUI");
-            responseButtonContainer = dialogueParent.transform.GetChild(1);
-            AlbertDelay = dialogueParent.transform.GetChild(2).gameObject;
-            AlbertDelay.SetActive(false);
-            advanceButton = dialogueParent.transform.GetChild(4).gameObject;
-
-            choiceButtonImages[0] = responseButtonContainer.GetChild(0).GetComponent<Image>();
-            Material globalMat = choiceButtonImages[0].material;
-            globalMat.SetFloat("_GlitchInterval", glitchInterval);
-            globalMat.SetFloat("_DispProbability", dispProbability);
-            globalMat.SetFloat("_DispIntensity", dispIntensity);
-            globalMat.SetFloat("_ColorProbability", colorProbability);
-            globalMat.SetFloat("_ColorIntensity", colorIntensity);
-            for (int i = 0; i < 4; i++)
-            {
-                choiceButtonImages[i] = responseButtonContainer.GetChild(i).GetComponent<Image>();
-                choiceButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
-                choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
-                choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
-            }
-
-            if (PlayerController.Instance != null)
-                PlayerController.Instance.LockMovement(true);
-
-            Debug.Log($"[DIALOGUE] Starting sequence '{sequence.sequenceId}'");
-
+                IsDialogueActive = true;
+                //dialoguePanel?.SetActive(true);
+        
             if (!started)
             {
+                dialogueParent = GameObject.FindGameObjectWithTag("MessagingUI");
+                responseButtonContainer = dialogueParent.transform.GetChild(1);
+                for (int i = 0; i < 4; i++)
+                {
+                    int index = i;
+                    choiceButtonRoots[i] = responseButtonContainer.transform.GetChild(i).gameObject;
+                    choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(() => OnChoiceSelected(index));
+                    choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(menuSound);
+                    choiceButtonTexts[i] = choiceButtonRoots[i].GetComponentInChildren<TextMeshProUGUI>();
+                }
+                AlbertDelay = dialogueParent.transform.GetChild(2).gameObject;
+                AlbertDelay.SetActive(false);
+                closeButton = dialogueParent.transform.GetChild(3).gameObject;
+                closeButton.GetComponent<Button>().onClick.AddListener(HideDialogue);
+                advanceButton = dialogueParent.transform.GetChild(4).gameObject;
+                advanceButton.GetComponent<Button>().onClick.AddListener(OnAdvanceClicked);
+
+                choiceButtonImages[0] = responseButtonContainer.GetChild(0).GetComponent<Image>();
+                Material globalMat = choiceButtonImages[0].material;
+                globalMat.SetFloat("_GlitchInterval", glitchInterval);
+                globalMat.SetFloat("_DispProbability", dispProbability);
+                globalMat.SetFloat("_DispIntensity", dispIntensity);
+                globalMat.SetFloat("_ColorProbability", colorProbability);
+                globalMat.SetFloat("_ColorIntensity", colorIntensity);
+                for (int i = 0; i < 4; i++)
+                {
+                    choiceButtonImages[i] = responseButtonContainer.GetChild(i).GetComponent<Image>();
+                    choiceButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
+                    choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
+                    choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
+                }
+
+                if (PlayerController.Instance != null)
+                    PlayerController.Instance.LockMovement(true);
+
+                Debug.Log($"[DIALOGUE] Starting sequence '{sequence.sequenceId}'");
+
                 _lineIndex = 0;
                 _playCoroutine = StartCoroutine(PlayFromCurrentLine());
                 started = true;
-            }
+                }
             else
                 ShowControlsForCurrentLine();
         }
@@ -194,12 +208,12 @@ namespace SUNSET16.UI
             IsDialogueActive    = false;
             _isTypewriting      = false;
             _waitingForAdvance  = false;
-            started             = false;
-            messageNum          = 0;
-            foreach (var msg in messages) if (msg != null) Destroy(msg);
-                messages.Clear(); 
+            //started             = false;
+            //messageNum          = 0;
+            /*foreach (var msg in messages) if (msg != null) Destroy(msg);
+                messages.Clear();*/
 
-            dialoguePanel?.SetActive(false);
+            //dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();
 
             if (PlayerController.Instance != null)
@@ -250,11 +264,14 @@ namespace SUNSET16.UI
 
         public void OnChoiceSelected(int choiceIndex)
         {
+            Debug.Log("Choice clicked! " + choiceIndex);
             if (!IsDialogueActive || _lines == null) return;
             if (_lineIndex >= _lines.Count)         return;
+            Debug.Log("First checkpoint");
 
             RuntimeLine currentLine = _lines[_lineIndex];
             if (currentLine.choices == null || choiceIndex >= currentLine.choices.Count) return;
+            Debug.Log("Second checkpoint");
 
             RuntimeChoice choice = currentLine.choices[choiceIndex];
             Debug.Log($"[DIALOGUE] Choice selected: '{choice.choiceText}' → line {choice.nextLineIndex}");
@@ -539,11 +556,11 @@ namespace SUNSET16.UI
             _waitingForAdvance = false;
             _isResponding      = false;
             started            = false;
-            messageNum         = 0;
+            //messageNum         = 0;
             foreach (var msg in messages) if (msg != null) Destroy(msg);
                 messages.Clear(); 
 
-            dialoguePanel?.SetActive(false);
+            //dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();
 
             if (PlayerController.Instance != null)

@@ -46,13 +46,13 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _ColorGlitchOn: 1
-    - _ColorIntensity: 0.5
-    - _ColorProbability: 0.1
+    - _ColorIntensity: 0.05
+    - _ColorProbability: 0.3
     - _DispGlitchOn: 1
-    - _DispIntensity: 0.5
-    - _DispProbability: 0.15
+    - _DispIntensity: 0.05
+    - _DispProbability: 0.3
     - _EnableExternalAlpha: 0
-    - _GlitchInterval: 0.16
+    - _GlitchInterval: 0.1
     - _WrapDispCoords: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
