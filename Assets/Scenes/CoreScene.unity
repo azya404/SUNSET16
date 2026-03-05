@@ -1397,6 +1397,7 @@ GameObject:
   - component: {fileID: 1667455042}
   - component: {fileID: 1667455041}
   - component: {fileID: 1667455040}
+  - component: {fileID: 1667455045}
   m_Layer: 5
   m_Name: DialogueUIManager
   m_TagString: Untagged
@@ -1416,14 +1417,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 800a26a0973d2bd489190f4b7537622a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialoguePanel: {fileID: 0}
+  dialogueParent: {fileID: 0}
+  responseButtonContainer: {fileID: 0}
   dialogueCanvasGroup: {fileID: 0}
+  AlbertDelay: {fileID: 0}
+  AlbertMessage: {fileID: 2722928380033971905, guid: dc3c6540015c79941973d8369c63e387, type: 3}
+  PlayerMessage: {fileID: 6662382049326946677, guid: 6bf19257397a8fb4b8ce2e916be65779, type: 3}
   speakerNameText: {fileID: 0}
   speakerPortrait: {fileID: 0}
   dialogueBodyText: {fileID: 0}
+  messagebox: {fileID: 21300000, guid: b6187bffc65373f4eb5f27afbb79b5ed, type: 3}
+  playerMessagebox: {fileID: 21300000, guid: ec2b25c2cfdf7354b9c0965b0acfdbe5, type: 3}
   advanceButton: {fileID: 0}
   closeButton: {fileID: 0}
   choiceButtonRoots:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -1431,7 +1439,30 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  choiceButtonImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  glitchInterval: 0.1
+  dispProbability: 0.3
+  dispIntensity: 0.05
+  colorProbability: 0.3
+  colorIntensity: 0.05
   typewriterCharDelay: 0.03
+  AlbertDelayAmt: 0.5
+  playerDelay: 0.5
+  albertX: 160
+  albertY: 160
+  playerX: 120
+  playerY: 80
+  offset: 80
+  audioSource: {fileID: 1667455045}
+  keyboard: {fileID: 8300000, guid: f43923ff3038f974a9aef7c0b34a9cb0, type: 3}
+  menuClick: {fileID: 8300000, guid: 6336ce03e4dda71489857b071cabf257, type: 3}
+  msgSend: {fileID: 8300000, guid: bbe9e12929ade374896a682613c57827, type: 3}
+  msgGet: {fileID: 8300000, guid: 3d6b305a64bcc1546b69a57d8366396a, type: 3}
 --- !u!114 &1667455041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1514,6 +1545,102 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!82 &1667455045
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1667455039}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1689521109
 GameObject:
   m_ObjectHideFlags: 0
@@ -1638,6 +1765,7 @@ MonoBehaviour:
   sfxSource: {fileID: 0}
   ambientSource: {fileID: 0}
   mirrorSource: {fileID: 0}
+  pillSFXSource: {fileID: 0}
   bedroomAmbientClip: {fileID: 8300000, guid: 47b0ca149059cab45b7cd5e3346c318c, type: 3}
   mirrorAmbientClip: {fileID: 8300000, guid: 5e91785b7079eaf439adc17e0b33e99b, type: 3}
   onPillMusic: {fileID: 0}
@@ -1653,6 +1781,8 @@ MonoBehaviour:
   uiClick: {fileID: 0}
   footstep: {fileID: 0}
   crossfadeDuration: 1
+  ambientFadeOutDuration: 0.8
+  ambientFadeInDuration: 1.5
 --- !u!4 &1731907957
 Transform:
   m_ObjectHideFlags: 0
