@@ -8,7 +8,7 @@ follows the same pattern as ComputerInteraction (BedroomScene):
   fade to black → hide overlay → TaskManager.CompleteCurrentTask() → nextTaskObject activates → fade in → unlock
 
 two task objects in BoilerRoomScene:
-  Task1Object (active by default)
+  Task1Object (active by default) 
     taskIndex = 1
     nextTaskObject → drag Task2Object GO here
   Task2Object (inactive by default)
