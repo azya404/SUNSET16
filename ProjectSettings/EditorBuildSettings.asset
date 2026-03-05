@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BedroomScene.unity
     guid: d2fef440938a0fd43b8cb49af88fe2c7
+  - enabled: 1
+    path: Assets/Scenes/BoilerRoomScene.unity
+    guid: 1b59dda2cb52930459f246623135971f
   m_configObjects: {}
