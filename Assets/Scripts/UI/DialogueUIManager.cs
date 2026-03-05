@@ -31,7 +31,7 @@ using System.Collections;
 using SUNSET16.Core;
 using SUNSET16.Interaction;
 using System.Collections.Generic;
-using UnityEditor.Advertisements;
+//using UnityEditor.Advertisements;
 
 namespace SUNSET16.UI
 {
