@@ -29,39 +29,79 @@ using TMPro;
 using System;
 using System.Collections;
 using SUNSET16.Core;
+using SUNSET16.Interaction;
+using System.Collections.Generic;
+using UnityEditor.Advertisements;
 
 namespace SUNSET16.UI
 {
     public class DialogueUIManager : Singleton<DialogueUIManager>
     {
         [Header("Panel")]
-        [SerializeField] private GameObject  dialoguePanel;
+        //[SerializeField] private GameObject  dialoguePanel;
+        [SerializeField] private GameObject dialogueParent;
+        [SerializeField] private Transform responseButtonContainer;
         [SerializeField] private CanvasGroup dialogueCanvasGroup;
+        [SerializeField] private GameObject AlbertDelay;
+
+        [Header("Prefabs")]
+        [SerializeField] private GameObject  AlbertMessage;
+        [SerializeField] private GameObject  PlayerMessage;
 
         [Header("Content")]
         [SerializeField] private TMP_Text speakerNameText;
         [SerializeField] private Image    speakerPortrait;
         [SerializeField] private TMP_Text dialogueBodyText;
+        [SerializeField] private Sprite   messagebox;
+        [SerializeField] private Sprite   playerMessagebox;
 
         [Header("Controls")]
         [SerializeField] private GameObject advanceButton;     // "▶ Continue" — visible after typewriter finishes
         [SerializeField] private GameObject closeButton;       // "Close" — always visible (player can exit)
 
-        [Header("Choice Buttons (max 3)")]
-        [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[3];  // Parent GOs per choice
-        [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[3];    // Labels per choice
+        [Header("Choice Buttons (max 4)")]
+        [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[4];  // Parent GOs per choice
+        [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[4];    // Labels per choice
+        [SerializeField] private Image[]      choiceButtonImages = new Image[4];
+        [SerializeField] private float        glitchInterval;
+        [SerializeField] private float        dispProbability;
+        [SerializeField] private float        dispIntensity;
+        [SerializeField] private float        colorProbability;
+        [SerializeField] private float        colorIntensity;
 
         [Header("Typewriter")]
         [SerializeField] private float typewriterCharDelay = 0.03f;
+        [SerializeField] private float AlbertDelayAmt = 0.5f;
+        [SerializeField] private float playerDelay = 0.5f;
+
+        [Header("UI Coordinates")]
+        [SerializeField] private int albertX;
+        [SerializeField] private int albertY;
+        [SerializeField] private int playerX;
+        [SerializeField] private int playerY;
+        [SerializeField] private int offset;
+
+        [Header("Sound Effects")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip keyboard;
+        [SerializeField] private AudioClip menuClick;
+        [SerializeField] private AudioClip msgSend;
+        [SerializeField] private AudioClip msgGet;
 
         // ─── Runtime State ────────────────────────────────────────────────────────
 
-        private DialogueLine[] _lines;
+        private List<RuntimeLine> _lines;
         private int             _lineIndex;
         private bool            _isTypewriting;
         private bool            _waitingForAdvance;
         private Coroutine       _playCoroutine;
+        private Coroutine       _messageCoroutine;
         private Coroutine       _typewriterCoroutine;
+        private bool            started = false;
+        private bool            _isResponding = false;
+
+        private int             messageNum = 0;
+        private List<GameObject> messages = new List<GameObject>();
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -71,7 +111,8 @@ namespace SUNSET16.UI
         protected override void Awake()
         {
             base.Awake();
-            if (dialoguePanel != null) dialoguePanel.SetActive(false);
+            //dialoguePanel = GameObject.FindGameObjectWithTag("DialoguePanel");
+            //if (dialoguePanel != null) dialoguePanel.SetActive(false);
             HideAllChoiceButtons();
         }
 
@@ -80,7 +121,7 @@ namespace SUNSET16.UI
             if (!IsDialogueActive) return;
 
             //player can bail out of albert at any time, no forced reading
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
                 HideDialogue();
             }
@@ -88,9 +129,10 @@ namespace SUNSET16.UI
 
         // ─── Public API ───────────────────────────────────────────────────────────
 
-        public void ShowDialogue(DialogueSequence sequence)
+        public void ShowDialogue(RuntimeSequence sequence)
         {
-            if (sequence == null || sequence.lines == null || sequence.lines.Length == 0)
+            Debug.Log("dialogue started!");
+            if (sequence == null || sequence.lines == null || sequence.lines.Count == 0)
             {
                 Debug.LogWarning("[DIALOGUE] Sequence is null or empty — nothing to show.");
                 return;
@@ -102,24 +144,62 @@ namespace SUNSET16.UI
                 return;
             }
 
-            //DOLOS cannot interrupt albert (but albert must not start during DOLOS — caller guards this)
-            _lines     = sequence.lines;
-            _lineIndex = 0;
+                //DOLOS cannot interrupt albert (but albert must not start during DOLOS — caller guards this)
+                _lines     = sequence.lines;
 
-            IsDialogueActive = true;
-            dialoguePanel?.SetActive(true);
+                IsDialogueActive = true;
+                //dialoguePanel?.SetActive(true);
+        
+            if (!started)
+            {
+                dialogueParent = GameObject.FindGameObjectWithTag("MessagingUI");
+                responseButtonContainer = dialogueParent.transform.GetChild(1);
+                for (int i = 0; i < 4; i++)
+                {
+                    int index = i;
+                    choiceButtonRoots[i] = responseButtonContainer.transform.GetChild(i).gameObject;
+                    choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(() => OnChoiceSelected(index));
+                    choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(menuSound);
+                    choiceButtonTexts[i] = choiceButtonRoots[i].GetComponentInChildren<TextMeshProUGUI>();
+                }
+                AlbertDelay = dialogueParent.transform.GetChild(2).gameObject;
+                AlbertDelay.SetActive(false);
+                closeButton = dialogueParent.transform.GetChild(3).gameObject;
+                closeButton.GetComponent<Button>().onClick.AddListener(HideDialogue);
+                advanceButton = dialogueParent.transform.GetChild(4).gameObject;
+                advanceButton.GetComponent<Button>().onClick.AddListener(OnAdvanceClicked);
 
-            if (PlayerController.Instance != null)
-                PlayerController.Instance.LockMovement(true);
+                choiceButtonImages[0] = responseButtonContainer.GetChild(0).GetComponent<Image>();
+                Material globalMat = choiceButtonImages[0].material;
+                globalMat.SetFloat("_GlitchInterval", glitchInterval);
+                globalMat.SetFloat("_DispProbability", dispProbability);
+                globalMat.SetFloat("_DispIntensity", dispIntensity);
+                globalMat.SetFloat("_ColorProbability", colorProbability);
+                globalMat.SetFloat("_ColorIntensity", colorIntensity);
+                for (int i = 0; i < 4; i++)
+                {
+                    choiceButtonImages[i] = responseButtonContainer.GetChild(i).GetComponent<Image>();
+                    choiceButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
+                    choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
+                    choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
+                }
 
-            Debug.Log($"[DIALOGUE] Starting sequence '{sequence.sequenceId}'");
+                if (PlayerController.Instance != null)
+                    PlayerController.Instance.LockMovement(true);
 
-            _playCoroutine = StartCoroutine(PlayFromCurrentLine());
+                Debug.Log($"[DIALOGUE] Starting sequence '{sequence.sequenceId}'");
+
+                _lineIndex = 0;
+                _playCoroutine = StartCoroutine(PlayFromCurrentLine());
+                started = true;
+                }
+            else
+                ShowControlsForCurrentLine();
         }
 
         public void HideDialogue()
         {
-            if (!IsDialogueActive) return;
+            if (!IsDialogueActive || _isTypewriting || _isResponding) return;
 
             StopAllCoroutines();
             _playCoroutine      = null;
@@ -128,14 +208,25 @@ namespace SUNSET16.UI
             IsDialogueActive    = false;
             _isTypewriting      = false;
             _waitingForAdvance  = false;
+            //started             = false;
+            //messageNum          = 0;
+            /*foreach (var msg in messages) if (msg != null) Destroy(msg);
+                messages.Clear();*/
 
-            dialoguePanel?.SetActive(false);
+            //dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();
 
             if (PlayerController.Instance != null)
                 PlayerController.Instance.LockMovement(false);
 
             Debug.Log("[DIALOGUE] Closed by player");
+
+            // Trigger the fade-out and canvas cleanup in ComputerInteraction
+            ComputerInteraction computer = FindObjectOfType<ComputerInteraction>();
+            if (computer != null)
+                computer.CloseOverlay();
+            else
+                Debug.LogWarning("[DIALOGUE] ComputerInteraction not found — overlay may not close");
         }
 
         // ─── Button Callbacks (wired via Inspector OnClick) ───────────────────────
@@ -149,7 +240,7 @@ namespace SUNSET16.UI
                 //typewriter still running - skip to end of this line immediately
                 if (_typewriterCoroutine != null) StopCoroutine(_typewriterCoroutine);
                 _isTypewriting = false;
-                if (_lines != null && _lineIndex < _lines.Length)
+                if (_lines != null && _lineIndex < _lines.Count)
                     dialogueBodyText.text = _lines[_lineIndex].text;
 
                 //show whatever controls belong on this line (choices or continue button)
@@ -160,8 +251,11 @@ namespace SUNSET16.UI
             if (_waitingForAdvance)
             {
                 _waitingForAdvance = false;
-                _lineIndex++;
-                if (_lineIndex < _lines.Length)
+                if (_lines[_lineIndex].advanceToLine > 0)
+                    _lineIndex = _lines[_lineIndex].advanceToLine;
+                else if (_lines[_lineIndex].advanceToLine != -1)
+                    _lineIndex++;
+                if (_lineIndex < _lines.Count)
                     _playCoroutine = StartCoroutine(PlayFromCurrentLine());
                 else
                     FinishDialogue();
@@ -170,61 +264,116 @@ namespace SUNSET16.UI
 
         public void OnChoiceSelected(int choiceIndex)
         {
+            Debug.Log("Choice clicked! " + choiceIndex);
             if (!IsDialogueActive || _lines == null) return;
-            if (_lineIndex >= _lines.Length)         return;
+            if (_lineIndex >= _lines.Count)         return;
+            Debug.Log("First checkpoint");
 
-            DialogueLine currentLine = _lines[_lineIndex];
-            if (currentLine.choices == null || choiceIndex >= currentLine.choices.Length) return;
+            RuntimeLine currentLine = _lines[_lineIndex];
+            if (currentLine.choices == null || choiceIndex >= currentLine.choices.Count) return;
+            Debug.Log("Second checkpoint");
 
-            DialogueChoice choice = currentLine.choices[choiceIndex];
+            RuntimeChoice choice = currentLine.choices[choiceIndex];
             Debug.Log($"[DIALOGUE] Choice selected: '{choice.choiceText}' → line {choice.nextLineIndex}");
 
-            HideAllChoiceButtons();
-
-            //nextLineIndex < 0 is the convention for "this choice ends the conversation"
-            if (choice.nextLineIndex < 0)
+            for (int i = 0; i < 4; i++)
             {
-                FinishDialogue();
-                return;
+                choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
+                choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
             }
-
-            _lineIndex = choice.nextLineIndex;
-            if (_lineIndex < _lines.Length)
-                _playCoroutine = StartCoroutine(PlayFromCurrentLine());
-            else
-                FinishDialogue();
+            _messageCoroutine = StartCoroutine(SendMessage(choiceIndex, currentLine, choice));
+            HideAllChoiceButtons();
         }
 
         // ─── Internal Playback ────────────────────────────────────────────────────
 
         private IEnumerator PlayFromCurrentLine()
         {
-            if (_lines == null || _lineIndex >= _lines.Length)
+            if (_lines == null || _lineIndex >= _lines.Count || _lineIndex == -1)
             {
                 FinishDialogue();
                 yield break;
             }
 
-            DialogueLine line = _lines[_lineIndex];
+            RuntimeLine line = _lines[_lineIndex];
 
-            if (speakerNameText != null)
-                speakerNameText.text = line.speakerName ?? "";
-
-            //only enable portrait if the line actually has one assigned
-            if (speakerPortrait != null)
+            if (!line.repeated && line.text != "")
             {
-                speakerPortrait.sprite  = line.portrait;
-                speakerPortrait.enabled = line.portrait != null;
+                if (line.sendDelay)
+                {
+                    AlbertDelay.SetActive(true);
+                    dialogueBodyText = AlbertDelay.GetComponentInChildren<TextMeshProUGUI>();
+                    typewriterCharDelay = AlbertDelayAmt;
+                    //typewriterCharDelay = 1f;
+                    for(int i = 0; i <= line.delayRepeats; i++)
+                    {
+                        _typewriterCoroutine = StartCoroutine(TypewriterEffect("..."));
+                        yield return _typewriterCoroutine;
+                        _typewriterCoroutine = null;
+                    }
+
+                    AlbertDelay.SetActive(false);
+                    typewriterCharDelay = 0.03f;
+                }
+
+                line.repeated = true;
+
+                GameObject message;
+                
+                int messageY;
+                if (messageNum < 5)
+                {
+                    messageY = albertY - (messageNum * offset);
+                }
+                else
+                {
+                    messageY = albertY - (4 * offset);
+                    Debug.Log("Shifting A");
+                    foreach (GameObject mes in messages)
+                    {
+                        RectTransform rt = mes.GetComponent<RectTransform>();
+                        rt.anchoredPosition += new Vector2(0, offset);
+                        if (rt.anchoredPosition.y > albertY)
+                        {
+                            Destroy(mes.gameObject);
+                        }
+                    }
+                    StartCoroutine(RemoveCells());
+                }
+
+                Vector3 messagePos = new Vector3(albertX, messageY, 0);
+
+                message = Instantiate(AlbertMessage, dialogueParent.transform);
+                messages.Add(message);
+                message.transform.localPosition = messagePos;
+                dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
+                audioSource.PlayOneShot(msgGet);
+
+                messageNum++;
+
+                if (speakerNameText != null)
+                    speakerNameText.text = line.speakerName ?? "";
+
+                //only enable portrait if the line actually has one assigned
+                if (speakerPortrait != null)
+                {
+                    speakerPortrait.sprite  = line.portrait;
+                    speakerPortrait.enabled = line.portrait != null;
+                }
+
+                if (line.advanceToLine == -1)
+                    _isResponding = false;
+
+                //hide controls while the typewriter is doing its thing
+                if (advanceButton != null) advanceButton.SetActive(false);
+                HideAllChoiceButtons();
+
+                //run the typewriter, then wait for it to fully finish before showing controls
+                /*_typewriterCoroutine = StartCoroutine(TypewriterEffect(line.text));
+                yield return _typewriterCoroutine;
+                _typewriterCoroutine = null;*/
+                dialogueBodyText.text = line.text;
             }
-
-            //hide controls while the typewriter is doing its thing
-            if (advanceButton != null) advanceButton.SetActive(false);
-            HideAllChoiceButtons();
-
-            //run the typewriter, then wait for it to fully finish before showing controls
-            _typewriterCoroutine = StartCoroutine(TypewriterEffect(line.text));
-            yield return _typewriterCoroutine;
-            _typewriterCoroutine = null;
 
             ShowControlsForCurrentLine();
 
@@ -238,8 +387,11 @@ namespace SUNSET16.UI
             {
                 //auto-advance after a delay - no player input needed
                 yield return new WaitForSeconds(line.autoAdvanceDelay);
-                _lineIndex++;
-                if (_lineIndex < _lines.Length)
+                if (line.advanceToLine > 0)
+                    _lineIndex = line.advanceToLine;
+                else
+                    _lineIndex++;
+                if (_lineIndex < _lines.Count)
                     _playCoroutine = StartCoroutine(PlayFromCurrentLine());
                 else
                     FinishDialogue();
@@ -251,11 +403,90 @@ namespace SUNSET16.UI
             }
         }
 
+        private IEnumerator SendMessage(int choiceIndex, RuntimeLine currentLine, RuntimeChoice choice)
+        {
+            GameObject message;
+            
+            int messageY;
+            if (messageNum < 5)
+            {
+                messageY = playerY - ((messageNum-1) * offset);
+            }
+            else
+            {
+                messageY = playerY - (3 * offset);
+                Debug.Log("Shifting P");
+                foreach (GameObject mes in messages)
+                {
+                    RectTransform rt = mes.GetComponent<RectTransform>();
+                    rt.anchoredPosition += new Vector2(0, offset);
+                    if (rt.anchoredPosition.y > albertY)
+                    {
+                        Destroy(mes.gameObject);
+                    }
+                }
+                StartCoroutine(RemoveCells());
+            }
+
+            Vector3 messagePos = new Vector3(playerX, messageY, 0);
+
+            message = Instantiate(PlayerMessage, dialogueParent.transform);
+            messages.Add(message);
+            dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
+            message.GetComponentInChildren<TextMeshProUGUI>().text = choice.choiceText;
+
+            _typewriterCoroutine = StartCoroutine(TypewriterEffect(choice.choiceText));
+            yield return _typewriterCoroutine;
+            _typewriterCoroutine = null;
+
+            audioSource.PlayOneShot(msgSend);
+            RectTransform mrt = message.GetComponent<RectTransform>();
+            _isResponding = true;
+            while (mrt.anchoredPosition.y < messageY)
+            {
+                yield return new WaitForSeconds(0.01f);
+                mrt.anchoredPosition += new Vector2(0, 10);
+            }
+
+            Transform box = message.transform.GetChild(1);
+            Image img = box.GetComponent<Image>();
+            img.sprite = playerMessagebox;
+            Transform pfp = message.transform.GetChild(0);
+            pfp.gameObject.SetActive(true);
+            message.transform.localPosition = messagePos;
+
+            messageNum++;
+
+            if (currentLine.repeat)
+                currentLine.choices.Remove(currentLine.choices[choiceIndex]);
+
+            //yield return new WaitForSeconds(playerDelay);
+
+            //nextLineIndex < 0 is the convention for "this choice ends the conversation"
+            if (choice.nextLineIndex < 0)
+            {
+                FinishDialogue();
+                yield break;
+            }
+
+            _lineIndex = choice.nextLineIndex;
+            if (_lineIndex < _lines.Count)
+                _playCoroutine = StartCoroutine(PlayFromCurrentLine());
+            else
+                FinishDialogue();
+        }
+
         private IEnumerator TypewriterEffect(string fullText)
         {
             _isTypewriting    = true;
             dialogueBodyText.text = "";
 
+            if (fullText != "...")
+            {
+                audioSource.clip = keyboard;
+                audioSource.Play();
+            }
+            
             //append one character at a time with a small delay between each
             foreach (char c in fullText)
             {
@@ -263,37 +494,52 @@ namespace SUNSET16.UI
                 yield return new WaitForSeconds(typewriterCharDelay);
             }
 
+            audioSource.Stop();
             _isTypewriting = false;
+        }
+
+        public IEnumerator RemoveCells()
+        {
+            yield return 0;
+
+            messages.RemoveAll(item => item == null);
         }
 
         private void ShowControlsForCurrentLine()
         {
-            if (_lines == null || _lineIndex >= _lines.Length) return;
+            if (_lines == null || _lineIndex >= _lines.Count) return;
 
-            DialogueLine line = _lines[_lineIndex];
+            RuntimeLine line = _lines[_lineIndex];
 
             if (line.HasChoices)
             {
+                _isResponding = false;
                 //choices and continue are mutually exclusive - never show both
                 if (advanceButton != null) advanceButton.SetActive(false);
                 ShowChoiceButtons(line.choices);
             }
-            else
+            else if (line.autoAdvanceDelay <= 0)
             {
-                if (advanceButton != null) advanceButton.SetActive(true);
+                //if (advanceButton != null) advanceButton.SetActive(true);
             }
         }
 
-        private void ShowChoiceButtons(DialogueChoice[] choices)
+        private void ShowChoiceButtons(List<RuntimeChoice> choices)
         {
             for (int i = 0; i < choiceButtonRoots.Length; i++)
             {
-                bool show = i < choices.Length;
+                bool show = i < choices.Count;
                 if (choiceButtonRoots[i] != null)
                     choiceButtonRoots[i].SetActive(show);
 
                 if (show && choiceButtonTexts[i] != null)
                     choiceButtonTexts[i].text = choices[i].choiceText;
+
+                if (show && choices[i].offPillChoice)
+                {
+                    choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 1f);
+                    choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 1f);
+                }
             }
         }
 
@@ -308,15 +554,31 @@ namespace SUNSET16.UI
             IsDialogueActive   = false;
             _isTypewriting     = false;
             _waitingForAdvance = false;
+            _isResponding      = false;
+            started            = false;
+            //messageNum         = 0;
+            foreach (var msg in messages) if (msg != null) Destroy(msg);
+                messages.Clear(); 
 
-            dialoguePanel?.SetActive(false);
+            //dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();
 
             if (PlayerController.Instance != null)
                 PlayerController.Instance.LockMovement(false);
 
             Debug.Log("[DIALOGUE] Sequence complete");
+
+            // Trigger the fade-out and canvas cleanup in ComputerInteraction
+            ComputerInteraction computer = FindObjectOfType<ComputerInteraction>();
+            if (computer != null)
+                computer.CloseOverlay();
+            else
+                Debug.LogWarning("[DIALOGUE] ComputerInteraction not found — overlay may not close");
+        }
+
+        public void menuSound()
+        {
+            audioSource.PlayOneShot(menuClick);
         }
     }
 }
-
