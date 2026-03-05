@@ -89,6 +89,10 @@ namespace SUNSET16.Core
 
         void OnTriggerEnter2D(Collider2D other)
         {
+            //unity calls physics callbacks even on disabled MonoBehaviours
+            //guard here so disabling the component fully suppresses interaction
+            if (!enabled) return;
+
             if (other.CompareTag("Player")) //only react to the player, not random colliders
             {
                 playerInRange = true;
@@ -99,6 +103,8 @@ namespace SUNSET16.Core
 
         void OnTriggerExit2D(Collider2D other)
         {
+            if (!enabled) return;
+
             if (other.CompareTag("Player"))
             {
                 playerInRange = false;
