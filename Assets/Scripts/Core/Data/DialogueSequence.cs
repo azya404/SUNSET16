@@ -5,6 +5,7 @@ one of these per conversation - create them in the editor under SUNSET16/Dialogu
 ComputerInteraction picks which one to use based on the current day (daySequences[0] = day 1 etc)
 sequenceId is there for identification if we need to look one up by name later
 */
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SUNSET16.Core
@@ -16,6 +17,6 @@ namespace SUNSET16.Core
         public string sequenceId;
 
         [Tooltip("All dialogue lines in this tree, played in order unless a choice branches the index.")]
-        public DialogueLine[] lines;
+        public List<DialogueLine> lines;
     }
 }

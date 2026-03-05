@@ -163,7 +163,7 @@ namespace SUNSET16.Interaction
             // if no SOs assigned yet, log warning and leave overlay open - expected during development
             DialogueSequence sequence = GetSequenceForToday();
             if (sequence != null && DialogueUIManager.Instance != null)
-                DialogueUIManager.Instance.ShowDialogue(sequence);
+                DialogueUIManager.Instance.ShowDialogue(CreateRuntimeSequence(sequence));
             else
                 Debug.LogWarning("[COMPUTER] No dialogue sequence for today - overlay open, no dialogue started (expected if SOs not yet assigned)");
         }
@@ -241,10 +241,62 @@ namespace SUNSET16.Interaction
             // fallback to first entry if DayManager isnt up yet
             if (DayManager.Instance == null) return daySequences[0];
 
+            int dayOffset = (daySequences.Length)/4;
             int index = DayManager.Instance.CurrentDay - 1; // day 1 -> index 0
+            bool pill = PillStateManager.Instance.HasTakenPillToday();
+            DayPhase phase = DayManager.Instance.CurrentPhase;
+
+            if (!pill)
+                index += dayOffset;
+            if (phase == DayPhase.Night)
+                index += 2*dayOffset;
+                
             if (index < 0 || index >= daySequences.Length) return null;
 
             return daySequences[index];
+        }
+
+        private RuntimeSequence CreateRuntimeSequence(DialogueSequence so)
+        {
+            var runtime = new RuntimeSequence
+            {
+                sequenceId = so.sequenceId,
+                lines      = new System.Collections.Generic.List<RuntimeLine>()
+            };
+
+            foreach (DialogueLine dl in so.lines)
+            {
+                var rl = new RuntimeLine
+                {
+                    speakerName      = dl.speakerName,
+                    portrait         = dl.portrait,
+                    text             = dl.text,
+                    sendDelay        = dl.sendDelay,
+                    delayRepeats     = dl.delayRepeats,
+                    autoAdvanceDelay = dl.autoAdvanceDelay,
+                    advanceToLine    = dl.advanceToLine,
+                    repeat           = dl.repeat,
+                    repeated         = false
+                };
+
+                if (dl.choices != null && dl.choices.Count > 0)
+                {
+                    rl.choices = new System.Collections.Generic.List<RuntimeChoice>();
+                    foreach (DialogueChoice dc in dl.choices)
+                    {
+                        rl.choices.Add(new RuntimeChoice
+                        {
+                            choiceText    = dc.choiceText,
+                            nextLineIndex = dc.nextLineIndex,
+                            offPillChoice = dc.offPillChoice
+                        });
+                    }
+                }
+
+                runtime.lines.Add(rl);
+            }
+
+            return runtime;
         }
     }
 }
