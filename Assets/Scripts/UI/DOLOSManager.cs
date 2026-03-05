@@ -67,6 +67,16 @@ namespace SUNSET16.UI
 
         public void TriggerAnnouncement(DOLOSAnnouncement announcement)
         {
+            Canvas[] canvases = FindObjectsOfType<Canvas>(true);
+            foreach (Canvas canvas in canvases)
+            {
+                if (canvas.CompareTag("DOLOSAnnouncement"))
+                {
+                    announcementPanel = canvas.gameObject;
+                    break;
+                }
+            }
+            announcementText = announcementPanel.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
             if (announcement == null)
             {
                 Debug.LogWarning("[DOLOS] Cannot trigger null announcement.");

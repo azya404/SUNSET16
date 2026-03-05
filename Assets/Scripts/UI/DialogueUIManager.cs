@@ -166,8 +166,10 @@ namespace SUNSET16.UI
                 AlbertDelay.SetActive(false);
                 closeButton = dialogueParent.transform.GetChild(3).gameObject;
                 closeButton.GetComponent<Button>().onClick.AddListener(HideDialogue);
+                closeButton.GetComponent<Button>().onClick.AddListener(menuSound);
                 advanceButton = dialogueParent.transform.GetChild(4).gameObject;
                 advanceButton.GetComponent<Button>().onClick.AddListener(OnAdvanceClicked);
+                advanceButton.GetComponent<Button>().onClick.AddListener(menuSound);
 
                 choiceButtonImages[0] = responseButtonContainer.GetChild(0).GetComponent<Image>();
                 Material globalMat = choiceButtonImages[0].material;

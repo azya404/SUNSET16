@@ -1135,7 +1135,7 @@ MonoBehaviour:
   announcementPanel: {fileID: 0}
   announcementText: {fileID: 0}
   speakerIcon: {fileID: 0}
-  announcementAudioSource: {fileID: 0}
+  announcementAudioSource: {fileID: 1549546079}
 --- !u!114 &1549546081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1783,6 +1783,7 @@ MonoBehaviour:
   crossfadeDuration: 1
   ambientFadeOutDuration: 0.8
   ambientFadeInDuration: 1.5
+  announcement: {fileID: 11400000, guid: 14d18e07a52ead042870aa5957bec9c0, type: 2}
 --- !u!4 &1731907957
 Transform:
   m_ObjectHideFlags: 0

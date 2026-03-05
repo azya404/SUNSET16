@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: WakeUp
+  m_EditorClassIdentifier: 
+  announcementId: 
+  text: Rise and shine, Technician. Current ship time is 0700 hours. Circadian cycle
+    complete. Vital readings are stable and within nominal parameters. All systems
+    are functional. Please proceed to your Aegis Collar Supplement Dispenser for
+    your mandatory daily wellness protocol at your earliest convenience.
+  audioClip: {fileID: 8300000, guid: 1cc667bcea5cdaf459db50b945acf8fa, type: 3}
+  displayDuration: 24

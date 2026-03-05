@@ -31,6 +31,7 @@ TODO: per-room ambient clip dictionary instead of single bedroomAmbientClip
 using System;
 using UnityEngine;
 using System.Collections;
+using SUNSET16.UI;
 
 namespace SUNSET16.Core
 {
@@ -72,6 +73,9 @@ namespace SUNSET16.Core
         [Header("Ambient Fade Settings")]
         [SerializeField] private float ambientFadeOutDuration = 0.8f; //bedroom fade-out before overlay pauses it
         [SerializeField] private float ambientFadeInDuration  = 1.5f; //bedroom fade-in when overlay closes
+
+        [Header("Temp")]
+        [SerializeField] private DOLOSAnnouncement announcement;
 
         //local volume caches - updated when SettingsManager fires events
         private float _masterVolume = 1.0f;
@@ -299,6 +303,10 @@ namespace SUNSET16.Core
                 PlayAmbient(bedroomAmbientClip);
                 Debug.Log("[AUDIOMANAGER] Bedroom ambient started");
             }
+
+            // TEMP - REMOVE LATER
+            if (roomName.Contains("Bedroom"))
+                DOLOSManager.Instance.TriggerAnnouncement(announcement);
         }
 
         //starts an ambient loop at full volume

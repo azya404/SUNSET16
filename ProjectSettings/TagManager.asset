@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MessagingUI
   - DialoguePanel
+  - DOLOSAnnouncement
   layers:
   - Default
   - TransparentFX
