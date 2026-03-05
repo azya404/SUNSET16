@@ -24,7 +24,12 @@ lastFacingX tracks the last horizontal direction so the sprite doesnt
 snap back to un-flipped when moving purely up or down
 
 TODO: sprint (hold Shift)
-TODO: footstep sfx thru AudioManager
+
+footstep SFX is handled via Animation Events directly on the walk clips (not AudioManager)
+- each walk clip fires PlayFootstep() on the frames where a foot lands
+- PlayFootstep() uses a dedicated AudioSource (footstepSource) with PlayOneShot
+- separate source from ambient/sfx so footstep volume is tunable independently
+- Animation Events are frame-accurate so the click always lands on the step, not in Update
 */
 using UnityEngine;
 
@@ -48,6 +53,11 @@ namespace SUNSET16.Core
         [SerializeField] private SpriteRenderer spriteRenderer;
         private bool hasAnimator = false;
         private float lastFacingX = 1f; //default facing right
+
+        [Header("Footstep Audio (Optional)")]
+        [SerializeField] private AudioSource footstepSource;
+        [SerializeField] private AudioClip   footstepClip;
+        [SerializeField] [Range(0f, 1f)] private float footstepVolume = 0.6f;
 
         void Awake()
         {
@@ -166,6 +176,15 @@ namespace SUNSET16.Core
             transform.position = position;
             rb.velocity = Vector2.zero; //stop any movement when teleporting
             Debug.Log($"[PLAYERCONTROLLER] Position set to {position}");
+        }
+
+        // called by Animation Events on each walk clip at the frame a foot lands
+        // method name must match exactly what is typed in the Animation Event inspector
+        // footstepSource/footstepClip are optional - silently skipped if not assigned
+        public void PlayFootstep()
+        {
+            if (footstepSource != null && footstepClip != null)
+                footstepSource.PlayOneShot(footstepClip, footstepVolume);
         }
     }
 }
