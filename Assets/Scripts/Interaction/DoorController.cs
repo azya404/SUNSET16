@@ -41,6 +41,14 @@ namespace SUNSET16.Core
         [Header("Bedroom Door Settings")]
         [SerializeField] private bool isBedroomDoor = false;
 
+        [Header("Task Room")]
+        [Tooltip("Block exit until all tasks are complete (use on BoilerRoom hallway door).")]
+        [SerializeField] private bool requiresAllTasksComplete = false;
+
+        [Header("Bedroom Door Gating")]
+        [Tooltip("Enable morning/night dialogue gates on the bedroom exit door.")]
+        [SerializeField] private bool isMorningGated = false;
+
         [Header("Visual")]
         [SerializeField] private Light2D doorLight;
         [SerializeField] private SpriteRenderer doorSprite;
@@ -96,6 +104,58 @@ namespace SUNSET16.Core
             {
                 ShowSleepyLockedMessage();
                 return;
+            }
+
+            // task room gate: block exit until all tasks are complete
+            if (requiresAllTasksComplete && TaskManager.Instance != null && !TaskManager.Instance.AreAllTasksCompleted)
+            {
+                ShowLockedMessage("Complete your tasks first.");
+                return;
+            }
+
+            // bedroom exit gates: pill check, morning dialogue, night dialogue
+            if (isMorningGated && DayManager.Instance != null)
+            {
+                // gate 1 (morning): pill choice not made
+                if (DayManager.Instance.CurrentPhase == DayPhase.Morning &&
+                    PillStateManager.Instance != null &&
+                    !PillStateManager.Instance.HasTakenPillToday())
+                {
+                    ShowLockedMessage("Maybe I should check the mirror first...");
+                    return;
+                }
+                // gate 2 (morning): morning computer session not done
+                if (DayManager.Instance.CurrentPhase == DayPhase.Morning &&
+                    DialogueUIManager.Instance != null &&
+                    !DialogueUIManager.Instance.HasCompletedTodaySequence)
+                {
+                    ShowLockedMessage("I should check in at the computer first.");
+                    return;
+                }
+                // gate 3 (night): night computer session not done
+                // VERTICAL SLICE NOTE: for the Day 3 VS demo this gate acts as the "sleep" gate.
+                // Once night dialogue is done and this passes, pressing E on the bedroom door is
+                // effectively the end of the demo — the door transitions to HallwayScene, which
+                // is a placeholder. No further day cycling is shown.
+                //
+                // FUTURE IMPLEMENTATION — when adding multi-day progression, this gate and the
+                // door it sits on need to be rethought:
+                //   - "Sleep" should fade to black → DayManager.AdvanceDay() → load BedroomScene
+                //     fresh as Morning (not transition to HallwayScene mid-night)
+                //   - Consider replacing the isMorningGated door transition with a dedicated
+                //     SleepInteraction.cs object in BedroomScene (like MirrorInteraction) that
+                //     calls DayManager.AdvanceDay() and triggers a morning cutscene / DayManager reset
+                //   - HasCompletedTodayNightSequence resets on OnPhaseChanged — correct for cycling,
+                //     but verify DialogueUIManager.Start() re-subscribes after scene reload if needed
+                //   - Off-pill path: HiddenRoom puzzle completion triggers IsNightRestrictionActive
+                //     for non-bedroom doors — confirm this still chains correctly into multi-day
+                if (DayManager.Instance.CurrentPhase == DayPhase.Night &&
+                    DialogueUIManager.Instance != null &&
+                    !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                {
+                    ShowLockedMessage("I should finish up before leaving.");
+                    return;
+                }
             }
 
             TransitionToRoom(); //all checks passed, LSFFGGGG

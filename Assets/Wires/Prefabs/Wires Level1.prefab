@@ -130,7 +130,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &3743294986552796662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +217,7 @@ MonoBehaviour:
   green_done: 0
   blue_done: 0
   leverBusy: 0
+  taskInteraction: {fileID: 0}
 --- !u!82 &7336950256422787451
 AudioSource:
   m_ObjectHideFlags: 0
