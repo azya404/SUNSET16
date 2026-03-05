@@ -253,7 +253,6 @@ namespace SUNSET16.UI
                 choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
                 choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
             }
-            audioSource.PlayOneShot(menuClick);
             _messageCoroutine = StartCoroutine(SendMessage(choiceIndex, currentLine, choice));
             HideAllChoiceButtons();
         }
@@ -493,7 +492,7 @@ namespace SUNSET16.UI
             }
             else if (line.autoAdvanceDelay <= 0)
             {
-                if (advanceButton != null) advanceButton.SetActive(true);
+                //if (advanceButton != null) advanceButton.SetActive(true);
             }
         }
 
