@@ -300,6 +300,8 @@ MonoBehaviour:
   isHiddenRoomDoor: 0
   hiddenRoomID: 
   isBedroomDoor: 0
+  requiresAllTasksComplete: 0
+  isMorningGated: 1
   doorLight: {fileID: 0}
   doorSprite: {fileID: 0}
 --- !u!114 &29539509

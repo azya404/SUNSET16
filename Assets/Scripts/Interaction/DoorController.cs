@@ -39,6 +39,7 @@ namespace SUNSET16.Core
         [SerializeField] private string hiddenRoomID;
 
         [Header("Bedroom Door Settings")]
+        [Tooltip("Bypasses the on-pill night restriction. Set on ANY door that should remain passable at night — not just literal bedroom doors. E.g. BoilerRoom→Hallway and Hallway→Bedroom both need this set so the player can always find their way back.")]
         [SerializeField] private bool isBedroomDoor = false;
 
         [Header("Task Room")]
