@@ -31,7 +31,7 @@ using System.Collections;
 using SUNSET16.Core;
 using SUNSET16.Interaction;
 using System.Collections.Generic;
-using UnityEditor.Advertisements;
+//using UnityEditor.Advertisements;
 
 namespace SUNSET16.UI
 {
@@ -106,6 +106,12 @@ namespace SUNSET16.UI
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
 
+        // set to true when the morning computer session closes (either finished or player exited)
+        // DoorController reads this for the bedroom exit gate
+        public bool HasCompletedTodaySequence { get; private set; }
+        // same for the night session
+        public bool HasCompletedTodayNightSequence { get; private set; }
+
         // ─── Lifecycle ────────────────────────────────────────────────────────────
 
         protected override void Awake()
@@ -114,6 +120,25 @@ namespace SUNSET16.UI
             //dialoguePanel = GameObject.FindGameObjectWithTag("DialoguePanel");
             //if (dialoguePanel != null) dialoguePanel.SetActive(false);
             HideAllChoiceButtons();
+        }
+
+        private void Start()
+        {
+            if (DayManager.Instance != null)
+                DayManager.Instance.OnPhaseChanged += OnPhaseChanged;
+        }
+
+        private void OnDestroy()
+        {
+            if (DayManager.Instance != null)
+                DayManager.Instance.OnPhaseChanged -= OnPhaseChanged;
+        }
+
+        private void OnPhaseChanged(DayPhase phase)
+        {
+            // reset both flags at the start of each new phase so they reflect the current session
+            HasCompletedTodaySequence      = false;
+            HasCompletedTodayNightSequence = false;
         }
 
         private void Update()
@@ -220,6 +245,15 @@ namespace SUNSET16.UI
                 PlayerController.Instance.LockMovement(false);
 
             Debug.Log("[DIALOGUE] Closed by player");
+
+            // mark this phase's session as done so DoorController bedroom gate passes
+            if (DayManager.Instance != null)
+            {
+                if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
+                    HasCompletedTodaySequence = true;
+                else if (DayManager.Instance.CurrentPhase == DayPhase.Night)
+                    HasCompletedTodayNightSequence = true;
+            }
 
             // Trigger the fade-out and canvas cleanup in ComputerInteraction
             ComputerInteraction computer = FindObjectOfType<ComputerInteraction>();
@@ -567,6 +601,15 @@ namespace SUNSET16.UI
                 PlayerController.Instance.LockMovement(false);
 
             Debug.Log("[DIALOGUE] Sequence complete");
+
+            // mark this phase's session as done so DoorController bedroom gate passes
+            if (DayManager.Instance != null)
+            {
+                if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
+                    HasCompletedTodaySequence = true;
+                else if (DayManager.Instance.CurrentPhase == DayPhase.Night)
+                    HasCompletedTodayNightSequence = true;
+            }
 
             // Trigger the fade-out and canvas cleanup in ComputerInteraction
             ComputerInteraction computer = FindObjectOfType<ComputerInteraction>();
