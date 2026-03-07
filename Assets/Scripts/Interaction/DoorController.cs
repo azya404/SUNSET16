@@ -275,6 +275,9 @@ namespace SUNSET16.Core
                 // AudioManager.Instance.PlayDoorOpen();
             }
 
+            if (RoomManager.Instance.GetCurrentRoomName().Contains("Bedroom"))
+                DialogueUIManager.Instance.resetDialogue();
+
             if (RoomManager.Instance != null)
                 RoomManager.Instance.SetNextSpawnPosition(spawnPositionInTargetScene);
 

@@ -26,6 +26,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
+using SUNSET16.UI;
 
 namespace SUNSET16.Core
 {
@@ -128,6 +129,9 @@ namespace SUNSET16.Core
                 PlayerController.Instance.SetPosition(spawnPos);
                 Debug.Log($"[ROOMMANAGER] Player spawned at {spawnPos}");
             }
+
+            if (roomSceneName.Contains("Bedroom"))
+                DOLOSManager.Instance.TriggerAnnouncement();
 
             OnRoomLoaded?.Invoke(roomSceneName);
             yield return StartCoroutine(FadeIn()); //TODO: also does nothing

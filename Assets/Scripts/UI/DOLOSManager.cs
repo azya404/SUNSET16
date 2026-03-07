@@ -25,6 +25,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using SUNSET16.Core;
 
 namespace SUNSET16.UI
@@ -39,12 +40,18 @@ namespace SUNSET16.UI
         [Header("Audio")]
         [SerializeField] private AudioSource announcementAudioSource;
 
+        [Header("Announcements")]
+        [SerializeField] private DOLOSAnnouncement[] announcements;
+
         // ─── State ────────────────────────────────────────────────────────────────
 
         public bool IsAnnouncementActive { get; private set; }
 
         private bool      _settingsQueued = false;
         private Coroutine _announcementCoroutine;
+
+        private Dictionary<string, DOLOSAnnouncement> _announcementsDict = new Dictionary<string, DOLOSAnnouncement>();
+        private DOLOSAnnouncement _currentAnnouncement;
 
         // ─── Events ───────────────────────────────────────────────────────────────
 
@@ -61,13 +68,30 @@ namespace SUNSET16.UI
             base.Awake();
             if (announcementPanel != null)
                 announcementPanel.SetActive(false);
+            
+            Debug.Log("Populating DOLOS dictionary");
+            foreach (DOLOSAnnouncement announcement in announcements)
+            {
+                string id = announcement.announcementId;
+                _announcementsDict[id] = announcement;
+                Debug.Log("Loaded " + id + " into the dictionary");
+            }
+        }
+
+        private void Update()
+        {
+            if (!IsAnnouncementActive) return;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+                StopAnnouncement();
         }
 
         // ─── Public API ───────────────────────────────────────────────────────────
 
-        public void TriggerAnnouncement(DOLOSAnnouncement announcement)
+        public void TriggerAnnouncement()
         {
-            if (announcement == null)
+            DetermineAnnouncement();
+            if (_currentAnnouncement == null)
             {
                 Debug.LogWarning("[DOLOS] Cannot trigger null announcement.");
                 return;
@@ -76,18 +100,18 @@ namespace SUNSET16.UI
             //already running - drop the new one, dont interrupt
             if (IsAnnouncementActive)
             {
-                Debug.Log($"[DOLOS] Already active — dropping '{announcement.announcementId}'");
+                Debug.Log($"[DOLOS] Already active — dropping '{_currentAnnouncement.announcementId}'");
                 return;
             }
 
             //albert takes exclusive attention priority - dont talk over him
             if (DialogueUIManager.Instance != null && DialogueUIManager.Instance.IsDialogueActive)
             {
-                Debug.Log($"[DOLOS] Albert dialogue active — dropping '{announcement.announcementId}'");
+                Debug.Log($"[DOLOS] Albert dialogue active — dropping '{_currentAnnouncement.announcementId}'");
                 return;
             }
 
-            _announcementCoroutine = StartCoroutine(PlayAnnouncement(announcement));
+            _announcementCoroutine = StartCoroutine(PlayAnnouncement(_currentAnnouncement));
         }
 
         public void StopAnnouncement()
@@ -106,6 +130,65 @@ namespace SUNSET16.UI
             //only meaningful if DOLOS is actually speaking right now
             if (IsAnnouncementActive)
                 _settingsQueued = true;
+        }
+
+        public void DetermineAnnouncement()
+        {
+            string roomName = RoomManager.Instance.GetCurrentRoomName();
+            int day = DayManager.Instance.CurrentDay;
+            DayPhase phase = DayManager.Instance.CurrentPhase;
+            bool takenPill = PillStateManager.Instance.HasTakenPillToday();
+            bool hasChatted = DialogueUIManager.Instance.GetFinishedDialogue();
+            bool completedTask = TaskManager.Instance.IsTaskCompleted(day);
+            string id = "";
+
+            // Naming convention for announcementID: dolos_day[#]_[phase]_[event]
+            // Example: dolos_day1_morning_wakeup
+            if (roomName.Contains("Bedroom"))
+            {
+                if (phase == DayPhase.Morning)
+                {
+                    if (takenPill)
+                    {
+                        if (hasChatted)
+                        {
+                            // Play announcement after chatting with Albert
+                        }
+                        else
+                        {
+                            // Play announcement after taking pill
+                        }
+                    }
+                    else
+                    {
+                        // Play morning announcement
+                        id = "dolos_day" + day + "_morning_wakeup";
+                    }
+                }
+                else if (hasChatted)
+                {
+                    // Play night announcement
+                }
+            }
+            else
+            {
+                if (completedTask)
+                {
+                    // Play announcement for completing all tasks
+                }
+                else
+                {
+                    // Play announcement for completing one task
+                }
+            }
+
+            if (id != "")
+                _currentAnnouncement = _announcementsDict[id];
+            else
+            {
+                Debug.Log("[DOLOS] DOLOS Announcement not set");
+                _currentAnnouncement = null;
+            }
         }
 
         // ─── Internal ─────────────────────────────────────────────────────────────

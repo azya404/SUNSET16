@@ -25,8 +25,12 @@ MonoBehaviour:
     choices:
     - choiceText: Sounds good to me.
       nextLineIndex: 1
+      offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: Another day, another wire.
       nextLineIndex: 2
+      offPillChoice: 0
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -61,10 +65,20 @@ MonoBehaviour:
     - choiceText: Any word on when more passengers are supposed to arrive? The ship
         feels empty sometimes.
       nextLineIndex: 4
+      offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: "How\u2019s the nuclear core these days?"
       nextLineIndex: 5
+      offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: Heard anything about that NUSA CEO? After the bankruptcy scandal?
       nextLineIndex: 8
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: I have no more questions.
+      nextLineIndex: 11
+      offPillChoice: 0
+      showOnRepeat: 1
     advanceToLine: 11
     repeat: 1
     repeated: 0
@@ -91,8 +105,12 @@ MonoBehaviour:
     choices:
     - choiceText: Really? How so?
       nextLineIndex: 6
+      offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: "Nothing you can\u2019t handle."
       nextLineIndex: 7
+      offPillChoice: 0
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -138,6 +156,8 @@ MonoBehaviour:
     choices:
     - choiceText: Could the same happen here?
       nextLineIndex: 10
+      offPillChoice: 0
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -150,18 +170,6 @@ MonoBehaviour:
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
-    repeat: 0
-    repeated: 0
-  - speakerName: Albert
-    portrait: {fileID: 0}
-    text: 
-    sendDelay: 0
-    delayRepeats: 0
-    autoAdvanceDelay: 0
-    choices:
-    - choiceText: I have no more questions.
-      nextLineIndex: 12
-    advanceToLine: 0
     repeat: 0
     repeated: 0
   - speakerName: Albert
