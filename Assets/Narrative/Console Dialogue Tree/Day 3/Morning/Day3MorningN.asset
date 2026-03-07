@@ -26,12 +26,15 @@ MonoBehaviour:
     - choiceText: Sounds good to me.
       nextLineIndex: 1
       offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: Another day, another wire.
       nextLineIndex: 2
       offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: A fuse blew last night? What caused it?
-      nextLineIndex: 13
+      nextLineIndex: 12
       offPillChoice: 1
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -67,16 +70,24 @@ MonoBehaviour:
         feels empty sometimes.
       nextLineIndex: 4
       offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: "How\u2019s the nuclear core these days?"
       nextLineIndex: 5
       offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: Heard anything about that NUSA CEO? After the bankruptcy scandal?
       nextLineIndex: 8
       offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: I found something weird in the system yesterday. Old technician
         log. The name was Fiske. Mean anything to you?
       nextLineIndex: 14
       offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: I have no more questions.
+      nextLineIndex: 11
+      offPillChoice: 0
+      showOnRepeat: 1
     advanceToLine: 11
     repeat: 1
     repeated: 0
@@ -104,9 +115,11 @@ MonoBehaviour:
     - choiceText: Really? How so?
       nextLineIndex: 6
       offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: "Nothing you can\u2019t handle."
       nextLineIndex: 7
       offPillChoice: 0
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -153,6 +166,7 @@ MonoBehaviour:
     - choiceText: Could the same happen here?
       nextLineIndex: 10
       offPillChoice: 0
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -165,19 +179,6 @@ MonoBehaviour:
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
-    repeat: 0
-    repeated: 0
-  - speakerName: Albert
-    portrait: {fileID: 0}
-    text: 
-    sendDelay: 0
-    delayRepeats: 0
-    autoAdvanceDelay: 0
-    choices:
-    - choiceText: I have no more questions.
-      nextLineIndex: 12
-      offPillChoice: 0
-    advanceToLine: 0
     repeat: 0
     repeated: 0
   - speakerName: Albert
@@ -210,8 +211,9 @@ MonoBehaviour:
     autoAdvanceDelay: 0
     choices:
     - choiceText: A terminal in C-12, behind a panel.
-      nextLineIndex: 15
+      nextLineIndex: 14
       offPillChoice: 1
+      showOnRepeat: 0
     advanceToLine: 3
     repeat: 0
     repeated: 0
@@ -226,8 +228,9 @@ MonoBehaviour:
     autoAdvanceDelay: 0
     choices:
     - choiceText: "Then\u2026 who was Fiske?"
-      nextLineIndex: 16
+      nextLineIndex: 15
       offPillChoice: 1
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0

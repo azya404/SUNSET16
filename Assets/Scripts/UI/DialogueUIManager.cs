@@ -59,10 +59,10 @@ namespace SUNSET16.UI
         [SerializeField] private GameObject advanceButton;     // "▶ Continue" — visible after typewriter finishes
         [SerializeField] private GameObject closeButton;       // "Close" — always visible (player can exit)
 
-        [Header("Choice Buttons (max 4)")]
-        [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[4];  // Parent GOs per choice
-        [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[4];    // Labels per choice
-        [SerializeField] private Image[]      choiceButtonImages = new Image[4];
+        [Header("Choice Buttons (max 5)")]
+        [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[5];  // Parent GOs per choice
+        [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[5];    // Labels per choice
+        [SerializeField] private Image[]      choiceButtonImages = new Image[5];
         [SerializeField] private float        glitchInterval;
         [SerializeField] private float        dispProbability;
         [SerializeField] private float        dispIntensity;
@@ -99,9 +99,9 @@ namespace SUNSET16.UI
         private Coroutine       _typewriterCoroutine;
         private bool            started = false;
         private bool            _isResponding = false;
-
         private int             messageNum = 0;
         private List<GameObject> messages = new List<GameObject>();
+        private DayPhase        phase;
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -174,14 +174,22 @@ namespace SUNSET16.UI
 
                 IsDialogueActive = true;
                 //dialoguePanel?.SetActive(true);
-        
+
+            if (phase != DayManager.Instance.CurrentPhase)
+            {
+                started = false;
+                messageNum = 0;
+            }
+
             if (!started)
             {
+                phase = DayManager.Instance.CurrentPhase;
                 dialogueParent = GameObject.FindGameObjectWithTag("MessagingUI");
                 responseButtonContainer = dialogueParent.transform.GetChild(1);
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     int index = i;
+                    Debug.Log("Index: " + i);
                     choiceButtonRoots[i] = responseButtonContainer.transform.GetChild(i).gameObject;
                     choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(() => OnChoiceSelected(index));
                     choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(menuSound);
@@ -201,7 +209,7 @@ namespace SUNSET16.UI
                 globalMat.SetFloat("_DispIntensity", dispIntensity);
                 globalMat.SetFloat("_ColorProbability", colorProbability);
                 globalMat.SetFloat("_ColorIntensity", colorIntensity);
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     choiceButtonImages[i] = responseButtonContainer.GetChild(i).GetComponent<Image>();
                     choiceButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
@@ -217,7 +225,7 @@ namespace SUNSET16.UI
                 _lineIndex = 0;
                 _playCoroutine = StartCoroutine(PlayFromCurrentLine());
                 started = true;
-                }
+            }
             else
                 ShowControlsForCurrentLine();
         }
@@ -236,7 +244,7 @@ namespace SUNSET16.UI
             //started             = false;
             //messageNum          = 0;
             /*foreach (var msg in messages) if (msg != null) Destroy(msg);
-                messages.Clear();*/
+            messages.Clear();*/
 
             //dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();
@@ -310,7 +318,7 @@ namespace SUNSET16.UI
             RuntimeChoice choice = currentLine.choices[choiceIndex];
             Debug.Log($"[DIALOGUE] Choice selected: '{choice.choiceText}' → line {choice.nextLineIndex}");
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
                 choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
@@ -350,8 +358,6 @@ namespace SUNSET16.UI
                     typewriterCharDelay = 0.03f;
                 }
 
-                line.repeated = true;
-
                 GameObject message;
                 
                 int messageY;
@@ -361,6 +367,7 @@ namespace SUNSET16.UI
                 }
                 else
                 {
+                    Debug.Log("Amount of objects in message (should be 5): " + messages.Count);
                     messageY = albertY - (4 * offset);
                     Debug.Log("Shifting A");
                     foreach (GameObject mes in messages)
@@ -555,6 +562,7 @@ namespace SUNSET16.UI
             else if (line.autoAdvanceDelay <= 0)
             {
                 //if (advanceButton != null) advanceButton.SetActive(true);
+                line.repeated = true;
             }
         }
 
@@ -563,6 +571,12 @@ namespace SUNSET16.UI
             for (int i = 0; i < choiceButtonRoots.Length; i++)
             {
                 bool show = i < choices.Count;
+
+                if (show && i == 4)
+                    Debug.Log("Show of repeat: " + choices[i].showOnRepeat + ", Repeated: " + _lines[_lineIndex].repeated);
+                if ((choiceButtonRoots[i] != null) && show && choices[i].showOnRepeat && (!_lines[_lineIndex].repeated))
+                    show = false;
+
                 if (choiceButtonRoots[i] != null)
                     choiceButtonRoots[i].SetActive(show);
 
@@ -575,6 +589,7 @@ namespace SUNSET16.UI
                     choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 1f);
                 }
             }
+            _lines[_lineIndex].repeated = true;
         }
 
         private void HideAllChoiceButtons()
@@ -590,9 +605,8 @@ namespace SUNSET16.UI
             _waitingForAdvance = false;
             _isResponding      = false;
             started            = false;
-            //messageNum         = 0;
             foreach (var msg in messages) if (msg != null) Destroy(msg);
-                messages.Clear(); 
+            messages.Clear(); 
 
             //dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();

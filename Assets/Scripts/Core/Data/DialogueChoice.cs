@@ -18,5 +18,7 @@ namespace SUNSET16.Core
         public int nextLineIndex = -1;
 
         public bool offPillChoice;
+
+        public bool showOnRepeat;
     }
 }
