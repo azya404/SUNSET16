@@ -97,11 +97,12 @@ namespace SUNSET16.UI
         private Coroutine       _playCoroutine;
         private Coroutine       _messageCoroutine;
         private Coroutine       _typewriterCoroutine;
-        private bool            started = false;
+        private bool            _started = false;
+        private bool            _finished = false;
         private bool            _isResponding = false;
-        private int             messageNum = 0;
-        private List<GameObject> messages = new List<GameObject>();
-        private DayPhase        phase;
+        private int             _messageNum = 0;
+        private List<GameObject> _messages = new List<GameObject>();
+        private DayPhase        _phase;
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -175,15 +176,15 @@ namespace SUNSET16.UI
                 IsDialogueActive = true;
                 //dialoguePanel?.SetActive(true);
 
-            if (phase != DayManager.Instance.CurrentPhase)
+            if (_phase != DayManager.Instance.CurrentPhase)
             {
-                started = false;
-                messageNum = 0;
+                _started = false;
+                _messageNum = 0;
             }
 
-            if (!started)
+            if (!_started)
             {
-                phase = DayManager.Instance.CurrentPhase;
+                _phase = DayManager.Instance.CurrentPhase;
                 dialogueParent = GameObject.FindGameObjectWithTag("MessagingUI");
                 responseButtonContainer = dialogueParent.transform.GetChild(1);
                 for (int i = 0; i < 5; i++)
@@ -224,7 +225,7 @@ namespace SUNSET16.UI
 
                 _lineIndex = 0;
                 _playCoroutine = StartCoroutine(PlayFromCurrentLine());
-                started = true;
+                _started = true;
             }
             else
                 ShowControlsForCurrentLine();
@@ -242,14 +243,12 @@ namespace SUNSET16.UI
             _isTypewriting      = false;
             _waitingForAdvance  = false;
 
-            if (_lineIndex == -1)
+            if (_lines[_lineIndex].advanceToLine == -1)
+            {
                 FinishDialogue();
-            //started             = false;
-            //messageNum          = 0;
-            /*foreach (var msg in messages) if (msg != null) Destroy(msg);
-            messages.Clear();*/
+                return;
+            }
 
-            //dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();
 
             if (PlayerController.Instance != null)
@@ -272,6 +271,25 @@ namespace SUNSET16.UI
                 computer.CloseOverlay();
             else
                 Debug.LogWarning("[DIALOGUE] ComputerInteraction not found — overlay may not close");
+        }
+
+        public void resetDialogue()
+        {
+            IsDialogueActive   = false;
+            _isTypewriting     = false;
+            _waitingForAdvance = false;
+            _isResponding      = false;
+            _started           = false;
+            _finished          = false;
+            foreach (var msg in _messages) if (msg != null) Destroy(msg);
+            _messages.Clear();
+        }
+
+        public bool GetFinishedDialogue()
+        {
+            if (!RoomManager.Instance.GetCurrentRoomName().Contains("Bedroom"))
+                return true;
+            return _finished;
         }
 
         // ─── Button Callbacks (wired via Inspector OnClick) ───────────────────────
@@ -331,6 +349,11 @@ namespace SUNSET16.UI
             HideAllChoiceButtons();
         }
 
+        public void menuSound()
+        {
+            audioSource.PlayOneShot(menuClick);
+        }
+
         // ─── Internal Playback ────────────────────────────────────────────────────
 
         private IEnumerator PlayFromCurrentLine()
@@ -365,16 +388,16 @@ namespace SUNSET16.UI
                 GameObject message;
                 
                 int messageY;
-                if (messageNum < 5)
+                if (_messageNum < 5)
                 {
-                    messageY = albertY - (messageNum * offset);
+                    messageY = albertY - (_messageNum * offset);
                 }
                 else
                 {
-                    Debug.Log("Amount of objects in message (should be 5): " + messages.Count);
+                    Debug.Log("Amount of objects in message (should be 5): " + _messages.Count);
                     messageY = albertY - (4 * offset);
                     Debug.Log("Shifting A");
-                    foreach (GameObject mes in messages)
+                    foreach (GameObject mes in _messages)
                     {
                         RectTransform rt = mes.GetComponent<RectTransform>();
                         rt.anchoredPosition += new Vector2(0, offset);
@@ -389,12 +412,12 @@ namespace SUNSET16.UI
                 Vector3 messagePos = new Vector3(albertX, messageY, 0);
 
                 message = Instantiate(AlbertMessage, dialogueParent.transform);
-                messages.Add(message);
+                _messages.Add(message);
                 message.transform.localPosition = messagePos;
                 dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
                 audioSource.PlayOneShot(msgGet);
 
-                messageNum++;
+                _messageNum++;
 
                 if (speakerNameText != null)
                     speakerNameText.text = line.speakerName ?? "";
@@ -453,15 +476,15 @@ namespace SUNSET16.UI
             GameObject message;
             
             int messageY;
-            if (messageNum < 5)
+            if (_messageNum < 5)
             {
-                messageY = playerY - ((messageNum-1) * offset);
+                messageY = playerY - ((_messageNum-1) * offset);
             }
             else
             {
                 messageY = playerY - (3 * offset);
                 Debug.Log("Shifting P");
-                foreach (GameObject mes in messages)
+                foreach (GameObject mes in _messages)
                 {
                     RectTransform rt = mes.GetComponent<RectTransform>();
                     rt.anchoredPosition += new Vector2(0, offset);
@@ -476,7 +499,7 @@ namespace SUNSET16.UI
             Vector3 messagePos = new Vector3(playerX, messageY, 0);
 
             message = Instantiate(PlayerMessage, dialogueParent.transform);
-            messages.Add(message);
+            _messages.Add(message);
             dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
             message.GetComponentInChildren<TextMeshProUGUI>().text = choice.choiceText;
 
@@ -500,7 +523,7 @@ namespace SUNSET16.UI
             pfp.gameObject.SetActive(true);
             message.transform.localPosition = messagePos;
 
-            messageNum++;
+            _messageNum++;
 
             if (currentLine.repeat)
                 currentLine.choices.Remove(currentLine.choices[choiceIndex]);
@@ -547,7 +570,7 @@ namespace SUNSET16.UI
         {
             yield return 0;
 
-            messages.RemoveAll(item => item == null);
+            _messages.RemoveAll(item => item == null);
         }
 
         private void ShowControlsForCurrentLine()
@@ -603,6 +626,7 @@ namespace SUNSET16.UI
 
         private void FinishDialogue()
         {
+            _finished = true;
             //dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();
 
@@ -626,22 +650,6 @@ namespace SUNSET16.UI
                 computer.CloseOverlay();
             else
                 Debug.LogWarning("[DIALOGUE] ComputerInteraction not found — overlay may not close");
-        }
-
-        public void menuSound()
-        {
-            audioSource.PlayOneShot(menuClick);
-        }
-
-        public void resetDialogue()
-        {
-            IsDialogueActive   = false;
-            _isTypewriting     = false;
-            _waitingForAdvance = false;
-            _isResponding      = false;
-            started            = false;
-            foreach (var msg in messages) if (msg != null) Destroy(msg);
-            messages.Clear();
         }
     }
 }

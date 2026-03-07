@@ -664,6 +664,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1191267673}
     m_Modifications:
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2898520656027023190, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -1792,6 +1804,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1191267673}
     m_Modifications:
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2898520656027023190, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -2677,6 +2701,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1191267673}
     m_Modifications:
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2898520656027023190, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -3080,6 +3116,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1191267673}
     m_Modifications:
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2898520656027023190, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -4283,6 +4331,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1191267673}
     m_Modifications:
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1785234627348285291, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2898520656027023190, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
