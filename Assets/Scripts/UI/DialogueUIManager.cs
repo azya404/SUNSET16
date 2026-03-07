@@ -241,6 +241,9 @@ namespace SUNSET16.UI
             IsDialogueActive    = false;
             _isTypewriting      = false;
             _waitingForAdvance  = false;
+
+            if (_lineIndex == -1)
+                FinishDialogue();
             //started             = false;
             //messageNum          = 0;
             /*foreach (var msg in messages) if (msg != null) Destroy(msg);
@@ -310,6 +313,7 @@ namespace SUNSET16.UI
             if (!IsDialogueActive || _lines == null) return;
             if (_lineIndex >= _lines.Count)         return;
             Debug.Log("First checkpoint");
+            _lines[_lineIndex].repeated = true;
 
             RuntimeLine currentLine = _lines[_lineIndex];
             if (currentLine.choices == null || choiceIndex >= currentLine.choices.Count) return;
@@ -589,7 +593,6 @@ namespace SUNSET16.UI
                     choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 1f);
                 }
             }
-            _lines[_lineIndex].repeated = true;
         }
 
         private void HideAllChoiceButtons()
@@ -600,14 +603,6 @@ namespace SUNSET16.UI
 
         private void FinishDialogue()
         {
-            IsDialogueActive   = false;
-            _isTypewriting     = false;
-            _waitingForAdvance = false;
-            _isResponding      = false;
-            started            = false;
-            foreach (var msg in messages) if (msg != null) Destroy(msg);
-            messages.Clear(); 
-
             //dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();
 
@@ -636,6 +631,17 @@ namespace SUNSET16.UI
         public void menuSound()
         {
             audioSource.PlayOneShot(menuClick);
+        }
+
+        public void resetDialogue()
+        {
+            IsDialogueActive   = false;
+            _isTypewriting     = false;
+            _waitingForAdvance = false;
+            _isResponding      = false;
+            started            = false;
+            foreach (var msg in messages) if (msg != null) Destroy(msg);
+            messages.Clear();
         }
     }
 }
