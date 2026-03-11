@@ -26,6 +26,8 @@ MonoBehaviour:
     choices:
     - choiceText: "It\u2019s what I\u2019m here for."
       nextLineIndex: 1
+      offPillChoice: 0
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -39,8 +41,12 @@ MonoBehaviour:
     choices:
     - choiceText: "A refresher wouldn\u2019t hurt."
       nextLineIndex: 2
+      offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: "I\u2019m good. Red to red, don\u2019t cross the streams. Simple."
       nextLineIndex: 3
+      offPillChoice: 0
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -55,6 +61,8 @@ MonoBehaviour:
     choices:
     - choiceText: Affirmative.
       nextLineIndex: 4
+      offPillChoice: 0
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
@@ -79,11 +87,21 @@ MonoBehaviour:
     choices:
     - choiceText: "What\u2019s on your plate today? At Section M-67?"
       nextLineIndex: 5
+      offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: "Feels like I\u2019ve been doing this forever\u2026"
       nextLineIndex: 6
+      offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: Thinking about it now, our collars look quite intricate despite
         their simple appearance.
       nextLineIndex: 7
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: I have no more questions.
+      nextLineIndex: 8
+      offPillChoice: 0
+      showOnRepeat: 1
     advanceToLine: 8
     repeat: 1
     repeated: 0
@@ -120,18 +138,6 @@ MonoBehaviour:
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 4
-    repeat: 0
-    repeated: 0
-  - speakerName: Albert
-    portrait: {fileID: 0}
-    text: 
-    sendDelay: 1
-    delayRepeats: 0
-    autoAdvanceDelay: 0
-    choices:
-    - choiceText: I have no more questions.
-      nextLineIndex: 9
-    advanceToLine: 0
     repeat: 0
     repeated: 0
   - speakerName: Albert

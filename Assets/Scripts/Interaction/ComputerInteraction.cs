@@ -252,7 +252,7 @@ namespace SUNSET16.Interaction
             // fallback to first entry if DayManager isnt up yet
             if (DayManager.Instance == null) return daySequences[0];
 
-            int dayOffset = (daySequences.Length)/4;
+            int dayOffset = daySequences.Length/4;
             int index = DayManager.Instance.CurrentDay - 1; // day 1 -> index 0
             PillChoice pill = PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay);
             DayPhase phase = DayManager.Instance.CurrentPhase;
@@ -299,7 +299,8 @@ namespace SUNSET16.Interaction
                         {
                             choiceText    = dc.choiceText,
                             nextLineIndex = dc.nextLineIndex,
-                            offPillChoice = dc.offPillChoice
+                            offPillChoice = dc.offPillChoice,
+                            showOnRepeat  = dc.showOnRepeat
                         });
                     }
                 }

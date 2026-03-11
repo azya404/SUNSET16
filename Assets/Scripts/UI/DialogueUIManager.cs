@@ -59,10 +59,10 @@ namespace SUNSET16.UI
         [SerializeField] private GameObject advanceButton;     // "▶ Continue" — visible after typewriter finishes
         [SerializeField] private GameObject closeButton;       // "Close" — always visible (player can exit)
 
-        [Header("Choice Buttons (max 4)")]
-        [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[4];  // Parent GOs per choice
-        [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[4];    // Labels per choice
-        [SerializeField] private Image[]      choiceButtonImages = new Image[4];
+        [Header("Choice Buttons (max 5)")]
+        [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[5];  // Parent GOs per choice
+        [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[5];    // Labels per choice
+        [SerializeField] private Image[]      choiceButtonImages = new Image[5];
         [SerializeField] private float        glitchInterval;
         [SerializeField] private float        dispProbability;
         [SerializeField] private float        dispIntensity;
@@ -97,11 +97,12 @@ namespace SUNSET16.UI
         private Coroutine       _playCoroutine;
         private Coroutine       _messageCoroutine;
         private Coroutine       _typewriterCoroutine;
-        private bool            started = false;
+        private bool            _started = false;
+        private bool            _finished = false;
         private bool            _isResponding = false;
-
-        private int             messageNum = 0;
-        private List<GameObject> messages = new List<GameObject>();
+        private int             _messageNum = 0;
+        private List<GameObject> _messages = new List<GameObject>();
+        private DayPhase        _phase;
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -174,14 +175,22 @@ namespace SUNSET16.UI
 
                 IsDialogueActive = true;
                 //dialoguePanel?.SetActive(true);
-        
-            if (!started)
+
+            if (_phase != DayManager.Instance.CurrentPhase)
             {
+                _started = false;
+                _messageNum = 0;
+            }
+
+            if (!_started)
+            {
+                _phase = DayManager.Instance.CurrentPhase;
                 dialogueParent = GameObject.FindGameObjectWithTag("MessagingUI");
                 responseButtonContainer = dialogueParent.transform.GetChild(1);
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     int index = i;
+                    Debug.Log("Index: " + i);
                     choiceButtonRoots[i] = responseButtonContainer.transform.GetChild(i).gameObject;
                     choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(() => OnChoiceSelected(index));
                     choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(menuSound);
@@ -201,7 +210,7 @@ namespace SUNSET16.UI
                 globalMat.SetFloat("_DispIntensity", dispIntensity);
                 globalMat.SetFloat("_ColorProbability", colorProbability);
                 globalMat.SetFloat("_ColorIntensity", colorIntensity);
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     choiceButtonImages[i] = responseButtonContainer.GetChild(i).GetComponent<Image>();
                     choiceButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
@@ -216,8 +225,8 @@ namespace SUNSET16.UI
 
                 _lineIndex = 0;
                 _playCoroutine = StartCoroutine(PlayFromCurrentLine());
-                started = true;
-                }
+                _started = true;
+            }
             else
                 ShowControlsForCurrentLine();
         }
@@ -233,12 +242,13 @@ namespace SUNSET16.UI
             IsDialogueActive    = false;
             _isTypewriting      = false;
             _waitingForAdvance  = false;
-            //started             = false;
-            //messageNum          = 0;
-            /*foreach (var msg in messages) if (msg != null) Destroy(msg);
-                messages.Clear();*/
 
-            //dialoguePanel?.SetActive(false);
+            if (_lines[_lineIndex].advanceToLine == -1)
+            {
+                FinishDialogue();
+                return;
+            }
+
             HideAllChoiceButtons();
 
             if (PlayerController.Instance != null)
@@ -261,6 +271,25 @@ namespace SUNSET16.UI
                 computer.CloseOverlay();
             else
                 Debug.LogWarning("[DIALOGUE] ComputerInteraction not found — overlay may not close");
+        }
+
+        public void resetDialogue()
+        {
+            IsDialogueActive   = false;
+            _isTypewriting     = false;
+            _waitingForAdvance = false;
+            _isResponding      = false;
+            _started           = false;
+            _finished          = false;
+            foreach (var msg in _messages) if (msg != null) Destroy(msg);
+            _messages.Clear();
+        }
+
+        public bool GetFinishedDialogue()
+        {
+            if (!RoomManager.Instance.GetCurrentRoomName().Contains("Bedroom"))
+                return true;
+            return _finished;
         }
 
         // ─── Button Callbacks (wired via Inspector OnClick) ───────────────────────
@@ -302,6 +331,7 @@ namespace SUNSET16.UI
             if (!IsDialogueActive || _lines == null) return;
             if (_lineIndex >= _lines.Count)         return;
             Debug.Log("First checkpoint");
+            _lines[_lineIndex].repeated = true;
 
             RuntimeLine currentLine = _lines[_lineIndex];
             if (currentLine.choices == null || choiceIndex >= currentLine.choices.Count) return;
@@ -310,13 +340,18 @@ namespace SUNSET16.UI
             RuntimeChoice choice = currentLine.choices[choiceIndex];
             Debug.Log($"[DIALOGUE] Choice selected: '{choice.choiceText}' → line {choice.nextLineIndex}");
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
                 choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
             }
             _messageCoroutine = StartCoroutine(SendMessage(choiceIndex, currentLine, choice));
             HideAllChoiceButtons();
+        }
+
+        public void menuSound()
+        {
+            audioSource.PlayOneShot(menuClick);
         }
 
         // ─── Internal Playback ────────────────────────────────────────────────────
@@ -350,20 +385,19 @@ namespace SUNSET16.UI
                     typewriterCharDelay = 0.03f;
                 }
 
-                line.repeated = true;
-
                 GameObject message;
                 
                 int messageY;
-                if (messageNum < 5)
+                if (_messageNum < 5)
                 {
-                    messageY = albertY - (messageNum * offset);
+                    messageY = albertY - (_messageNum * offset);
                 }
                 else
                 {
+                    Debug.Log("Amount of objects in message (should be 5): " + _messages.Count);
                     messageY = albertY - (4 * offset);
                     Debug.Log("Shifting A");
-                    foreach (GameObject mes in messages)
+                    foreach (GameObject mes in _messages)
                     {
                         RectTransform rt = mes.GetComponent<RectTransform>();
                         rt.anchoredPosition += new Vector2(0, offset);
@@ -378,12 +412,12 @@ namespace SUNSET16.UI
                 Vector3 messagePos = new Vector3(albertX, messageY, 0);
 
                 message = Instantiate(AlbertMessage, dialogueParent.transform);
-                messages.Add(message);
+                _messages.Add(message);
                 message.transform.localPosition = messagePos;
                 dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
                 audioSource.PlayOneShot(msgGet);
 
-                messageNum++;
+                _messageNum++;
 
                 if (speakerNameText != null)
                     speakerNameText.text = line.speakerName ?? "";
@@ -442,15 +476,15 @@ namespace SUNSET16.UI
             GameObject message;
             
             int messageY;
-            if (messageNum < 5)
+            if (_messageNum < 5)
             {
-                messageY = playerY - ((messageNum-1) * offset);
+                messageY = playerY - ((_messageNum-1) * offset);
             }
             else
             {
                 messageY = playerY - (3 * offset);
                 Debug.Log("Shifting P");
-                foreach (GameObject mes in messages)
+                foreach (GameObject mes in _messages)
                 {
                     RectTransform rt = mes.GetComponent<RectTransform>();
                     rt.anchoredPosition += new Vector2(0, offset);
@@ -465,7 +499,7 @@ namespace SUNSET16.UI
             Vector3 messagePos = new Vector3(playerX, messageY, 0);
 
             message = Instantiate(PlayerMessage, dialogueParent.transform);
-            messages.Add(message);
+            _messages.Add(message);
             dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
             message.GetComponentInChildren<TextMeshProUGUI>().text = choice.choiceText;
 
@@ -489,7 +523,7 @@ namespace SUNSET16.UI
             pfp.gameObject.SetActive(true);
             message.transform.localPosition = messagePos;
 
-            messageNum++;
+            _messageNum++;
 
             if (currentLine.repeat)
                 currentLine.choices.Remove(currentLine.choices[choiceIndex]);
@@ -536,7 +570,7 @@ namespace SUNSET16.UI
         {
             yield return 0;
 
-            messages.RemoveAll(item => item == null);
+            _messages.RemoveAll(item => item == null);
         }
 
         private void ShowControlsForCurrentLine()
@@ -555,6 +589,7 @@ namespace SUNSET16.UI
             else if (line.autoAdvanceDelay <= 0)
             {
                 //if (advanceButton != null) advanceButton.SetActive(true);
+                line.repeated = true;
             }
         }
 
@@ -563,6 +598,12 @@ namespace SUNSET16.UI
             for (int i = 0; i < choiceButtonRoots.Length; i++)
             {
                 bool show = i < choices.Count;
+
+                if (show && i == 4)
+                    Debug.Log("Show of repeat: " + choices[i].showOnRepeat + ", Repeated: " + _lines[_lineIndex].repeated);
+                if ((choiceButtonRoots[i] != null) && show && choices[i].showOnRepeat && (!_lines[_lineIndex].repeated))
+                    show = false;
+
                 if (choiceButtonRoots[i] != null)
                     choiceButtonRoots[i].SetActive(show);
 
@@ -585,15 +626,7 @@ namespace SUNSET16.UI
 
         private void FinishDialogue()
         {
-            IsDialogueActive   = false;
-            _isTypewriting     = false;
-            _waitingForAdvance = false;
-            _isResponding      = false;
-            started            = false;
-            //messageNum         = 0;
-            foreach (var msg in messages) if (msg != null) Destroy(msg);
-                messages.Clear(); 
-
+            _finished = true;
             //dialoguePanel?.SetActive(false);
             HideAllChoiceButtons();
 
@@ -617,11 +650,6 @@ namespace SUNSET16.UI
                 computer.CloseOverlay();
             else
                 Debug.LogWarning("[DIALOGUE] ComputerInteraction not found — overlay may not close");
-        }
-
-        public void menuSound()
-        {
-            audioSource.PlayOneShot(menuClick);
         }
     }
 }
