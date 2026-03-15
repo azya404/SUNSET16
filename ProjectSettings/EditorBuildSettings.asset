@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BoilerRoomScene.unity
     guid: 1b59dda2cb52930459f246623135971f
+  - enabled: 1
+    path: Assets/Scenes/HallwayScene.unity
+    guid: d564ff0b7d8c1e249a7c2193799d01db
   m_configObjects: {}

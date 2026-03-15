@@ -31,7 +31,7 @@ using System.Collections;
 using SUNSET16.Core;
 using SUNSET16.Interaction;
 using System.Collections.Generic;
-//using UnityEditor.Advertisements;
+using UnityEditor;
 
 namespace SUNSET16.UI
 {
@@ -43,6 +43,8 @@ namespace SUNSET16.UI
         [SerializeField] private Transform responseButtonContainer;
         [SerializeField] private CanvasGroup dialogueCanvasGroup;
         [SerializeField] private GameObject AlbertDelay;
+        [SerializeField] private Transform loreButtonContainer;
+        [SerializeField] private Image loreImage;
 
         [Header("Prefabs")]
         [SerializeField] private GameObject  AlbertMessage;
@@ -58,6 +60,8 @@ namespace SUNSET16.UI
         [Header("Controls")]
         [SerializeField] private GameObject advanceButton;     // "▶ Continue" — visible after typewriter finishes
         [SerializeField] private GameObject closeButton;       // "Close" — always visible (player can exit)
+        [SerializeField] private GameObject chatButton;
+        [SerializeField] private GameObject loreButton;
 
         [Header("Choice Buttons (max 5)")]
         [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[5];  // Parent GOs per choice
@@ -68,6 +72,11 @@ namespace SUNSET16.UI
         [SerializeField] private float        dispIntensity;
         [SerializeField] private float        colorProbability;
         [SerializeField] private float        colorIntensity;
+
+        [Header("Lore Buttons (max 5)")]
+        [SerializeField] private GameObject[] loreButtonRoots = new GameObject[5];  // Parent GOs per choice
+        [SerializeField] private TMP_Text[]   loreButtonTexts = new TMP_Text[5];    // Labels per choice
+        [SerializeField] private Image[]      loreButtonImages = new Image[5];
 
         [Header("Typewriter")]
         [SerializeField] private float typewriterCharDelay = 0.03f;
@@ -103,7 +112,11 @@ namespace SUNSET16.UI
         private int             _messageNum = 0;
         private List<GameObject> _messages = new List<GameObject>();
         private DayPhase        _phase;
-
+        private bool            _chatOpen = true;
+        private List<LoreEntryData> _loreEntries;
+        private int             _selectedEntry;
+        private int             _entryPage = 1;
+        private int             _buttonPage = 1;
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
 
@@ -193,7 +206,7 @@ namespace SUNSET16.UI
                     Debug.Log("Index: " + i);
                     choiceButtonRoots[i] = responseButtonContainer.transform.GetChild(i).gameObject;
                     choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(() => OnChoiceSelected(index));
-                    choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(menuSound);
+                    choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(MenuSound);
                     choiceButtonTexts[i] = choiceButtonRoots[i].GetComponentInChildren<TextMeshProUGUI>();
                 }
                 AlbertDelay = dialogueParent.transform.GetChild(2).gameObject;
@@ -217,6 +230,27 @@ namespace SUNSET16.UI
                     choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
                     choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
                 }
+
+                chatButton = dialogueParent.transform.GetChild(5).gameObject;
+                chatButton.GetComponent<Button>().onClick.AddListener(SwapToChat);
+                chatButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+                loreButton = dialogueParent.transform.GetChild(6).gameObject;
+                loreButton.GetComponent<Button>().onClick.AddListener(SwapToLore);
+                loreButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+                loreButtonContainer = dialogueParent.transform.GetChild(7);
+                loreButtonContainer.gameObject.SetActive(false);
+                loreImage = dialogueParent.transform.GetChild(8).GetComponent<Image>();
+                loreImage.gameObject.SetActive(false);
+                for (int i = 0; i < 5; i++)
+                {
+                    int index = i;
+                    Debug.Log("Index: " + i);
+                    loreButtonRoots[i] = loreButtonContainer.transform.GetChild(i).gameObject;
+                    loreButtonRoots[i].GetComponent<Button>().onClick.AddListener(() => OnEntrySelected(index));
+                    loreButtonRoots[i].GetComponent<Button>().onClick.AddListener(MenuSound);
+                    loreButtonTexts[i] = loreButtonRoots[i].GetComponentInChildren<TextMeshProUGUI>();
+                }
+
 
                 if (PlayerController.Instance != null)
                     PlayerController.Instance.LockMovement(true);
@@ -349,9 +383,59 @@ namespace SUNSET16.UI
             HideAllChoiceButtons();
         }
 
-        public void menuSound()
+        public void MenuSound()
         {
             audioSource.PlayOneShot(menuClick);
+        }
+
+        public void SwapToChat()
+        {
+            // IF IN LORE ENTRIES:
+            if (!_chatOpen)
+            {
+                // Deactivate entry buttons
+                /*foreach (GameObject entry in loreButtonRoots)
+                    entry.SetActive(false);*/
+                loreButtonContainer.gameObject.SetActive(false);
+                // Deactivate lore entry
+                loreImage.gameObject.SetActive(false);
+                // Activate appropriate response buttons
+                ShowControlsForCurrentLine();
+                // Activate all messages
+                foreach (GameObject msg in _messages)
+                    msg.SetActive(true);
+            }
+        }
+
+        public void SwapToLore()
+        {
+            // IF IN CHAT:
+            if (_chatOpen)
+            {
+                // Deactivate all response buttons
+                /*foreach (GameObject choice in choiceButtonRoots)
+                    choice.SetActive(false);*/
+                responseButtonContainer.gameObject.SetActive(false);
+                // Deactivate all messages
+                foreach (GameObject msg in _messages)
+                    msg.SetActive(false);
+                // Activate appropriate entry buttons
+                for (int i = 0; i < 4; i++)
+                {
+                    if (i < _loreEntries.Count)
+                        break;
+                    loreButtonRoots[i].SetActive(true);
+                }
+                // Display last opened lore entry (nothing if none have been selected)
+                loreImage = _loreEntries[_selectedEntry].content[_entryPage];
+            }
+        }
+
+        public void OnEntrySelected(int index)
+        {
+            int entryNum = index * _buttonPage;
+            _entryPage = 1;
+            loreImage = _loreEntries[entryNum].content[1];
         }
 
         // ─── Internal Playback ────────────────────────────────────────────────────
