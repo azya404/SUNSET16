@@ -135,10 +135,14 @@ namespace SUNSET16.Core
                             }
 
                             //GATE CHECK 5: must have completed this days puzzle in the hidden room
+                            //only blocks if a puzzle asset actually exists for this day - if no asset is assigned
+                            //in PuzzleManager, the gate is skipped (temporary until all puzzle assets are built)
+                            //TODO: once puzzle_day_N assets exist for all days, HasPuzzleForDay will always return true
                             if (PuzzleManager.Instance != null && PuzzleManager.Instance.IsInitialized)
                             {
                                 string expectedPuzzleId = $"puzzle_day_{CurrentDay}"; //puzzle IDs follow this naming convention
-                                if (!PuzzleManager.Instance.IsPuzzleCompleted(expectedPuzzleId))
+                                if (PuzzleManager.Instance.HasPuzzleForDay(CurrentDay) &&
+                                    !PuzzleManager.Instance.IsPuzzleCompleted(expectedPuzzleId))
                                 {
                                     Debug.LogWarning($"[DAYMANAGER] Cannot advance Day {CurrentDay} Night -> Day {CurrentDay + 1} Morning: must complete this day's hidden room puzzle first (off-pill restriction)");
                                     return;
