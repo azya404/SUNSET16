@@ -1434,7 +1434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a09985378c51a4a48bea69aa6e112b6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startingDay: 3
+  _startingDay: 1
 --- !u!4 &1531903180
 Transform:
   m_ObjectHideFlags: 0
@@ -1873,6 +1873,8 @@ MonoBehaviour:
   responseButtonContainer: {fileID: 0}
   dialogueCanvasGroup: {fileID: 0}
   AlbertDelay: {fileID: 0}
+  loreButtonContainer: {fileID: 0}
+  loreImage: {fileID: 0}
   AlbertMessage: {fileID: 2722928380033971905, guid: dc3c6540015c79941973d8369c63e387, type: 3}
   PlayerMessage: {fileID: 6662382049326946677, guid: 6bf19257397a8fb4b8ce2e916be65779, type: 3}
   speakerNameText: {fileID: 0}
@@ -1882,6 +1884,8 @@ MonoBehaviour:
   playerMessagebox: {fileID: 21300000, guid: ec2b25c2cfdf7354b9c0965b0acfdbe5, type: 3}
   advanceButton: {fileID: 0}
   closeButton: {fileID: 0}
+  chatButton: {fileID: 0}
+  loreButton: {fileID: 0}
   choiceButtonRoots:
   - {fileID: 0}
   - {fileID: 0}
@@ -1905,6 +1909,24 @@ MonoBehaviour:
   dispIntensity: 0.05
   colorProbability: 0.3
   colorIntensity: 0.05
+  loreButtonRoots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  loreButtonTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  loreButtonImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   typewriterCharDelay: 0.03
   AlbertDelayAmt: 0.5
   playerDelay: 0.5
