@@ -5790,12 +5790,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 0}
-  promptText: {fileID: 0}
+  promptCanvas: {fileID: 727391113}
+  promptText: {fileID: 2085716962}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 64
 --- !u!114 &1347967287
 MonoBehaviour:
   m_ObjectHideFlags: 0
