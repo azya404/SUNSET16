@@ -92,8 +92,9 @@ namespace SUNSET16.UI
             {
                 if (!_linesSkipped)
                 {
-                    StopCoroutine(_linesCoroutine);
-                    announcementText.text = _fullText;
+                    //null guard: _linesCoroutine is null if announcementText ref was missing in Inspector
+                    if (_linesCoroutine != null) StopCoroutine(_linesCoroutine);
+                    if (announcementText != null) announcementText.text = _fullText;
                     _linesSkipped = true;
                 }
                 else
@@ -226,15 +227,18 @@ namespace SUNSET16.UI
                 announcementAudioSource.Play();
             }
 
-            announcementGradient.canvasRenderer.SetAlpha(0f);
-            announcementText.canvasRenderer.SetAlpha(0f);
-            skipText.canvasRenderer.SetAlpha(0f);
+            //use CrossFadeAlpha(0,0,true) to instantly set alpha to 0 — avoids deprecated
+            //canvasRenderer.SetAlpha which can leave renderer-level alpha stuck at 0
+            //null guards here so a missing Inspector ref doesnt crash and lock IsAnnouncementActive
+            announcementGradient?.CrossFadeAlpha(0f, 0f, true);
+            if (announcementText != null) announcementText.CrossFadeAlpha(0f, 0f, true);
+            skipText?.CrossFadeAlpha(0f, 0f, true);
 
             yield return null;
-            
-            announcementGradient.CrossFadeAlpha(1.0f, 2, false);
-            announcementText.CrossFadeAlpha(1.0f, 2, false);
-            skipText.CrossFadeAlpha(1.0f, 2, false);
+
+            announcementGradient?.CrossFadeAlpha(1.0f, 2f, false);
+            if (announcementText != null) announcementText.CrossFadeAlpha(1.0f, 2f, false);
+            skipText?.CrossFadeAlpha(1.0f, 2f, false);
 
             Debug.Log($"[DOLOS] Playing '{announcement.announcementId}': {announcement.text}");
             OnAnnouncementStarted?.Invoke(announcement.announcementId);
@@ -301,4 +305,3 @@ namespace SUNSET16.UI
         }
     }
 }
-
