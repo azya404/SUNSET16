@@ -856,7 +856,7 @@ MonoBehaviour:
   roomType: 3
   isHiddenRoomDoor: 0
   hiddenRoomID: 
-  isBedroomDoor: 0
+  isBedroomDoor: 1
   requiresAllTasksComplete: 0
   isMorningGated: 0
   doorLight: {fileID: 0}
