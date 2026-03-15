@@ -19,7 +19,9 @@ PuzzleManager links them as rewards via PuzzleData.loreReward
 TODO: might want to add a Sprite icon field for visual representation in the UI
 TODO: might want to add an AudioClip for a narrated version of the lore
 */
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 namespace SUNSET16.Core
 {
     [CreateAssetMenu(fileName = "NewLoreEntry", menuName = "SUNSET16/Lore Entry Data")]
@@ -34,8 +36,7 @@ namespace SUNSET16.Core
 
         [Header("lore content")]
         [Tooltip("the main text for this lore entry")]
-        [TextArea(5, 15)]
-        public string content;
+        public List<Image> content;
 
         [Header("metadata")]
         [Tooltip("if this lore is connected to a specific day, put the day number here (leave 0 if not tied to one)")]

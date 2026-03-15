@@ -13,11 +13,19 @@ MonoBehaviour:
   m_Name: Day 3 Morning Wakeup
   m_EditorClassIdentifier: 
   announcementId: dolos_day3_morning_wakeup
-  text: Rise and shine, Technician Andromeda. Current time is 0700 hours. Please
+  text: 'Rise and shine, Technician Andromeda. Current time is 0700 hours.
+
+    Please
     prepare for yet another productive day in service of the DOLOS Corporation, a
-    subsidiary of the Erebus Holdings. Body temperature has decreased by 0.4% since
-    the previous biometric scan. All systems are functional. Please proceed to your
-    Aegis Collar Supplement Dispenser for your mandatory daily wellness protocol
-    at your earliest convenience.
+    subsidiary of the Erebus Holdings.
+
+    Body temperature has decreased by 0.4%
+    since the previous biometric scan. All systems are functional.
+
+    Please proceed
+    to your Aegis Collar Supplement Dispenser for your mandatory daily wellness protocol
+    at your earliest convenience.'
+  fontSize: 20
   audioClip: {fileID: 8300000, guid: 22c9783d720fc914cb8dfb4c3de1ffe6, type: 3}
   displayDuration: 34
+  lineDurations: 080000000800000009000000

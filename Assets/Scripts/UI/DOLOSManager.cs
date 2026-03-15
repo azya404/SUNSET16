@@ -35,6 +35,8 @@ namespace SUNSET16.UI
         [Header("Announcement Display")]
         [SerializeField] private GameObject  announcementPanel;
         [SerializeField] private TMP_Text    announcementText;
+        [SerializeField] private TMP_Text    skipText;
+        [SerializeField] private Image       announcementGradient;
         [SerializeField] private Image       speakerIcon;          // Optional — DOLOS icon/portrait
 
         [Header("Audio")]
@@ -52,6 +54,10 @@ namespace SUNSET16.UI
 
         private Dictionary<string, DOLOSAnnouncement> _announcementsDict = new Dictionary<string, DOLOSAnnouncement>();
         private DOLOSAnnouncement _currentAnnouncement;
+        private bool _showingLines;
+        private bool _linesSkipped;
+        private Coroutine _linesCoroutine;
+        private string _fullText;
 
         // ─── Events ───────────────────────────────────────────────────────────────
 
@@ -83,7 +89,16 @@ namespace SUNSET16.UI
             if (!IsAnnouncementActive) return;
 
             if (Input.GetKeyDown(KeyCode.Space))
-                StopAnnouncement();
+            {
+                if (!_linesSkipped)
+                {
+                    StopCoroutine(_linesCoroutine);
+                    announcementText.text = _fullText;
+                    _linesSkipped = true;
+                }
+                else
+                    StopAnnouncement();
+            }
         }
 
         // ─── Public API ───────────────────────────────────────────────────────────
@@ -197,7 +212,12 @@ namespace SUNSET16.UI
         {
             IsAnnouncementActive = true;
 
-            if (announcementText  != null) announcementText.text = announcement.text;
+            if (announcementText  != null) 
+            {
+                announcementText.fontSize = announcement.fontSize;
+                _fullText = announcement.text;
+                _linesCoroutine = StartCoroutine(LineByLine(announcement));
+            }
             if (announcementPanel != null) announcementPanel.SetActive(true);
 
             if (announcementAudioSource != null && announcement.audioClip != null)
@@ -206,6 +226,16 @@ namespace SUNSET16.UI
                 announcementAudioSource.Play();
             }
 
+            announcementGradient.canvasRenderer.SetAlpha(0f);
+            announcementText.canvasRenderer.SetAlpha(0f);
+            skipText.canvasRenderer.SetAlpha(0f);
+
+            yield return null;
+            
+            announcementGradient.CrossFadeAlpha(1.0f, 2, false);
+            announcementText.CrossFadeAlpha(1.0f, 2, false);
+            skipText.CrossFadeAlpha(1.0f, 2, false);
+
             Debug.Log($"[DOLOS] Playing '{announcement.announcementId}': {announcement.text}");
             OnAnnouncementStarted?.Invoke(announcement.announcementId);
 
@@ -213,13 +243,44 @@ namespace SUNSET16.UI
 
             FinishAnnouncement(announcement.announcementId);
         }
+        
+        private IEnumerator LineByLine(DOLOSAnnouncement announcement)
+        {
+            _showingLines = true;
+            _linesSkipped = false;
+            announcementText.text = "";
+            int linesShown = 0;
+
+            foreach(char c in announcement.text)
+            {
+                announcementText.text += c;
+
+                if (c == '\n')
+                {
+                    yield return new WaitForSeconds(announcement.lineDurations[linesShown]);
+                    linesShown++;
+                }
+            }
+            _showingLines = false;
+        }
+
+        private IEnumerator FadeOut()
+        {
+            announcementGradient.CrossFadeAlpha(0f, 2, false);
+            announcementText.CrossFadeAlpha(0f, 2, false);
+            skipText.CrossFadeAlpha(0f, 2, false);
+
+            yield return new WaitForSeconds(2);
+
+            if (announcementPanel != null) announcementPanel.SetActive(false);
+            if (announcementText  != null) announcementText.text = "";
+        }
 
         private void FinishAnnouncement(string announcementId)
         {
             IsAnnouncementActive = false;
 
-            if (announcementPanel != null) announcementPanel.SetActive(false);
-            if (announcementText  != null) announcementText.text = "";
+            StartCoroutine(FadeOut());
 
             if (announcementAudioSource != null && announcementAudioSource.isPlaying)
                 announcementAudioSource.Stop();
