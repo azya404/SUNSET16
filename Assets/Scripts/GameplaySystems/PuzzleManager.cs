@@ -201,6 +201,14 @@ namespace SUNSET16.Core
             return _completedPuzzles != null && _completedPuzzles.Contains(puzzleId);
         }
 
+        //returns true if a PuzzleData asset exists for the given day
+        //DayManager uses this so the night->morning gate only blocks when a puzzle actually exists
+        //TODO: once all puzzle assets are created this will always return true for off-pill days
+        public bool HasPuzzleForDay(int day)
+        {
+            return FindPuzzleById($"puzzle_day_{day}") != null;
+        }
+
         public bool IsLoreUnlocked(string loreId)
         {
             return _unlockedLore != null && _unlockedLore.Contains(loreId);
