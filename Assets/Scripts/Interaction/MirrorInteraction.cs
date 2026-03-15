@@ -41,6 +41,10 @@ namespace SUNSET16.Interaction
         [SerializeField] private GameObject mirrorOverlayCanvas;
         [Tooltip("CanvasGroup on the PillChoiceFade child GO — fades to black on button click.")]
         [SerializeField] private CanvasGroup pillChoiceFade;
+        [Tooltip("The Consume Pill button — hidden on Day 2 (forced refuse day).")]
+        [SerializeField] private Button takePillButton;
+        [Tooltip("The Conceal Pill button — hidden on Day 1 (forced take day).")]
+        [SerializeField] private Button concealPillButton;
 
         [Header("SFX")]
         [Tooltip("Sound played when the player takes the pill.")]
@@ -220,6 +224,27 @@ namespace SUNSET16.Interaction
             if (mirrorOverlayCanvas != null)
                 mirrorOverlayCanvas.SetActive(true);
 
+            //enforce scripted choices: hide the button the player isnt allowed to press
+            //day 1 = forced take (conceal hidden), day 2 = forced refuse (take hidden)
+            //days 3+ = free choice, both buttons visible
+            if (PillStateManager.Instance != null && DayManager.Instance != null)
+            {
+                int today = DayManager.Instance.CurrentDay;
+                if (PillStateManager.Instance.IsForcedChoice(today))
+                {
+                    PillChoice forced = PillStateManager.Instance.GetForcedChoice(today);
+                    if (takePillButton   != null) takePillButton.gameObject.SetActive(forced == PillChoice.Taken);
+                    if (concealPillButton != null) concealPillButton.gameObject.SetActive(forced == PillChoice.NotTaken);
+                    Debug.Log($"[MIRROR] Day {today} forced choice: showing only {forced} button");
+                }
+                else
+                {
+                    //free choice day — make sure both buttons are visible
+                    if (takePillButton   != null) takePillButton.gameObject.SetActive(true);
+                    if (concealPillButton != null) concealPillButton.gameObject.SetActive(true);
+                }
+            }
+
             if (pillChoiceFade != null)
             {
                 pillChoiceFade.alpha          = 0f;
@@ -250,6 +275,10 @@ namespace SUNSET16.Interaction
 
             if (mirrorOverlayCanvas != null)
                 mirrorOverlayCanvas.SetActive(false);
+
+            //restore both buttons for the next time the overlay opens (next day)
+            if (takePillButton   != null) takePillButton.gameObject.SetActive(true);
+            if (concealPillButton != null) concealPillButton.gameObject.SetActive(true);
 
             if (PlayerController.Instance != null)
                 PlayerController.Instance.LockMovement(false);

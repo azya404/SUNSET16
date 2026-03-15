@@ -4544,6 +4544,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mirrorOverlayCanvas: {fileID: 3275779}
   pillChoiceFade: {fileID: 53646211}
+  takePillButton: {fileID: 1049946212}
+  concealPillButton: {fileID: 1980878806}
   pillTakeSFX: {fileID: 8300000, guid: 8232f3bcaa181124e9ff4d6f9cbb6bb7, type: 3}
   pillHideSFX: {fileID: 8300000, guid: 9518badca2ce449439f9f9dec1910b83, type: 3}
   fadeOutDuration: 0.8
