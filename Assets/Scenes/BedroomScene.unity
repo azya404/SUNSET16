@@ -294,12 +294,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309f235276d9f624ba770ee2904ef110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: BoilerRoomScene
-  spawnPositionInTargetScene: {x: -5.5, y: -9.5, z: 0}
+  targetSceneName: HallwayScene
+  spawnPositionInTargetScene: {x: -18.6, y: -1.1, z: 0}
   roomType: 3
   isHiddenRoomDoor: 0
   hiddenRoomID: 
-  isBedroomDoor: 0
+  isBedroomDoor: 1
   requiresAllTasksComplete: 0
   isMorningGated: 1
   doorLight: {fileID: 0}
