@@ -5718,6 +5718,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1347967284}
   - component: {fileID: 1347967285}
+  - component: {fileID: 1347967287}
+  - component: {fileID: 1347967286}
   m_Layer: 9
   m_Name: PodInteract
   m_TagString: Untagged
@@ -5775,6 +5777,42 @@ CapsuleCollider2D:
   m_Offset: {x: 0.0000004768727, y: -1.9301865}
   m_Size: {x: 4.198981, y: 6.98752}
   m_Direction: 0
+--- !u!114 &1347967286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347967283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeabfe7707e56c44c9726997854694e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionKey: 101
+  promptCanvas: {fileID: 0}
+  promptText: {fileID: 0}
+  defaultPrompt: Press E to interact
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 1
+--- !u!114 &1347967287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347967283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 200260a9a3d583143ba09edb6cec1b86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadePanel: {fileID: 829849846}
+  fadeDuration: 1
+  sleepHoldDuration: 0.5
+  sleepPrompt: Sleep
+  wrongPhasePrompt: I should wait until tonight...
 --- !u!1 &1365030099
 GameObject:
   m_ObjectHideFlags: 0
