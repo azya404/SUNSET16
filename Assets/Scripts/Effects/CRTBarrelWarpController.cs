@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// Enables / disables the CRT Barrel Warp Fullscreen Pass Renderer Feature
@@ -12,8 +12,8 @@ using UnityEngine.Rendering.Universal;
 public class CRTBarrelWarpController : MonoBehaviour
 {
     [Header("References")]
-    [Tooltip("Drag your Universal Renderer Data asset here (Assets/Settings/...)")]
-    [SerializeField] private UniversalRendererData _rendererData;
+    [Tooltip("Drag your Renderer2D asset here (Assets/Settings/Renderer2D)")]
+    [SerializeField] private ScriptableRendererData _rendererData;
 
     [Tooltip("Must match the Name field you give the Fullscreen Pass Renderer Feature exactly")]
     [SerializeField] private string _featureName = "CRT Barrel Warp";
