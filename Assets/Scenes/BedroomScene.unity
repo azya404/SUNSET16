@@ -6132,6 +6132,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1368300093 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4276499198185738365, guid: 980710eee7ac7164d9d25b1e5b021a56, type: 3}
+  m_PrefabInstance: {fileID: 1945703983746102184}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1383701519
 GameObject:
   m_ObjectHideFlags: 0
@@ -6770,6 +6775,12 @@ MonoBehaviour:
   fadePanel: {fileID: 829849846}
   fadeDuration: 1
   cutsceneDuration: 3
+  bedroomContent:
+  - {fileID: 2068848511}
+  - {fileID: 693999840}
+  - {fileID: 695264215}
+  - {fileID: 1383701519}
+  - {fileID: 1368300093}
   interactionPrompt: Press E to use computer
   lockedPrompt: Maybe I should check the mirror first...
 --- !u!114 &1695215910

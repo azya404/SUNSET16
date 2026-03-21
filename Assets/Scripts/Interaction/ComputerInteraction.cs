@@ -55,12 +55,15 @@ namespace SUNSET16.Interaction
         [Header("Timing")]
         [SerializeField] private float cutsceneDuration = 2f;
 
+        [Header("Bedroom Content")]
+        [Tooltip("GOs to hide while the computer overlay is open. Drag in the root bedroom scene objects (bg, props, player, etc).")]
+        [SerializeField] private GameObject[] bedroomContent;
+
         [Header("Settings")]
         [SerializeField] private string interactionPrompt = "Press E to use computer";
         [SerializeField] private string lockedPrompt = "Maybe I should check the mirror first...";
 
         private InteractionSystem _interactionSystem;
-        private CRTBarrelWarpController _barrelWarp;
         private bool _mirrorCompleted = false;
         private bool _sequenceActive  = false;
         private bool _sequenceCreated = false;
@@ -71,7 +74,6 @@ namespace SUNSET16.Interaction
         private void Awake()
         {
             _interactionSystem = GetComponent<InteractionSystem>();
-            _barrelWarp = GetComponent<CRTBarrelWarpController>();
         }
 
         private void Start()
@@ -144,6 +146,9 @@ namespace SUNSET16.Interaction
             // fade to black (covers game view)
             yield return StartCoroutine(Fade(0f, 1f));
 
+            // hide bedroom scene behind the fade so it doesn't bleed through
+            SetBedroomVisible(false);
+
             // activate canvas + Frame 1 behind black panel
             if (computerCanvas != null) computerCanvas.SetActive(true);
             if (cutscenePanel  != null) cutscenePanel.SetActive(true);
@@ -160,7 +165,6 @@ namespace SUNSET16.Interaction
             // swap: Frame 1 off, Frame 2 on
             if (cutscenePanel != null) cutscenePanel.SetActive(false);
             if (overlayPanel  != null) overlayPanel.SetActive(true);
-            _barrelWarp?.SetWarpActive(true);
 
             // fade in - reveal Frame 2, teammate's UI children are now live
             yield return StartCoroutine(Fade(1f, 0f));
@@ -202,15 +206,26 @@ namespace SUNSET16.Interaction
             yield return StartCoroutine(Fade(0f, 1f));
 
             // hide everything
-            _barrelWarp?.SetWarpActive(false);
             if (overlayPanel   != null) overlayPanel.SetActive(false);
             if (computerCanvas != null) computerCanvas.SetActive(false);
+
+            // restore bedroom scene before fading back in
+            SetBedroomVisible(true);
 
             // fade in - back to game view
             yield return StartCoroutine(Fade(1f, 0f));
 
             if (PlayerController.Instance != null) PlayerController.Instance.LockMovement(false);
             _sequenceActive = false;
+        }
+
+        // --- Bedroom visibility ------------------------------------------------------
+
+        private void SetBedroomVisible(bool visible)
+        {
+            if (bedroomContent == null) return;
+            foreach (var go in bedroomContent)
+                if (go != null) go.SetActive(visible);
         }
 
         // --- Fade helper -------------------------------------------------------------
