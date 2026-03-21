@@ -64,6 +64,7 @@ namespace SUNSET16.Interaction
         [SerializeField] private string lockedPrompt = "Maybe I should check the mirror first...";
 
         private InteractionSystem _interactionSystem;
+        private CRTBarrelWarpController _barrelWarp;
         private bool _mirrorCompleted = false;
         private bool _sequenceActive  = false;
         private bool _sequenceCreated = false;
@@ -74,6 +75,7 @@ namespace SUNSET16.Interaction
         private void Awake()
         {
             _interactionSystem = GetComponent<InteractionSystem>();
+            _barrelWarp = GetComponent<CRTBarrelWarpController>();
         }
 
         private void Start()
@@ -169,6 +171,8 @@ namespace SUNSET16.Interaction
             // fade in - reveal Frame 2, teammate's UI children are now live
             yield return StartCoroutine(Fade(1f, 0f));
 
+            _barrelWarp?.SetWarpActive(true);
+
             // hand off to DialogueUIManager
             // if no SOs assigned yet, log warning and leave overlay open - expected during development
             DialogueSequence sequence = GetSequenceForToday();
@@ -204,6 +208,8 @@ namespace SUNSET16.Interaction
         {
             // fade to black
             yield return StartCoroutine(Fade(0f, 1f));
+
+            _barrelWarp?.SetWarpActive(false);
 
             // hide everything
             if (overlayPanel   != null) overlayPanel.SetActive(false);

@@ -42,14 +42,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
-    - _EdgeDarkness: 0.593
+    - _EdgeDarkness: 0.575
     - _EnableExternalAlpha: 0
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _WarpStrength: 0.045
+    - _WarpStrength: 0.066
     - _WarpZoom: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
