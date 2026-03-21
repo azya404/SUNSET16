@@ -1930,11 +1930,11 @@ MonoBehaviour:
   typewriterCharDelay: 0.03
   AlbertDelayAmt: 0.5
   playerDelay: 0.5
-  albertX: 160
-  albertY: 160
-  playerX: 120
-  playerY: 80
-  offset: 80
+  albertX: 170
+  albertY: 260
+  playerX: 180
+  playerY: 140
+  offset: 120
   audioSource: {fileID: 1667455045}
   keyboard: {fileID: 8300000, guid: f43923ff3038f974a9aef7c0b34a9cb0, type: 3}
   menuClick: {fileID: 8300000, guid: 6336ce03e4dda71489857b071cabf257, type: 3}
