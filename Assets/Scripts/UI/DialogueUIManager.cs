@@ -117,6 +117,10 @@ namespace SUNSET16.UI
         private int             _selectedEntry;
         private int             _entryPage = 1;
         private int             _buttonPage = 1;
+        private Color           _baseColor = new Color(1f, 1f, 1f, 1f);
+        private Color           _disabledColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+        private bool            _clickDisabled = false;
+
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
 
@@ -213,6 +217,7 @@ namespace SUNSET16.UI
                 AlbertDelay.SetActive(false);
                 closeButton = dialogueParent.transform.GetChild(3).gameObject;
                 closeButton.GetComponent<Button>().onClick.AddListener(HideDialogue);
+                closeButton.GetComponent<Button>().onClick.AddListener(MenuSound);
                 advanceButton = dialogueParent.transform.GetChild(4).gameObject;
                 advanceButton.GetComponent<Button>().onClick.AddListener(OnAdvanceClicked);
 
@@ -380,12 +385,14 @@ namespace SUNSET16.UI
                 choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
             }
             _messageCoroutine = StartCoroutine(SendMessage(choiceIndex, currentLine, choice));
+
             HideAllChoiceButtons();
         }
 
         public void MenuSound()
         {
-            audioSource.PlayOneShot(menuClick);
+            if (!_clickDisabled)
+                audioSource.PlayOneShot(menuClick);
         }
 
         public void SwapToChat()
@@ -679,6 +686,9 @@ namespace SUNSET16.UI
 
         private void ShowChoiceButtons(List<RuntimeChoice> choices)
         {
+            closeButton.GetComponent<Image>().color = _baseColor;
+            _clickDisabled = false;
+
             for (int i = 0; i < choiceButtonRoots.Length; i++)
             {
                 bool show = i < choices.Count;
@@ -704,6 +714,9 @@ namespace SUNSET16.UI
 
         private void HideAllChoiceButtons()
         {
+            closeButton.GetComponent<Image>().color = _disabledColor;
+            _clickDisabled = true;
+
             foreach (var root in choiceButtonRoots)
                 if (root != null) root.SetActive(false);
         }
