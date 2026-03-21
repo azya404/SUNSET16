@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_RGBPhosphor
-  m_Shader: {fileID: 4800000, guid: 4c234f57fa74fde4a9f5f807b5584716, type: 3}
+  m_Name: M_BarrelWarp
+  m_Shader: {fileID: 4800000, guid: 6c236cd0300f6374ca012f9f2dcd6590, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -42,14 +42,15 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
+    - _EdgeDarkness: 0.593
     - _EnableExternalAlpha: 0
-    - _Intensity: 0.027
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _StripeWidth: 8
+    - _WarpStrength: 0.045
+    - _WarpZoom: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}

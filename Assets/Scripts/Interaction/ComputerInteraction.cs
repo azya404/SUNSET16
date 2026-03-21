@@ -60,6 +60,7 @@ namespace SUNSET16.Interaction
         [SerializeField] private string lockedPrompt = "Maybe I should check the mirror first...";
 
         private InteractionSystem _interactionSystem;
+        private CRTBarrelWarpController _barrelWarp;
         private bool _mirrorCompleted = false;
         private bool _sequenceActive  = false;
         private bool _sequenceCreated = false;
@@ -70,6 +71,7 @@ namespace SUNSET16.Interaction
         private void Awake()
         {
             _interactionSystem = GetComponent<InteractionSystem>();
+            _barrelWarp = GetComponent<CRTBarrelWarpController>();
         }
 
         private void Start()
@@ -158,6 +160,7 @@ namespace SUNSET16.Interaction
             // swap: Frame 1 off, Frame 2 on
             if (cutscenePanel != null) cutscenePanel.SetActive(false);
             if (overlayPanel  != null) overlayPanel.SetActive(true);
+            _barrelWarp?.SetWarpActive(true);
 
             // fade in - reveal Frame 2, teammate's UI children are now live
             yield return StartCoroutine(Fade(1f, 0f));
@@ -199,6 +202,7 @@ namespace SUNSET16.Interaction
             yield return StartCoroutine(Fade(0f, 1f));
 
             // hide everything
+            _barrelWarp?.SetWarpActive(false);
             if (overlayPanel   != null) overlayPanel.SetActive(false);
             if (computerCanvas != null) computerCanvas.SetActive(false);
 

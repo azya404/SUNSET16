@@ -2,8 +2,10 @@ Shader "Custom/CRT/BarrelWarp"
 {
     // -----------------------------------------------------------------------
     // CRT Barrel Warp — fullscreen barrel/pincushion distortion.
-    // Applied via URP Fullscreen Pass Renderer Feature, not a UI RawImage.
-    // Enabled/disabled at runtime by CRTBarrelWarpController.cs
+    // Applied via URP Fullscreen Pass Renderer Feature (ALWAYS ENABLED).
+    // Injection Point: After Rendering
+    // Controlled at runtime via global shader property _CRTWarpActive (0/1)
+    // set by CRTBarrelWarpController.cs — no feature toggling needed.
     // -----------------------------------------------------------------------
     Properties
     {
@@ -39,9 +41,17 @@ Shader "Custom/CRT/BarrelWarp"
             float _WarpZoom;
             float _EdgeDarkness;
 
+            // Global property set by CRTBarrelWarpController
+            // 1 = warp active, 0 = pass through unchanged
+            float _CRTWarpActive;
+
             half4 Frag(Varyings input) : SV_Target
             {
                 float2 uv = input.texcoord;
+
+                // Pass through unchanged when overlay is not open
+                if (_CRTWarpActive < 0.5)
+                    return SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, uv);
 
                 // Move origin to screen centre (-1 to +1)
                 float2 centered = uv * 2.0 - 1.0;
