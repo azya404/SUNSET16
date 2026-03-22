@@ -282,7 +282,7 @@ namespace SUNSET16.UI
             _isTypewriting      = false;
             _waitingForAdvance  = false;
 
-            if (_lines[_lineIndex].advanceToLine == -1)
+            if (_lines[_lineIndex].advanceToLine == -1 || _lines[_lineIndex].text == "")
             {
                 FinishDialogue();
                 return;
@@ -681,6 +681,7 @@ namespace SUNSET16.UI
             {
                 //if (advanceButton != null) advanceButton.SetActive(true);
                 line.repeated = true;
+                _isResponding = false;
             }
         }
 
