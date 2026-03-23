@@ -1587,6 +1587,7 @@ MonoBehaviour:
   announcementAudioSource: {fileID: 1549546079}
   announcements:
   - {fileID: 11400000, guid: 2f7a1ac0f2d65344aa353767aab9dd71, type: 2}
+  - {fileID: 11400000, guid: d23215da62c33bb4497f36ca3b39eb7b, type: 2}
   - {fileID: 11400000, guid: 954da4853dff53a4595f53ce8881f1d3, type: 2}
 --- !u!114 &1549546081
 MonoBehaviour:

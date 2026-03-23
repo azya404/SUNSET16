@@ -12,5 +12,361 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e7c527a6f66a8c49a6fab10a94681fc, type: 3}
   m_Name: Day2MorningP
   m_EditorClassIdentifier: 
-  sequenceId: 
-  lines: []
+  sequenceId: albert_day2_morning_pill
+  lines:
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Morning, Andy. We have another productive day ahead of us. Same stuff as
+      yesterday. Fix some wiring over at the navigation room. Other than keeping
+      DOLOS happy, do you have any questions?
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Yeah, I got some if you don\u2019t mind me asking."
+      nextLineIndex: 1
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Fire away.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices:
+    - choiceText: "The capsules\u2026 what\u2019s in them that makes them so mandatory
+        to be taken every day?"
+      nextLineIndex: 2
+      offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: You never really talk about yourself, Al. What did you do before
+        working for the DOLOS Corporation?
+      nextLineIndex: 8
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: How do you feel about the DOLOS Corporation? From one employee
+        to another?
+      nextLineIndex: 18
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: I should probably get to work, actually.
+      nextLineIndex: 26
+      offPillChoice: 0
+      showOnRepeat: 1
+    advanceToLine: 26
+    repeat: 1
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "It\u2019s a compound blend designed to mitigate the psychological effects
+      of long-term isolation, radiation exposure, and circadian disruption."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Along with a mix of nootropics and other company-approved stimulants to
+      boost productivity, of course.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 4
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Though I wonder, why ask that now of all times?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Well, it\u2019s my last year here before my contract expires.
+        I wanted to make sure I wasn\u2019t breaking any niche rules before my term
+        is over.It would look bad on my resume."
+      nextLineIndex: 5
+      offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: No reason in particular. Just a shower thought.
+      nextLineIndex: 6
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "An ideal employee. It\u2019s wonderful that you adhere to company policy
+      so diligently."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 1
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: You should know all this. Taking these medications is a part of your contract
+      for working on the SUNSET16.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 7
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: It is in your best interest to take them every day. To keep you safe, of
+      course.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "I\u2019m very familiar with our company policy. There\u2019s no
+        need to worry."
+      nextLineIndex: 1
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: I was an electrical grid regulator for SinoEuro Power. Did that for 3 years
+      before the company merged with NUSA Electric, not long after Erebus Holdings
+      bought out the DOLOS Corporation.
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 9
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Anyhow, they restructured and took away some of my benefits. I left and
+      found a posting for the SUNSET16 not long after.
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 10
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "And\u2026 here I am."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Sounds like quite the journey you went on. I\u2019m impressed."
+      nextLineIndex: 11
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "I\u2019m surprised you left. I always took you for a corporate
+        loyalist."
+      nextLineIndex: 15
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "On paper, maybe. But there\u2019s less chaos here."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 12
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: I was never really one to bounce from corporation to corporation. I did
+      my job and did it well.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 13
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "In a way, you\u2019re like that too. That\u2019s why you passed the screenings
+      when applying and got your job here."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 14
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Life coasts on by when you stick to the status quo. Remember that.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 1
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "I was an opportunist at heart. Keyword was. It\u2019s just that SinoEuro
+      Power provided some good benefits for me at the time."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 16
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "But\u2026 they pale in comparison to what the DOLOS Corporation provides
+      me now."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 17
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: I have no reason to leave the company any time soon. Neither should you.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 1
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Out of all the significant conglomerates and mega-corporations on the
+      planet, without a doubt, the DOLOS Corporation is one of the most\u2026 secure."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 19
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "They\u2019ve been around for nearly forty years now."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "The company started as a small engineering firm in the 2080\u2019s, manufacturing
+      automated systems for cargo vessels. Then the company pivoted, hard."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Pivoted into what?
+      nextLineIndex: 21
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: A lot of stuff, eventually. DOLOS has its hands in a lot of pies.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 22
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: The Life-Sciences Division takes care of our collars, supplements, that
+      sort of stuff.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 23
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: The Aerospace Division took care of things like the SUNSET16.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 24
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: They got a division for resource extraction. Mining operations on the Moon,
+      asteroids, and a few spots on Mars.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 25
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "That\u2019s where most of the real money comes from. It\u2019s how they
+      partially funded the SUNSET16 and our AI development before being bought by
+      Erebus Holdings."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 1
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "I think that\u2019s all I have time for too. Shorter chat than usual.
+      I have work to complete."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices:
+    - choiceText: Talk to you later.
+      nextLineIndex: 27
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: 
+    sendDelay: 0
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices: []
+    advanceToLine: -1
+    repeat: 0
+    repeated: 0

@@ -31,7 +31,6 @@ using System.Collections;
 using SUNSET16.Core;
 using SUNSET16.Interaction;
 using System.Collections.Generic;
-using UnityEditor;
 
 namespace SUNSET16.UI
 {
@@ -312,7 +311,7 @@ namespace SUNSET16.UI
                 Debug.LogWarning("[DIALOGUE] ComputerInteraction not found — overlay may not close");
         }
 
-        public void resetDialogue()
+        public void ResetDialogue()
         {
             IsDialogueActive   = false;
             _isTypewriting     = false;
@@ -320,8 +319,15 @@ namespace SUNSET16.UI
             _isResponding      = false;
             _started           = false;
             _finished          = false;
+            _clickDisabled     = false;
+            _messageNum        = 0;
+            _entryPage         = 1;
+            _buttonPage        = 1;
+            _chatOpen          = true;
+            _lines.Clear();
             foreach (var msg in _messages) if (msg != null) Destroy(msg);
             _messages.Clear();
+            Debug.Log("[DIALOGUE] Messages reset!");
         }
 
         public bool GetFinishedDialogue()

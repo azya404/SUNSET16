@@ -25,6 +25,7 @@ TODO: different prompts/behaviour based on pill state (off-pill insomnia flavour
 using System.Collections;
 using UnityEngine;
 using SUNSET16.Core;
+using SUNSET16.UI;
 
 namespace SUNSET16.Interaction
 {
@@ -100,6 +101,12 @@ namespace SUNSET16.Interaction
 
             // advance phase - Night -> next day Morning (gates enforced inside AdvancePhase)
             DayManager.Instance.AdvancePhase();
+
+            // Reset Dialogue
+            DialogueUIManager.Instance.ResetDialogue();
+
+            // Reload Room
+            RoomManager.Instance.LoadRoom(RoomManager.Instance.GetCurrentRoomName());
 
             // hold at black
             yield return new WaitForSeconds(sleepHoldDuration);

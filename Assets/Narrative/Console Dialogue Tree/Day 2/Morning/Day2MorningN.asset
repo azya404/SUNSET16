@@ -90,7 +90,7 @@ MonoBehaviour:
     choices:
     - choiceText: "Well, it\u2019s my last year here before my contract expires.
         I wanted to make sure I wasn\u2019t breaking any niche rules before my term
-        is over.It would look bad on my resume."
+        is over. It would look bad on my resume."
       nextLineIndex: 5
       offPillChoice: 1
       showOnRepeat: 0

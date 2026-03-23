@@ -245,8 +245,8 @@ MonoBehaviour:
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "\u2026Pay no attention to them. Files like that are old and are sometimes
-      corrupted with malware. You\u2019ll get your tablet infected if you keep interacting
-      with it."
+      corrupted with malware. You\u2019ll get your computer infected if you keep
+      interacting with it."
     sendDelay: 1
     delayRepeats: 1
     autoAdvanceDelay: 0.5
