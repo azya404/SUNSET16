@@ -493,8 +493,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -506.74, y: 343.33}
-  m_SizeDelta: {x: 206.9254, y: 33.222}
+  m_AnchoredPosition: {x: -495.3, y: 343.34}
+  m_SizeDelta: {x: 269.098, y: 33.222}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &762798617
 MonoBehaviour:
@@ -525,8 +525,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -627,7 +627,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0096313, y: 275}
+  m_AnchoredPosition: {x: -0.0096313, y: 244}
   m_SizeDelta: {x: 1220.3861, y: 117.4458}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &777268679
@@ -659,8 +659,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1586,8 +1586,8 @@ MonoBehaviour:
   speakerIcon: {fileID: 0}
   announcementAudioSource: {fileID: 1549546079}
   announcements:
-  - {fileID: 11400000, guid: 2f7a1ac0f2d65344aa353767aab9dd71, type: 2}
-  - {fileID: 11400000, guid: d23215da62c33bb4497f36ca3b39eb7b, type: 2}
+  - {fileID: 11400000, guid: bc75e523e96c3104d909bc3a26ad85a8, type: 2}
+  - {fileID: 11400000, guid: 622bb78c3801b6e4f9ae3bb2377a441c, type: 2}
   - {fileID: 11400000, guid: 954da4853dff53a4595f53ce8881f1d3, type: 2}
 --- !u!114 &1549546081
 MonoBehaviour:
