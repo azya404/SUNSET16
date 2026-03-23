@@ -713,7 +713,7 @@ Transform:
   m_GameObject: {fileID: 122905828}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.07, y: 7.23, z: 8.396289}
+  m_LocalPosition: {x: -1.07, y: 7.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3423,8 +3423,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: NavRoomScene
-  spawnPositionInTargetScene: {x: 0, y: 0, z: 0}
-  roomType: 3
+  spawnPositionInTargetScene: {x: 0, y: -8.03, z: 0}
+  roomType: 0
   isHiddenRoomDoor: 0
   hiddenRoomID: 
   isBedroomDoor: 0
