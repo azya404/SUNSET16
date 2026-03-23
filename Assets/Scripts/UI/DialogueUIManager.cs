@@ -725,7 +725,7 @@ namespace SUNSET16.UI
 
         private void HideAllChoiceButtons()
         {
-            closeImage.color = _disabledColor;
+            if (closeImage != null) closeImage.color = _disabledColor;
             _clickDisabled = true;
 
             foreach (var root in choiceButtonRoots)
