@@ -58,7 +58,9 @@ namespace SUNSET16.UI
 
         [Header("Controls")]
         [SerializeField] private GameObject advanceButton;     // "▶ Continue" — visible after typewriter finishes
-        [SerializeField] private GameObject closeButton;       // "Close" — always visible (player can exit)
+        [SerializeField] private Transform closeButtonContainer;       // "Close" — always visible (player can exit)
+        [SerializeField] private GameObject closeButton;
+        [SerializeField] private Image closeImage;
         [SerializeField] private GameObject chatButton;
         [SerializeField] private GameObject loreButton;
 
@@ -214,9 +216,11 @@ namespace SUNSET16.UI
                 }
                 AlbertDelay = dialogueParent.transform.GetChild(2).gameObject;
                 AlbertDelay.SetActive(false);
-                closeButton = dialogueParent.transform.GetChild(3).gameObject;
+                closeButtonContainer = dialogueParent.transform.GetChild(3);
+                closeButton = closeButtonContainer.transform.GetChild(0).gameObject;
                 closeButton.GetComponent<Button>().onClick.AddListener(HideDialogue);
                 closeButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+                closeImage = closeButtonContainer.GetChild(1).GetComponent<Image>();
                 advanceButton = dialogueParent.transform.GetChild(4).gameObject;
                 advanceButton.GetComponent<Button>().onClick.AddListener(OnAdvanceClicked);
 
@@ -693,7 +697,7 @@ namespace SUNSET16.UI
 
         private void ShowChoiceButtons(List<RuntimeChoice> choices)
         {
-            closeButton.GetComponent<Image>().color = _baseColor;
+            closeImage.color = _baseColor;
             _clickDisabled = false;
 
             for (int i = 0; i < choiceButtonRoots.Length; i++)
@@ -721,7 +725,7 @@ namespace SUNSET16.UI
 
         private void HideAllChoiceButtons()
         {
-            closeButton.GetComponent<Image>().color = _disabledColor;
+            closeImage.color = _disabledColor;
             _clickDisabled = true;
 
             foreach (var root in choiceButtonRoots)
