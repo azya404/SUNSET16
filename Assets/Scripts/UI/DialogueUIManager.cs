@@ -31,7 +31,6 @@ using System.Collections;
 using SUNSET16.Core;
 using SUNSET16.Interaction;
 using System.Collections.Generic;
-using UnityEditor;
 
 namespace SUNSET16.UI
 {
@@ -59,7 +58,9 @@ namespace SUNSET16.UI
 
         [Header("Controls")]
         [SerializeField] private GameObject advanceButton;     // "▶ Continue" — visible after typewriter finishes
-        [SerializeField] private GameObject closeButton;       // "Close" — always visible (player can exit)
+        [SerializeField] private Transform closeButtonContainer;       // "Close" — always visible (player can exit)
+        [SerializeField] private GameObject closeButton;
+        [SerializeField] private Image closeImage;
         [SerializeField] private GameObject chatButton;
         [SerializeField] private GameObject loreButton;
 
@@ -117,6 +118,10 @@ namespace SUNSET16.UI
         private int             _selectedEntry;
         private int             _entryPage = 1;
         private int             _buttonPage = 1;
+        private Color           _baseColor = new Color(1f, 1f, 1f, 1f);
+        private Color           _disabledColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+        private bool            _clickDisabled = false;
+
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
 
@@ -211,8 +216,11 @@ namespace SUNSET16.UI
                 }
                 AlbertDelay = dialogueParent.transform.GetChild(2).gameObject;
                 AlbertDelay.SetActive(false);
-                closeButton = dialogueParent.transform.GetChild(3).gameObject;
+                closeButtonContainer = dialogueParent.transform.GetChild(3);
+                closeButton = closeButtonContainer.transform.GetChild(0).gameObject;
                 closeButton.GetComponent<Button>().onClick.AddListener(HideDialogue);
+                closeButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+                closeImage = closeButtonContainer.GetChild(1).GetComponent<Image>();
                 advanceButton = dialogueParent.transform.GetChild(4).gameObject;
                 advanceButton.GetComponent<Button>().onClick.AddListener(OnAdvanceClicked);
 
@@ -277,7 +285,7 @@ namespace SUNSET16.UI
             _isTypewriting      = false;
             _waitingForAdvance  = false;
 
-            if (_lines[_lineIndex].advanceToLine == -1)
+            if (_lines[_lineIndex].advanceToLine == -1 || _lines[_lineIndex].text == "")
             {
                 FinishDialogue();
                 return;
@@ -307,7 +315,7 @@ namespace SUNSET16.UI
                 Debug.LogWarning("[DIALOGUE] ComputerInteraction not found — overlay may not close");
         }
 
-        public void resetDialogue()
+        public void ResetDialogue()
         {
             IsDialogueActive   = false;
             _isTypewriting     = false;
@@ -315,8 +323,15 @@ namespace SUNSET16.UI
             _isResponding      = false;
             _started           = false;
             _finished          = false;
+            _clickDisabled     = false;
+            _messageNum        = 0;
+            _entryPage         = 1;
+            _buttonPage        = 1;
+            _chatOpen          = true;
+            _lines.Clear();
             foreach (var msg in _messages) if (msg != null) Destroy(msg);
             _messages.Clear();
+            Debug.Log("[DIALOGUE] Messages reset!");
         }
 
         public bool GetFinishedDialogue()
@@ -380,12 +395,14 @@ namespace SUNSET16.UI
                 choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
             }
             _messageCoroutine = StartCoroutine(SendMessage(choiceIndex, currentLine, choice));
+
             HideAllChoiceButtons();
         }
 
         public void MenuSound()
         {
-            audioSource.PlayOneShot(menuClick);
+            if (!_clickDisabled)
+                audioSource.PlayOneShot(menuClick);
         }
 
         public void SwapToChat()
@@ -674,11 +691,15 @@ namespace SUNSET16.UI
             {
                 //if (advanceButton != null) advanceButton.SetActive(true);
                 line.repeated = true;
+                _isResponding = false;
             }
         }
 
         private void ShowChoiceButtons(List<RuntimeChoice> choices)
         {
+            closeImage.color = _baseColor;
+            _clickDisabled = false;
+
             for (int i = 0; i < choiceButtonRoots.Length; i++)
             {
                 bool show = i < choices.Count;
@@ -704,6 +725,9 @@ namespace SUNSET16.UI
 
         private void HideAllChoiceButtons()
         {
+            closeImage.color = _disabledColor;
+            _clickDisabled = true;
+
             foreach (var root in choiceButtonRoots)
                 if (root != null) root.SetActive(false);
         }

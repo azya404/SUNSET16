@@ -281,11 +281,15 @@ namespace SUNSET16.Interaction
             int index = DayManager.Instance.CurrentDay - 1; // day 1 -> index 0
             PillChoice pill = PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay);
             DayPhase phase = DayManager.Instance.CurrentPhase;
-
+            
+            Debug.Log("Index before adjustment: " + index);
             if (pill == PillChoice.NotTaken)
                 index += dayOffset;
             if (phase == DayPhase.Night)
                 index += 2*dayOffset;
+
+            Debug.Log("[DIALOGUE] Day offset: " + dayOffset + ", Index: " + index + ", Pill choice: " + pill + ", Phase: " + phase);
+            Debug.Log("[DIALOGUE] Dialogue Tree: " + daySequences[index].sequenceId);
                 
             if (index < 0 || index >= daySequences.Length) return null;
 
