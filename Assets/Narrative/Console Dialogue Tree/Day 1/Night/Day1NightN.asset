@@ -12,5 +12,306 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e7c527a6f66a8c49a6fab10a94681fc, type: 3}
   m_Name: Day1NightN
   m_EditorClassIdentifier: 
-  sequenceId: 
-  lines: []
+  sequenceId: albert_day1_night_nopill
+  lines:
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: I just received the completion notice for the tasks. According to DOLOS,
+      everything went smoothly. Wiring shows an optimal power flow in that quadrant.
+      Good job.
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Yeah, it was fine. Standard grid alignment.
+      nextLineIndex: 1
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: Whatever gets the paycheck.
+      nextLineIndex: 2
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "I\u2019ve said it before, and I\u2019ll say it again. You\u2019ve always
+      had a keen eye. That\u2019s why the DOLOS Corporation hired you."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 4
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Heh\u2026 can\u2019t blame you, I guess."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "As long as you complete your work efficiently, DOLOS will remain in a
+      satisfactory state. It\u2019s in your best interest to keep it that way."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 4
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: On an unrelated note, the UNEP Annual 2116 Report was released earlier
+      this quarter.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 5
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "A bunch of jargon, but also some interesting points about the state of
+      the Earth. Don\u2019t know if you kept up with it."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "No, I haven\u2019t kept up with the annual report. And frankly,
+        I couldn\u2019t care less about the Earth."
+      nextLineIndex: 6
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "Yeah, I\u2019ve read through the previous reports here and there,
+        though not this version yet. Why bring it up?"
+      nextLineIndex: 12
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: Oh? They still make those things?
+      nextLineIndex: 16
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "I guess I never really pried into it, but, if you don\u2019t mind my asking,
+      why do you hate the place so much?"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: I hated the pollution, and I hated the people there more.
+      nextLineIndex: 7
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: The cities were too crowded. Noisy too. Felt like my ears were
+        constantly bleeding. Compare that to here? The difference between heaven
+        and hell.
+      nextLineIndex: 8
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "I don\u2019t want to talk about it."
+      nextLineIndex: 11
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Some people can be\u2026 troublesome. The best kind of people are the
+      ones who comply with the rules and regulations."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "That I agree with. No crowds\u2026 no noise\u2026 It\u2019s hard to miss
+      what isn\u2019t here on the SUNSET16."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 9
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Besides, jobs in space\u2014and especially jobs under the DOLOS Corporation\u2014are
+      few and far between."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 10
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Strict rules and regulations need to be followed. But you and I are both
+      good at that.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "We all have our demons. You can keep your secrets\u2026"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: I figured it would have been useful information to know.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: The only information I need to keep myself updated on is regarding
+        the SUNSET16 and/or important updates within the DOLOS Corporation and Erebus
+        Holdings.
+      nextLineIndex: 13
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "Can\u2019t fault you there. If you have a copy, send it my way."
+      nextLineIndex: 15
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "That\u2019s a good response. I like that. Everything you and I need to
+      know is on this ship."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 14
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Though it\u2019s nice to gossip about international events here and there,
+      after all, the DOLOS corporation has a dominant worldwide reach."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Sure, just give me one moment\u2026"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Surprisingly so. According to recent DOLOS intel, the environmental reports
+      are influenced by companies like Terra Consulting, allowing them to continue
+      their\u2026 environmental ventures without intervention."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Doesn\u2019t sound like much of a secret if the DOLOS higher-ups
+        know about it."
+      nextLineIndex: 17
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: Maybe I should brush up on those files and give them a read.
+      nextLineIndex: 19
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "You\u2019d be right about that. Between you, me, and other DOLOS employees,
+      our Life-Sciences Division\u2014which you can thank for the AEGIS-1 Collar\u2014will
+      be planning something with that group in the future."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "And that would be\u2026?"
+      nextLineIndex: 18
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Classified. At least for now.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "I\u2019ll send you the file in a moment."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Anyways, gotta get some rest. DOLOS has already queued tomorrow\u2019s
+      schedule. Night, Andy."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Goodnight, Al.
+      nextLineIndex: 21
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: 
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices: []
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0

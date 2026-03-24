@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HallwayScene.unity
     guid: d564ff0b7d8c1e249a7c2193799d01db
+  - enabled: 1
+    path: Assets/Scenes/NavRoomScene.unity
+    guid: 225a5d284dd3c1b43aec5c4a51b97ece
   m_configObjects: {}

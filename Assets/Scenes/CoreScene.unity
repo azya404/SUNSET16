@@ -493,8 +493,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -506.74, y: 343.33}
-  m_SizeDelta: {x: 206.9254, y: 33.222}
+  m_AnchoredPosition: {x: -495.3, y: 343.34}
+  m_SizeDelta: {x: 269.098, y: 33.222}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &762798617
 MonoBehaviour:
@@ -525,8 +525,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -627,7 +627,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0096313, y: 275}
+  m_AnchoredPosition: {x: -0.0096313, y: 244}
   m_SizeDelta: {x: 1220.3861, y: 117.4458}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &777268679
@@ -659,8 +659,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -683,7 +683,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 14
   m_fontSizeMax: 40
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -1274,7 +1274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1586,7 +1586,8 @@ MonoBehaviour:
   speakerIcon: {fileID: 0}
   announcementAudioSource: {fileID: 1549546079}
   announcements:
-  - {fileID: 11400000, guid: 2f7a1ac0f2d65344aa353767aab9dd71, type: 2}
+  - {fileID: 11400000, guid: bc75e523e96c3104d909bc3a26ad85a8, type: 2}
+  - {fileID: 11400000, guid: 622bb78c3801b6e4f9ae3bb2377a441c, type: 2}
   - {fileID: 11400000, guid: 954da4853dff53a4595f53ce8881f1d3, type: 2}
 --- !u!114 &1549546081
 MonoBehaviour:
@@ -1930,11 +1931,11 @@ MonoBehaviour:
   typewriterCharDelay: 0.03
   AlbertDelayAmt: 0.5
   playerDelay: 0.5
-  albertX: 160
-  albertY: 160
-  playerX: 120
-  playerY: 80
-  offset: 80
+  albertX: 170
+  albertY: 260
+  playerX: 180
+  playerY: 140
+  offset: 120
   audioSource: {fileID: 1667455045}
   keyboard: {fileID: 8300000, guid: f43923ff3038f974a9aef7c0b34a9cb0, type: 3}
   menuClick: {fileID: 8300000, guid: 6336ce03e4dda71489857b071cabf257, type: 3}

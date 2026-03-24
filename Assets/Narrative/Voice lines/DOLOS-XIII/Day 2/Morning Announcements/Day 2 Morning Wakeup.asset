@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 2 Morning Wakeup
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day2_morning_wakeup
+  text: 'Rise and shine, Technician. Current time is 0600 hours.
+
+    Prepare for
+    another productive shift in service of the DOLOS Corporation, a subsidiary of
+    the Erebus Holdings.
+
+    Vital signs show a 4% increase in metabolic rate. All
+    systems are functional.
+
+    Please proceed to your Aegis Collar Supplement Dispenser
+    for your mandatory daily wellness protocol at your earliest convenience.'
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: cc37c9100a48273468b6b6c6d18f7b1f, type: 3}
+  displayDuration: 29
+  lineDurations: 060000000800000007000000

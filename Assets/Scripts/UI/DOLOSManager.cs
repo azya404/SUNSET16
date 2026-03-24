@@ -95,6 +95,7 @@ namespace SUNSET16.UI
                     //null guard: _linesCoroutine is null if announcementText ref was missing in Inspector
                     if (_linesCoroutine != null) StopCoroutine(_linesCoroutine);
                     if (announcementText != null) announcementText.text = _fullText;
+                    if (skipText != null) skipText.text = "[Press Space to close]";
                     _linesSkipped = true;
                 }
                 else
@@ -216,6 +217,7 @@ namespace SUNSET16.UI
             if (announcementText  != null) 
             {
                 announcementText.fontSize = announcement.fontSize;
+                skipText.text = "[Press Space to skip]";
                 _fullText = announcement.text;
                 _linesCoroutine = StartCoroutine(LineByLine(announcement));
             }
@@ -250,6 +252,7 @@ namespace SUNSET16.UI
         
         private IEnumerator LineByLine(DOLOSAnnouncement announcement)
         {
+            Debug.Log("[DOLOS] Playing Line by Line");
             _showingLines = true;
             _linesSkipped = false;
             announcementText.text = "";
@@ -261,8 +264,10 @@ namespace SUNSET16.UI
 
                 if (c == '\n')
                 {
+                    Debug.Log("[DOLOS] Announement text: " + announcementText.text);
                     yield return new WaitForSeconds(announcement.lineDurations[linesShown]);
                     linesShown++;
+                    announcementText.text = "";
                 }
             }
             _showingLines = false;

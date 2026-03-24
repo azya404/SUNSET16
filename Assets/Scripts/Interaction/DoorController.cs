@@ -276,7 +276,7 @@ namespace SUNSET16.Core
             }
 
             if (RoomManager.Instance.GetCurrentRoomName().Contains("Bedroom"))
-                DialogueUIManager.Instance.resetDialogue();
+                DialogueUIManager.Instance.ResetDialogue();
 
             if (RoomManager.Instance != null)
                 RoomManager.Instance.SetNextSpawnPosition(spawnPositionInTargetScene);
