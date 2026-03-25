@@ -109,7 +109,10 @@ namespace SUNSET16.Core
             {
                 string startingRoom = SaveManager.Instance.SaveExists ? "BedroomScene" : "CutSceneDay1";
                 Debug.Log($"[GAMEMANAGER] Loading starting room: {startingRoom}");
-                RoomManager.Instance.LoadRoom(startingRoom);
+                // cutscene: skip both fades — main menu already faded to black, cutscene plays raw
+                // bedroom (continue): normal fades apply
+                bool isCutscene = startingRoom == "CutSceneDay1";
+                RoomManager.Instance.LoadRoom(startingRoom, skipFadeIn: isCutscene, skipFadeOut: isCutscene);
             }
             else
             {
