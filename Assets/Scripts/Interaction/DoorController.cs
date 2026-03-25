@@ -56,6 +56,9 @@ namespace SUNSET16.Core
         [Header("Visual")]
         [SerializeField] private Light2D doorLight;
         [SerializeField] private SpriteRenderer doorSprite;
+        [SerializeField] private GameObject lightSpriteRed;    // LightR.png GO — shown when locked
+        [SerializeField] private GameObject lightSpriteYellow; // YELLOW.png GO — shown when accessible
+        [SerializeField] private GameObject lightSpriteGreen;  // LightG.png GO — shown when player in zone
 
         [Header("Animation")]
         [SerializeField] private Sprite[] animationFrames; // drag DoorAnim_0 to DoorAnim_7 in order
@@ -94,12 +97,16 @@ namespace SUNSET16.Core
         {
             if (!isLocked && doorLight != null)
                 doorLight.color = ColourInZone;
+            if (!isLocked)
+                ActivateLightSprite(lightSpriteGreen);
         }
 
         public void OnPlayerExitZone()
         {
             if (!isLocked && doorLight != null)
                 doorLight.color = ColourAccessible;
+            if (!isLocked)
+                ActivateLightSprite(lightSpriteYellow);
         }
 
         // ─── IInteractable ────────────────────────────────────────────────────────
@@ -345,6 +352,13 @@ namespace SUNSET16.Core
 
         // ─── State Management ─────────────────────────────────────────────────────
 
+        private void ActivateLightSprite(GameObject active)
+        {
+            if (lightSpriteRed    != null) lightSpriteRed.SetActive(lightSpriteRed       == active);
+            if (lightSpriteYellow != null) lightSpriteYellow.SetActive(lightSpriteYellow == active);
+            if (lightSpriteGreen  != null) lightSpriteGreen.SetActive(lightSpriteGreen   == active);
+        }
+
         public void SetDoorState(DoorState state)
         {
             currentState = state;
@@ -354,6 +368,7 @@ namespace SUNSET16.Core
                 case DoorState.Locked:
                     if (doorLight  != null) doorLight.color  = ColourLocked;
                     if (doorSprite != null) doorSprite.color = new Color(1f, 0.5f, 0.5f);
+                    ActivateLightSprite(lightSpriteRed);
                     isLocked = true;
                     break;
 
@@ -361,12 +376,14 @@ namespace SUNSET16.Core
                     // discovered = accessible but not yet entered, show orange like Normal
                     if (doorLight  != null) doorLight.color  = ColourAccessible;
                     if (doorSprite != null) doorSprite.color = Color.white;
+                    ActivateLightSprite(lightSpriteYellow);
                     isLocked = false;
                     break;
 
                 case DoorState.Normal:
                     if (doorLight  != null) doorLight.color  = ColourAccessible;
                     if (doorSprite != null) doorSprite.color = Color.white;
+                    ActivateLightSprite(lightSpriteYellow);
                     isLocked = false;
                     break;
 
