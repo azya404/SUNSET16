@@ -1884,7 +1884,9 @@ MonoBehaviour:
   messagebox: {fileID: 21300000, guid: b6187bffc65373f4eb5f27afbb79b5ed, type: 3}
   playerMessagebox: {fileID: 21300000, guid: ec2b25c2cfdf7354b9c0965b0acfdbe5, type: 3}
   advanceButton: {fileID: 0}
+  closeButtonContainer: {fileID: 0}
   closeButton: {fileID: 0}
+  closeImage: {fileID: 0}
   chatButton: {fileID: 0}
   loreButton: {fileID: 0}
   choiceButtonRoots:
@@ -2581,7 +2583,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27be29f6ae6e3a8458db1c4b7f08db36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _puzzleDataAssets: []
+  _puzzleDataAssets:
+  - {fileID: 11400000, guid: fbe01df71dbdbd54a9356a67dd242645, type: 2}
   _puzzleSpawnPoint: {fileID: 0}
 --- !u!4 &2055875353
 Transform:
