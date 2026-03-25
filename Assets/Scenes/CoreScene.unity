@@ -2585,6 +2585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _puzzleDataAssets:
   - {fileID: 11400000, guid: fbe01df71dbdbd54a9356a67dd242645, type: 2}
+  - {fileID: 11400000, guid: 19d94ffed27f61947a4e37b9748327c9, type: 2}
   _puzzleSpawnPoint: {fileID: 0}
 --- !u!4 &2055875353
 Transform:
