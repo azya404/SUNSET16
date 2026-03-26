@@ -168,10 +168,10 @@ namespace SUNSET16.Interaction
             if (cutscenePanel != null) cutscenePanel.SetActive(false);
             if (overlayPanel  != null) overlayPanel.SetActive(true);
 
+            _barrelWarp?.SetWarpActive(true);
+            
             // fade in - reveal Frame 2, teammate's UI children are now live
             yield return StartCoroutine(Fade(1f, 0f));
-
-            _barrelWarp?.SetWarpActive(true);
 
             // hand off to DialogueUIManager
             // if no SOs assigned yet, log warning and leave overlay open - expected during development
