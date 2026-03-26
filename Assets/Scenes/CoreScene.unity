@@ -1939,6 +1939,11 @@ MonoBehaviour:
   loreEntries:
   - {fileID: 11400000, guid: 2f27743fe6544f242a81314dd400b32c, type: 2}
   - {fileID: 11400000, guid: 9d78db23a2782b44a9c08ce608e95d8c, type: 2}
+  - {fileID: 11400000, guid: 334377081e3b441439657b833415075d, type: 2}
+  - {fileID: 11400000, guid: abfce044124d7064ab9c3de81cc6507f, type: 2}
+  - {fileID: 11400000, guid: 88acd28fd15c0d749936d755dd87b2c3, type: 2}
+  - {fileID: 11400000, guid: 5ad1c0d4cfca2a7498aa32da2598cfc2, type: 2}
+  - {fileID: 11400000, guid: 65dd24ee4e153c94cab235798e76084a, type: 2}
   typewriterCharDelay: 0.03
   AlbertDelayAmt: 0.5
   playerDelay: 0.5

@@ -485,6 +485,13 @@ namespace SUNSET16.UI
                 }*/
                 prevButton.gameObject.SetActive(true);
                 nextButton.gameObject.SetActive(true);
+                if (_unlockedEntries.Count == 0)
+                {
+                    _prevDisabled = true;
+                    prevImage.color = _disabledColor;
+                    _nextDisabled = true;
+                    nextImage.color = _disabledColor;
+                }
                 // Display last opened lore entry (nothing if none have been selected)
                 if (_unlockedEntries.Count > 0)
                 {
@@ -498,10 +505,11 @@ namespace SUNSET16.UI
 
         public void OnEntrySelected(int index)
         {
-            int entryNum = ((index + 1) * _buttonPage) - 1;
+            int entryNum = index + 5 * (_buttonPage - 1);
             _selectedEntry = entryNum;
             _entryPage = 0;
             loreImage.sprite = _unlockedEntries[entryNum].content[0];
+            UpdatePageButtons();
         }
 
         public void PrevButtonPage()
@@ -524,17 +532,21 @@ namespace SUNSET16.UI
 
         public void UpdateEntryButtons()
         {
-            int max = _unlockedEntries.Count % 5;
             int max_index = _buttonPage * 5;
-            if (max == 0)
-                max = 5;
+            int max = 5;
+            if (max_index > _unlockedEntries.Count)
+            {
+                max = _unlockedEntries.Count % 5;
+                if (max == 0)
+                    max = 5;
+            }
             for (int i = 0; i < 5; i++)
             {
-                Debug.Log("[DIALOGUE] Index: " + i + ", Max: " + max + ", Max Index: " + max_index + ", Entry Index: " + (((i + 1) * _buttonPage) - 1));
+                Debug.Log("[DIALOGUE] Index: " + i + ", Max: " + max + ", Max Index: " + max_index + ", Entry Index: " + (i + 5 * (_buttonPage - 1)));
                 if (i < max)
                 {
                     loreButtonRoots[i].gameObject.SetActive(true);
-                    loreButtonTexts[i].text = _unlockedEntries[((i + 1) * _buttonPage) - 1].title;
+                    loreButtonTexts[i].text = _unlockedEntries[i + 5 * (_buttonPage - 1)].title;
                 }
                 else
                     loreButtonRoots[i].gameObject.SetActive(false);
