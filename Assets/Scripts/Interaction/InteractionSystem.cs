@@ -38,6 +38,7 @@ namespace SUNSET16.Core
         [SerializeField] private LayerMask playerLayer;
 
         private IInteractable interactable;
+        private IProximityResponder proximityResponder;
         private bool playerInRange = false;
         private Collider2D triggerCollider;
 
@@ -51,6 +52,8 @@ namespace SUNSET16.Core
                 enabled = false; //no point running if theres nothing to interact with
                 return;
             }
+            //optional - not all interactables need proximity feedback (mirrors, computers, etc)
+            proximityResponder = GetComponent<IProximityResponder>();
             //auto-fix if someone forgot to set the collider as a trigger
             triggerCollider = GetComponent<Collider2D>();
             if (!triggerCollider.isTrigger)
@@ -97,6 +100,7 @@ namespace SUNSET16.Core
             {
                 playerInRange = true;
                 ShowPrompt();
+                proximityResponder?.OnPlayerEnterZone();
                 Debug.Log($"[INTERACTIONSYSTEM] Player entered range of {gameObject.name}");
             }
         }
@@ -109,6 +113,7 @@ namespace SUNSET16.Core
             {
                 playerInRange = false;
                 HidePrompt();
+                proximityResponder?.OnPlayerExitZone();
                 Debug.Log($"[INTERACTIONSYSTEM] Player exited range of {gameObject.name}");
             }
         }
