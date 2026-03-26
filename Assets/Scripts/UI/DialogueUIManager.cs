@@ -62,7 +62,9 @@ namespace SUNSET16.UI
         [SerializeField] private GameObject closeButton;
         [SerializeField] private Image closeImage;
         [SerializeField] private GameObject chatButton;
+        [SerializeField] private Image chatButtonImage;
         [SerializeField] private GameObject loreButton;
+        [SerializeField] private Image loreButtonImage;
         [SerializeField] private GameObject prevButton;
         [SerializeField] private Image prevImage;
         [SerializeField] private GameObject nextButton;
@@ -250,10 +252,10 @@ namespace SUNSET16.UI
 
                 chatButton = dialogueParent.transform.GetChild(5).gameObject;
                 chatButton.GetComponent<Button>().onClick.AddListener(SwapToChat);
-                chatButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+                chatButtonImage = chatButton.GetComponent<Image>();
                 loreButton = dialogueParent.transform.GetChild(6).gameObject;
                 loreButton.GetComponent<Button>().onClick.AddListener(SwapToLore);
-                loreButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+                loreButtonImage = loreButton.GetComponent<Image>();
 
                 loreButtonContainer = dialogueParent.transform.GetChild(7);
                 loreButtonContainer.gameObject.SetActive(false);
@@ -275,12 +277,12 @@ namespace SUNSET16.UI
                 }
 
                 prevButton = dialogueParent.transform.GetChild(9).gameObject;
+                prevButton.GetComponent<Button>().onClick.AddListener(PrevPageSound);
                 prevButton.GetComponent<Button>().onClick.AddListener(PrevButtonPage);
-                prevButton.GetComponent<Button>().onClick.AddListener(MenuSound);
                 prevImage = prevButton.GetComponent<Image>();
                 nextButton = dialogueParent.transform.GetChild(10).gameObject;
+                nextButton.GetComponent<Button>().onClick.AddListener(NextPageSound);
                 nextButton.GetComponent<Button>().onClick.AddListener(NextButtonPage);
-                nextButton.GetComponent<Button>().onClick.AddListener(MenuSound);
                 nextImage = nextButton.GetComponent<Image>();
 
                 prevPageButton = dialogueParent.transform.GetChild(11).gameObject;
@@ -429,6 +431,11 @@ namespace SUNSET16.UI
                 choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
             }
             _messageCoroutine = StartCoroutine(SendMessage(choiceIndex, currentLine, choice));
+            
+            if (closeImage != null) closeImage.color = _disabledColor;
+            if (chatButtonImage != null) chatButtonImage.color = _disabledColor;
+            if (loreButtonImage != null) loreButtonImage.color = _disabledColor;
+            _clickDisabled = true;
 
             HideAllChoiceButtons();
         }
@@ -439,12 +446,26 @@ namespace SUNSET16.UI
                 audioSource.PlayOneShot(menuClick);
         }
 
+        public void PrevPageSound()
+        {
+            if (!_prevDisabled)
+                audioSource.PlayOneShot(menuClick);
+        }
+        public void NextPageSound()
+        {
+            if (!_nextDisabled)
+                audioSource.PlayOneShot(menuClick);
+        }
+
         public void SwapToChat()
         {
             // IF IN LORE ENTRIES:
-            if (!_chatOpen)
+            if (!_chatOpen && !_clickDisabled)
             {
                 _chatOpen = true;
+                MenuSound();
+                loreButtonImage.color = _baseColor;
+                chatButtonImage.color = _disabledColor;
                 // Deactivate entry buttons
                 /*foreach (GameObject entry in loreButtonRoots)
                     entry.SetActive(false);*/
@@ -465,9 +486,12 @@ namespace SUNSET16.UI
         public void SwapToLore()
         {
             // IF IN CHAT:
-            if (_chatOpen)
+            if (_chatOpen && !_clickDisabled)
             {
                 _chatOpen = false;
+                MenuSound();
+                chatButtonImage.color = _baseColor;
+                loreButtonImage.color = _disabledColor;
                 // Deactivate all response buttons
                 /*foreach (GameObject choice in choiceButtonRoots)
                     choice.SetActive(false);*/
@@ -651,6 +675,11 @@ namespace SUNSET16.UI
 
             if (!line.repeated && line.text != "")
             {
+                if (closeImage != null) closeImage.color = _disabledColor;
+                if (chatButtonImage != null) chatButtonImage.color = _disabledColor;
+                if (loreButtonImage != null) loreButtonImage.color = _disabledColor;
+                _clickDisabled = true;
+
                 if (line.sendDelay)
                 {
                     AlbertDelay.SetActive(true);
@@ -712,12 +741,6 @@ namespace SUNSET16.UI
                     speakerPortrait.enabled = line.portrait != null;
                 }
 
-                if (line.loreEntry != "")
-                {
-                    //yield return new WaitForSeconds(1);
-                    UnlockEntry(line.loreEntry);
-                }
-
                 if (line.advanceToLine == -1)
                     _isResponding = false;
 
@@ -733,6 +756,12 @@ namespace SUNSET16.UI
             }
 
             ShowControlsForCurrentLine();
+
+            if (line.loreEntry != "")
+            {
+                yield return new WaitForSeconds(1);
+                UnlockEntry(line.loreEntry);
+            }
 
             if (line.HasChoices)
             {
@@ -885,7 +914,10 @@ namespace SUNSET16.UI
 
         private void ShowChoiceButtons(List<RuntimeChoice> choices)
         {
-            closeImage.color = _baseColor;
+            if (closeImage != null) closeImage.color = _baseColor;
+            if (!_chatOpen)
+                if (chatButtonImage != null) chatButtonImage.color = _baseColor;
+            if (loreButtonImage != null) loreButtonImage.color = _baseColor;
             _clickDisabled = false;
 
             for (int i = 0; i < choiceButtonRoots.Length; i++)
@@ -913,9 +945,6 @@ namespace SUNSET16.UI
 
         private void HideAllChoiceButtons()
         {
-            if (closeImage != null) closeImage.color = _disabledColor;
-            _clickDisabled = true;
-
             foreach (var root in choiceButtonRoots)
                 if (root != null) root.SetActive(false);
         }
