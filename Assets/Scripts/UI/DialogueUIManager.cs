@@ -268,7 +268,7 @@ namespace SUNSET16.UI
                     loreButtonRoots[i].GetComponent<Button>().onClick.AddListener(MenuSound);
                     loreButtonTexts[i] = loreButtonRoots[i].GetComponentInChildren<TextMeshProUGUI>();
 
-                    loreButtonImages[i] = responseButtonContainer.GetChild(i).GetComponent<Image>();
+                    loreButtonImages[i] = loreButtonContainer.GetChild(i).GetComponent<Image>();
                     loreButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
                     loreButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
                     loreButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
@@ -276,15 +276,19 @@ namespace SUNSET16.UI
 
                 prevButton = dialogueParent.transform.GetChild(9).gameObject;
                 prevButton.GetComponent<Button>().onClick.AddListener(PrevButtonPage);
+                prevButton.GetComponent<Button>().onClick.AddListener(MenuSound);
                 prevImage = prevButton.GetComponent<Image>();
                 nextButton = dialogueParent.transform.GetChild(10).gameObject;
                 nextButton.GetComponent<Button>().onClick.AddListener(NextButtonPage);
+                nextButton.GetComponent<Button>().onClick.AddListener(MenuSound);
                 nextImage = nextButton.GetComponent<Image>();
 
                 prevPageButton = dialogueParent.transform.GetChild(11).gameObject;
                 prevPageButton.GetComponent<Button>().onClick.AddListener(PrevEntryPage);
+                prevPageButton.GetComponent<Button>().onClick.AddListener(MenuSound);
                 nextPageButton = dialogueParent.transform.GetChild(12).gameObject;
-                prevPageButton.GetComponent<Button>().onClick.AddListener(NextEntryPage);
+                nextPageButton.GetComponent<Button>().onClick.AddListener(NextEntryPage);
+                nextPageButton.GetComponent<Button>().onClick.AddListener(MenuSound);
 
 
                 if (PlayerController.Instance != null)
@@ -485,6 +489,7 @@ namespace SUNSET16.UI
                 if (_unlockedEntries.Count > 0)
                 {
                     UpdateEntryButtons();
+                    UpdatePageButtons();
                     loreImage.gameObject.SetActive(true);
                     loreImage.sprite = _unlockedEntries[_selectedEntry].content[_entryPage];
                 }
@@ -560,13 +565,13 @@ namespace SUNSET16.UI
 
         public void PrevEntryPage()
         {
-            _entryPage++;
+            _entryPage--;
             UpdatePageButtons();
         }
         
         public void NextEntryPage()
         {
-            _entryPage--;
+            _entryPage++;
             UpdatePageButtons();
         }
 
