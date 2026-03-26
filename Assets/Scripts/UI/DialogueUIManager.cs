@@ -61,15 +61,21 @@ namespace SUNSET16.UI
         [SerializeField] private Transform closeButtonContainer;       // "Close" — always visible (player can exit)
         [SerializeField] private GameObject closeButton;
         [SerializeField] private Image closeImage;
+        [SerializeField] private Transform chatTabContainer;
         [SerializeField] private GameObject chatButton;
         [SerializeField] private Image chatButtonImage;
+        [SerializeField] private Transform loreTabContainer;
         [SerializeField] private GameObject loreButton;
         [SerializeField] private Image loreButtonImage;
+        [SerializeField] private Transform prevButtonContainer;
         [SerializeField] private GameObject prevButton;
         [SerializeField] private Image prevImage;
+        [SerializeField] private Transform nextButtonContainer;
         [SerializeField] private GameObject nextButton;
         [SerializeField] private Image nextImage;
+        [SerializeField] private Transform prevPageContainer;
         [SerializeField] private GameObject prevPageButton;
+        [SerializeField] private Transform nextPageContainer;
         [SerializeField] private GameObject nextPageButton;
 
         [Header("Choice Buttons (max 5)")]
@@ -250,12 +256,14 @@ namespace SUNSET16.UI
                 advanceButton = dialogueParent.transform.GetChild(4).gameObject;
                 advanceButton.GetComponent<Button>().onClick.AddListener(OnAdvanceClicked);
 
-                chatButton = dialogueParent.transform.GetChild(5).gameObject;
+                chatTabContainer = dialogueParent.transform.GetChild(5);
+                chatButton = chatTabContainer.transform.GetChild(0).gameObject;
                 chatButton.GetComponent<Button>().onClick.AddListener(SwapToChat);
-                chatButtonImage = chatButton.GetComponent<Image>();
-                loreButton = dialogueParent.transform.GetChild(6).gameObject;
+                chatButtonImage = chatTabContainer.GetChild(1).GetComponent<Image>();
+                loreTabContainer = dialogueParent.transform.GetChild(6);
+                loreButton = loreTabContainer.transform.GetChild(0).gameObject;
                 loreButton.GetComponent<Button>().onClick.AddListener(SwapToLore);
-                loreButtonImage = loreButton.GetComponent<Image>();
+                loreButtonImage = loreTabContainer.GetChild(1).GetComponent<Image>();
 
                 loreButtonContainer = dialogueParent.transform.GetChild(7);
                 loreButtonContainer.gameObject.SetActive(false);
@@ -276,19 +284,23 @@ namespace SUNSET16.UI
                     loreButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
                 }
 
-                prevButton = dialogueParent.transform.GetChild(9).gameObject;
+                prevButtonContainer = dialogueParent.transform.GetChild(10);
+                prevButton = prevButtonContainer.transform.GetChild(1).gameObject;
                 prevButton.GetComponent<Button>().onClick.AddListener(PrevPageSound);
                 prevButton.GetComponent<Button>().onClick.AddListener(PrevButtonPage);
-                prevImage = prevButton.GetComponent<Image>();
-                nextButton = dialogueParent.transform.GetChild(10).gameObject;
+                prevImage = prevButtonContainer.GetChild(0).GetComponent<Image>();
+                nextButtonContainer = dialogueParent.transform.GetChild(9);
+                nextButton = nextButtonContainer.transform.GetChild(1).gameObject;
                 nextButton.GetComponent<Button>().onClick.AddListener(NextPageSound);
                 nextButton.GetComponent<Button>().onClick.AddListener(NextButtonPage);
-                nextImage = nextButton.GetComponent<Image>();
+                nextImage = nextButtonContainer.GetChild(0).GetComponent<Image>();
 
-                prevPageButton = dialogueParent.transform.GetChild(11).gameObject;
+                prevPageContainer = dialogueParent.transform.GetChild(11);
+                prevPageButton = prevPageContainer.transform.GetChild(1).gameObject;
                 prevPageButton.GetComponent<Button>().onClick.AddListener(PrevEntryPage);
                 prevPageButton.GetComponent<Button>().onClick.AddListener(MenuSound);
-                nextPageButton = dialogueParent.transform.GetChild(12).gameObject;
+                nextPageContainer = dialogueParent.transform.GetChild(12);
+                nextPageButton = nextPageContainer.transform.GetChild(1).gameObject;
                 nextPageButton.GetComponent<Button>().onClick.AddListener(NextEntryPage);
                 nextPageButton.GetComponent<Button>().onClick.AddListener(MenuSound);
 
@@ -470,8 +482,8 @@ namespace SUNSET16.UI
                 /*foreach (GameObject entry in loreButtonRoots)
                     entry.SetActive(false);*/
                 loreButtonContainer.gameObject.SetActive(false);
-                prevButton.gameObject.SetActive(false);
-                nextButton.gameObject.SetActive(false);
+                prevButtonContainer.gameObject.SetActive(false);
+                nextButtonContainer.gameObject.SetActive(false);
                 // Deactivate lore entry
                 loreImage.gameObject.SetActive(false);
                 // Activate appropriate response buttons
@@ -507,8 +519,8 @@ namespace SUNSET16.UI
                         break;
                     loreButtonRoots[i].SetActive(true);
                 }*/
-                prevButton.gameObject.SetActive(true);
-                nextButton.gameObject.SetActive(true);
+                prevButtonContainer.gameObject.SetActive(true);
+                nextButtonContainer.gameObject.SetActive(true);
                 if (_unlockedEntries.Count == 0)
                 {
                     _prevDisabled = true;
@@ -614,14 +626,14 @@ namespace SUNSET16.UI
         public void UpdatePageButtons()
         {
             if (_entryPage > 0)
-                prevPageButton.gameObject.SetActive(true);
+                prevPageContainer.gameObject.SetActive(true);
             else
-                prevPageButton.gameObject.SetActive(false);
+                prevPageContainer.gameObject.SetActive(false);
 
             if (_entryPage < (_unlockedEntries[_selectedEntry].content.Count - 1))
-                nextPageButton.gameObject.SetActive(true);
+                nextPageContainer.gameObject.SetActive(true);
             else
-                nextPageButton.gameObject.SetActive(false);
+                nextPageContainer.gameObject.SetActive(false);
 
             loreImage.sprite = _unlockedEntries[_selectedEntry].content[_entryPage];
         }
@@ -659,6 +671,14 @@ namespace SUNSET16.UI
             UnlockEntry("test_5");
             UnlockEntry("test_6");
             UnlockEntry("test_7");
+        }
+
+        [ContextMenu("UnlockAllTestEntries")]
+        public void TestUnlockAll()
+        {
+            TestUnlock1();
+            TestUnlock2();
+            TestUnlockOthers();
         }
 
         // ─── Internal Playback ────────────────────────────────────────────────────
@@ -747,7 +767,8 @@ namespace SUNSET16.UI
                     if (closeImage != null) closeImage.color = _baseColor;
                     if (!_chatOpen)
                         if (chatButtonImage != null) chatButtonImage.color = _baseColor;
-                    if (loreButtonImage != null) loreButtonImage.color = _baseColor;
+                    if (_chatOpen)
+                        if (loreButtonImage != null) loreButtonImage.color = _baseColor;
                     _clickDisabled = false;
                 }
 
@@ -924,7 +945,8 @@ namespace SUNSET16.UI
             if (closeImage != null) closeImage.color = _baseColor;
             if (!_chatOpen)
                 if (chatButtonImage != null) chatButtonImage.color = _baseColor;
-            if (loreButtonImage != null) loreButtonImage.color = _baseColor;
+            if (_chatOpen)
+                if (loreButtonImage != null) loreButtonImage.color = _baseColor;
             _clickDisabled = false;
 
             for (int i = 0; i < choiceButtonRoots.Length; i++)
