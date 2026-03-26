@@ -1,11 +1,12 @@
 /*
 the door script - handles room transitions and access control
 implements IInteractable so InteractionSystem can trigger it with E
+implements IProximityResponder so InteractionSystem can notify it when player enters/exits zone
 
 three flavors of door:
 - normal: always works, no restrictions (hallways, bedroom, etc)
 - hidden room: only works off-pill at night after task is done
-  has visual states too (red = locked, yellow = discovered, green = entered)
+  has visual states too (red = locked, orange = accessible, green = player in zone)
 - bedroom: special flag so on-pill nights the player can ONLY go here
   all other doors show "too drowsy to explore" which is kinda funny
 
@@ -13,21 +14,23 @@ when you go through a door it tells RoomManager where to spawn the player
 in the next room and then triggers the additive scene load
 if its a hidden room door it also tells HiddenRoomManager you entered
 
-the light + sprite color feedback is a nice touch
-red/pink for locked, yellow/warm for discovered, green/white for open
-players can tell at a glance whats accessible
+light colour feedback (option 2):
+- red    = hard locked regardless of proximity
+- orange = accessible, player not in zone (always visible from a distance)
+- green  = player is in zone and door is accessible (ready to press E)
+animation plays on successful interact, THEN transitions to room
 
-TODO: actual door open/close animation
 TODO: PlayDoorOpen sfx is commented out - need the audio asset
 TODO: HUD locked message display (needs HUDManager which doesnt exist yet)
 */
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using SUNSET16.UI;
 
 namespace SUNSET16.Core
 {
-    public class DoorController : MonoBehaviour, IInteractable
+    public class DoorController : MonoBehaviour, IInteractable, IProximityResponder
     {
         [Header("Room Configuration")]
         [SerializeField] private string targetSceneName;
@@ -53,10 +56,22 @@ namespace SUNSET16.Core
         [Header("Visual")]
         [SerializeField] private Light2D doorLight;
         [SerializeField] private SpriteRenderer doorSprite;
+        [SerializeField] private GameObject lightSpriteRed;    // LightR.png GO — shown when locked
+        [SerializeField] private GameObject lightSpriteYellow; // YELLOW.png GO — shown when accessible
+        [SerializeField] private GameObject lightSpriteGreen;  // LightG.png GO — shown when player in zone
+
+        [Header("Animation")]
+        [SerializeField] private Sprite[] animationFrames; // drag DoorAnim_0 to DoorAnim_7 in order
+        [SerializeField] private float frameDelay = 0.07f;
+        private bool isAnimating = false;
 
         [Header("Door State")]
         private DoorState currentState = DoorState.Normal;
         private bool isLocked = false;
+
+        private static readonly Color ColourLocked     = Color.red;
+        private static readonly Color ColourAccessible = new Color(1f, 0.5f, 0f); // orange
+        private static readonly Color ColourInZone     = Color.green;
 
         private InteractionSystem interactionSystem;
 
@@ -64,7 +79,7 @@ namespace SUNSET16.Core
         {
             interactionSystem = GetComponent<InteractionSystem>();
             //if its a hidden room door, ask HiddenRoomManager what state its in
-            //otherwise just set it to normal (unlocked, green)
+            //otherwise just set it to normal (unlocked, orange)
             if (isHiddenRoomDoor && HiddenRoomManager.Instance != null)
             {
                 DoorState state = HiddenRoomManager.Instance.GetDoorState(hiddenRoomID);
@@ -76,9 +91,31 @@ namespace SUNSET16.Core
             }
         }
 
+        // ─── IProximityResponder ──────────────────────────────────────────────────
+
+        public void OnPlayerEnterZone()
+        {
+            if (!isLocked && doorLight != null)
+                doorLight.color = ColourInZone;
+            if (!isLocked)
+                ActivateLightSprite(lightSpriteGreen);
+        }
+
+        public void OnPlayerExitZone()
+        {
+            if (!isLocked && doorLight != null)
+                doorLight.color = ColourAccessible;
+            if (!isLocked)
+                ActivateLightSprite(lightSpriteYellow);
+        }
+
+        // ─── IInteractable ────────────────────────────────────────────────────────
+
         public void Interact()
         {
             Debug.Log($"[DOORCONTROLLER] Attempting to interact with door to {targetSceneName}");
+
+            if (isAnimating) return; // dont interrupt an animation already playing
 
             // andy can move, but not change rooms when DOLOS is announcing things
             if (DOLOSManager.Instance != null && DOLOSManager.Instance.IsAnnouncementActive)
@@ -159,7 +196,8 @@ namespace SUNSET16.Core
                 }
             }
 
-            TransitionToRoom(); //all checks passed, LSFFGGGG
+            // all checks passed - play animation then transition
+            StartCoroutine(PlayOpenAnimation());
         }
 
         public string GetInteractionPrompt()
@@ -181,6 +219,25 @@ namespace SUNSET16.Core
                 return "Too tired...";
 
             return "Press E to open";
+        }
+
+        // ─── Animation ────────────────────────────────────────────────────────────
+
+        private IEnumerator PlayOpenAnimation()
+        {
+            isAnimating = true;
+
+            if (animationFrames != null && animationFrames.Length > 0 && doorSprite != null)
+            {
+                foreach (Sprite frame in animationFrames)
+                {
+                    doorSprite.sprite = frame;
+                    yield return new WaitForSeconds(frameDelay);
+                }
+            }
+
+            isAnimating = false;
+            TransitionToRoom();
         }
 
         // ─── Door Restriction Logic ───────────────────────────────────────────────
@@ -295,6 +352,13 @@ namespace SUNSET16.Core
 
         // ─── State Management ─────────────────────────────────────────────────────
 
+        private void ActivateLightSprite(GameObject active)
+        {
+            if (lightSpriteRed    != null) lightSpriteRed.SetActive(lightSpriteRed       == active);
+            if (lightSpriteYellow != null) lightSpriteYellow.SetActive(lightSpriteYellow == active);
+            if (lightSpriteGreen  != null) lightSpriteGreen.SetActive(lightSpriteGreen   == active);
+        }
+
         public void SetDoorState(DoorState state)
         {
             currentState = state;
@@ -302,20 +366,24 @@ namespace SUNSET16.Core
             switch (state)
             {
                 case DoorState.Locked:
-                    if (doorLight  != null) doorLight.color  = Color.red;
+                    if (doorLight  != null) doorLight.color  = ColourLocked;
                     if (doorSprite != null) doorSprite.color = new Color(1f, 0.5f, 0.5f);
+                    ActivateLightSprite(lightSpriteRed);
                     isLocked = true;
                     break;
 
                 case DoorState.Discovered:
-                    if (doorLight  != null) doorLight.color  = Color.yellow;
-                    if (doorSprite != null) doorSprite.color = new Color(1f, 1f, 0.7f);
+                    // discovered = accessible but not yet entered, show orange like Normal
+                    if (doorLight  != null) doorLight.color  = ColourAccessible;
+                    if (doorSprite != null) doorSprite.color = Color.white;
+                    ActivateLightSprite(lightSpriteYellow);
                     isLocked = false;
                     break;
 
                 case DoorState.Normal:
-                    if (doorLight  != null) doorLight.color  = Color.green;
+                    if (doorLight  != null) doorLight.color  = ColourAccessible;
                     if (doorSprite != null) doorSprite.color = Color.white;
+                    ActivateLightSprite(lightSpriteYellow);
                     isLocked = false;
                     break;
 
