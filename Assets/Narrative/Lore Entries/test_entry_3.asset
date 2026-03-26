@@ -15,8 +15,7 @@ MonoBehaviour:
   loreId: test_3
   title: Test 3
   content:
-  - {fileID: 21300000, guid: abdf8bd8618e6b94482e6d9854dabef5, type: 3}
-  - {fileID: 21300000, guid: 5755d5e6a4fa6de4792f089e9742d9d5, type: 3}
+  - {fileID: 21300000, guid: de9e4689df4230543ad713352293d35c, type: 3}
   associatedDay: 0
   preview: 
-  unlocked: 0
+  unlocked: 1

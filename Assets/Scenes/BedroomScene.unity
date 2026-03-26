@@ -1472,7 +1472,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &189832370
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4326,7 +4326,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: USB Files
+  m_text: Documents
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 17c56f7e47c154248a518b13dff16d6c, type: 2}
   m_sharedMaterial: {fileID: 134332080442649876, guid: 17c56f7e47c154248a518b13dff16d6c, type: 2}
@@ -7717,16 +7717,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   daySequences:
-  - {fileID: 11400000, guid: 974503572fc43284db65b50a6f32521f, type: 2}
+  - {fileID: 11400000, guid: e09bbd4c6b4aa7f43bfa0218c5e9e788, type: 2}
   - {fileID: 11400000, guid: bb6d42d82a2f79e4487839b29de364de, type: 2}
   - {fileID: 11400000, guid: c2810fc8787708140b9eda2656d03126, type: 2}
-  - {fileID: 11400000, guid: 173915e44644cbf42815085883daaf4d, type: 2}
+  - {fileID: 11400000, guid: e0e570e3fe618d64faa315e8456b201b, type: 2}
   - {fileID: 11400000, guid: 1b5268892ee43a7448189a59b3af132e, type: 2}
   - {fileID: 11400000, guid: ea5f372b77bfc7e46bb919f4c6eb61fa, type: 2}
   - {fileID: 11400000, guid: a48d6f181dafb654884a8b840a8b6e72, type: 2}
   - {fileID: 11400000, guid: 96fc5f43f4850f74eb8c3d53d8c37d09, type: 2}
   - {fileID: 11400000, guid: dd1b7866b5be09c41bbaf7cf4e541d2c, type: 2}
-  - {fileID: 11400000, guid: f4d7fa075edba4a4287bfa054e45b3c7, type: 2}
+  - {fileID: 11400000, guid: 49598cc5c5f66f04f8ea287255b7f7a2, type: 2}
   - {fileID: 11400000, guid: 96b907c588547a94ebbec74fa6c393d9, type: 2}
   - {fileID: 11400000, guid: 261d9ecce0261704b9b26cfc3f271c26, type: 2}
   computerCanvas: {fileID: 548808717}
