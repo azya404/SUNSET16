@@ -742,7 +742,14 @@ namespace SUNSET16.UI
                 }
 
                 if (line.advanceToLine == -1)
+                {
                     _isResponding = false;
+                    if (closeImage != null) closeImage.color = _baseColor;
+                    if (!_chatOpen)
+                        if (chatButtonImage != null) chatButtonImage.color = _baseColor;
+                    if (loreButtonImage != null) loreButtonImage.color = _baseColor;
+                    _clickDisabled = false;
+                }
 
                 //hide controls while the typewriter is doing its thing
                 if (advanceButton != null) advanceButton.SetActive(false);
