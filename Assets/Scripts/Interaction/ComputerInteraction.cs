@@ -316,7 +316,8 @@ namespace SUNSET16.Interaction
                     autoAdvanceDelay = dl.autoAdvanceDelay,
                     advanceToLine    = dl.advanceToLine,
                     repeat           = dl.repeat,
-                    repeated         = false
+                    repeated         = false,
+                    loreEntry        = dl.loreEntry
                 };
 
                 if (dl.choices != null && dl.choices.Count > 0)

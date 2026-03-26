@@ -1884,9 +1884,17 @@ MonoBehaviour:
   messagebox: {fileID: 21300000, guid: b6187bffc65373f4eb5f27afbb79b5ed, type: 3}
   playerMessagebox: {fileID: 21300000, guid: ec2b25c2cfdf7354b9c0965b0acfdbe5, type: 3}
   advanceButton: {fileID: 0}
+  closeButtonContainer: {fileID: 0}
   closeButton: {fileID: 0}
+  closeImage: {fileID: 0}
   chatButton: {fileID: 0}
   loreButton: {fileID: 0}
+  prevButton: {fileID: 0}
+  prevImage: {fileID: 0}
+  nextButton: {fileID: 0}
+  nextImage: {fileID: 0}
+  prevPageButton: {fileID: 0}
+  nextPageButton: {fileID: 0}
   choiceButtonRoots:
   - {fileID: 0}
   - {fileID: 0}
@@ -1928,6 +1936,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  loreEntries:
+  - {fileID: 11400000, guid: 2f27743fe6544f242a81314dd400b32c, type: 2}
+  - {fileID: 11400000, guid: 9d78db23a2782b44a9c08ce608e95d8c, type: 2}
   typewriterCharDelay: 0.03
   AlbertDelayAmt: 0.5
   playerDelay: 0.5
