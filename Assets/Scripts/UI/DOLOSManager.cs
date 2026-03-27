@@ -172,10 +172,12 @@ namespace SUNSET16.UI
                         if (hasChatted)
                         {
                             // Play announcement after chatting with Albert
+                            id = "dolos_day" + day + "_morning_computer";
                         }
                         else
                         {
                             // Play announcement after taking pill
+                            id = "dolos_day" + day + "_morning_mirror";
                         }
                     }
                     else
@@ -184,9 +186,10 @@ namespace SUNSET16.UI
                         id = "dolos_day" + day + "_morning_wakeup";
                     }
                 }
-                else if (hasChatted)
+                else
                 {
                     // Play night announcement
+                    id = "dolos_day" + day + "_night_bedroom";
                 }
             }
             else
@@ -194,10 +197,12 @@ namespace SUNSET16.UI
                 if (completedTask)
                 {
                     // Play announcement for completing all tasks
+                    id = "dolos_day" + day + "_task1";
                 }
                 else
                 {
                     // Play announcement for completing one task
+                    id = "dolos_day" + day + "_task2";
                 }
             }
 
