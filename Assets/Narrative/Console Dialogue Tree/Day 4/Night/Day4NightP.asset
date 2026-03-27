@@ -1,0 +1,419 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7c527a6f66a8c49a6fab10a94681fc, type: 3}
+  m_Name: Day4NightP
+  m_EditorClassIdentifier: 
+  sequenceId: albert_day4_night_pill
+  lines:
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Evening, Andy. The logs show that the circuits by ____ are back online.
+      How was it down there?
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: The work is the same as usual. Nothing super spectacular.
+      nextLineIndex: 1
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "That\u2019s the spirit. An orderly day is a good day."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Are you sure? It seems like something is on your mind that\u2019s unrelated
+      to our work here."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "I\u2019m okay. Just quite a few things on my mind right now. You
+        don\u2019t have to worry about that."
+      nextLineIndex: 3
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Anyhow, any burning questions you wanted to ask me before curfew?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Weren\u2019t more passengers supposed to arrive on the ship? The
+        place feels empty sometimes."
+      nextLineIndex: 4
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: The DOLOS-XIII Management System. How do you view it all?The DOLOS-XIII
+        Management System. How do you view it all?
+      nextLineIndex: 7
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "I think I\u2019m done asking questions tonight."
+      nextLineIndex: 30
+      offPillChoice: 0
+      showOnRepeat: 1
+    advanceToLine: 30
+    repeat: 1
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Last I checked, passenger rotations were delayed indefinitely. Corporate
+      restructuring, I think.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 5
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: However, that was a few months ago.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 6
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "There\u2019s no need to pay it any mind now. Focusing on the main task
+      at hand is your priority."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Ah. The DOLOS-XIII Management System is\u2026 well, it\u2019s nothing
+      short of a monumental feat of engineering."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "The system is responsible for coordinating nearly everything on the ship.
+      Life support, navigation, data collection, communications\u2026 it all runs
+      through DOLOS-XIII."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 9
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: 'Of course, the company had previous iterations of the Management System.
+      Albeit on a much smaller scale. Stuff like managing factories back on Earth. '
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 10
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: DOLOS-XIII, however, is the first designed for a fully habitable environment
+      for a human crew.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 11
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "So far, it\u2019s been doing a flawless job."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Are there other versions? Newer models?
+      nextLineIndex: 12
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: A few, yes.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 13
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "They run larger installations, like the Callisto mining colonies. I\u2019ve
+      heard rumours of a DOLOS-XVI being developed for the \u201CErebus Initiative,\u201D
+      but nobody knows what that is. Beyond my pay grade, that\u2019s certain."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 14
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Some corporations have tried to replicate DOLOS\u2019s source code. Competitors,
+      foreign governments, and private military contractors, to name a few."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 15
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "They\u2019ve all failed."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 16
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "It\u2019s too complex\u2026 too unique. There are bogus online conspiracies
+      that claim the source code was derived from something called \u201CProject
+      Chimera,\u201D an old military program from the 2060s."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Project Chimera?
+      nextLineIndex: 17
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Don\u2019t quote me on that, haha. The point of all that is, the DOLOS
+      Management System is the crown jewel of the corporation."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 18
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "It\u2019s why Erebus Holdings acquired the DOLOS Corporation in the first
+      place."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: albert_acquired
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "My daughter\u2026? Her name was R-Ro-Ros\u2026"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: '&*^@#*&^'
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 21
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: (*^@$#^*#&^!$$^
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 22
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: '[Error: Message goes beyond current parameters]'
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 23
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Apologies, my computer was malfunctioning for a moment. I had to run a
+      diagnostic check in the background.
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 24
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Everything is in the clear now, Andromeda. What were we talking about?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "\u2026Nothing. We were talking about nothing."
+      nextLineIndex: 25
+      offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: Your daughter, Al. You mentioned you had one earlier today.
+      nextLineIndex: 26
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Fair enough.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: I did?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 27
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "I\u2019ve never had a daughter."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 28
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Are you sure you\u2019re not hallucinating things? The capsule injections
+      should be helping with that. You are taking them, right?"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Yeah\u2026 I have been\u2026"
+      nextLineIndex: 29
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Excellent to hear. It\u2019s part of your contract to take them. You should
+      never skip a dosage. Ever."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Night, Andy.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices: []
+    advanceToLine: -1
+    repeat: 0
+    repeated: 0
+    loreEntry: 

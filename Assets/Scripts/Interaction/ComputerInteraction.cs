@@ -280,7 +280,13 @@ namespace SUNSET16.Interaction
             int dayOffset = daySequences.Length/4;
             int index = DayManager.Instance.CurrentDay - 1; // day 1 -> index 0
             PillChoice pill = PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay);
+            int pillsTaken = PillStateManager.Instance.GetPillsTakenCount();
+            int pillsRefused = PillStateManager.Instance.GetPillsRefusedCount();
             DayPhase phase = DayManager.Instance.CurrentPhase;
+            
+            // Override dialogue tree for final day
+            if ((DayManager.Instance.CurrentDay == 4) && (phase == DayPhase.Night) && ((pillsRefused == 3) || (pillsTaken == 3)))
+                index++;
             
             Debug.Log("Index before adjustment: " + index);
             if (pill == PillChoice.NotTaken)
@@ -317,7 +323,8 @@ namespace SUNSET16.Interaction
                     advanceToLine    = dl.advanceToLine,
                     repeat           = dl.repeat,
                     repeated         = false,
-                    loreEntry        = dl.loreEntry
+                    loreEntry        = dl.loreEntry,
+                    switchToDOLOS    = dl.switchToDOLOS
                 };
 
                 if (dl.choices != null && dl.choices.Count > 0)

@@ -1,0 +1,150 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7c527a6f66a8c49a6fab10a94681fc, type: 3}
+  m_Name: Day5MorningP
+  m_EditorClassIdentifier: 
+  sequenceId: albert_day5_morning_pill
+  lines:
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "I was looking at some company updates earlier. There\u2019s some interesting
+      stuff happening out there in the corporate world. Want to hear about it?"
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "It\u2019s always good to keep up with the latest news. What\u2019s
+        happening?"
+      nextLineIndex: 1
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "No. I think I\u2019m fine. I should honestly be heading to do
+        my DOLOS assignments right now. I\u2019ll catch you later."
+      nextLineIndex: 8
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: The former NUSA CEO was assassinated in Chongqing.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Really? What happened?
+      nextLineIndex: 2
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Nothing confirmed yet, though sources suggest the money she blew on poor
+      financial decisions caught up to her.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: You can never be too careful with the enemies you make out in the real
+      world.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "I guess you\u2019re right about that."
+      nextLineIndex: 4
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "That\u2019s why it\u2019s important to stay in your lane and focus on
+      what you\u2019re good at."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Speaking of tasks, I\u2019ll need to get going now. I\u2019ll
+        talk to you after my shift, Al."
+      nextLineIndex: 7
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Some would argue, but I\u2019ve never really put too much thought into
+      it."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 6
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "I\u2019ve been one to stick to my tasks for the DOLOS Corporation. You
+      should be like that, too, Andy."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Speaking of tasks, I\u2019ll need to get going now. I\u2019ll
+        talk to you after my shift, Al."
+      nextLineIndex: 7
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Talk to you later, Andy
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices: []
+    advanceToLine: -1
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Sounds good. I\u2019m sure you know the drill anyway\u2014regular maintenance
+      and such. Good luck."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices: []
+    advanceToLine: -1
+    repeat: 0
+    repeated: 0
+    loreEntry: 

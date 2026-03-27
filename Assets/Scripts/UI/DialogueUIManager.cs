@@ -48,6 +48,7 @@ namespace SUNSET16.UI
         [Header("Prefabs")]
         [SerializeField] private GameObject  AlbertMessage;
         [SerializeField] private GameObject  PlayerMessage;
+        [SerializeField] private GameObject  DOLOSMessage;
 
         [Header("Content")]
         [SerializeField] private TMP_Text speakerNameText;
@@ -141,6 +142,7 @@ namespace SUNSET16.UI
         private bool            _prevDisabled = true;
         private bool            _nextDisabled = true;
         private Color           _noPillColor = new Color(0.125f, 0.765f, 0.890f, 1f);
+        private bool            _isDOLOS = false;
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -252,10 +254,10 @@ namespace SUNSET16.UI
                 AlbertDelay = dialogueParent.transform.GetChild(2).gameObject;
                 AlbertDelay.SetActive(false);
                 closeButtonContainer = dialogueParent.transform.GetChild(3);
-                closeButton = closeButtonContainer.transform.GetChild(0).gameObject;
+                closeButton = closeButtonContainer.transform.GetChild(1).gameObject;
                 closeButton.GetComponent<Button>().onClick.AddListener(HideDialogue);
                 closeButton.GetComponent<Button>().onClick.AddListener(MenuSound);
-                closeImage = closeButtonContainer.GetChild(1).GetComponent<Image>();
+                closeImage = closeButtonContainer.GetChild(0).GetComponent<Image>();
                 advanceButton = dialogueParent.transform.GetChild(4).gameObject;
                 advanceButton.GetComponent<Button>().onClick.AddListener(OnAdvanceClicked);
 
@@ -378,6 +380,7 @@ namespace SUNSET16.UI
             _entryPage         = 1;
             _buttonPage        = 1;
             _chatOpen          = true;
+            _isDOLOS           = false;
             _lines.Clear();
             foreach (var msg in _messages) if (msg != null) Destroy(msg);
             _messages.Clear();
@@ -696,6 +699,11 @@ namespace SUNSET16.UI
 
             RuntimeLine line = _lines[_lineIndex];
 
+            if (line.switchToDOLOS)
+            {
+                _isDOLOS = true;
+            }
+
             if (!line.repeated && line.text != "")
             {
                 if (closeImage != null) closeImage.color = _disabledColor;
@@ -705,19 +713,26 @@ namespace SUNSET16.UI
 
                 if (line.sendDelay)
                 {
-                    AlbertDelay.SetActive(true);
-                    dialogueBodyText = AlbertDelay.GetComponentInChildren<TextMeshProUGUI>();
-                    typewriterCharDelay = AlbertDelayAmt;
-                    //typewriterCharDelay = 1f;
-                    for(int i = 0; i <= line.delayRepeats; i++)
+                    if (!_isDOLOS)
                     {
-                        _typewriterCoroutine = StartCoroutine(TypewriterEffect("..."));
-                        yield return _typewriterCoroutine;
-                        _typewriterCoroutine = null;
-                    }
+                        AlbertDelay.SetActive(true);
+                        dialogueBodyText = AlbertDelay.GetComponentInChildren<TextMeshProUGUI>();
+                        typewriterCharDelay = AlbertDelayAmt;
+                        //typewriterCharDelay = 1f;
+                        for(int i = 0; i <= line.delayRepeats; i++)
+                        {
+                            _typewriterCoroutine = StartCoroutine(TypewriterEffect("..."));
+                            yield return _typewriterCoroutine;
+                            _typewriterCoroutine = null;
+                        }
 
-                    AlbertDelay.SetActive(false);
-                    typewriterCharDelay = 0.03f;
+                        AlbertDelay.SetActive(false);
+                        typewriterCharDelay = 0.03f;
+                    }
+                    else
+                    {
+                        yield return new WaitForSeconds(line.delayRepeats);
+                    }
                 }
 
                 GameObject message;
@@ -746,7 +761,10 @@ namespace SUNSET16.UI
 
                 Vector3 messagePos = new Vector3(albertX, messageY, 0);
 
-                message = Instantiate(AlbertMessage, dialogueParent.transform);
+                if (!_isDOLOS)
+                    message = Instantiate(AlbertMessage, dialogueParent.transform);
+                else
+                    message = Instantiate(DOLOSMessage, dialogueParent.transform);
                 _messages.Add(message);
                 message.transform.localPosition = messagePos;
                 dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
@@ -784,6 +802,15 @@ namespace SUNSET16.UI
                 yield return _typewriterCoroutine;
                 _typewriterCoroutine = null;*/
                 dialogueBodyText.text = line.text;
+            }
+            else if (line.text == "" && line.advanceToLine == -1)
+            {
+                if (closeImage != null) closeImage.color = _baseColor;
+                if (!_chatOpen)
+                    if (chatButtonImage != null) chatButtonImage.color = _baseColor;
+                if (_chatOpen)
+                    if (loreButtonImage != null) loreButtonImage.color = _baseColor;
+                _clickDisabled = false;
             }
 
             ShowControlsForCurrentLine();

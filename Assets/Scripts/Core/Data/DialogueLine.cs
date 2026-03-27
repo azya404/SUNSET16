@@ -44,5 +44,6 @@ namespace SUNSET16.Core
 
         public bool repeated;
         public string loreEntry;
+        public bool switchToDOLOS;
     }
 }

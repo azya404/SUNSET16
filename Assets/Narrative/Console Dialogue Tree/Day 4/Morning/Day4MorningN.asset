@@ -1,0 +1,364 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7c527a6f66a8c49a6fab10a94681fc, type: 3}
+  m_Name: Day4MorningN
+  m_EditorClassIdentifier: 
+  sequenceId: albert_day4_morning_nopill
+  lines:
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Morning, Andy. DOLOS has you at the ___ today. The circuit box over there
+      short-circuited last night.
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 1
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Most likely the result of a corporate attack from a rival company. All
+      systems are nominal, per regular system reboots.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 2
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: All the circuit box needs is a full diagnostic check and some rewiring.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Understood. Will get those wires all sorted in no time.
+      nextLineIndex: 3
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: Feels like the DOLOS Corporation is always under a cyberattack
+        every month.
+      nextLineIndex: 4
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: Rival company? Which one?
+      nextLineIndex: 6
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: We could always count on you. Keep up that work ethic. The higher-ups love
+      to see it.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "We expect it. Even before Erebus Holdings bought it, it was a common occurrence.
+      But we always pull through\u2026 in one way, shape, or form."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 5
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Anyhow, do your job well.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Ethax Enterprise. A medium-sized conglomerate based in the North of the
+      United Kingdom, specializing in pharmaceutical production and distribution.
+      No need to worry about them; the DOLOS Corporation will take care of that issue
+      promptly.
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: How so?
+      nextLineIndex: 7
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "\u2026You don\u2019t have to worry about that."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Before you head out\u2026 you\u2019ve seemed different lately. Anything
+      you wanna talk about?"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices:
+    - choiceText: "Just paying more attention. That\u2019s allowed, isn\u2019t it?"
+      nextLineIndex: 9
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "I feel like I\u2019m being watched. More than usual. Like the
+        whole ship is watching me. Something\u2019s off\u2026"
+      nextLineIndex: 10
+      offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: Can I ask you something personal?
+      nextLineIndex: 17
+      offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: I gotta complete my shift now. Catch you later, Al.
+      nextLineIndex: 23
+      offPillChoice: 0
+      showOnRepeat: 1
+    advanceToLine: 23
+    repeat: 1
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "\u2026Of course. As long as it doesn\u2019t hinder your performance as
+      a technician. Doing the tasks DOLOS assigns you is a part of your contract.
+      Be sure not to breach its terms of service."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: I know that much.
+      nextLineIndex: 8
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Really? It doesn\u2019t feel like that to me. I feel like you\u2019re
+      just imagining things."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 11
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Are you getting enough sleep, Andy?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 12
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Are the capsule injections not potent enough? Taking some extra dosages
+      might alleviate the anxiety you\u2019re feeling."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 13
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Do you want me to report this to DOLOS?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "No, no. I\u2019m fine."
+      nextLineIndex: 14
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "I will say this: space has a way of bringing up thoughts you don\u2019t
+      like if you *let it happen\u2026*"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Yeah, you\u2019re right\u2026"
+      nextLineIndex: 15
+      offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: "Don\u2019t act like I didn\u2019t see that Tame Impala reference."
+      nextLineIndex: 16
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "It\u2019s better to push those thoughts down by doing your tasks. Besides,
+      doing your tasks keeps DOLOS happy."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Hahaha, guilty as charged. \u201CCurrents\u201D is still my favourite
+      album of all time."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Sure. What\u2019s on your mind?"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Did you have anyone down there? On Earth? A family, perhaps?
+      nextLineIndex: 18
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: '*&^&$#&#@'
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 19
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: I had a daughter. But that was a long time ago. I work here now. Doing
+      my job here for DOLOS and the rest of the corporation is what matters.
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Tell me, why are you thinking about that? I thought you hated Earth.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Nostalgia. That\u2019s all."
+      nextLineIndex: 21
+      offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: "Just\u2026 thinking about someone."
+      nextLineIndex: 22
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Are you sure?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Yeah, I\u2019m sure\u2026"
+      nextLineIndex: 8
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "It happens. But there\u2019s a reason why you\u2019re here, and on this
+      ship. Don\u2019t let those memories distract you from your assignments. Those
+      capsules should take care of that issue for you."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Talk to you later then, Andy.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices: []
+    advanceToLine: -1
+    repeat: 0
+    repeated: 0
+    loreEntry: 
