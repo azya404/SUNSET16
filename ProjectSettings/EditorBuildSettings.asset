@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ServerRoomScene.unity
     guid: 5560f2ab5d2f95b459dfef7c113feeee
+  - enabled: 1
+    path: Assets/Scenes/CrematoriumScene.unity
+    guid: 59589bf6716ad214c96b7595304bc59c
   m_configObjects: {}
