@@ -33,12 +33,14 @@ Shader "UI/DigitalGlitch"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float4 color : COLOR;
             };
 
             struct v2f
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+                float4 color : COLOR;
             };
 
             float rand(float2 co)
@@ -51,6 +53,7 @@ Shader "UI/DigitalGlitch"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
+                o.color = v.color;
                 return o;
             }
 
@@ -88,7 +91,7 @@ Shader "UI/DigitalGlitch"
 
                 col = float4(r, g, b, tex2D(_MainTex, uv).a);
 
-                return col;
+                return col * i.color;
             }
             ENDCG
         }

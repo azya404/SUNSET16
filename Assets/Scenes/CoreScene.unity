@@ -1887,13 +1887,21 @@ MonoBehaviour:
   closeButtonContainer: {fileID: 0}
   closeButton: {fileID: 0}
   closeImage: {fileID: 0}
+  chatTabContainer: {fileID: 0}
   chatButton: {fileID: 0}
+  chatButtonImage: {fileID: 0}
+  loreTabContainer: {fileID: 0}
   loreButton: {fileID: 0}
+  loreButtonImage: {fileID: 0}
+  prevButtonContainer: {fileID: 0}
   prevButton: {fileID: 0}
   prevImage: {fileID: 0}
+  nextButtonContainer: {fileID: 0}
   nextButton: {fileID: 0}
   nextImage: {fileID: 0}
+  prevPageContainer: {fileID: 0}
   prevPageButton: {fileID: 0}
+  nextPageContainer: {fileID: 0}
   nextPageButton: {fileID: 0}
   choiceButtonRoots:
   - {fileID: 0}
@@ -1918,6 +1926,10 @@ MonoBehaviour:
   dispIntensity: 0.05
   colorProbability: 0.3
   colorIntensity: 0.05
+  intensity: 1
+  blockSize: 6
+  dispStrength: 1
+  colorSplit: 1
   loreButtonRoots:
   - {fileID: 0}
   - {fileID: 0}

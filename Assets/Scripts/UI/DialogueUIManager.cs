@@ -82,11 +82,13 @@ namespace SUNSET16.UI
         [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[5];  // Parent GOs per choice
         [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[5];    // Labels per choice
         [SerializeField] private Image[]      choiceButtonImages = new Image[5];
-        [SerializeField] private float        glitchInterval;
-        [SerializeField] private float        dispProbability;
-        [SerializeField] private float        dispIntensity;
-        [SerializeField] private float        colorProbability;
-        [SerializeField] private float        colorIntensity;
+        [SerializeField] private float        intensity;
+        [SerializeField] private float        blockSize;
+        [SerializeField] private float        dispStrength;
+        [SerializeField] private float        colorSplit;
+        [SerializeField] private Sprite       normalChoice;
+        [SerializeField] private Sprite       noPillChoice;
+
 
         [Header("Lore Buttons (max 5)")]
         [SerializeField] private GameObject[] loreButtonRoots = new GameObject[5];  // Parent GOs per choice
@@ -138,6 +140,7 @@ namespace SUNSET16.UI
         private bool            _clickDisabled = false;
         private bool            _prevDisabled = true;
         private bool            _nextDisabled = true;
+        private Color           _noPillColor = new Color(0.125f, 0.765f, 0.890f, 1f);
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -226,11 +229,10 @@ namespace SUNSET16.UI
 
                 choiceButtonImages[0] = responseButtonContainer.GetChild(0).GetComponent<Image>();
                 Material globalMat = choiceButtonImages[0].material;
-                globalMat.SetFloat("_GlitchInterval", glitchInterval);
-                globalMat.SetFloat("_DispProbability", dispProbability);
-                globalMat.SetFloat("_DispIntensity", dispIntensity);
-                globalMat.SetFloat("_ColorProbability", colorProbability);
-                globalMat.SetFloat("_ColorIntensity", colorIntensity);
+                globalMat.SetFloat("_Intensity", intensity);
+                globalMat.SetFloat("_BlockSize", blockSize);
+                globalMat.SetFloat("_DispStrength", dispStrength);
+                globalMat.SetFloat("_ColorSplit", colorSplit);
 
                 for (int i = 0; i < 5; i++)
                 {
@@ -243,8 +245,9 @@ namespace SUNSET16.UI
 
                     choiceButtonImages[i] = responseButtonContainer.GetChild(i).GetComponent<Image>();
                     choiceButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
-                    choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
-                    choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
+                    choiceButtonImages[i].material.SetFloat("_Intensity", 0f);
+                    choiceButtonImages[i].sprite = normalChoice;
+                    choiceButtonImages[i].color = _baseColor;
                 }
                 AlbertDelay = dialogueParent.transform.GetChild(2).gameObject;
                 AlbertDelay.SetActive(false);
@@ -280,8 +283,7 @@ namespace SUNSET16.UI
 
                     loreButtonImages[i] = loreButtonContainer.GetChild(i).GetComponent<Image>();
                     loreButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
-                    loreButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
-                    loreButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
+                    loreButtonImages[i].material.SetFloat("_Intensity", 0f);
                 }
 
                 prevButtonContainer = dialogueParent.transform.GetChild(10);
@@ -439,8 +441,9 @@ namespace SUNSET16.UI
 
             for (int i = 0; i < 5; i++)
             {
-                choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
-                choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
+                choiceButtonImages[i].material.SetFloat("_Intensity", 0f);
+                choiceButtonImages[i].sprite = normalChoice;
+                choiceButtonImages[i].color = _baseColor;
             }
             _messageCoroutine = StartCoroutine(SendMessage(choiceIndex, currentLine, choice));
             
@@ -966,8 +969,9 @@ namespace SUNSET16.UI
 
                 if (show && choices[i].offPillChoice)
                 {
-                    choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 1f);
-                    choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 1f);
+                    choiceButtonImages[i].material.SetFloat("_Intensity", intensity);
+                    choiceButtonImages[i].sprite = noPillChoice;
+                    choiceButtonImages[i].color = _noPillColor;
                 }
             }
         }
