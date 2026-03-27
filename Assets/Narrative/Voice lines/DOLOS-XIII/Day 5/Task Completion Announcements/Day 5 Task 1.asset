@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 5 Task 1
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day5_task1
+  text: 'Task completed. One more wire box has yet to be fixed, and therefore, unoptimal
+    power is being logged by my mainframe.
+
+    Correct this error at your earliest
+    convenience, Technician.'
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: 2843ec9f6081ed04e935d764c3124196, type: 3}
+  displayDuration: 13
+  lineDurations: 09000000

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 5 Task 2
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day5_task2
+  text: "Task completed. The SUNSET16\u2019s internal systems for Section C-12 are
+    now receiving the appropriate levels of power.\nGood work, Technician. You may
+    head back to your personal quarters at your convenience."
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: eeec9c4fd7fe79d4989e516803c84336, type: 3}
+  displayDuration: 14
+  lineDurations: 09000000

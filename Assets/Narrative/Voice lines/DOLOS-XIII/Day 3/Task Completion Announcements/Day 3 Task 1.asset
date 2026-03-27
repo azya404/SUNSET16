@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 3 Task 1
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day3_task1
+  text: "Task completed. I\u2019m getting a 39.2% increase in optimal electrical
+    flow.\nYour performance has been logged for my future reference. Fix the last
+    remaining fuse box."
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: 4c706472b8b403d4e831655c97810506, type: 3}
+  displayDuration: 14
+  lineDurations: 08000000

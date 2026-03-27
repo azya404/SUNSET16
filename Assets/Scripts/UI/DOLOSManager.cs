@@ -45,6 +45,8 @@ namespace SUNSET16.UI
         [Header("Announcements")]
         [SerializeField] private DOLOSAnnouncement[] announcements;
 
+        [SerializeField] private string testAnnouncementId;
+
         // ─── State ────────────────────────────────────────────────────────────────
 
         public bool IsAnnouncementActive { get; private set; }
@@ -307,6 +309,12 @@ namespace SUNSET16.UI
                 OnSettingsRequested?.Invoke();
                 Debug.Log("[DOLOS] Honoring queued settings request");
             }
+        }
+
+        [ContextMenu("TestVoiceline")]
+        public void TestVoiceline()
+        {
+            _announcementCoroutine = StartCoroutine(PlayAnnouncement(_announcementsDict[testAnnouncementId]));
         }
     }
 }

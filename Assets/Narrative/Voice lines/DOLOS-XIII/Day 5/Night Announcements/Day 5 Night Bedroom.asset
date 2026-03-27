@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 5 Night Bedroom
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day5_night_bedroom
+  text: "Shift completed. You have done a great service today, Andromeda.\nAfter
+    5 successful years of service, your efforts have been recognized. You have proved
+    yourself a useful asset to the DOLOS Corporation.\nAnd for that, we can soon
+    proceed with the \u201CErebus Initiative,\u201D where your data\u2014and mind\u2014shall
+    be used to elevate humanity into a digital medium."
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: 3c0f038a6f80e01459eb5d39783c77b3, type: 3}
+  displayDuration: 28
+  lineDurations: 060000000a000000

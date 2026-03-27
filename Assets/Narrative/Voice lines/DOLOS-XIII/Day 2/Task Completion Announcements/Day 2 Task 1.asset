@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 2 Task 1
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day2_task1
+  text: 'Task completed. However, your methodology indicated a 12% deviation from
+    the recommended procedure.
+
+    This has been logged for review. Complete the
+    remainder of your assignment.'
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: 4f257b7d637fb714c88f3f80e58ca70b, type: 3}
+  displayDuration: 12
+  lineDurations: 08000000

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 4 Task 2
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day4_task2
+  text: "Task completed. All broken circuit boxes are now reporting as \u201Coptimal\u201D
+    in my internal systems.\nYou may now return to your personal quarters at your
+    earliest convenience."
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: e5979d6368600494cafbe770358eb3af, type: 3}
+  displayDuration: 11
+  lineDurations: 07000000

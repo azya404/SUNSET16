@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 1 Night Bedroom
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day1_night_bedroom
+  text: "Shift concluded. All systems are nominal. Your financial compensation has
+    been calculated and will be deposited into your designated Earth-side account.\nA
+    reminder: The ship\u2019s lights will dim to facilitate optimal circadian rhythms.
+    A rest period is mandatory.\nGood work today, Technician."
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: b931f8123fe1d1443bf62189759af4d9, type: 3}
+  displayDuration: 20
+  lineDurations: 0a00000008000000

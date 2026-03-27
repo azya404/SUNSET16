@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 4 Night Bedroom
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day4_night_bedroom
+  text: 'Shift completed. Systems are within acceptable parameters.
+
+    The future
+    of the DOLOS Corporation depends on employees such as yourself.
+
+    Another
+    productive day of work continues tomorrow.
+
+    Failure is never tolerated on
+    my starliner.'
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: 4c8ed2f94ad0050478c9e9aec5d8a6db, type: 3}
+  displayDuration: 18
+  lineDurations: 050000000500000004000000
