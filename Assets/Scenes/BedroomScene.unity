@@ -650,7 +650,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &83314562
 RectTransform:
   m_ObjectHideFlags: 0
@@ -985,6 +985,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: ResponseButton_2
@@ -1261,6 +1265,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: LoreButton_4
@@ -1478,7 +1486,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &189832370
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2870,6 +2878,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: ResponseButton_0
@@ -4008,6 +4020,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: ResponseButton_4
@@ -4704,6 +4720,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: ResponseButton_1
@@ -5004,6 +5024,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: LoreButton_2
@@ -5443,6 +5467,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: LoreButton_1
@@ -6688,6 +6716,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: LoreButton_0
@@ -7048,6 +7080,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: ResponseButton_3
@@ -7541,7 +7577,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1372004922
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9873,6 +9909,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2979639859195126436, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
     - target: {fileID: 6117844572094530505, guid: cb4272bd2f1f5a94dbc070faa7ee3f2a, type: 3}
       propertyPath: m_Name
       value: LoreButton_3
