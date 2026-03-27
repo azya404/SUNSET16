@@ -177,9 +177,15 @@ namespace SUNSET16.UI
 
         private IEnumerator LoadSceneAfterSFX(string sceneName)
         {
+            // lock all buttons immediately — prevents button mashing during fade/SFX
+            newGameButton.interactable  = false;
+            continueButton.interactable = false;
+            settingsButton.interactable = false;
+            creditsButton.interactable  = false;
+
             float sfxDuration = (startButtonSFX != null && sfxSource != null) ? startButtonSFX.length : 0f;
-            // screen fade drives the timing — music and SFX play underneath it
-            float totalDuration = Mathf.Max(sfxDuration, screenFadeDuration);
+            // fade duration matches SFX exactly — screenFadeDuration is fallback only if no clip assigned
+            float totalDuration = sfxDuration > 0f ? sfxDuration : screenFadeDuration;
 
             _sceneFadeActive = true;
             if (_musicLoopCoroutine != null) StopCoroutine(_musicLoopCoroutine);
@@ -208,7 +214,8 @@ namespace SUNSET16.UI
 
         private void OnContinueClicked()
         {
-            sfxSource?.PlayOneShot(menuClickSFX);
+            // use startButtonSFX for continue too — same weight as starting a new game
+            sfxSource?.PlayOneShot(startButtonSFX);
             Debug.Log("[MAINMENU] Continuing saved game");
             StartCoroutine(LoadSceneAfterSFX(CORE_SCENE_NAME));
         }
