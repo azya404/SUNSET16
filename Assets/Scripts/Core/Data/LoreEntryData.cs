@@ -48,5 +48,7 @@ namespace SUNSET16.Core
 
         [Header("whether or not the player has unlocked the lore entry")]
         public bool unlocked;
+
+        public bool viewed;
     }
 }

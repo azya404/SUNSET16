@@ -68,6 +68,7 @@ namespace SUNSET16.UI
         [SerializeField] private Transform loreTabContainer;
         [SerializeField] private GameObject loreButton;
         [SerializeField] private Image loreButtonImage;
+        [SerializeField] private Image notifImage;
         [SerializeField] private Transform prevButtonContainer;
         [SerializeField] private GameObject prevButton;
         [SerializeField] private Image prevImage;
@@ -143,6 +144,8 @@ namespace SUNSET16.UI
         private bool            _nextDisabled = true;
         private Color           _noPillColor = new Color(0.125f, 0.765f, 0.890f, 1f);
         private bool            _isDOLOS = false;
+        private bool            _newNotif = false;
+        private int             _newEntryAmt = 0;
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -269,6 +272,10 @@ namespace SUNSET16.UI
                 loreButton = loreTabContainer.transform.GetChild(0).gameObject;
                 loreButton.GetComponent<Button>().onClick.AddListener(SwapToLore);
                 loreButtonImage = loreTabContainer.GetChild(1).GetComponent<Image>();
+                notifImage = loreTabContainer.GetChild(3).GetComponent<Image>();
+
+                if (_newNotif)
+                    notifImage.gameObject.SetActive(true);
 
                 loreButtonContainer = dialogueParent.transform.GetChild(7);
                 loreButtonContainer.gameObject.SetActive(false);
@@ -542,6 +549,14 @@ namespace SUNSET16.UI
                     loreImage.gameObject.SetActive(true);
                     loreImage.sprite = _unlockedEntries[_selectedEntry].content[_entryPage];
                 }
+
+                if (_unlockedEntries.Count == 1 && _unlockedEntries[0].viewed == false)
+                {
+                    _unlockedEntries[0].viewed = true;
+                    _newEntryAmt--;
+                    _newNotif = false;
+                    notifImage.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -551,7 +566,27 @@ namespace SUNSET16.UI
             _selectedEntry = entryNum;
             _entryPage = 0;
             loreImage.sprite = _unlockedEntries[entryNum].content[0];
+            if (!_unlockedEntries[entryNum].viewed)
+            {
+                _unlockedEntries[entryNum].viewed = true;
+                _newEntryAmt--;
+                if (_newEntryAmt == 0)
+                {
+                    _newNotif = false;
+                    notifImage.gameObject.SetActive(false);
+                }
+            }
             UpdatePageButtons();
+        }
+
+        [ContextMenu("ResetViewed")]
+        public void ResetViewed()
+        {
+            foreach (LoreEntryData entry in loreEntries)
+            {
+                entry.unlocked = false;
+                entry.viewed = false;
+            }
         }
 
         public void PrevButtonPage()
@@ -653,6 +688,9 @@ namespace SUNSET16.UI
                     entry.unlocked = true;
                     _unlockedEntries.Add(entry);
                     audioSource.PlayOneShot(msgGet);
+                    _newNotif = true;
+                    _newEntryAmt++;
+                    notifImage.gameObject.SetActive(true);
                 }
             }
         }

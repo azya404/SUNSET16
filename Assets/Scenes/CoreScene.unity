@@ -1894,6 +1894,7 @@ MonoBehaviour:
   loreTabContainer: {fileID: 0}
   loreButton: {fileID: 0}
   loreButtonImage: {fileID: 0}
+  notifImage: {fileID: 0}
   prevButtonContainer: {fileID: 0}
   prevButton: {fileID: 0}
   prevImage: {fileID: 0}
