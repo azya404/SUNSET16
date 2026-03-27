@@ -9393,11 +9393,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309f235276d9f624ba770ee2904ef110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: 
-  spawnPositionInTargetScene: {x: 0, y: 0, z: 0}
-  roomType: 3
-  isHiddenRoomDoor: 0
-  hiddenRoomID: 
+  targetSceneName: CrematoriumScene
+  spawnPositionInTargetScene: {x: 9, y: -26.28, z: 0}
+  roomType: 1
+  isHiddenRoomDoor: 1
+  hiddenRoomID: room_3
   isBedroomDoor: 0
   requiresAllTasksComplete: 0
   isMorningGated: 0
@@ -11526,11 +11526,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309f235276d9f624ba770ee2904ef110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: 
-  spawnPositionInTargetScene: {x: 0, y: 0, z: 0}
-  roomType: 3
-  isHiddenRoomDoor: 0
-  hiddenRoomID: 
+  targetSceneName: ServerRoomScene
+  spawnPositionInTargetScene: {x: -5.39, y: -36.39, z: 0}
+  roomType: 1
+  isHiddenRoomDoor: 1
+  hiddenRoomID: room_2
   isBedroomDoor: 0
   requiresAllTasksComplete: 0
   isMorningGated: 0
