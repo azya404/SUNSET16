@@ -25,6 +25,7 @@ namespace SUNSET16.UI
         [SerializeField] private string videoFileName = "cutscene.mp4";
 
         private bool _transitioning = false;
+        private bool _inputEnabled  = false;
 
         private void Start()
         {
@@ -32,14 +33,23 @@ namespace SUNSET16.UI
             videoPlayer.url = Application.streamingAssetsPath + "/" + videoFileName;
             videoPlayer.loopPointReached += OnVideoFinished;
             videoPlayer.Play();
+            StartCoroutine(EnableInputNextFrame());
+        }
+
+        // wait one frame so RoomManager finishes its LoadRoomCoroutine and clears _isTransitioning
+        // before we accept any skip input — prevents immediate-skip softlock
+        private IEnumerator EnableInputNextFrame()
+        {
+            yield return null;
+            _inputEnabled = true;
         }
 
         private void Update()
         {
-            if (!_transitioning &&
-                (Input.GetKeyDown(KeyCode.Space)
-                 || Input.GetKeyDown(KeyCode.Return)
-                 || Input.GetKeyDown(KeyCode.Escape)))
+            if (!_inputEnabled || _transitioning) return;
+            if (Input.GetKeyDown(KeyCode.Space)
+                || Input.GetKeyDown(KeyCode.Return)
+                || Input.GetKeyDown(KeyCode.Escape))
             {
                 Skip();
             }
@@ -62,8 +72,8 @@ namespace SUNSET16.UI
         {
             _transitioning = true;
             yield return null; // one frame gap avoids double-trigger
-            // Use RoomManager so CoreScene stays loaded — cutscene scene unloads additively
-            RoomManager.Instance.LoadRoom(nextSceneName);
+            // skipFadeOut: true — no fade-to-black on cutscene exit, bedroom handles its own fade in
+            RoomManager.Instance.LoadRoom(nextSceneName, skipFadeOut: true);
         }
     }
 }

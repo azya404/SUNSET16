@@ -617,7 +617,7 @@ MonoBehaviour:
   confirmNewGameButton: {fileID: 1842591322}
   cancelNewGameButton: {fileID: 528668860}
   sfxSource: {fileID: 191470372}
-  startButtonSFX: {fileID: 8300000, guid: e29c8f9e0e4282846b513af9badcd6f5, type: 3}
+  startButtonSFX: {fileID: 8300000, guid: 7d1cc03a620cbf748a68fb50865e98d3, type: 3}
   menuClickSFX: {fileID: 8300000, guid: c6b2b27fc68788b4fbfec7ea1fcff911, type: 3}
   musicSource: {fileID: 824580562}
   musicFadeDuration: 1.5

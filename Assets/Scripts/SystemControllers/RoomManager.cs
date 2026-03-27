@@ -56,7 +56,9 @@ namespace SUNSET16.Core
         }
 
         //called by DoorController when player walks through a door
-        public void LoadRoom(string roomSceneName)
+        //skipFadeIn: snap to transparent immediately after scene loads (no gradual fade in)
+        //skipFadeOut: snap to black immediately before unloading (no gradual fade out)
+        public void LoadRoom(string roomSceneName, bool skipFadeIn = false, bool skipFadeOut = false)
         {
             //dont allow another load while were mid-transition
             if (_isTransitioning)
@@ -71,17 +73,25 @@ namespace SUNSET16.Core
                 return;
             }
 
-            StartCoroutine(LoadRoomCoroutine(roomSceneName));
+            StartCoroutine(LoadRoomCoroutine(roomSceneName, skipFadeIn, skipFadeOut));
         }
 
         //the actual room swap logic - runs as a coroutine so we can yield between steps
-        private IEnumerator LoadRoomCoroutine(string roomSceneName)
+        private IEnumerator LoadRoomCoroutine(string roomSceneName, bool skipFadeIn = false, bool skipFadeOut = false)
         {
             _isTransitioning = true;
 
             string roomId = ExtractRoomIdFromSceneName(roomSceneName);
 
-            yield return StartCoroutine(FadeOut()); //TODO: this does nothing rn
+            if (skipFadeOut)
+            {
+                // snap to black instantly — no gradual fade (used when exiting cutscene)
+                if (screenFadePanel != null) screenFadePanel.alpha = 1f;
+            }
+            else
+            {
+                yield return StartCoroutine(FadeOut());
+            }
 
             //unload the current room if theres one loaded
             if (!string.IsNullOrEmpty(_currentRoomScene))
@@ -134,7 +144,16 @@ namespace SUNSET16.Core
                 DOLOSManager.Instance.TriggerAnnouncement();
 
             OnRoomLoaded?.Invoke(roomSceneName);
-            yield return StartCoroutine(FadeIn()); //TODO: also does nothing
+
+            if (skipFadeIn)
+            {
+                // snap to transparent instantly — cutscene appears immediately, no fade in
+                if (screenFadePanel != null) screenFadePanel.alpha = 0f;
+            }
+            else
+            {
+                yield return StartCoroutine(FadeIn());
+            }
 
             _isTransitioning = false;
             Debug.Log($"[ROOMMANAGER] Room loaded: {roomSceneName}");
