@@ -130,7 +130,7 @@ namespace SUNSET16.UI
         private Coroutine       _messageCoroutine;
         private Coroutine       _typewriterCoroutine;
         private bool            _started = false;
-        private bool            _finished = false;
+        public bool            _finished = false;
         private bool            _isResponding = false;
         private int             _messageNum = 0;
         private List<GameObject> _messages = new List<GameObject>();
@@ -150,6 +150,7 @@ namespace SUNSET16.UI
         private bool            _newNotif = false;
         private int             _newEntryAmt = 0;
         private Coroutine       _DOLOSCoroutine;
+        public bool             announcementTriggered;
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -233,6 +234,7 @@ namespace SUNSET16.UI
             if (!_started)
             {
                 _phase = DayManager.Instance.CurrentPhase;
+                announcementTriggered = false;
 
                 dialogueParent = GameObject.FindGameObjectWithTag("MessagingUI");
                 responseButtonContainer = dialogueParent.transform.GetChild(1);
@@ -704,10 +706,10 @@ namespace SUNSET16.UI
             }
         }
 
-        [ContextMenu("UnlockEntry1")]
+        [ContextMenu("UnlockUSB1")]
         public void TestUnlock1()
         {
-            UnlockEntry("test_1");
+            UnlockEntry("usb_log_1");
         }
 
         [ContextMenu("UnlockEntry2")]
