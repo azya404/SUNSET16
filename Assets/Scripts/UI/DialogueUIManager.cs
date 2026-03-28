@@ -116,6 +116,9 @@ namespace SUNSET16.UI
         [SerializeField] private AudioClip menuClick;
         [SerializeField] private AudioClip msgSend;
         [SerializeField] private AudioClip msgGet;
+        [SerializeField] private AudioClip computerTakeover;
+
+        [SerializeField] private RawImage computerGlitch;
 
         // ─── Runtime State ────────────────────────────────────────────────────────
 
@@ -146,6 +149,7 @@ namespace SUNSET16.UI
         private bool            _isDOLOS = false;
         private bool            _newNotif = false;
         private int             _newEntryAmt = 0;
+        private Coroutine       _DOLOSCoroutine;
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -314,6 +318,10 @@ namespace SUNSET16.UI
                 nextPageButton = nextPageContainer.transform.GetChild(1).gameObject;
                 nextPageButton.GetComponent<Button>().onClick.AddListener(NextEntryPage);
                 nextPageButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+
+                computerGlitch = dialogueParent.transform.GetChild(13).GetComponent<RawImage>();
+                computerGlitch.material = Instantiate(computerGlitch.material);
+                computerGlitch.material.SetFloat("_Intensity", 0f);
 
 
                 if (PlayerController.Instance != null)
@@ -740,6 +748,7 @@ namespace SUNSET16.UI
             if (line.switchToDOLOS)
             {
                 _isDOLOS = true;
+                StartCoroutine(DOLOSTakeover());
             }
 
             if (!line.repeated && line.text != "")
@@ -985,6 +994,16 @@ namespace SUNSET16.UI
             yield return 0;
 
             _messages.RemoveAll(item => item == null);
+        }
+
+        private IEnumerator DOLOSTakeover()
+        {
+            computerGlitch.transform.SetAsLastSibling();
+            audioSource.PlayOneShot(computerTakeover);
+            AudioManager.Instance.SwapToDOLOSAmbient();
+            computerGlitch.material.SetFloat("_Intensity", 1f);
+            yield return new WaitForSeconds(4);
+            computerGlitch.material.SetFloat("_Intensity", 0f);
         }
 
         private void ShowControlsForCurrentLine()
