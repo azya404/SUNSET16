@@ -1754,7 +1754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: HallwayScene
-  spawnPositionInTargetScene: {x: -1.07, y: 7.23, z: 0}
+  spawnPositionInTargetScene: {x: -0.827, y: 7, z: 0}
   roomType: 3
   isHiddenRoomDoor: 0
   hiddenRoomID: 
@@ -1763,6 +1763,11 @@ MonoBehaviour:
   isMorningGated: 0
   doorLight: {fileID: 0}
   doorSprite: {fileID: 164863181}
+  lightSpriteRed: {fileID: 0}
+  lightSpriteYellow: {fileID: 0}
+  lightSpriteGreen: {fileID: 0}
+  animationFrames: []
+  frameDelay: 0.07
 --- !u!1 &1210657941
 GameObject:
   m_ObjectHideFlags: 0

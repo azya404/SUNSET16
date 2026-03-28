@@ -168,6 +168,7 @@ namespace SUNSET16.UI
             //dialoguePanel = GameObject.FindGameObjectWithTag("DialoguePanel");
             //if (dialoguePanel != null) dialoguePanel.SetActive(false);
             HideAllChoiceButtons();
+            ResetViewed();
         }
 
         private void Start()

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 5 Morning Computer
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day5_morning_computer
+  text: 'Your tasks have been assigned.
+
+    Complete these assignments efficiently,
+    as per your contractual obligation.'
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: 270ad57535c886a4298c70a0c3729d18, type: 3}
+  displayDuration: 7
+  lineDurations: 03000000
