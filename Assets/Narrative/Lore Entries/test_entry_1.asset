@@ -20,4 +20,5 @@ MonoBehaviour:
   - {fileID: 21300000, guid: dcc85a3b2362b86409571a2a60d71c27, type: 3}
   associatedDay: 0
   preview: 
-  unlocked: 1
+  unlocked: 0
+  viewed: 0
