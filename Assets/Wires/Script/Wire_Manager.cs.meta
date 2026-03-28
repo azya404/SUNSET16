@@ -3,14 +3,7 @@ guid: 4776362d7c8ff8b4fab857b3853d4b46
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - img: {instanceID: 0}
-  - red_wire: {instanceID: 0}
-  - blue_wire: {instanceID: 0}
-  - yellow_wire: {instanceID: 0}
-  - green_wire: {instanceID: 0}
-  - connection_one: {instanceID: 0}
-  - connection_two: {instanceID: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

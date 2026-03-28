@@ -11,7 +11,9 @@ public class Wire_Manager : MonoBehaviour, IPointerClickHandler
     public Sprite red_wire;
     public Sprite blue_wire;
     public Sprite yellow_wire;
-    public Sprite green_wire;
+    public Sprite purple_wire;
+    public Sprite white_wire;
+    public Sprite black_wire;
     public Slot connection_one;
     public Slot connection_two;
     //public Sprite purple_wire;
@@ -36,13 +38,17 @@ public class Wire_Manager : MonoBehaviour, IPointerClickHandler
         {
             img.sprite = yellow_wire;
         }
-        else if (slotWireColor != null && slotWireColor.wire_id == "Green")
-        {
-            img.sprite = green_wire;
-        }
         else if (slotWireColor != null && slotWireColor.wire_id == "Purple")
         {
-            //img.sprite = purple_wire;
+            img.sprite = purple_wire;
+        }
+        else if (slotWireColor != null && slotWireColor.wire_id == "White")
+        {
+            img.sprite = white_wire;
+        }
+        else if (slotWireColor != null && slotWireColor.wire_id == "Black")
+        {
+            img.sprite = black_wire;
         }
     }
     public void OnPointerClick(PointerEventData eventData)
@@ -52,12 +58,13 @@ public class Wire_Manager : MonoBehaviour, IPointerClickHandler
             // Only allow deleting if this slot is a node (or has a wire_id)
             
             string colorId = null;
-            if (connection_one.attachednode != null) colorId = connection_one.attachednode.id;
+            if (connection_one.wire_fulled != false) colorId = connection_one.node_id;
+            
             else if (connection_one.wire_fulled) colorId = connection_one.wire_id;
 
             if (!string.IsNullOrEmpty(colorId))
             {
-                FindObjectOfType<Level1_Manager>().delete_wire(colorId);
+                FindObjectOfType<Level_Manager>().delete_wire(colorId);
             }
         }   
     }
