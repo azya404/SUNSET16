@@ -36,6 +36,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "You always followed protocol the best out of all the people I\u2019ve
@@ -49,6 +50,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Straight to the point. Can\u2019t argue with the results."
@@ -60,6 +62,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "On a different note, you didn\u2019t seem like yourself this morning.
@@ -85,7 +88,7 @@ MonoBehaviour:
       nextLineIndex: 10
       offPillChoice: 0
       showOnRepeat: 0
-    - choiceText: "I found something peculiar in the system yesterday. An old technician\u2019s
+    - choiceText: "I found something peculiar in the system today. An old technician\u2019s
         log. Part of one, anyway. The name was Fiske. Mean anything to you?"
       nextLineIndex: 14
       offPillChoice: 1
@@ -98,6 +101,7 @@ MonoBehaviour:
     repeat: 1
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Of course. Nothing wrong with that at all.
@@ -109,6 +113,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "It\u2019s always smart to know the rulebook that you live under. Compliance
@@ -121,6 +126,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s how DOLOS wants things up here. Precision is what keeps a
@@ -142,6 +148,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "The answer that\u2019s known to the public was that the shareholders got
@@ -158,6 +165,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Remains classified to high-ranking DOLOS personnel only.
@@ -169,6 +177,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: You and me both. The DOLOS Corporation is a very stable company. All thanks
@@ -181,6 +190,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Dreams can be like that. But that\u2019s why the capsule pills help with
@@ -198,6 +208,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "\u2026You did take your dosage today, right, Andy?"
@@ -218,6 +229,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Good. Just checking\u2026 for your own wellbeing."
@@ -229,6 +241,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: The logs only show dispensation requests. I trust you to follow protocol,
@@ -241,6 +254,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "\u2026That\u2019s a name I haven\u2019t seen in a while. Where\u2019d
@@ -257,6 +271,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "\u2026Pay no attention to them. Files like that are old and are sometimes
@@ -270,6 +285,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: DOLOS issued an announcement a while ago on matters like this. You should
@@ -290,6 +306,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_corrupted_logs
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Good.
@@ -301,6 +318,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "\u2026Someone who didn\u2019t follow protocol. He was put on administrative
@@ -313,6 +331,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "We shouldn\u2019t talk about him anymore. Listen to DOLOS and adhere to
@@ -325,6 +344,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Anyways, my late-night shift is about to start. Don\u2019t stay up too
@@ -341,6 +361,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: 
@@ -352,3 +373,4 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0

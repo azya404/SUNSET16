@@ -31,6 +31,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using SUNSET16.Core;
+using SUNSET16.UI;
 
 namespace SUNSET16.Interaction
 {
@@ -287,6 +288,7 @@ namespace SUNSET16.Interaction
             AudioManager.Instance?.ResumeAmbientWithFadeIn(); //bedroom fades back in
 
             Debug.Log("[MIRROR] Pill-choice overlay closed");
+            DOLOSManager.Instance.TriggerAnnouncement();
         }
 
         // ─── Day Change ───────────────────────────────────────────────────────────

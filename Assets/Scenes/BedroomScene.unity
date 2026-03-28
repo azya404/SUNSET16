@@ -3327,6 +3327,7 @@ GameObject:
   - component: {fileID: 586791079}
   - component: {fileID: 586791080}
   - component: {fileID: 586791081}
+  - component: {fileID: 586791082}
   m_Layer: 8
   m_Name: Computer
   m_TagString: Untagged
@@ -3565,6 +3566,44 @@ PolygonCollider2D:
       - {x: -8.809999, y: -0.29999998}
       - {x: -8.84, y: -0.29999998}
   m_UseDelaunayMesh: 0
+--- !u!114 &586791082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586791078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e8df7786a2780d4c8419175936c6ffe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frames:
+  - {fileID: 21300000, guid: 8b3bf2e9482e3a1458e061984bb58089, type: 3}
+  - {fileID: 21300000, guid: 802b18819f02cd440b8285395ea994c6, type: 3}
+  - {fileID: 21300000, guid: 119471826989f79458660858c2b2d5ff, type: 3}
+  - {fileID: 21300000, guid: 7cb73e3b0f442c6408b8be29e5e2eb69, type: 3}
+  - {fileID: 21300000, guid: dda8af6d3405add46982985e383ea5f0, type: 3}
+  - {fileID: 21300000, guid: 930b8d0113073934aae7ab830e3e4240, type: 3}
+  - {fileID: 21300000, guid: 70c44006a210cda4d91b5305db208fc0, type: 3}
+  - {fileID: 21300000, guid: 966b726a9d0e9c440ab95db6d5b4bfe7, type: 3}
+  - {fileID: 21300000, guid: 0fb3ea229218df14198d612a74eeda29, type: 3}
+  - {fileID: 21300000, guid: 5804550398bd5ae45988f44708b78c38, type: 3}
+  - {fileID: 21300000, guid: 386f455f807e2444ca34525d83b4b64d, type: 3}
+  - {fileID: 21300000, guid: b1cdffd1ac5deea49baefa77c3190a70, type: 3}
+  - {fileID: 21300000, guid: ded933ffd4ceb2f40ab3cf67961e7cd0, type: 3}
+  - {fileID: 21300000, guid: 03a784705951ea24abf6ff13ce56041c, type: 3}
+  - {fileID: 21300000, guid: 6c0b2e543feb97f4aa06d8ac054c096d, type: 3}
+  - {fileID: 21300000, guid: fdfac978790040b48813b383fb617e6a, type: 3}
+  - {fileID: 21300000, guid: bcff8417c45bef94e852ce98152cec15, type: 3}
+  - {fileID: 21300000, guid: 74001f616175c8b42b58b18f18190058, type: 3}
+  - {fileID: 21300000, guid: 787810eea37e78b48911bd706e31eef0, type: 3}
+  - {fileID: 21300000, guid: 0db3311d1a660dc46b7a89a88a162912, type: 3}
+  - {fileID: 21300000, guid: 8d018e3c36431634c8572dd4719cdda1, type: 3}
+  - {fileID: 21300000, guid: d19e1d7a3521aee47a709ea44919447a, type: 3}
+  - {fileID: 21300000, guid: 4cba983cdf2e2414f915c4f701de05b9, type: 3}
+  - {fileID: 21300000, guid: 42f2cdba592bc3b468436a815f44f09e, type: 3}
+  fps: 1
 --- !u!1 &616821390
 GameObject:
   m_ObjectHideFlags: 0
@@ -3893,7 +3932,8 @@ GameObject:
   m_Component:
   - component: {fileID: 744239836}
   - component: {fileID: 744239838}
-  - component: {fileID: 744239837}
+  - component: {fileID: 744239840}
+  - component: {fileID: 744239839}
   m_Layer: 5
   m_Name: CutsceneImage
   m_TagString: Untagged
@@ -3920,7 +3960,51 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &744239837
+--- !u!222 &744239838
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744239835}
+  m_CullTransparentMesh: 1
+--- !u!328 &744239839
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744239835}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 0}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 7964a2538e35e7c459ca52897e668d8c, type: 2}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 5
+  m_DataSource: 1
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 0
+  m_SkipOnDrop: 1
+  m_Looping: 0
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
+--- !u!114 &744239840
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3929,7 +4013,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 744239835}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -3940,24 +4024,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cac64c870bfa1114fa8bcca3ef06dbf8, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &744239838
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 744239835}
-  m_CullTransparentMesh: 1
+  m_Texture: {fileID: 8400000, guid: 7964a2538e35e7c459ca52897e668d8c, type: 2}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &765230972
 GameObject:
   m_ObjectHideFlags: 0
@@ -6631,7 +6704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -8511,9 +8584,11 @@ MonoBehaviour:
   computerCanvas: {fileID: 548808717}
   cutscenePanel: {fileID: 744239835}
   overlayPanel: {fileID: 189832369}
+  cutsceneVideo: {fileID: 744239839}
+  cutsceneVideoFileName: ComputerLoadV4.mp4
+  cutsceneDuration: 3
   fadePanel: {fileID: 829849846}
   fadeDuration: 1
-  cutsceneDuration: 3
   bedroomContent:
   - {fileID: 2068848511}
   - {fileID: 693999840}
