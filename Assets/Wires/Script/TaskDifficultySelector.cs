@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TaskDifficultySelector : MonoBehaviour
 {
-    public PillStateManager State;
+    public PillStateManager State; 
     [SerializeField] private int taskIndex;          // 1 = Task1Panel, 2 = Task2Panel
     [SerializeField] private GameObject easyContent;
     [SerializeField] private GameObject mediumContent;
@@ -29,8 +29,7 @@ public class TaskDifficultySelector : MonoBehaviour
             return;
         }
 
-        bool pillTaken =
-            PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay) == PillChoice.Taken;
+        bool pillTaken = PillStateManager.Instance.HasTakenPillToday();
 
         if (taskIndex == 1)
         {
