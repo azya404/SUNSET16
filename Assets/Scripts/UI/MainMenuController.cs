@@ -14,6 +14,15 @@ settings just toggles the settings panel on/off
 credits loads NeutralCreditsScene — when returning from credits the menu
 fades in from black via ReturnedFromCredits static flag set by NeutralCreditsSceneController
 
+SETTINGS LIVE PREVIEW:
+main menu subscribes directly to SettingsManager events so sliders
+affect the menu itself without needing CoreScene's AudioManager or LightingController:
+- master volume: AudioListener.volume (handled inside SettingsManager.SetMasterVolume)
+- music volume: _musicVolumeMax drives MusicLoopWithFade's fade target
+- sfx volume: sfxSource.volume set directly
+- brightness: brightnessOverlay CanvasGroup alpha
+  mapping: 1.0 (default) = alpha 0 (fully clear), 0.0 = alpha 1 (fully black), linear
+
 TODO: animated bg for the menu (space station exterior maybe?)
 TODO: transition animation when going from menu to game
 */
@@ -55,11 +64,17 @@ namespace SUNSET16.UI
 
         private Coroutine _musicLoopCoroutine;
         private bool      _sceneFadeActive = false;
+        // tracks the current music volume ceiling — updated live by OnMusicVolumeChanged
+        private float     _musicVolumeMax = 1f;
 
         [Header("Screen Transition")]
         [Tooltip("Full-screen black CanvasGroup — starts transparent, fades to black on scene exit.")]
         [SerializeField] private CanvasGroup screenFadePanel;
         [SerializeField] private float       screenFadeDuration = 1.2f;
+
+        [Header("Brightness Overlay")]
+        [Tooltip("Full-screen black Image + CanvasGroup — alpha driven by brightness setting.\nDefault brightness (1.0) = alpha 0 (clear). Dragging slider left darkens the screen.")]
+        [SerializeField] private CanvasGroup brightnessOverlay;
 
         [Header("Scene Names")]
         [SerializeField] private string newGameSceneName = "CoreScene";
@@ -71,6 +86,17 @@ namespace SUNSET16.UI
             //GameManager doesnt exist here so nobody else is gonna do it
             SettingsManager.Instance.Initialize();
             SaveManager.Instance.Initialize();
+
+            // subscribe to settings events so sliders affect the menu live
+            SettingsManager.Instance.OnMusicVolumeChanged  += OnMusicVolumeChanged;
+            SettingsManager.Instance.OnSFXVolumeChanged    += OnSFXVolumeChanged;
+            SettingsManager.Instance.OnBrightnessChanged   += OnBrightnessChanged;
+
+            // apply current saved settings immediately on load
+            _musicVolumeMax = SettingsManager.Instance.MusicVolume;
+            if (sfxSource != null)
+                sfxSource.volume = SettingsManager.Instance.SFXVolume;
+            ApplyBrightness(SettingsManager.Instance.Brightness);
 
             //wire up all the button click listeners
             newGameButton.onClick.AddListener(OnNewGameClicked);
@@ -86,8 +112,8 @@ namespace SUNSET16.UI
                 newGameConfirmPanel.SetActive(false);
             }
 
-            //gray out the continue button if theres no save to load
-            continueButton.interactable = SaveManager.Instance.SaveExists;
+            //TODO: re-enable continue when save/load is fixed for submission
+            continueButton.interactable = false;
 
             if (settingsPanel != null)
             {
@@ -121,13 +147,55 @@ namespace SUNSET16.UI
             Debug.Log("[MAINMENU] Main menu initialized");
         }
 
+        private void OnDestroy()
+        {
+            // always unsub from SettingsManager events — this GO is destroyed on scene load
+            if (SettingsManager.Instance != null)
+            {
+                SettingsManager.Instance.OnMusicVolumeChanged  -= OnMusicVolumeChanged;
+                SettingsManager.Instance.OnSFXVolumeChanged    -= OnSFXVolumeChanged;
+                SettingsManager.Instance.OnBrightnessChanged   -= OnBrightnessChanged;
+            }
+        }
+
+        // --- settings live preview handlers ---
+
+        private void OnMusicVolumeChanged(float value)
+        {
+            _musicVolumeMax = value;
+            // apply immediately so dragging up restores volume without waiting for the next loop cycle
+            if (musicSource != null)
+                musicSource.volume = value;
+        }
+
+        private void OnSFXVolumeChanged(float value)
+        {
+            if (sfxSource != null)
+                sfxSource.volume = value;
+        }
+
+        private void OnBrightnessChanged(float value)
+        {
+            ApplyBrightness(value);
+        }
+
+        private void ApplyBrightness(float brightness)
+        {
+            if (brightnessOverlay == null) return;
+            // 1.0 (default) = alpha 0 (fully clear = 100% brightness)
+            // 0.5 = alpha 0.5 (half darkened)
+            // 0.0 = alpha 1 (fully black)
+            brightnessOverlay.alpha = Mathf.Clamp01(1f - brightness);
+        }
+
         // fade in → wait → fade out → restart → repeat until _sceneFadeActive
+        // fades to _musicVolumeMax instead of 1f so music volume setting is respected
         private IEnumerator MusicLoopWithFade()
         {
             while (!_sceneFadeActive)
             {
-                // fade in
-                yield return StartCoroutine(FadeMusic(0f, 1f, musicFadeDuration));
+                // fade in to current volume ceiling
+                yield return StartCoroutine(FadeMusic(0f, _musicVolumeMax, musicFadeDuration));
 
                 // wait until musicFadeDuration seconds before the track ends
                 float waitTime = musicSource.clip.length - musicSource.time - musicFadeDuration;
