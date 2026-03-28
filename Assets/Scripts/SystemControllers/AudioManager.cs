@@ -48,6 +48,7 @@ namespace SUNSET16.Core
 
         [Header("Ambient")]
         [SerializeField] private AudioClip bedroomAmbientClip; //ambient loop for BedroomScene (Albert's theme)
+        [SerializeField] private AudioClip evilBedroomAmbient;
         [SerializeField] private AudioClip mirrorAmbientClip;  //plays while mirror overlay is open
 
         [Header("Music Tracks")]
@@ -529,6 +530,13 @@ namespace SUNSET16.Core
                 PlayMusic(goodEndingMusic, fade: true);
 
             Debug.Log($"[AUDIOMANAGER] Playing {ending} ending music");
+        }
+
+        public void SwapToDOLOSAmbient()
+        {
+            float t = ambientSource.time;
+            ambientSource.time = t;
+            PlayAmbient(evilBedroomAmbient);
         }
 
         // ─── CLEANUP ──────────────────────────────────────────────────────────────

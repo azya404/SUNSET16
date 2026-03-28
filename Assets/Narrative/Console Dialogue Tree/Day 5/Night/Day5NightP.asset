@@ -1,0 +1,252 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7c527a6f66a8c49a6fab10a94681fc, type: 3}
+  m_Name: Day5NightP
+  m_EditorClassIdentifier: 
+  sequenceId: albert_day5_night_pill
+  lines:
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Evening, Andy. Logs show another perfect day. DOLOS is quite happy with
+      your overall performance metrics. Couldn\u2019t ask for more, really."
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "It\u2019s easy work."
+      nextLineIndex: 1
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "I\u2019m just ready for bed, honestly."
+      nextLineIndex: 2
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "That\u2019s the Andromeda I know. Always diligent with her assignments.
+      The data you\u2019ve provided to the DOLOS Corporation will go a long way,
+      I can say that much."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 4
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "A well-rested mind is always beneficial for the data that DOLOS-XIII collects.
+      It\u2019s for the better that your circadian rhythm isn\u2019t disrupted."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "It would\u2026 hinder the data collection process."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Yeah, well\u2026 it\u2019s whatever."
+      nextLineIndex: 4
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: I have some time to burn. Do you want to throw any questions at me before
+      the lights shut off?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Nah, I\u2019m good. Maybe tomorrow."
+      nextLineIndex: 5
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: 
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Although\u2026 My 5-year contract is almost up."
+      nextLineIndex: 6
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Oh?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 7
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Good thing that\u2019s going to change :)"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Am I getting a promotion?
+      nextLineIndex: 8
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "I thought I\u2019d be returning to that hellhole called Earth,
+        and have to apply for another job after my savings run dry."
+      nextLineIndex: 13
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: You could call it that.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 9
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "The DOLOS Corporation isn\u2019t one to let go of its valuable employees.
+      Five years of compliance and loyalty for the company\u2026 DOLOS will take
+      good care of you."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "\u201CTake care of me,\u201D how?"
+      nextLineIndex: 10
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "You\u2019ll find out. Soon enough."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 11
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: In the meantime, continue with your work onboard the SUNSET16.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 12
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Goodnight, Andy. May tomorrow be another productive day for you.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Goodnight, Al.
+      nextLineIndex: 16
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "The DOLOS Management System, and subsequently the DOLOS Corporation, isn\u2019t
+      done with your work."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 14
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: At least not yet.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 15
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Your technical experience is still needed.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "\u201CNeeded,\u201D how?"
+      nextLineIndex: 10
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: 
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices: []
+    advanceToLine: -1
+    repeat: 0
+    repeated: 0
+    loreEntry: 

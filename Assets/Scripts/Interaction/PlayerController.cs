@@ -58,6 +58,8 @@ namespace SUNSET16.Core
         [SerializeField] private AudioSource footstepSource;
         [SerializeField] private AudioClip   footstepClip;
         [SerializeField] [Range(0f, 1f)] private float footstepVolume = 0.6f;
+        [SerializeField] private float footstepCooldown = 0.2f;
+        private float lastFootstepTime = -1f;
 
         void Awake()
         {
@@ -183,8 +185,21 @@ namespace SUNSET16.Core
         // footstepSource/footstepClip are optional - silently skipped if not assigned
         public void PlayFootstep()
         {
+            // block duplicate triggers (diagonal + transitions)
+            if (Time.time - lastFootstepTime < footstepCooldown)
+                return;
+
+            // optional: only play if actually moving
+            if (moveInput.magnitude < 0.1f)
+                return;
+
+            lastFootstepTime = Time.time;
+
             if (footstepSource != null && footstepClip != null)
+            {
+                footstepSource.pitch = Random.Range(0.9f, 1.1f);
                 footstepSource.PlayOneShot(footstepClip, footstepVolume);
+            }
         }
     }
 }

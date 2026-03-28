@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 5697966590916275023}
   - component: {fileID: 1498456057580454551}
   - component: {fileID: 660682613749851375}
+  - component: {fileID: -2338830606014502979}
+  - component: {fileID: 5842208673411079029}
   m_Layer: 0
   m_Name: Wire_Prefab
   m_TagString: Untagged
@@ -51,10 +53,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   img: {fileID: 660682613749851375}
-  red_wire: {fileID: -1752848546, guid: 1a30835359e025c45a228e801c08e02e, type: 3}
-  blue_wire: {fileID: -1915173283, guid: 2e23fc55ebc4f254ebe3a2f8b5c81cac, type: 3}
-  yellow_wire: {fileID: 656977461, guid: 871e02bc75f952f4fa63c8c5c23b05f7, type: 3}
-  green_wire: {fileID: -758471825, guid: 005c2e951c58cf646b0a913b2ce37255, type: 3}
+  red_wire: {fileID: 1640492319, guid: 036f908d6e779b04897749fa26e8da82, type: 3}
+  blue_wire: {fileID: 1991303361, guid: dbe51c312122be84daaac5d3df55f32e, type: 3}
+  yellow_wire: {fileID: -1908330131, guid: c5d7b108cd54e9a4cb52260742e684f9, type: 3}
+  purple_wire: {fileID: 1515476070, guid: e95ed4d168c57d245b36469d12ae9b13, type: 3}
+  white_wire: {fileID: -2045723189, guid: 6c389bd5963f7484c88b989a5fe3f347, type: 3}
+  black_wire: {fileID: 1505978775, guid: 3294958a6421fff40969f582d74d580f, type: 3}
   connection_one: {fileID: 0}
   connection_two: {fileID: 0}
 --- !u!222 &1498456057580454551
@@ -95,3 +99,49 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!223 &-2338830606014502979
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408807953702679275}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 1
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 5
+  m_TargetDisplay: 0
+--- !u!114 &5842208673411079029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408807953702679275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 1280, y: 720}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0.5
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0

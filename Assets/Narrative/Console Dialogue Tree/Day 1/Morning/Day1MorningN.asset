@@ -18,19 +18,31 @@ MonoBehaviour:
     portrait: {fileID: 0}
     text: "Morning, Andy. Welcome to another beautiful day on the SUNSET16. You\u2019ve
       been assigned maintenance on Section C-12 of the ship again for the foreseeable
-      future. Wire duty. It\u2019s up your alley as a Technician. Your efficiency
-      ratings have been stellar these past 5 years. DOLOS is pleased."
+      future. Wire duty. It\u2019s up your alley as a Technician."
     sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 1
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Your efficiency ratings have been stellar these past 5 years. DOLOS is
+      pleased.
+    sendDelay: 1
     delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
     - choiceText: "It\u2019s what I\u2019m here for."
-      nextLineIndex: 1
+      nextLineIndex: 2
       offPillChoice: 0
       showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Exactly. Now, need a refresher on wiring protocols, or are you good on
@@ -40,16 +52,17 @@ MonoBehaviour:
     autoAdvanceDelay: 0
     choices:
     - choiceText: "A refresher wouldn\u2019t hurt."
-      nextLineIndex: 2
+      nextLineIndex: 3
       offPillChoice: 0
       showOnRepeat: 0
-    - choiceText: "I\u2019m good. Red to red, don\u2019t cross the streams. Simple."
-      nextLineIndex: 3
+    - choiceText: "I know what I\u2019m doing. No refreshers needed."
+      nextLineIndex: 4
       offPillChoice: 0
       showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "It\u2019s the standard grid-based alignment. Connect the correctly coloured
@@ -60,86 +73,114 @@ MonoBehaviour:
     autoAdvanceDelay: 0
     choices:
     - choiceText: Affirmative.
-      nextLineIndex: 4
+      nextLineIndex: 5
       offPillChoice: 0
       showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: "Heh. You\u2019ve done this a thousand times. Still, check the manual whenever
-      you need to. Always good to keep your mind sharp."
+    text: "You\u2019ve done this a thousand times. Still, check the manual\u2019s
+      instructions whenever you need to. It\u2019s always beneficial to keep one\u2019s
+      mind sharp, especially when working for the DOLOS Corporation."
     sendDelay: 1
     delayRepeats: 1
     autoAdvanceDelay: 0.5
     choices: []
-    advanceToLine: 4
+    advanceToLine: 5
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: "Any other questions before you start? My shift at Section M-67 doesn\u2019t
-      begin for another 20."
+    text: "Any other questions before you head out to the boiler room? My shift at
+      Section M-67 doesn\u2019t begin for another 20."
     sendDelay: 1
     delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices:
     - choiceText: "What\u2019s on your plate today? At Section M-67?"
-      nextLineIndex: 5
-      offPillChoice: 0
-      showOnRepeat: 0
-    - choiceText: "Feels like I\u2019ve been doing this forever\u2026"
       nextLineIndex: 6
       offPillChoice: 0
       showOnRepeat: 0
-    - choiceText: Thinking about it now, our collars look quite intricate despite
-        their simple appearance.
+    - choiceText: "It feels like I\u2019ve been doing this forever\u2026"
       nextLineIndex: 7
       offPillChoice: 0
       showOnRepeat: 0
-    - choiceText: I have no more questions.
-      nextLineIndex: 8
+    - choiceText: "Thinking about it now\u2026 our collars look quite intricate despite
+        their simple appearance."
+      nextLineIndex: 9
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: I have no more questions. I have tasks to complete.
+      nextLineIndex: 11
       offPillChoice: 0
       showOnRepeat: 1
-    advanceToLine: 8
+    advanceToLine: 11
     repeat: 1
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "The usual. Monitoring the nuclear core output. All graphs and numbers.
       It\u2019s light work, but you need a keen eye. I always preferred the less
-      hands-on assignments."
+      hands-on assignments. Hated getting oil stuck between my fingernails."
     sendDelay: 1
     delayRepeats: 1
     autoAdvanceDelay: 0.01
     choices: []
-    advanceToLine: 4
+    advanceToLine: 5
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Space has a way of changing your perception of time. But that\u2019s why
       routines always help. Keeps things orderly."
     sendDelay: 1
-    delayRepeats: 1
-    autoAdvanceDelay: 0.01
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
     choices: []
-    advanceToLine: 4
+    advanceToLine: 8
     repeat: 0
     repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Trust me, it\u2019s better here than anywhere else on the planet."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 5
+    repeat: 0
+    repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Haha, yeah. The Aegis Collar is a precise system. The DOLOS Corporation
       views aesthetics for a device like that as inconsequential for its function.
-      Our job is to wear the collar, not to accessorize it.
     sendDelay: 1
     delayRepeats: 1
-    autoAdvanceDelay: 0.01
+    autoAdvanceDelay: 0.5
     choices: []
-    advanceToLine: 4
+    advanceToLine: 10
     repeat: 0
     repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Our job is to wear the collar, not to accessorize it.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 5
+    repeat: 0
+    repeated: 0
+    loreEntry: albert_aegis_collar
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Alright, I\u2019ll let you get to it. DOLOS loves a completed log."
@@ -150,3 +191,4 @@ MonoBehaviour:
     advanceToLine: -1
     repeat: 0
     repeated: 0
+    loreEntry: 

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 4 Morning Wakeup
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day4_morning_wakeup
+  text: "Good morning, Technician Andromeda. Current time is 0600 hours.\nMeasured
+    brain activity remains\u2026 stable. Body temperature has decreased by 0.04%
+    since the previous biometric scan.\nProceed to your Aegis Collar Supplement Dispenser
+    for your mandatory daily wellness protocol at your earliest convenience."
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: 4b2ba7adbb38aac42b6580924296ed47, type: 3}
+  displayDuration: 23
+  lineDurations: 060000000a000000

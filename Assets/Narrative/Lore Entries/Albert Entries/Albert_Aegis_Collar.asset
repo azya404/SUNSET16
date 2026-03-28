@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc9e01a82ab1e2d4991d1b04549e741a, type: 3}
+  m_Name: Albert_Aegis_Collar
+  m_EditorClassIdentifier: 
+  loreId: albert_aegis_collar
+  title: "DOLOS Internal - Patent DRN-PSYCH-07A \u201CThe Aegis Collar\u201D"
+  content:
+  - {fileID: 21300000, guid: 6aef71330820bd24fb9e85328394875b, type: 3}
+  - {fileID: 21300000, guid: 7a493cb65b372ef40893d9f7eb36c02c, type: 3}
+  associatedDay: 0
+  preview: 
+  unlocked: 1
+  viewed: 1

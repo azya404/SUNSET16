@@ -1587,8 +1587,36 @@ MonoBehaviour:
   announcementAudioSource: {fileID: 1549546079}
   announcements:
   - {fileID: 11400000, guid: bc75e523e96c3104d909bc3a26ad85a8, type: 2}
+  - {fileID: 11400000, guid: be83e26787234c04199a0630bc45c138, type: 2}
+  - {fileID: 11400000, guid: 4735fc2b4a05bc04683ca3db3c96bc44, type: 2}
+  - {fileID: 11400000, guid: 77d262eec98a1a5499aac1149bc7264f, type: 2}
+  - {fileID: 11400000, guid: fdc47155dbb11204d8781272898dee03, type: 2}
+  - {fileID: 11400000, guid: 8cb089b3908282b4a80ec51f102d63fa, type: 2}
   - {fileID: 11400000, guid: 622bb78c3801b6e4f9ae3bb2377a441c, type: 2}
+  - {fileID: 11400000, guid: 583408e46a57fdc45838d5f58ce85fc7, type: 2}
+  - {fileID: 11400000, guid: 7ba7fca1e8cc1dc4f80ee0dc32fbe9c0, type: 2}
+  - {fileID: 11400000, guid: b223f3a510e551f47ad56e00a054f6d7, type: 2}
+  - {fileID: 11400000, guid: 2280d329c1fe3f943991349ecbc9c9cc, type: 2}
+  - {fileID: 11400000, guid: e4c9e7124b7881e4cb11022f9d371d2f, type: 2}
   - {fileID: 11400000, guid: 954da4853dff53a4595f53ce8881f1d3, type: 2}
+  - {fileID: 11400000, guid: 621aef777512afc41b62cd55e0a8a1b4, type: 2}
+  - {fileID: 11400000, guid: 5413e87a2b885de4989e3ac9ec61478c, type: 2}
+  - {fileID: 11400000, guid: 76af8abfe3088794ea503808dbe05bca, type: 2}
+  - {fileID: 11400000, guid: 29b1ceb36f45fac4c87d1ea8b5081c1a, type: 2}
+  - {fileID: 11400000, guid: 74c33e2e2ba142f41b6b370396dc37c6, type: 2}
+  - {fileID: 11400000, guid: a4c9cc3b0426b994bb2b61cd59ae195d, type: 2}
+  - {fileID: 11400000, guid: d4a36da4c5e62044f8123815d4ad06a7, type: 2}
+  - {fileID: 11400000, guid: d2a642147669ee94c9dc3c19cb55fc94, type: 2}
+  - {fileID: 11400000, guid: d6cb5943b245e08498eb08d04da14abe, type: 2}
+  - {fileID: 11400000, guid: 4a9b6c130c89e0743b75dbd583494b03, type: 2}
+  - {fileID: 11400000, guid: 3d61af632bac98344a12f2422878b26c, type: 2}
+  - {fileID: 11400000, guid: b09b5acc5325a4249915d9b3b83cc0bf, type: 2}
+  - {fileID: 11400000, guid: 4ac2ab8a3d9477148bc70c41cccceb6a, type: 2}
+  - {fileID: 11400000, guid: 70c6e31b2b0aa274196683eadc8efb19, type: 2}
+  - {fileID: 11400000, guid: b7b7b7587201cc0439f51b5e7b95e54e, type: 2}
+  - {fileID: 11400000, guid: 324b9f613477f6245b7f6591a82ed659, type: 2}
+  - {fileID: 11400000, guid: f98edd7ff1b44ba48aeb871f94fa446e, type: 2}
+  testAnnouncementId: dolos_day5_night_bedroom
 --- !u!114 &1549546081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1878,6 +1906,7 @@ MonoBehaviour:
   loreImage: {fileID: 0}
   AlbertMessage: {fileID: 2722928380033971905, guid: dc3c6540015c79941973d8369c63e387, type: 3}
   PlayerMessage: {fileID: 6662382049326946677, guid: 6bf19257397a8fb4b8ce2e916be65779, type: 3}
+  DOLOSMessage: {fileID: 2722928380033971905, guid: 83ede99c9dc34cc4aa8f67dbe189d606, type: 3}
   speakerNameText: {fileID: 0}
   speakerPortrait: {fileID: 0}
   dialogueBodyText: {fileID: 0}
@@ -1887,8 +1916,23 @@ MonoBehaviour:
   closeButtonContainer: {fileID: 0}
   closeButton: {fileID: 0}
   closeImage: {fileID: 0}
+  chatTabContainer: {fileID: 0}
   chatButton: {fileID: 0}
+  chatButtonImage: {fileID: 0}
+  loreTabContainer: {fileID: 0}
   loreButton: {fileID: 0}
+  loreButtonImage: {fileID: 0}
+  notifImage: {fileID: 0}
+  prevButtonContainer: {fileID: 0}
+  prevButton: {fileID: 0}
+  prevImage: {fileID: 0}
+  nextButtonContainer: {fileID: 0}
+  nextButton: {fileID: 0}
+  nextImage: {fileID: 0}
+  prevPageContainer: {fileID: 0}
+  prevPageButton: {fileID: 0}
+  nextPageContainer: {fileID: 0}
+  nextPageButton: {fileID: 0}
   choiceButtonRoots:
   - {fileID: 0}
   - {fileID: 0}
@@ -1907,11 +1951,12 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  glitchInterval: 0.1
-  dispProbability: 0.3
-  dispIntensity: 0.05
-  colorProbability: 0.3
-  colorIntensity: 0.05
+  intensity: 1
+  blockSize: 5
+  dispStrength: 0.3
+  colorSplit: 0.3
+  normalChoice: {fileID: 21300000, guid: 5e43c846e99e4ad4eaa838c7bc038b4f, type: 3}
+  noPillChoice: {fileID: 21300000, guid: 9832ca1203a9ca34ea476e9c92e993f8, type: 3}
   loreButtonRoots:
   - {fileID: 0}
   - {fileID: 0}
@@ -1930,6 +1975,18 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  loreEntries:
+  - {fileID: 11400000, guid: 81a68003039ac504d8d035682b2fdcf0, type: 2}
+  - {fileID: 11400000, guid: 862107b67913b854cbad11d455e69eae, type: 2}
+  - {fileID: 11400000, guid: a1c6d5766e445ec4299045d66e755c00, type: 2}
+  - {fileID: 11400000, guid: bc1e8acd2ef8b814e905c30911f5ce7a, type: 2}
+  - {fileID: 11400000, guid: f94dff12ad7916e47999f3274a5d26d4, type: 2}
+  - {fileID: 11400000, guid: d258b81bcd6485b4dbf00f35b52154c7, type: 2}
+  - {fileID: 11400000, guid: c9f9cdef1986e9041bbee6d0aaee66af, type: 2}
+  - {fileID: 11400000, guid: cad9cd9f5f893634d9a2e597d6e9b059, type: 2}
+  - {fileID: 11400000, guid: e694b176e2cb7504a994b0a9a573640b, type: 2}
+  - {fileID: 11400000, guid: d6eb2efab0070744cb34cfbd4d1bc88c, type: 2}
+  - {fileID: 11400000, guid: 744e6f613458b1348ad9800601c1f106, type: 2}
   typewriterCharDelay: 0.03
   AlbertDelayAmt: 0.5
   playerDelay: 0.5
@@ -1939,10 +1996,12 @@ MonoBehaviour:
   playerY: 140
   offset: 120
   audioSource: {fileID: 1667455045}
-  keyboard: {fileID: 8300000, guid: f43923ff3038f974a9aef7c0b34a9cb0, type: 3}
+  keyboard: {fileID: 8300000, guid: ce27c57c08823bb438c4d309e8ddf5dd, type: 3}
   menuClick: {fileID: 8300000, guid: 6336ce03e4dda71489857b071cabf257, type: 3}
   msgSend: {fileID: 8300000, guid: bbe9e12929ade374896a682613c57827, type: 3}
   msgGet: {fileID: 8300000, guid: 3d6b305a64bcc1546b69a57d8366396a, type: 3}
+  computerTakeover: {fileID: 8300000, guid: 637e10022d9cb1c4c8aa2f65b09cda98, type: 3}
+  computerGlitch: {fileID: 0}
 --- !u!114 &1667455041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2246,7 +2305,8 @@ MonoBehaviour:
   ambientSource: {fileID: 0}
   mirrorSource: {fileID: 0}
   pillSFXSource: {fileID: 0}
-  bedroomAmbientClip: {fileID: 8300000, guid: 47b0ca149059cab45b7cd5e3346c318c, type: 3}
+  bedroomAmbientClip: {fileID: 8300000, guid: e8a16eec507381340a762a4f68dd952d, type: 3}
+  evilBedroomAmbient: {fileID: 8300000, guid: d7a9235faccc6374eae38d19ddb78122, type: 3}
   mirrorAmbientClip: {fileID: 8300000, guid: 5e91785b7079eaf439adc17e0b33e99b, type: 3}
   onPillMusic: {fileID: 0}
   offPillMusic: {fileID: 0}
@@ -2586,6 +2646,7 @@ MonoBehaviour:
   _puzzleDataAssets:
   - {fileID: 11400000, guid: fbe01df71dbdbd54a9356a67dd242645, type: 2}
   - {fileID: 11400000, guid: 19d94ffed27f61947a4e37b9748327c9, type: 2}
+  - {fileID: 11400000, guid: 951c03b2962a68e418151ce66c73268b, type: 2}
   _puzzleSpawnPoint: {fileID: 0}
 --- !u!4 &2055875353
 Transform:

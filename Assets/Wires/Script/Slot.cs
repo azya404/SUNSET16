@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class Slot : MonoBehaviour,
     IPointerDownHandler,
@@ -12,41 +13,57 @@ public class Slot : MonoBehaviour,
     //IPointerEnterHandler,
     IPointerClickHandler
 {
-
+    public Image img;       
+    public Sprite purple_node;
+    public Sprite red_node;
+    public Sprite yellow_node;
+    public Sprite blue_node;
+    public Sprite white_node;
+    public Sprite black_node;
+    public Sprite empty_node;
     public Transform wire_spot;   // drag the "Wire_spot" GameObject here in Inspector
     public TMP_Text Text_Output;
     public Slot up_slot;
     public Slot down_slot;
     public Slot left_slot;
     public Slot right_slot;
-    public Node attachednode;
+    //public string attachednode = null;
+    public string node_id = null;
     public Player_Drag Draging;
     public GameObject wire_prefab;
-    public UnityEngine.Vector3  offset_positon;
+    public UnityEngine.Vector3 offset_positon;
     public int offset_rotate;
     public bool node_fulled = false;
     public bool wire_fulled = false;
     public bool slot_fulled = false; //used when check side slots
-    public Level1_Manager level;
-
-
-
-
+    public bool has_bend = false;
+    public Level_Manager level;
     public string wire_id; 
-
     public static Slot selectedSlot = null; 
     public bool IsFull => node_fulled || wire_fulled; //if the slot is full of any of those then it cant be added
 
     public bool selection_click = false, second_click = false;
 
+    
+    public void update_slot_visual()
+    {
+        if (node_id == "Red") img.sprite = red_node;
+        else if (node_id == "Purple") img.sprite = purple_node;
+        else if (node_id == "White") img.sprite = white_node;
+        else if (node_id == "Black") img.sprite = black_node;
+        else if (node_id == "Blue") img.sprite = blue_node;
+        else if (node_id == "Yellow") img.sprite = yellow_node;
+        Debug.Log("wires_upated");
+    }
+    
     private string GetConnectionIdFromThisOrOther(Slot otherSlot)
     {
         // Prefer THIS slot as the source (so extending from a wire works naturally)
-        if (attachednode != null) return attachednode.id; //works from node → empty
+        if (node_fulled == true) return node_id; //works from node → empty
         if (wire_fulled == true && string.IsNullOrEmpty(wire_id) == false) return wire_id; //works from wire → empty
 
         // Fallback: maybe the other slot is the source
-        if (otherSlot != null && otherSlot.attachednode != null) return otherSlot.attachednode.id; // works from node → wire only if same color
+        if (otherSlot != null && otherSlot.node_fulled == true) return otherSlot.node_id; // works from node → wire only if same color
         if (otherSlot != null && otherSlot.wire_fulled == true && string.IsNullOrEmpty(otherSlot.wire_id) == false) return otherSlot.wire_id; // works from wire → wire only if same color
 
         return null;
@@ -55,6 +72,8 @@ public class Slot : MonoBehaviour,
 
     private void Update()
     {
+        if (level.leverBusy == true) return;
+        else {
         if (Draging == null) return;
         if (!Draging.gameObject.activeSelf) return;
 
@@ -70,420 +89,174 @@ public class Slot : MonoBehaviour,
 
         // Now call your existing neighbor-placement logic:
         TryPlaceFromSelectedNeighbor();
+        }
     }
-
-    // public void place_wire(Slot otherSlot, float rotationZ, Vector3 offset)
-    // {
-    //     if (otherSlot == null) return;
-
-    //     string connectionId = GetConnectionIdFromThisOrOther(otherSlot);
-    //     if (string.IsNullOrEmpty(connectionId)) return;
-
-    //     // mark data
-    //     wire_fulled = true;
-    //     otherSlot.wire_fulled = true;
-    //     wire_id = connectionId;
-    //     otherSlot.wire_id = connectionId;
-
-    //     if (wire_prefab == null)
-    //     {
-    //         Debug.LogWarning("wire_prefab not assigned on " + name);
-    //         return;
-    //     }
-
-    //     // spawn in WORLD space
-    //     Vector3 spawnPos = transform.position + offset;
-    //     Quaternion spawnRot = Quaternion.Euler(0f, 0f, rotationZ);
-
-    //     GameObject clone = Instantiate(wire_prefab, spawnPos, spawnRot);
-
-    //     // (optional) name it for deleting later
-    //     clone.name = "Wire_" + connectionId + "_" + name + "_to_" + otherSlot.name;
-
-    //     // call function on clone (ONLY if Wire_Manager is on the prefab)
-    //     Wire_Manager script = clone.GetComponent<Wire_Manager>();
-    //     if (script != null)
-    //     {
-    //         script.ColorWire(otherSlot);
-    //     }
-    // }
-
-    // public void place_wire(Slot otherSlot, float rotationZ, Vector3 offset)
-    // {
-    //     if (otherSlot == null)
-    //     {
-    //         Debug.LogWarning("place_wire: otherSlot is null");
-    //         if (Text_Output != null) Text_Output.text = "place_wire: otherSlot is null";
-    //         return;
-    //     }
-
-    //     if (wire_prefab == null)
-    //     {
-    //         Debug.LogWarning("place_wire: wire_prefab not assigned on " + name);
-    //         if (Text_Output != null) Text_Output.text = "wire_prefab missing on " + name;
-    //         return;
-    //     }
-
-    //     // Decide what color/id this connection should be (node OR existing wire)
-    //     string connectionId = GetConnectionIdFromThisOrOther(otherSlot);
-    //     if (string.IsNullOrEmpty(connectionId))
-    //     {
-    //         Debug.LogWarning("place_wire: no node/wire id to extend from");
-    //         if (Text_Output != null) Text_Output.text = "No wire/node id to extend from";
-    //         return;
-    //     }
-
-    //     // If this slot already has a wire id, it must match
-    //     if (wire_fulled && !string.IsNullOrEmpty(wire_id) && wire_id != connectionId)
-    //     {
-    //         Debug.Log("place_wire: this slot has different wire color, can't connect.");
-    //         if (Text_Output != null) Text_Output.text = "Different wire color (this slot)";
-    //         return;
-    //     }
-
-    //     // If the other slot already has a wire id, it must match
-    //     if (otherSlot.wire_fulled && !string.IsNullOrEmpty(otherSlot.wire_id) && otherSlot.wire_id != connectionId)
-    //     {
-    //         Debug.Log("place_wire: other slot has different wire color, can't connect.");
-    //         if (Text_Output != null) Text_Output.text = "Different wire color (other slot)";
-    //         return;
-    //     }
-
-    //     // Mark both ends as wire-filled and stamp the id
-    //     wire_fulled = true;
-    //     otherSlot.wire_fulled = true;
-    //     wire_id = connectionId;
-    //     otherSlot.wire_id = connectionId;
-
-    //     // Spawn in WORLD space
-    //     Vector3 spawnPos = transform.position + offset;
-    //     Quaternion spawnRot = Quaternion.Euler(0f, 0f, rotationZ);
-
-    //     GameObject clone = Instantiate(wire_prefab, spawnPos, spawnRot);
-    //     clone.name = "Wire_" + connectionId + "_" + name + "_to_" + otherSlot.name;
-
-    //     // Get Wire_Manager (root OR child)
-    //     Wire_Manager script = clone.GetComponent<Wire_Manager>();
-    //     if (script == null) script = clone.GetComponentInChildren<Wire_Manager>();
-
-    //     if (script != null)
-    //     {
-    //         // Better to use the id you already computed
-    //         // If your Wire_Manager has a wire_id field, do this:
-    //         // script.wire_id = connectionId;
-
-    //         // If ColorWire takes a Slot, pass THIS slot (source) or whichever you want.
-    //         // But the most reliable is to make ColorWire take the string id.
-    //         script.ColorWire(this);  // <-- change to script.ColorWire(connectionId) if you update Wire_Manager
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning("place_wire: clone has no Wire_Manager component.");
-    //     }
-    // }
-        
-        
     public void place_wire(Slot otherSlot, float rotationZ, Vector3 offset)
+    {
+        if (otherSlot == null) return;
+
+        if (wire_prefab == null)
         {
-            if (otherSlot == null) return;
+            Debug.LogWarning("place_wire: wire_prefab not assigned on " + name);
+            return;
+        }
 
-            if (wire_prefab == null)
-            {
-                Debug.LogWarning("place_wire: wire_prefab not assigned on " + name);
-                return;
-            }
+        if (wire_spot == null)
+        {
+            Debug.LogWarning("place_wire: wire_spot not assigned on " + name);
+            return;
+        }
 
-            if (wire_spot == null)
-            {
-                Debug.LogWarning("place_wire: wire_spot not assigned on " + name + " (drag Wire_spot into the slot)");
-                return;
-            }
+        string connectionId = GetConnectionIdFromThisOrOther(otherSlot);
+        if (string.IsNullOrEmpty(connectionId)) return;
 
-            string connectionId = GetConnectionIdFromThisOrOther(otherSlot);
-            if (string.IsNullOrEmpty(connectionId)) return;
+        if (wire_fulled && !string.IsNullOrEmpty(wire_id) && wire_id != connectionId) return;
+        if (otherSlot.wire_fulled && !string.IsNullOrEmpty(otherSlot.wire_id) && otherSlot.wire_id != connectionId) return;
 
-            // If this slot already has a wire id, it must match
-            if (wire_fulled && !string.IsNullOrEmpty(wire_id) && wire_id != connectionId) return;
+        wire_fulled = true;
+        otherSlot.wire_fulled = true;
+        wire_id = connectionId;
+        otherSlot.wire_id = connectionId;
 
-            // If the other slot already has a wire id, it must match
-            if (otherSlot.wire_fulled && !string.IsNullOrEmpty(otherSlot.wire_id) && otherSlot.wire_id != connectionId) return;
+        Quaternion localRotation = Quaternion.Euler(0f, 0f, rotationZ);
 
-            // mark data
-            wire_fulled = true;
-            otherSlot.wire_fulled = true;
-            wire_id = connectionId;
-            otherSlot.wire_id = connectionId;
+        GameObject clone = Instantiate(wire_prefab, wire_spot);
+        clone.name = wire_id;
+        level.action_wire_stack.Push(clone);
 
-            Vector3 spawnPos = transform.position + offset;
-            Quaternion spawnRot = Quaternion.Euler(0f, 0f, rotationZ);
+        RectTransform cloneRect = clone.GetComponent<RectTransform>();
 
-            // parent under Wire_spot when instantiating
-            GameObject clone = Instantiate(wire_prefab, spawnPos, spawnRot, wire_spot);
+        if (cloneRect != null)
+        {
+            cloneRect.localScale = Vector3.one;
+            cloneRect.localRotation = Quaternion.Euler(0f, 0f, rotationZ);
+            cloneRect.localPosition = offset;
+        }
+        else
+        {
+            clone.transform.localScale = Vector3.one;
+            clone.transform.localRotation = Quaternion.Euler(0f, 0f, rotationZ);
+            clone.transform.localPosition = offset;
+        }
 
-            clone.name = wire_id;
+        Wire_Manager script = clone.GetComponent<Wire_Manager>();
+        if (script == null) script = clone.GetComponentInChildren<Wire_Manager>();
 
-            Wire_Manager script = clone.GetComponent<Wire_Manager>();
+        if (script != null)
+        {
             script.connection_one = this;
             script.connection_two = otherSlot;
-            if (script == null) script = clone.GetComponentInChildren<Wire_Manager>();
-
-            if (script != null)
-            {
-                script.ColorWire(this); // or better: script.ColorWire(connectionId) if you update Wire_Manager
-            }
+            script.ColorWire(this);
         }
-        // private void OnMouseDown() 
-        //     {
-        //         if (node_fulled == true && wire_fulled == false){
-        //             Draging.begin();
-        //             selection_click = true;
-        //             Debug.Log("Click");
-        //         }
-        //     }
-        
-        public void OnPointerDown(PointerEventData eventData)
+    }
+            
+    public void OnPointerDown(PointerEventData eventData) //holding click
         {
-            if (node_fulled && !wire_fulled)
+            if (level.leverBusy == true) return;
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
-                Draging.begin();
-                selection_click = true;
-                Debug.Log("Click");
+                if (node_fulled && !wire_fulled)
+                {
+                    Draging.begin();
+                    selection_click = true;
+                    Debug.Log("Click");
+                    level.action_stack.Add(this);
+                }
             }
-        }
+    }
+    public void OnPointerUp(PointerEventData eventData) //when they let go of click
+        {
+            if (Draging.is_dragging == true) {
+                if (Draging != null) Draging.end();
+                Debug.Log("Stop Click");
+                selection_click = false;
 
-        // private void OnMouseUp() {
-        //     Draging.end();
-        //     Debug.Log("Stop Click");
-        //     selection_click = false;
-        //     // Red
-        //     level.red_done = level.check_connected(level.red_node_1, "Red", level.red_node_2);
-        //     if (!level.red_done && wire_id == "Red")
-        //     {
-        //         level.delete_wire("Red");
-        //     }
+                // Only re-check and delete for THIS slot's color (less spam)
+                if (level == null) return;
 
-        //     // Yellow
-        //     level.yellow_done = level.check_connected(level.yellow_node_1, "Yellow", level.yellow_node_2);
-        //     if (!level.yellow_done && wire_id == "Yellow")
-        //     {
-        //         level.delete_wire("Yellow");
-        //     }
+                if (wire_id == "Red")
+                {
+                    level.check_connected(level.red_node_1, "Red", level.red_node_2);
+                }
+                else if (wire_id == "Yellow")
+                {
+                    level.check_connected(level.yellow_node_1, "Yellow", level.yellow_node_2);
+                }
+                else if (wire_id == "Blue")
+                {
+                    level.check_connected(level.blue_node_1, "Blue", level.blue_node_2);
+                }
+                else if (wire_id == "Purple")
+                {
+                    level.check_connected(level.purple_node_1, "Purple", level.purple_node_2);
+                }
+                else if (wire_id == "White")
+                {
+                    level.check_connected(level.white_node_1, "White", level.white_node_2);
+                }
+                else if (wire_id == "Black")
+                {
+                    level.check_connected(level.black_node_1, "Black", level.black_node_2);
+                }
+                else
+                {
+                    level.action_stack.Clear();
+                }
+            }
+    }
 
-        //     // Blue
-        //     level.blue_done = level.check_connected(level.blue_node_1, "Blue", level.blue_node_2);
-        //     if (!level.blue_done && wire_id == "Blue")
-        //     {
-        //         level.delete_wire("Blue");
-        //     }
-
-        //     // Green
-        //     level.green_done = level.check_connected(level.green_node_1, "Green", level.green_node_2);
-        //     if (!level.green_done && wire_id == "Green")
-        //     {
-        //         level.delete_wire("Green");
-        //     }
-                    
-        // }
-public void OnPointerUp(PointerEventData eventData)
+    
+    public void cursor_off()
     {
+        Slot s = level.action_stack[level.action_stack.Count - 1];
+        
         if (Draging != null) Draging.end();
         Debug.Log("Stop Click");
-        selection_click = false;
+        s.selection_click = false;
 
         // Only re-check and delete for THIS slot's color (less spam)
         if (level == null) return;
 
-        if (wire_id == "Red")
+        if (s.wire_id == "Red")
         {
-            level.red_done = level.check_connected(level.red_node_1, "Red", level.red_node_2);
-            if (!level.red_done) level.delete_wire("Red");
+            level.check_connected(level.red_node_1, "Red", level.red_node_2);
         }
-        else if (wire_id == "Yellow")
+        else if (s.wire_id == "Yellow")
         {
-            level.yellow_done = level.check_connected(level.yellow_node_1, "Yellow", level.yellow_node_2);
-            if (!level.yellow_done) level.delete_wire("Yellow");
+            level.check_connected(level.yellow_node_1, "Yellow", level.yellow_node_2);
         }
-        else if (wire_id == "Blue")
+        else if (s.wire_id == "Blue")
         {
-            level.blue_done = level.check_connected(level.blue_node_1, "Blue", level.blue_node_2);
-            if (!level.blue_done) level.delete_wire("Blue");
+            level.check_connected(level.blue_node_1, "Blue", level.blue_node_2);
         }
-        else if (wire_id == "Green")
+        else if (wire_id == "Purple")
         {
-            level.green_done = level.check_connected(level.green_node_1, "Green", level.green_node_2);
-            if (!level.green_done) level.delete_wire("Green");
+            level.check_connected(level.purple_node_1, "Purple", level.purple_node_2);
+        }
+        else if (wire_id == "White")
+        {
+            level.check_connected(level.white_node_1, "White", level.white_node_2);
+        }
+        else if (wire_id == "Black")
+        {
+            level.check_connected(level.black_node_1, "Black", level.black_node_2);
         }
     }
-
-    // private void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     //Neighbor second click. Checks if the slot is there and where the first click is!
-    //     if (up_slot != null && up_slot.selection_click == true || down_slot != null && down_slot.selection_click == true || right_slot != null && right_slot.selection_click == true || left_slot != null && left_slot.selection_click == true)
-    //     {
-    //         // first click cell is UP
-    //         if (down_slot != null && down_slot.selection_click == true)
-    //         {
-    //             if (wire_fulled == false && node_fulled == false)
-    //             {
-    //                 Debug.Log("Place wire");
-    //                 Text_Output.text = "Place wire";
-    //                 offset_positon = new UnityEngine.Vector3(0f, -37f, 0f);
-    //                 offset_rotate = 90;
-    //                 level.place_wire_sound();
-    //                 place_wire(down_slot, offset_rotate, offset_positon);
-    //                 down_slot.selection_click = false;
-    //                 selection_click = true;
-    //             }
-    //             else if (node_fulled == true && wire_fulled == true)
-    //             {
-    //                 Debug.Log("Wire spot full");
-    //                 Text_Output.text = "Wire spot full";
-    //                 Draging.end();
-    //             }
-    //             else if (node_fulled == true && attachednode.id == down_slot.wire_id){
-    //                 Debug.Log("fulled node");
-    //                 Text_Output.text = "fulled node";
-    //                 offset_positon = new UnityEngine.Vector3(0f, -37f, 0f);
-    //                 offset_rotate = 90;
-    //                 level.place_wire_sound();
-    //                 place_wire(down_slot, offset_rotate, offset_positon);
-    //                 Draging.end();
-    //                 down_slot.selection_click = false;
-    //                 selection_click = false;
-    //             }
-    //             else
-    //             {
-    //                 Debug.Log("spot is full");
-    //                 Text_Output.text = "spot is full";
-    //                 Draging.end();
-    //             }
-
-    //         }
-
-    //         // first click cell is DOWN
-    //         if (up_slot != null && up_slot.selection_click == true)
-    //         {
-    //             //first check if slot has a wire or a node, secd checks if the there is a node there and the wire id is the same (same wire)
-    //             if (wire_fulled == false && node_fulled == false) 
-    //             {
-    //                 Debug.Log("Place wire");
-    //                 Text_Output.text = "Place wire";
-    //                 offset_positon = new UnityEngine.Vector3(0f,37f, 0f);
-    //                 offset_rotate = -90;
-    //                 level.place_wire_sound();
-    //                 place_wire(up_slot, offset_rotate, offset_positon);
-    //                 up_slot.selection_click = false;
-    //                 selection_click = true;
-    //             }
-    //             else if (node_fulled == true && wire_fulled == true)
-    //             {
-    //                 Debug.Log("Wire spot full");
-    //                 Text_Output.text = "Wire spot full";
-    //                 Draging.end();
-    //             }
-    //             else if (node_fulled == true && attachednode.id == up_slot.wire_id){
-    //                 Debug.Log("Place wire");
-    //                 Text_Output.text = "Place awire";
-    //                 offset_positon = new UnityEngine.Vector3(0f,37f, 0f);
-    //                 offset_rotate = -90;
-    //                 level.place_wire_sound();
-    //                 place_wire(up_slot, offset_rotate, offset_positon);
-    //                 Draging.end();
-    //                 up_slot.selection_click = false;
-    //                 selection_click = false;
-    //             }
-    //             else
-    //             {
-    //                 Debug.Log("spot is full");
-    //                 Text_Output.text = "spot is full";
-    //                 Draging.end();
-    //             }
-    //         }
-
-    //         // first click cell is LEFT
-    //         if (right_slot != null && right_slot.selection_click == true)
-    //         {
-    //             if (wire_fulled == false && node_fulled == false)
-    //             {
-    //                 Debug.Log("Place wire");
-    //                 Text_Output.text = "Place wire";
-    //                 offset_positon = new UnityEngine.Vector3(35f,0f, 0f);
-    //                 offset_rotate = 0;
-    //                 level.place_wire_sound();
-    //                 place_wire(right_slot, offset_rotate, offset_positon);
-    //                 right_slot.selection_click = false;
-    //                 selection_click = true;
-    //             }
-    //             else if (node_fulled == true && wire_fulled == true)
-    //             {
-    //                 Debug.Log("Wire spot full");
-    //                 Text_Output.text = "Wire spot full";
-    //                 Draging.end();
-    //             }
-                
-    //             else if (node_fulled == true && attachednode.id == right_slot.wire_id){
-    //                 Debug.Log("Place wire");
-    //                 Text_Output.text = "Place wire";
-    //                 offset_positon = new UnityEngine.Vector3(35f,0f, 0f);
-    //                 offset_rotate = 0;
-    //                 level.place_wire_sound();
-    //                 place_wire(right_slot, offset_rotate, offset_positon);
-    //                 Draging.end();
-    //                 right_slot.selection_click = false;
-    //                 selection_click = false;
-    //             }
-    //             else
-    //             {
-    //                 Debug.Log("spot is full");
-    //                 Text_Output.text = "spot is full";
-    //                 Draging.end();
-    //             }
-    //         }
-
-    //         // first click cell is RIGHT
-    //         if (left_slot != null && left_slot.selection_click == true)
-    //         {
-    //             if (wire_fulled == false && node_fulled == false)
-    //             {
-    //                 Debug.Log("Place wire");
-    //                 Text_Output.text = "Place wire";
-    //                 offset_positon = new UnityEngine.Vector3(-35f,0f, 0f);
-    //                 offset_rotate = 0;
-    //                 level.place_wire_sound();
-    //                 place_wire(left_slot, offset_rotate, offset_positon);
-    //                 left_slot.selection_click = false;
-    //                 selection_click = true;
-    //             }
-    //             else if (node_fulled == true && wire_fulled == true)
-    //             {
-    //                 Debug.Log("Wire spot full");
-    //                 Text_Output.text = "Wire spot full";
-    //                 Draging.end();
-    //             }
-    //             else if (node_fulled == true && attachednode.id == left_slot.wire_id){
-    //                 Debug.Log("Place wire");
-    //                 Text_Output.text = "Place wire";
-    //                 offset_positon = new UnityEngine.Vector3(-35f,0f, 0f);
-    //                 offset_rotate = 0;
-    //                 level.place_wire_sound();
-    //                 place_wire(left_slot, offset_rotate, offset_positon);
-    //                 Draging.end();
-    //                 left_slot.selection_click = false;
-    //                 selection_click = false;
-    //             }
-    //             else
-    //             {
-    //                 Debug.Log("spot is full");
-    //                 Text_Output.text = "spot is full";
-    //                 Draging.end();
-    //             }
-    //         }
-    //     }
-    // }
-    private void TryPlaceFromSelectedNeighbor()
+    private Vector3 GetHalfwayOffset(Slot otherSlot){
+        if (otherSlot == null || wire_spot == null)
         {
-        // public void OnPointerEnter(PointerEventData eventData)
-        // {
+            return Vector3.zero;
+        }
+
+        Vector3 thisWorldPosition = transform.position;
+        Vector3 otherWorldPosition = otherSlot.transform.position;
+
+        Vector3 middleWorldPosition = (thisWorldPosition + otherWorldPosition) * 0.5f;
+
+        return wire_spot.InverseTransformPoint(middleWorldPosition);
+    }
+        private void TryPlaceFromSelectedNeighbor()
+        {
 
             // only do this if we are currently dragging
             if (Draging == null) return;
@@ -495,6 +268,24 @@ public void OnPointerUp(PointerEventData eventData)
                 (right_slot != null && right_slot.selection_click) ||
                 (left_slot != null && left_slot.selection_click))
             {
+                
+                if (level.action_stack.Count == 2 && level != null) level.place_wire_sound(); //sound from starting Node
+                
+                if (this == level.peek())
+                {   
+                    Debug.Log("this ran");
+                    Slot removed = level.action_stack_remove_last();
+                    removed.selection_click = false;
+                    removed.wire_fulled = false;
+                    removed.wire_id = null;
+                    removed.has_bend = false;
+                    if (has_bend == true) {
+                        has_bend = false;
+                        level.back_wire_bend();
+                    }
+                    selection_click = true;
+                    level.connent_right_animation();
+                }
                 // first click cell is UP (meaning: the selected slot is below me)
                 if (down_slot != null && down_slot.selection_click)
                 {
@@ -503,41 +294,45 @@ public void OnPointerUp(PointerEventData eventData)
                         Debug.Log("Place wire");
                         if (Text_Output != null) Text_Output.text = "Place wire";
 
-                        offset_positon = new Vector3(0f, -37f, 0f);
+                        offset_positon = GetHalfwayOffset(down_slot);
                         offset_rotate = 90;
 
-                        if (level != null) level.place_wire_sound();
+                        level.action_stack.Add(this);
                         place_wire(down_slot, offset_rotate, offset_positon);
-
+                        level.is_wire_bent();
                         down_slot.selection_click = false;
                         selection_click = true;
+                        level.connent_right_animation();
                     }
                     else if (node_fulled && wire_fulled)
                     {
                         Debug.Log("Wire spot full");
                         if (Text_Output != null) Text_Output.text = "Wire spot full";
-                        Draging.end();
+                        cursor_off();
+                        level.connent_wrong_animation();
                     }
-                    else if (node_fulled && attachednode != null && attachednode.id == down_slot.wire_id)
+                    else if (node_fulled && node_id == down_slot.wire_id)
                     {
-                        Debug.Log("fulled node");
+                        Debug.Log("Place wire On Node");
                         if (Text_Output != null) Text_Output.text = "fulled node";
 
-                        offset_positon = new Vector3(0f, -37f, 0f);
+                        offset_positon = GetHalfwayOffset(down_slot);
                         offset_rotate = 90;
 
-                        if (level != null) level.place_wire_sound();
+                        level.action_stack.Add(this);
                         place_wire(down_slot, offset_rotate, offset_positon);
-
-                        Draging.end();
+                        level.is_wire_bent();
+                        cursor_off();
                         down_slot.selection_click = false;
                         selection_click = false;
+                        level.connent_node_animation();
                     }
                     else
                     {
                         Debug.Log("spot is full");
                         if (Text_Output != null) Text_Output.text = "spot is full";
-                        Draging.end();
+                        cursor_off();
+                        level.connent_wrong_animation();
                     }
                 }
 
@@ -549,41 +344,45 @@ public void OnPointerUp(PointerEventData eventData)
                         Debug.Log("Place wire");
                         if (Text_Output != null) Text_Output.text = "Place wire";
 
-                        offset_positon = new Vector3(0f, 37f, 0f);
-                        offset_rotate = -90;
+                        offset_positon = GetHalfwayOffset(up_slot);
+                        offset_rotate = 90;
 
-                        if (level != null) level.place_wire_sound();
+                        level.action_stack.Add(this);
                         place_wire(up_slot, offset_rotate, offset_positon);
-
+                        level.is_wire_bent();
                         up_slot.selection_click = false;
                         selection_click = true;
+                        level.connent_right_animation();
                     }
                     else if (node_fulled && wire_fulled)
                     {
                         Debug.Log("Wire spot full");
                         if (Text_Output != null) Text_Output.text = "Wire spot full";
-                        Draging.end();
+                        cursor_off();
+                        level.connent_wrong_animation();
                     }
-                    else if (node_fulled && attachednode != null && attachednode.id == up_slot.wire_id)
+                    else if (node_fulled && node_id == up_slot.wire_id)
                     {
-                        Debug.Log("Place wire");
+                        Debug.Log("Place wire On Node");
                         if (Text_Output != null) Text_Output.text = "Place wire";
 
-                        offset_positon = new Vector3(0f, 37f, 0f);
-                        offset_rotate = -90;
+                        offset_positon = GetHalfwayOffset(up_slot);
+                        offset_rotate = 90;
 
-                        if (level != null) level.place_wire_sound();
+                        level.action_stack.Add(this);
                         place_wire(up_slot, offset_rotate, offset_positon);
-
-                        Draging.end();
+                        level.is_wire_bent();
+                        cursor_off();
                         up_slot.selection_click = false;
                         selection_click = false;
+                        level.connent_node_animation();
                     }
                     else
                     {
                         Debug.Log("spot is full");
                         if (Text_Output != null) Text_Output.text = "spot is full";
-                        Draging.end();
+                        cursor_off();
+                        level.connent_wrong_animation();
                     }
                 }
 
@@ -595,41 +394,45 @@ public void OnPointerUp(PointerEventData eventData)
                         Debug.Log("Place wire");
                         if (Text_Output != null) Text_Output.text = "Place wire";
 
-                        offset_positon = new Vector3(35f, 0f, 0f);
+                        offset_positon = GetHalfwayOffset(right_slot);
                         offset_rotate = 0;
 
-                        if (level != null) level.place_wire_sound();
+                        level.action_stack.Add(this);
                         place_wire(right_slot, offset_rotate, offset_positon);
-
+                        level.is_wire_bent();
                         right_slot.selection_click = false;
                         selection_click = true;
+                        level.connent_right_animation();
                     }
                     else if (node_fulled && wire_fulled)
                     {
                         Debug.Log("Wire spot full");
                         if (Text_Output != null) Text_Output.text = "Wire spot full";
-                        Draging.end();
+                        cursor_off();
+                        level.connent_wrong_animation();
                     }
-                    else if (node_fulled && attachednode != null && attachednode.id == right_slot.wire_id)
+                    else if (node_fulled && node_id == right_slot.wire_id)
                     {
-                        Debug.Log("Place wire");
+                        Debug.Log("Place wire On Node");
                         if (Text_Output != null) Text_Output.text = "Place wire";
 
-                        offset_positon = new Vector3(35f, 0f, 0f);
+                        offset_positon = GetHalfwayOffset(right_slot);
                         offset_rotate = 0;
 
-                        if (level != null) level.place_wire_sound();
+                        level.action_stack.Add(this);
                         place_wire(right_slot, offset_rotate, offset_positon);
-
-                        Draging.end();
+                        level.is_wire_bent();
+                        cursor_off();
                         right_slot.selection_click = false;
                         selection_click = false;
+                        level.connent_node_animation();
                     }
                     else
                     {
                         Debug.Log("spot is full");
                         if (Text_Output != null) Text_Output.text = "spot is full";
-                        Draging.end();
+                        cursor_off();
+                        level.connent_wrong_animation();
                     }
                 }
 
@@ -641,161 +444,63 @@ public void OnPointerUp(PointerEventData eventData)
                         Debug.Log("Place wire");
                         if (Text_Output != null) Text_Output.text = "Place wire";
 
-                        offset_positon = new Vector3(-35f, 0f, 0f);
-                        offset_rotate = 0;
+                        offset_positon = GetHalfwayOffset(left_slot);
+                        offset_rotate = 180;
 
-                        if (level != null) level.place_wire_sound();
+                        level.action_stack.Add(this);
                         place_wire(left_slot, offset_rotate, offset_positon);
-
+                        level.is_wire_bent();
                         left_slot.selection_click = false;
                         selection_click = true;
+                        level.connent_right_animation();
                     }
                     else if (node_fulled && wire_fulled)
                     {
                         Debug.Log("Wire spot full");
                         if (Text_Output != null) Text_Output.text = "Wire spot full";
-                        Draging.end();
+                        cursor_off();
+                        level.connent_wrong_animation();
                     }
-                    else if (node_fulled && attachednode != null && attachednode.id == left_slot.wire_id)
+                    else if (node_fulled && node_id == left_slot.wire_id)
                     {
-                        Debug.Log("Place wire");
+                        Debug.Log("Place wire On Node");
                         if (Text_Output != null) Text_Output.text = "Place wire";
 
-                        offset_positon = new Vector3(-35f, 0f, 0f);
-                        offset_rotate = 0;
+                        offset_positon = GetHalfwayOffset(left_slot);
+                        offset_rotate = 180;
 
-                        if (level != null) level.place_wire_sound();
+                        level.action_stack.Add(this);
                         place_wire(left_slot, offset_rotate, offset_positon);
-
-                        Draging.end();
+                        level.is_wire_bent();
+                        cursor_off();
                         left_slot.selection_click = false;
                         selection_click = false;
+                        level.connent_node_animation();
                     }
                     else
                     {
                         Debug.Log("spot is full");
                         if (Text_Output != null) Text_Output.text = "spot is full";
-                        Draging.end();
+                        cursor_off();
+                        level.connent_wrong_animation();
                     }
                 }
             }
-    
     }
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (level.leverBusy == true) return;
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             // Only allow deleting if this slot is a node (or has a wire_id)
             string colorId = null;
-            if (attachednode != null) colorId = attachednode.id;
+            if (node_fulled == true) colorId = node_id;
             else if (wire_fulled) colorId = wire_id;
 
             if (!string.IsNullOrEmpty(colorId))
             {
-                FindObjectOfType<Level1_Manager>().delete_wire(colorId);
+                FindObjectOfType<Level_Manager>().delete_wire(colorId);
             }
         }   
     }
-
-    private void Start()
-    {
-        if (attachednode != null)
-        {
-            node_fulled = true;
-        }
-    }
-
-    public void DeleteConnectedWires(Slot startSlot, string color)
-    {
-    if (startSlot == null) return; //thing to delcte
-
-    int steps = 0;
-    int maxSteps = 500;
-
-    // stack-based search so it deletes branches too!
-    List<Slot> stack = new List<Slot>();
-    HashSet<Slot> visited = new HashSet<Slot>();
-
-    stack.Add(startSlot);
-
-        while (stack.Count > 0 && steps < maxSteps)
-        {
-            steps++;
-
-            Slot current = stack[stack.Count - 1];
-            stack.RemoveAt(stack.Count - 1);
-
-            if (current == null) continue;
-            if (visited.Contains(current)) continue;
-            visited.Add(current);
-            current.selection_click = false;
-
-            // Only delete slots that are actually part of this color wire
-            if (current.wire_fulled == true && current.wire_id == color)
-            {
-                // delete wire data on this slot
-                current.wire_fulled = false;
-                current.wire_id = null;
-
-
-                // Visit neighbors (only follow the same color)
-                if (current.down_slot != null && !visited.Contains(current.down_slot) &&
-                    current.down_slot.wire_fulled == true && current.down_slot.wire_id == color)
-                {
-                    stack.Add(current.down_slot);
-                }
-
-                if (current.up_slot != null && !visited.Contains(current.up_slot) &&
-                    current.up_slot.wire_fulled == true && current.up_slot.wire_id == color)
-                {
-                    stack.Add(current.up_slot);
-                }
-
-                if (current.left_slot != null && !visited.Contains(current.left_slot) &&
-                    current.left_slot.wire_fulled == true && current.left_slot.wire_id == color)
-                {
-                    stack.Add(current.left_slot);
-                }
-
-                if (current.right_slot != null && !visited.Contains(current.right_slot) &&
-                    current.right_slot.wire_fulled == true && current.right_slot.wire_id == color)
-                {
-                    stack.Add(current.right_slot);
-                }
-            }
-        }
-    }
-    // public void DeleteWireVisualsTouchingThisSlot(string colorId)
-    // {
-    //     if (wireParent == null)
-    //     {
-    //         Debug.LogWarning("wireParent is null");
-    //         return;
-    //     }
-
-    //     string prefix = "Wire_" + colorId + "_";
-    //     string wire = name; // this slot's GameObject name
-
-    //     for (int i = wireParent.childCount - 1; i >= 0; i--)
-    //     {
-    //         Transform child = wireParent.GetChild(i);
-
-    //         // Only delete wires of this color
-    //         if (!child.name.StartsWith(prefix))
-    //             continue;
-
-    //         // Delete if the wire name mentions this slot name
-    //         if (child.name.Contains(wire))
-    //         {
-    //             Destroy(child.gameObject);
-    //         }
-    //     }
-    // }
-
 }
-
-    
-
-
-
-

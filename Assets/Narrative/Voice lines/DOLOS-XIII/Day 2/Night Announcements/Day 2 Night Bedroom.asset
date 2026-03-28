@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 2 Night Bedroom
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day2_night_bedroom
+  text: 'Shift completed. Systems are within acceptable parameters.
+
+    Your daily
+    performance metrics are currently being analyzed and will be sent in for review
+    at the DOLOS Corporation Headquarters.
+
+    Good work today, Technician.'
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: 6334d285b5a38fa48817ca3de33ed204, type: 3}
+  displayDuration: 14
+  lineDurations: 0500000007000000

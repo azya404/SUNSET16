@@ -5241,8 +5241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309f235276d9f624ba770ee2904ef110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: 
-  spawnPositionInTargetScene: {x: 0, y: 0, z: 0}
+  targetSceneName: InfirmaryScene
+  spawnPositionInTargetScene: {x: 0.82, y: -15.87, z: 0}
   roomType: 3
   isHiddenRoomDoor: 0
   hiddenRoomID: 
@@ -10913,11 +10913,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309f235276d9f624ba770ee2904ef110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: 
-  spawnPositionInTargetScene: {x: 0, y: 0, z: 0}
-  roomType: 3
-  isHiddenRoomDoor: 0
-  hiddenRoomID: 
+  targetSceneName: LabScene
+  spawnPositionInTargetScene: {x: -9.42, y: -13.64, z: 0}
+  roomType: 1
+  isHiddenRoomDoor: 1
+  hiddenRoomID: room_1
   isBedroomDoor: 0
   requiresAllTasksComplete: 0
   isMorningGated: 0

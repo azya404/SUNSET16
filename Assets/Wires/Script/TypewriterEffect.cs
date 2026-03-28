@@ -1,60 +1,81 @@
-using UnityEngine;
-using TMPro;
 using System.Collections;
+using TMPro;
+using UnityEngine;
 
-public class TypewriterEffect : MonoBehaviour
+public class Terminal_Message : MonoBehaviour
 {
-    public TMP_Text textComponent;
-    public float typingSpeed = 0.05f;
+    public TMP_Text text_output;
+    public AudioSource audio_source;
+    public AudioClip send_message_sound;
 
-    [Header("Typing Sound")]
-    [SerializeField] private AudioSource typingAudioSource; // assign in Inspector
-    [SerializeField] private AudioClip typingLoopClip;      // short looping clip
+    [TextArea(10, 30)]
+    public string long_message =
+@"[AEGIS-077 Instructional Slab]
 
-    private string fullText;
+Technician,
 
-    void Start()
+Complete the circuit by connecting all wires node-to-node based on colour.
+
+Wires can be routed in all four cardinal directions, but wires of different colours cannot cross paths. At the DOLOS Corporation, disordered wiring is a cause for concern.
+
+In the event you select the incorrect wire, letting go of the aforementioned wire resets it.
+
+In the event that you find an unoptimal path and thus need to get rid of a completed wire, right-clicking the wire to resets it.
+
+Signed,
+DOLOS-XIII Management System
+On behalf of the DOLOS Corporation, a subsidiary of Erebus Holdings
+“Safeguarding Tomorrow’s Future”";
+
+    public float flash_time = 3f;
+    public float flash_speed = 0.2f;
+    public float type_speed = 0.01f;
+
+    private void Start()
     {
-        fullText = textComponent.text;
-        textComponent.maxVisibleCharacters = 0;
-        StartCoroutine(TypeText());
+        StartCoroutine(flash_then_type());
     }
 
-    IEnumerator TypeText()
+    private IEnumerator flash_then_type()
     {
-        StartTypingSound();
+        float timer = 0f;
+        bool show_colon = true;
 
-        for (int i = 0; i <= fullText.Length; i++)
+        while (timer < flash_time)
         {
-            textComponent.maxVisibleCharacters = i;
-            yield return new WaitForSeconds(typingSpeed);
+            if (show_colon == true)
+            {
+                text_output.text = "//:";
+            }
+            else
+            {
+                text_output.text = "//";
+            }
+
+            show_colon = !show_colon;
+
+            yield return new WaitForSeconds(flash_speed);
+            timer = timer + flash_speed;
         }
 
-        StopTypingSound();
-    }
+        text_output.text = "//:";
 
-    private void StartTypingSound()
-    {
-        if (typingAudioSource == null || typingLoopClip == null) return;
+        if (audio_source != null && send_message_sound != null)
+        {
+            audio_source.PlayOneShot(send_message_sound);
+        }
 
-        typingAudioSource.clip = typingLoopClip;
-        typingAudioSource.loop = true;
-        if (!typingAudioSource.isPlaying)
-            typingAudioSource.Play();
-    }
+        yield return new WaitForSeconds(0.05f);
 
-    private void StopTypingSound()
-    {
-        if (typingAudioSource == null) return;
+        text_output.text = "";
 
-        typingAudioSource.loop = false;
-        typingAudioSource.Stop();
-        typingAudioSource.clip = null;
-    }
+        int index = 0;
 
-    private void OnDisable()
-    {
-        // safety: if the object is turned off mid-typing
-        StopTypingSound();
+        while (index < long_message.Length)
+        {
+            text_output.text = text_output.text + long_message[index];
+            index = index + 1;
+            yield return new WaitForSeconds(type_speed);
+        }
     }
 }

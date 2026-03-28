@@ -30,6 +30,7 @@ MonoBehaviour:
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Fire away.
@@ -59,6 +60,7 @@ MonoBehaviour:
     advanceToLine: 26
     repeat: 1
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "It\u2019s a compound blend designed to mitigate the psychological effects
@@ -70,6 +72,7 @@ MonoBehaviour:
     advanceToLine: 3
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Along with a mix of nootropics and other company-approved stimulants to
@@ -81,6 +84,7 @@ MonoBehaviour:
     advanceToLine: 4
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Though I wonder, why ask that now of all times?
@@ -101,6 +105,7 @@ MonoBehaviour:
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "An ideal employee. It\u2019s wonderful that you adhere to company policy
@@ -112,6 +117,7 @@ MonoBehaviour:
     advanceToLine: 1
     repeat: 0
     repeated: 0
+    loreEntry: albert_terms
   - speakerName: Albert
     portrait: {fileID: 0}
     text: You should know all this. Taking these medications is a part of your contract
@@ -123,6 +129,7 @@ MonoBehaviour:
     advanceToLine: 7
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: It is in your best interest to take them every day. To keep you safe, of
@@ -139,6 +146,7 @@ MonoBehaviour:
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: albert_terms
   - speakerName: Albert
     portrait: {fileID: 0}
     text: I was an electrical grid regulator for SinoEuro Power. Did that for 3 years
@@ -151,6 +159,7 @@ MonoBehaviour:
     advanceToLine: 9
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Anyhow, they restructured and took away some of my benefits. I left and
@@ -162,6 +171,7 @@ MonoBehaviour:
     advanceToLine: 10
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "And\u2026 here I am."
@@ -181,6 +191,7 @@ MonoBehaviour:
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "On paper, maybe. But there\u2019s less chaos here."
@@ -191,6 +202,7 @@ MonoBehaviour:
     advanceToLine: 12
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: I was never really one to bounce from corporation to corporation. I did
@@ -202,6 +214,7 @@ MonoBehaviour:
     advanceToLine: 13
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "In a way, you\u2019re like that too. That\u2019s why you passed the screenings
@@ -213,6 +226,7 @@ MonoBehaviour:
     advanceToLine: 14
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Life coasts on by when you stick to the status quo. Remember that.
@@ -223,6 +237,7 @@ MonoBehaviour:
     advanceToLine: 1
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "I was an opportunist at heart. Keyword was. It\u2019s just that SinoEuro
@@ -234,6 +249,7 @@ MonoBehaviour:
     advanceToLine: 16
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "But\u2026 they pale in comparison to what the DOLOS Corporation provides
@@ -245,6 +261,7 @@ MonoBehaviour:
     advanceToLine: 17
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: I have no reason to leave the company any time soon. Neither should you.
@@ -255,6 +272,7 @@ MonoBehaviour:
     advanceToLine: 1
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Out of all the significant conglomerates and mega-corporations on the
@@ -266,6 +284,7 @@ MonoBehaviour:
     advanceToLine: 19
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "They\u2019ve been around for nearly forty years now."
@@ -276,6 +295,7 @@ MonoBehaviour:
     advanceToLine: 20
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "The company started as a small engineering firm in the 2080\u2019s, manufacturing
@@ -291,6 +311,7 @@ MonoBehaviour:
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: A lot of stuff, eventually. DOLOS has its hands in a lot of pies.
@@ -301,6 +322,7 @@ MonoBehaviour:
     advanceToLine: 22
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: The Life-Sciences Division takes care of our collars, supplements, that
@@ -312,6 +334,7 @@ MonoBehaviour:
     advanceToLine: 23
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: The Aerospace Division took care of things like the SUNSET16.
@@ -322,6 +345,7 @@ MonoBehaviour:
     advanceToLine: 24
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: They got a division for resource extraction. Mining operations on the Moon,
@@ -333,6 +357,7 @@ MonoBehaviour:
     advanceToLine: 25
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s where most of the real money comes from. It\u2019s how they
@@ -345,6 +370,7 @@ MonoBehaviour:
     advanceToLine: 1
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "I think that\u2019s all I have time for too. Shorter chat than usual.
@@ -360,6 +386,7 @@ MonoBehaviour:
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: 
@@ -370,3 +397,4 @@ MonoBehaviour:
     advanceToLine: -1
     repeat: 0
     repeated: 0
+    loreEntry: 

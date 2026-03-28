@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 3 Night Bedroom
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day3_night_bedroom
+  text: 'Shift completed. Systems are within acceptable parameters.
+
+    A reminder:
+    achieving an optimal level of REM sleep improves efficiency by 45%.
+
+    Go to
+    sleep when the lights dim. Your work continues tomorrow.
+
+    Failure is not
+    tolerated onboard the SUNSET16.'
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: e10ed024f24b34b44913c1f27f077fbc, type: 3}
+  displayDuration: 22
+  lineDurations: 060000000700000005000000
