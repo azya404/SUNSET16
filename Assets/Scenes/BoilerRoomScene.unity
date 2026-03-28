@@ -3634,6 +3634,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tutorial_Level
       objectReference: {fileID: 0}
+    - target: {fileID: 7759647974033207281, guid: 5811922616595034c9ea6b9bb1614c97, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
