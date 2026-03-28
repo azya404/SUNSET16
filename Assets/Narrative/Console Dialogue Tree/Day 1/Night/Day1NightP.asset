@@ -35,6 +35,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "I\u2019ve said it before, and I\u2019ll say it again. You\u2019ve always
@@ -47,6 +48,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Heh\u2026 can\u2019t blame you, I guess."
@@ -58,6 +60,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "As long as you complete your work efficiently, DOLOS will remain in a
@@ -70,6 +73,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: On an unrelated note, the UNEP Annual 2116 Report was released earlier
@@ -82,6 +86,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "A bunch of jargon, but also some interesting points about the state of
@@ -108,6 +113,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "I guess I never really pried into it, but, if you don\u2019t mind my asking,
@@ -134,6 +140,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Some people can be\u2026 troublesome. The best kind of people are the
@@ -146,6 +153,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_unep_report
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That I agree with. No crowds\u2026 no noise\u2026 It\u2019s hard to miss
@@ -158,6 +166,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Besides, jobs in space\u2014and especially jobs under the DOLOS Corporation\u2014are
@@ -170,6 +179,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Strict rules and regulations need to be followed. But you and I are both
@@ -182,6 +192,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_unep_report
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "We all have our demons. You can keep your secrets\u2026"
@@ -193,6 +204,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_unep_report
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: I figured it would have been useful information to know.
@@ -214,6 +226,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s a good response. I like that. Everything you and I need to
@@ -226,6 +239,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Though it\u2019s nice to gossip about international events here and there,
@@ -238,6 +252,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_unep_report
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Sure, just give me one moment\u2026"
@@ -249,6 +264,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_unep_report
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Surprisingly so. According to recent DOLOS intel, the environmental reports
@@ -271,6 +287,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "You\u2019d be right about that. Between you, me, and other DOLOS employees,
@@ -288,6 +305,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Classified. At least for now.
@@ -299,6 +317,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_unep_report
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "I\u2019ll send you the file in a moment."
@@ -310,6 +329,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_unep_report
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Anyways, gotta get some rest. DOLOS has already queued tomorrow\u2019s
@@ -326,6 +346,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: 
@@ -333,7 +354,8 @@ MonoBehaviour:
     delayRepeats: 0
     autoAdvanceDelay: 0
     choices: []
-    advanceToLine: 0
+    advanceToLine: -1
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0

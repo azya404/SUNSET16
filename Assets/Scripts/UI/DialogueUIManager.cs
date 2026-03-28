@@ -333,6 +333,8 @@ namespace SUNSET16.UI
                 Debug.Log($"[DIALOGUE] Starting sequence '{sequence.sequenceId}'");
 
                 _chatOpen = true;
+                _entryPage = 0;
+                _buttonPage = 1;
                 SwapToChat();
 
                 _lineIndex = 0;
