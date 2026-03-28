@@ -9,10 +9,11 @@ if no save exists it just goes straight to the bedroom scene
 continue loads CoreScene which has all the managers and they
 auto-init and pull save data from PlayerPrefs
 
-settings just toggles the settings panel on/off and credits
-doesnt do anything yet lol
+settings just toggles the settings panel on/off
 
-TODO: credits scene
+credits loads NeutralCreditsScene — when returning from credits the menu
+fades in from black via ReturnedFromCredits static flag set by NeutralCreditsSceneController
+
 TODO: animated bg for the menu (space station exterior maybe?)
 TODO: transition animation when going from menu to game
 */
@@ -47,6 +48,10 @@ namespace SUNSET16.UI
         [SerializeField] private AudioClip   menuClickSFX;
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private float       musicFadeDuration = 1.5f;
+
+        // set by NeutralCreditsSceneController before loading back to this scene
+        // so we know to fade in from black instead of appearing instantly
+        public static bool ReturnedFromCredits = false;
 
         private Coroutine _musicLoopCoroutine;
         private bool      _sceneFadeActive = false;
@@ -95,6 +100,22 @@ namespace SUNSET16.UI
                 musicSource.volume = 0f;
                 musicSource.Play();
                 _musicLoopCoroutine = StartCoroutine(MusicLoopWithFade());
+            }
+
+            // returning from credits — fade the menu in from black
+            // otherwise just appear instantly (fresh game launch)
+            if (ReturnedFromCredits)
+            {
+                ReturnedFromCredits = false;
+                if (screenFadePanel != null)
+                {
+                    screenFadePanel.alpha = 1f;
+                    StartCoroutine(FadeScreen(1f, 0f, screenFadeDuration));
+                }
+            }
+            else if (screenFadePanel != null)
+            {
+                screenFadePanel.alpha = 0f;
             }
 
             Debug.Log("[MAINMENU] Main menu initialized");
@@ -233,7 +254,7 @@ namespace SUNSET16.UI
         private void OnCreditsClicked()
         {
             sfxSource?.PlayOneShot(menuClickSFX);
-            Debug.Log("[MAINMENU] Credits scene not yet implemented");
+            StartCoroutine(LoadSceneAfterSFX("NeutralCreditsScene"));
         }
     }
 }
