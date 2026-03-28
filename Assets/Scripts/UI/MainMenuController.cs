@@ -234,8 +234,9 @@ namespace SUNSET16.UI
         {
             sfxSource?.PlayOneShot(startButtonSFX);
 
-            //if they already have a save, make sure they actually wanna overwrite it
-            if (SaveManager.Instance.SaveExists && newGameConfirmPanel != null)
+            //if they already have a save AND continue is available, warn before overwriting
+            //if continue is disabled there's nothing to protect so go straight to new game
+            if (SaveManager.Instance.SaveExists && newGameConfirmPanel != null && continueButton.interactable)
             {
                 newGameConfirmPanel.SetActive(true);
             }
