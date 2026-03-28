@@ -223,7 +223,7 @@ namespace SUNSET16.Interaction
 
             if (PlayerController.Instance != null) PlayerController.Instance.LockMovement(false);
             _sequenceActive = false;
-            if (DialogueUIManager.Instance._finished && !DialogueUIManager.Instance.announcementTriggered)
+            if (DialogueUIManager.Instance._finished && !DialogueUIManager.Instance.announcementTriggered && DayManager.Instance.CurrentPhase == DayPhase.Morning)
             {
                 DOLOSManager.Instance.TriggerAnnouncement();
                 DialogueUIManager.Instance.announcementTriggered = true;
