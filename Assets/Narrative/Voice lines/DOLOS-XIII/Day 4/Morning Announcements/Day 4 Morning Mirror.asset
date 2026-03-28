@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 4 Morning Mirror
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day4_morning_mirror
+  text: "You have new messages on your home terminal. \nComplete your assigned tasks
+    efficiently, and you will be rewarded accordingly.\nYour efforts will be monitored
+    and calculated in real time, as per your contract."
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: bbf568613f612b7408df7654968fb3cb, type: 3}
+  displayDuration: 15
+  lineDurations: 0400000005000000

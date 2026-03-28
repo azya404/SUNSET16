@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b40d71522cecb45850ab8775137f8e, type: 3}
+  m_Name: Day 5 Morning Wakeup
+  m_EditorClassIdentifier: 
+  announcementId: dolos_day5_morning_wakeup
+  text: 'Technician Andromeda, your rest period is now over.
+
+    Your mandatory
+    company-issued medication is awaiting your injection.
+
+    A reminder: all employees
+    of the DOLOS Corporation must take it, in adherence to their contractual obligations.'
+  fontSize: 20
+  audioClip: {fileID: 8300000, guid: 615c2f84f0b91934abc581e873bdfbf6, type: 3}
+  displayDuration: 19
+  lineDurations: 0500000005000000
