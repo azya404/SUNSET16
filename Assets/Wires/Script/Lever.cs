@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using SUNSET16.Core;
+using SUNSET16.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -69,13 +71,22 @@ public class Lever : MonoBehaviour, IPointerClickHandler
     {
         yield return StartCoroutine(PlayAndWait(clip_success, audioSource_success));
 
+        DOLOSManager.Instance.taskCompleteCount++;
+
         if (level.taskInteraction != null)
         {
             level.taskInteraction.CloseOverlay();
+            DOLOSManager.Instance.TriggerAnnouncement();
         }
         if (level.puzzleInteraction != null)
         {
             level.puzzleInteraction.CloseOverlay();
+            string id = "usb_log_" + PillStateManager.Instance.GetPillsRefusedCount();
+            DialogueUIManager.Instance.UnlockEntry(id);
+            if (RoomManager.Instance.GetCurrentRoomName().Contains("Crematorium"))
+            {
+                DialogueUIManager.Instance.UnlockEntry("usb_albert_death");
+            }
         }
 
     }

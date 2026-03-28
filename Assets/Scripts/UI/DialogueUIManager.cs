@@ -738,6 +738,12 @@ namespace SUNSET16.UI
             TestUnlockOthers();
         }
 
+        [ContextMenu("SimulatePuzzleComplete")]
+        public void UnlockUSB()
+        {
+            UnlockEntry("usb_log_" + PillStateManager.Instance.GetPillsRefusedCount());
+        }
+
         // ─── Internal Playback ────────────────────────────────────────────────────
 
         private IEnumerator PlayFromCurrentLine()
