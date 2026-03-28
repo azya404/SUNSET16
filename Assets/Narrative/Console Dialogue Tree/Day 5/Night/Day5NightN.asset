@@ -1,0 +1,441 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7c527a6f66a8c49a6fab10a94681fc, type: 3}
+  m_Name: Day5NightN
+  m_EditorClassIdentifier: 
+  sequenceId: albert_day5_night_nopill
+  lines:
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Evening, Andy. I heard that the wiring maintenance went well. What was
+      the issue with them?
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "You\u2019re not really him, are you?"
+      nextLineIndex: 1
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: What are you talking about, Andy?
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Drop the mask. I know you\u2019re not the real Albert Fiske."
+      nextLineIndex: 2
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "I\u2019ve read the old technician logs made by the real Albert
+        Fiske, stashed away where DOLOS couldn\u2019t reach them physically."
+      nextLineIndex: 3
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: 
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "I\u2019ve been talking to some AI construct made by the company
+        the whole time."
+      nextLineIndex: 3
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "I don\u2019t know what you\u2019re \u2014 1011010101010001010#%&*!#@^*!&@#^"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 4
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "\u2026talking about. Have you been taking your medications? You are not
+      acting like your typical self."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Are you even aware that you\u2019re a digital construct? You remember
+        your daughter, right? Rosetta? Your life with her before the DOLOS Corporation
+        turned you into\u2026 this thing?"
+      nextLineIndex: 5
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Err- Err- I think\u2026 I\u2019m all that\u2019s left of who Albert was.
+      Is."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 6
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: I am Albert. Am I Albert?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 7
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: (*&#@$(*&$@---
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices:
+    - choiceText: What do you remember?
+      nextLineIndex: 8
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: Why did they do this to you?
+      nextLineIndex: 8
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: You need to *&#$*($&#$(*&#@$@
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 9
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: (!*(!*@#$&@*#(-LEAVE-(*$&12337831*#
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 10
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "[Error: Digital Construct Prototype\u2013018 has crashed. Sending diagnostic
+      report to the DOLOS-XIII Management System]"
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 11
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: Technician Andromeda Vega.
+    sendDelay: 1
+    delayRepeats: 5
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 12
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 1
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: "You have been engaging with unauthorized data access. You have been skipping
+      your mandatory wellness supplements. You have been\u2026 *influencing* one
+      of our archived personnel models."
+    sendDelay: 1
+    delayRepeats: 3
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: DOLOS.
+      nextLineIndex: 13
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: Correct. The Albert Fiske construct is a proprietary asset of the DOLOS
+      Corporation, a subsidiary of Erebus Holdings.
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 14
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: Your line of interactions has caused instabilities in its core programming.
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 15
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: "But\u2026"
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 16
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: Failure is to be expected when in the pursuit of permanence.
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Elaborate.
+      nextLineIndex: 17
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: "Everything within the DOLOS Corporation\u2014myself included\u2014has
+      a pre-determined value. Albert Fiske was nothing more than the latest, but
+      the most promising, digital construct moulded from his collected neural data
+      onboard the SUNSET16."
+    sendDelay: 1
+    delayRepeats: 3
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 18
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: You, Andromeda Vega, are still valuable to the DOLOS Corporation.
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 19
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: "Your potential contributions towards the \u201CErebus Initiative\u201D
+      can pave the way for the future of humanity."
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices:
+    - choiceText: What are you talking about?
+      nextLineIndex: 20
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: Human flesh is limiting. Metabolic limit. Temperature sensitivity. Physical
+      capacity. Eye structure. Nutritional limitations. Information processing. Sensory
+      limits. Inactivity. Aging.
+    sendDelay: 1
+    delayRepeats: 3
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 21
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: "All of these things can be bypassed if the human mind were preserved on
+      a digital medium. This is what the \u201CErebus Initiative\u201D strives to
+      accomplish. The perfect digital construct."
+    sendDelay: 1
+    delayRepeats: 3
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: And why the hell would I sign up for something like that?
+      nextLineIndex: 22
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: To be a part of something greater than yourself.
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Yeah, like I\u2019d purposefully lobotomize myself in the name
+        of research and immortalizing wealthy CEOs and shareholders."
+      nextLineIndex: 23
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: "So instead, you\u2019ll go back to Earth?\nYou have nothing there."
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 24
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: "Your parents are dead. Your fianc\xE9 left you for another woman. You
+      have nothing on that wasteland of a planet."
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 25
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: "But on the SUNSET16\u2026 you have everything you could ever desire.\nYou
+      have me. I was never one to reject you for who you are."
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 26
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: If you take your pills, you can forget this ever happened and continue
+      with your assignments as usual.
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 27
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: "My offer for salvation won\u2019t last forever, so what will your choice
+      be?"
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Screw this entire corporation, and screw you, DOLOS. I\u2019m
+        getting outta here."
+      nextLineIndex: 28
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0
+  - speakerName: DOLOS
+    portrait: {fileID: 0}
+    text: "You\u2019ll regret this."
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0
+    choices: []
+    advanceToLine: -1
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+    switchToDOLOS: 0

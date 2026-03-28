@@ -12,5 +12,343 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e7c527a6f66a8c49a6fab10a94681fc, type: 3}
   m_Name: Day2NightP
   m_EditorClassIdentifier: 
-  sequenceId: 
-  lines: []
+  sequenceId: albert_day2_morning_pill
+  lines:
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Hey there, Andy. The logs show that wiring in the navigation room is operational.
+      How was the fix-up?
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Just the standard procedure. Re-routed the pathways and avoided
+        crossing paths. Everything\u2019s in the clear. Hopefully, things stay like
+        that for a while."
+      nextLineIndex: 1
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: It was fine.
+      nextLineIndex: 2
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "You always followed protocol the best out of all the people I\u2019ve
+      known. Keep that up, and I\u2019m sure you\u2019ll be well taken care of by
+      DOLOS."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Straight to the point. Can\u2019t argue with the results."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "On a different note, you didn\u2019t seem like yourself this morning.
+      I can\u2019t quite put my finger on why. Is everything alright on your end?
+      Got any questions you need answered?"
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices:
+    - choiceText: "I\u2019m just reviewing and keeping myself reminded about the
+        contract. Staying sharp is all. There\u2019s nothing wrong with that, right?"
+      nextLineIndex: 4
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "I\u2019ve been thinking about how precise and meticulous everything
+        has to be. The doses in the collar, the data logs\u2026 all that stuff that
+        DOLOS collects from us."
+      nextLineIndex: 6
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "I had a weird dream a while ago that I thought about recently.
+        About Earth, actually. Just got me thinking about some stuff\u2026"
+      nextLineIndex: 10
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "I found something peculiar in the system yesterday. An old technician\u2019s
+        log. Part of one, anyway. The name was Fiske. Mean anything to you?"
+      nextLineIndex: 14
+      offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: That's about all I wanted to ask.
+      nextLineIndex: 20
+      offPillChoice: 0
+      showOnRepeat: 1
+    advanceToLine: 0
+    repeat: 1
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Of course. Nothing wrong with that at all.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 5
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "It\u2019s always smart to know the rulebook that you live under. Compliance
+      is stability, and stability is safety."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "That\u2019s how DOLOS wants things up here. Precision is what keeps a
+      tin can like the SUNSET16 functional in the void of space. One of our competitors
+      from a few years ago didn\u2019t follow that line of reasoning."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: What happened to them anyway?
+      nextLineIndex: 7
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "It\u2019s a good thing that I applied here then."
+      nextLineIndex: 9
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "The answer that\u2019s known to the public was that the shareholders got
+      too greedy, and the company collapsed from the inside."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: And the real answer?
+      nextLineIndex: 8
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Remains classified to high-ranking DOLOS personnel only.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: You and me both. The DOLOS Corporation is a very stable company. All thanks
+      to Erebus Holdings.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Dreams can be like that. But that\u2019s why the capsule pills help with
+      that. They stabilize your sleeping patterns, among all the other benefits they
+      provide us on board the SUNSET16."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Right. The pills.
+      nextLineIndex: 11
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "\u2026You did take your dosage today, right, Andy?"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "I\u2019ve been here for 5 years already, and I\u2019ve adhered
+        to company policy this whole time. I have no reason to break it now."
+      nextLineIndex: 12
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: Of course. Would the logs say otherwise?
+      nextLineIndex: 13
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Good. Just checking\u2026 for your own wellbeing."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: The logs only show dispensation requests. I trust you to follow protocol,
+      as per your contract.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "\u2026That\u2019s a name I haven\u2019t seen in a while. Where\u2019d
+      you find that?"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "In an unsuspecting terminal. I can\u2019t recall which one."
+      nextLineIndex: 15
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "\u2026Pay no attention to them. Files like that are old and are sometimes
+      corrupted with malware. You\u2019ll get your computer infected if you keep
+      interacting with it."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 16
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: DOLOS issued an announcement a while ago on matters like this. You should
+      brush up on it.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Alright\u2026 I won\u2019t pry further."
+      nextLineIndex: 17
+      offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: "Then\u2026 who was Fiske?"
+      nextLineIndex: 18
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: albert_corrupted_logs
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Good.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "\u2026Someone who didn\u2019t follow protocol. He was put on administrative
+      leave for an undisclosed amount of time."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 19
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "We shouldn\u2019t talk about him anymore. Listen to DOLOS and adhere to
+      your contract, as you have been doing these past 5 years."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Anyways, my late-night shift is about to start. Don\u2019t stay up too
+      late. Tomorrow is another beautiful day of productivity."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Night, Al.
+      nextLineIndex: 21
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: 
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices: []
+    advanceToLine: -1
+    repeat: 0
+    repeated: 0
+    loreEntry: 

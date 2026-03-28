@@ -48,6 +48,7 @@ namespace SUNSET16.UI
         [Header("Prefabs")]
         [SerializeField] private GameObject  AlbertMessage;
         [SerializeField] private GameObject  PlayerMessage;
+        [SerializeField] private GameObject  DOLOSMessage;
 
         [Header("Content")]
         [SerializeField] private TMP_Text speakerNameText;
@@ -61,23 +62,41 @@ namespace SUNSET16.UI
         [SerializeField] private Transform closeButtonContainer;       // "Close" — always visible (player can exit)
         [SerializeField] private GameObject closeButton;
         [SerializeField] private Image closeImage;
+        [SerializeField] private Transform chatTabContainer;
         [SerializeField] private GameObject chatButton;
+        [SerializeField] private Image chatButtonImage;
+        [SerializeField] private Transform loreTabContainer;
         [SerializeField] private GameObject loreButton;
+        [SerializeField] private Image loreButtonImage;
+        [SerializeField] private Image notifImage;
+        [SerializeField] private Transform prevButtonContainer;
+        [SerializeField] private GameObject prevButton;
+        [SerializeField] private Image prevImage;
+        [SerializeField] private Transform nextButtonContainer;
+        [SerializeField] private GameObject nextButton;
+        [SerializeField] private Image nextImage;
+        [SerializeField] private Transform prevPageContainer;
+        [SerializeField] private GameObject prevPageButton;
+        [SerializeField] private Transform nextPageContainer;
+        [SerializeField] private GameObject nextPageButton;
 
         [Header("Choice Buttons (max 5)")]
         [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[5];  // Parent GOs per choice
         [SerializeField] private TMP_Text[]   choiceButtonTexts = new TMP_Text[5];    // Labels per choice
         [SerializeField] private Image[]      choiceButtonImages = new Image[5];
-        [SerializeField] private float        glitchInterval;
-        [SerializeField] private float        dispProbability;
-        [SerializeField] private float        dispIntensity;
-        [SerializeField] private float        colorProbability;
-        [SerializeField] private float        colorIntensity;
+        [SerializeField] private float        intensity;
+        [SerializeField] private float        blockSize;
+        [SerializeField] private float        dispStrength;
+        [SerializeField] private float        colorSplit;
+        [SerializeField] private Sprite       normalChoice;
+        [SerializeField] private Sprite       noPillChoice;
+
 
         [Header("Lore Buttons (max 5)")]
         [SerializeField] private GameObject[] loreButtonRoots = new GameObject[5];  // Parent GOs per choice
         [SerializeField] private TMP_Text[]   loreButtonTexts = new TMP_Text[5];    // Labels per choice
         [SerializeField] private Image[]      loreButtonImages = new Image[5];
+        [SerializeField] private List<LoreEntryData> loreEntries;
 
         [Header("Typewriter")]
         [SerializeField] private float typewriterCharDelay = 0.03f;
@@ -97,6 +116,9 @@ namespace SUNSET16.UI
         [SerializeField] private AudioClip menuClick;
         [SerializeField] private AudioClip msgSend;
         [SerializeField] private AudioClip msgGet;
+        [SerializeField] private AudioClip computerTakeover;
+
+        [SerializeField] private RawImage computerGlitch;
 
         // ─── Runtime State ────────────────────────────────────────────────────────
 
@@ -114,13 +136,20 @@ namespace SUNSET16.UI
         private List<GameObject> _messages = new List<GameObject>();
         private DayPhase        _phase;
         private bool            _chatOpen = true;
-        private List<LoreEntryData> _loreEntries;
+        private List<LoreEntryData> _unlockedEntries = new List<LoreEntryData>();
         private int             _selectedEntry;
-        private int             _entryPage = 1;
+        private int             _entryPage = 0;
         private int             _buttonPage = 1;
         private Color           _baseColor = new Color(1f, 1f, 1f, 1f);
         private Color           _disabledColor = new Color(0.5f, 0.5f, 0.5f, 1f);
         private bool            _clickDisabled = false;
+        private bool            _prevDisabled = true;
+        private bool            _nextDisabled = true;
+        private Color           _noPillColor = new Color(0.125f, 0.765f, 0.890f, 1f);
+        private bool            _isDOLOS = false;
+        private bool            _newNotif = false;
+        private int             _newEntryAmt = 0;
+        private Coroutine       _DOLOSCoroutine;
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -139,6 +168,7 @@ namespace SUNSET16.UI
             //dialoguePanel = GameObject.FindGameObjectWithTag("DialoguePanel");
             //if (dialoguePanel != null) dialoguePanel.SetActive(false);
             HideAllChoiceButtons();
+            ResetViewed();
         }
 
         private void Start()
@@ -203,8 +233,17 @@ namespace SUNSET16.UI
             if (!_started)
             {
                 _phase = DayManager.Instance.CurrentPhase;
+
                 dialogueParent = GameObject.FindGameObjectWithTag("MessagingUI");
                 responseButtonContainer = dialogueParent.transform.GetChild(1);
+
+                choiceButtonImages[0] = responseButtonContainer.GetChild(0).GetComponent<Image>();
+                Material globalMat = choiceButtonImages[0].material;
+                globalMat.SetFloat("_Intensity", intensity);
+                globalMat.SetFloat("_BlockSize", blockSize);
+                globalMat.SetFloat("_DispStrength", dispStrength);
+                globalMat.SetFloat("_ColorSplit", colorSplit);
+
                 for (int i = 0; i < 5; i++)
                 {
                     int index = i;
@@ -213,38 +252,36 @@ namespace SUNSET16.UI
                     choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(() => OnChoiceSelected(index));
                     choiceButtonRoots[i].GetComponent<Button>().onClick.AddListener(MenuSound);
                     choiceButtonTexts[i] = choiceButtonRoots[i].GetComponentInChildren<TextMeshProUGUI>();
+
+                    choiceButtonImages[i] = responseButtonContainer.GetChild(i).GetComponent<Image>();
+                    choiceButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
+                    choiceButtonImages[i].material.SetFloat("_Intensity", 0f);
+                    choiceButtonImages[i].sprite = normalChoice;
+                    choiceButtonImages[i].color = _baseColor;
                 }
                 AlbertDelay = dialogueParent.transform.GetChild(2).gameObject;
                 AlbertDelay.SetActive(false);
                 closeButtonContainer = dialogueParent.transform.GetChild(3);
-                closeButton = closeButtonContainer.transform.GetChild(0).gameObject;
+                closeButton = closeButtonContainer.transform.GetChild(1).gameObject;
                 closeButton.GetComponent<Button>().onClick.AddListener(HideDialogue);
                 closeButton.GetComponent<Button>().onClick.AddListener(MenuSound);
-                closeImage = closeButtonContainer.GetChild(1).GetComponent<Image>();
+                closeImage = closeButtonContainer.GetChild(0).GetComponent<Image>();
                 advanceButton = dialogueParent.transform.GetChild(4).gameObject;
                 advanceButton.GetComponent<Button>().onClick.AddListener(OnAdvanceClicked);
 
-                choiceButtonImages[0] = responseButtonContainer.GetChild(0).GetComponent<Image>();
-                Material globalMat = choiceButtonImages[0].material;
-                globalMat.SetFloat("_GlitchInterval", glitchInterval);
-                globalMat.SetFloat("_DispProbability", dispProbability);
-                globalMat.SetFloat("_DispIntensity", dispIntensity);
-                globalMat.SetFloat("_ColorProbability", colorProbability);
-                globalMat.SetFloat("_ColorIntensity", colorIntensity);
-                for (int i = 0; i < 5; i++)
-                {
-                    choiceButtonImages[i] = responseButtonContainer.GetChild(i).GetComponent<Image>();
-                    choiceButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
-                    choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
-                    choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
-                }
-
-                chatButton = dialogueParent.transform.GetChild(5).gameObject;
+                chatTabContainer = dialogueParent.transform.GetChild(5);
+                chatButton = chatTabContainer.transform.GetChild(0).gameObject;
                 chatButton.GetComponent<Button>().onClick.AddListener(SwapToChat);
-                chatButton.GetComponent<Button>().onClick.AddListener(MenuSound);
-                loreButton = dialogueParent.transform.GetChild(6).gameObject;
+                chatButtonImage = chatTabContainer.GetChild(1).GetComponent<Image>();
+                loreTabContainer = dialogueParent.transform.GetChild(6);
+                loreButton = loreTabContainer.transform.GetChild(0).gameObject;
                 loreButton.GetComponent<Button>().onClick.AddListener(SwapToLore);
-                loreButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+                loreButtonImage = loreTabContainer.GetChild(1).GetComponent<Image>();
+                notifImage = loreTabContainer.GetChild(3).GetComponent<Image>();
+
+                if (_newNotif)
+                    notifImage.gameObject.SetActive(true);
+
                 loreButtonContainer = dialogueParent.transform.GetChild(7);
                 loreButtonContainer.gameObject.SetActive(false);
                 loreImage = dialogueParent.transform.GetChild(8).GetComponent<Image>();
@@ -257,13 +294,44 @@ namespace SUNSET16.UI
                     loreButtonRoots[i].GetComponent<Button>().onClick.AddListener(() => OnEntrySelected(index));
                     loreButtonRoots[i].GetComponent<Button>().onClick.AddListener(MenuSound);
                     loreButtonTexts[i] = loreButtonRoots[i].GetComponentInChildren<TextMeshProUGUI>();
+
+                    loreButtonImages[i] = loreButtonContainer.GetChild(i).GetComponent<Image>();
+                    loreButtonImages[i].material = Instantiate(choiceButtonImages[i].material);
+                    loreButtonImages[i].material.SetFloat("_Intensity", 0f);
                 }
+
+                prevButtonContainer = dialogueParent.transform.GetChild(10);
+                prevButton = prevButtonContainer.transform.GetChild(1).gameObject;
+                prevButton.GetComponent<Button>().onClick.AddListener(PrevPageSound);
+                prevButton.GetComponent<Button>().onClick.AddListener(PrevButtonPage);
+                prevImage = prevButtonContainer.GetChild(0).GetComponent<Image>();
+                nextButtonContainer = dialogueParent.transform.GetChild(9);
+                nextButton = nextButtonContainer.transform.GetChild(1).gameObject;
+                nextButton.GetComponent<Button>().onClick.AddListener(NextPageSound);
+                nextButton.GetComponent<Button>().onClick.AddListener(NextButtonPage);
+                nextImage = nextButtonContainer.GetChild(0).GetComponent<Image>();
+
+                prevPageContainer = dialogueParent.transform.GetChild(11);
+                prevPageButton = prevPageContainer.transform.GetChild(1).gameObject;
+                prevPageButton.GetComponent<Button>().onClick.AddListener(PrevEntryPage);
+                prevPageButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+                nextPageContainer = dialogueParent.transform.GetChild(12);
+                nextPageButton = nextPageContainer.transform.GetChild(1).gameObject;
+                nextPageButton.GetComponent<Button>().onClick.AddListener(NextEntryPage);
+                nextPageButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+
+                computerGlitch = dialogueParent.transform.GetChild(13).GetComponent<RawImage>();
+                computerGlitch.material = Instantiate(computerGlitch.material);
+                computerGlitch.material.SetFloat("_Intensity", 0f);
 
 
                 if (PlayerController.Instance != null)
                     PlayerController.Instance.LockMovement(true);
 
                 Debug.Log($"[DIALOGUE] Starting sequence '{sequence.sequenceId}'");
+
+                _chatOpen = true;
+                SwapToChat();
 
                 _lineIndex = 0;
                 _playCoroutine = StartCoroutine(PlayFromCurrentLine());
@@ -328,6 +396,7 @@ namespace SUNSET16.UI
             _entryPage         = 1;
             _buttonPage        = 1;
             _chatOpen          = true;
+            _isDOLOS           = false;
             _lines.Clear();
             foreach (var msg in _messages) if (msg != null) Destroy(msg);
             _messages.Clear();
@@ -391,10 +460,16 @@ namespace SUNSET16.UI
 
             for (int i = 0; i < 5; i++)
             {
-                choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 0f);
-                choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 0f);
+                choiceButtonImages[i].material.SetFloat("_Intensity", 0f);
+                choiceButtonImages[i].sprite = normalChoice;
+                choiceButtonImages[i].color = _baseColor;
             }
             _messageCoroutine = StartCoroutine(SendMessage(choiceIndex, currentLine, choice));
+            
+            if (closeImage != null) closeImage.color = _disabledColor;
+            if (chatButtonImage != null) chatButtonImage.color = _disabledColor;
+            if (loreButtonImage != null) loreButtonImage.color = _disabledColor;
+            _clickDisabled = true;
 
             HideAllChoiceButtons();
         }
@@ -405,18 +480,36 @@ namespace SUNSET16.UI
                 audioSource.PlayOneShot(menuClick);
         }
 
+        public void PrevPageSound()
+        {
+            if (!_prevDisabled)
+                audioSource.PlayOneShot(menuClick);
+        }
+        public void NextPageSound()
+        {
+            if (!_nextDisabled)
+                audioSource.PlayOneShot(menuClick);
+        }
+
         public void SwapToChat()
         {
             // IF IN LORE ENTRIES:
-            if (!_chatOpen)
+            if (!_chatOpen && !_clickDisabled)
             {
+                _chatOpen = true;
+                MenuSound();
+                loreButtonImage.color = _baseColor;
+                chatButtonImage.color = _disabledColor;
                 // Deactivate entry buttons
                 /*foreach (GameObject entry in loreButtonRoots)
                     entry.SetActive(false);*/
                 loreButtonContainer.gameObject.SetActive(false);
+                prevButtonContainer.gameObject.SetActive(false);
+                nextButtonContainer.gameObject.SetActive(false);
                 // Deactivate lore entry
                 loreImage.gameObject.SetActive(false);
                 // Activate appropriate response buttons
+                responseButtonContainer.gameObject.SetActive(true);
                 ShowControlsForCurrentLine();
                 // Activate all messages
                 foreach (GameObject msg in _messages)
@@ -427,8 +520,12 @@ namespace SUNSET16.UI
         public void SwapToLore()
         {
             // IF IN CHAT:
-            if (_chatOpen)
+            if (_chatOpen && !_clickDisabled)
             {
+                _chatOpen = false;
+                MenuSound();
+                chatButtonImage.color = _baseColor;
+                loreButtonImage.color = _disabledColor;
                 // Deactivate all response buttons
                 /*foreach (GameObject choice in choiceButtonRoots)
                     choice.SetActive(false);*/
@@ -437,22 +534,204 @@ namespace SUNSET16.UI
                 foreach (GameObject msg in _messages)
                     msg.SetActive(false);
                 // Activate appropriate entry buttons
-                for (int i = 0; i < 4; i++)
+                loreButtonContainer.gameObject.SetActive(true);
+                /*for (int i = 0; i < 4; i++)
                 {
-                    if (i < _loreEntries.Count)
+                    if (i < loreEntries.Count)
                         break;
                     loreButtonRoots[i].SetActive(true);
+                }*/
+                prevButtonContainer.gameObject.SetActive(true);
+                nextButtonContainer.gameObject.SetActive(true);
+                if (_unlockedEntries.Count == 0)
+                {
+                    _prevDisabled = true;
+                    prevImage.color = _disabledColor;
+                    _nextDisabled = true;
+                    nextImage.color = _disabledColor;
                 }
                 // Display last opened lore entry (nothing if none have been selected)
-                loreImage = _loreEntries[_selectedEntry].content[_entryPage];
+                if (_unlockedEntries.Count > 0)
+                {
+                    UpdateEntryButtons();
+                    UpdatePageButtons();
+                    loreImage.gameObject.SetActive(true);
+                    loreImage.sprite = _unlockedEntries[_selectedEntry].content[_entryPage];
+                }
+
+                if (_unlockedEntries.Count == 1 && _unlockedEntries[0].viewed == false)
+                {
+                    _unlockedEntries[0].viewed = true;
+                    _newEntryAmt--;
+                    _newNotif = false;
+                    notifImage.gameObject.SetActive(false);
+                }
             }
         }
 
         public void OnEntrySelected(int index)
         {
-            int entryNum = index * _buttonPage;
-            _entryPage = 1;
-            loreImage = _loreEntries[entryNum].content[1];
+            int entryNum = index + 5 * (_buttonPage - 1);
+            _selectedEntry = entryNum;
+            _entryPage = 0;
+            loreImage.sprite = _unlockedEntries[entryNum].content[0];
+            if (!_unlockedEntries[entryNum].viewed)
+            {
+                _unlockedEntries[entryNum].viewed = true;
+                _newEntryAmt--;
+                if (_newEntryAmt == 0)
+                {
+                    _newNotif = false;
+                    notifImage.gameObject.SetActive(false);
+                }
+            }
+            UpdatePageButtons();
+        }
+
+        [ContextMenu("ResetViewed")]
+        public void ResetViewed()
+        {
+            foreach (LoreEntryData entry in loreEntries)
+            {
+                entry.unlocked = false;
+                entry.viewed = false;
+            }
+        }
+
+        public void PrevButtonPage()
+        {
+            if (!_prevDisabled)
+            {
+                _buttonPage--;
+                UpdateEntryButtons();
+            }
+        }
+        
+        public void NextButtonPage()
+        {
+            if (!_nextDisabled)
+            {
+                _buttonPage++;
+                UpdateEntryButtons();
+            }
+        }
+
+        public void UpdateEntryButtons()
+        {
+            int max_index = _buttonPage * 5;
+            int max = 5;
+            if (max_index > _unlockedEntries.Count)
+            {
+                max = _unlockedEntries.Count % 5;
+                if (max == 0)
+                    max = 5;
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                Debug.Log("[DIALOGUE] Index: " + i + ", Max: " + max + ", Max Index: " + max_index + ", Entry Index: " + (i + 5 * (_buttonPage - 1)));
+                if (i < max)
+                {
+                    loreButtonRoots[i].gameObject.SetActive(true);
+                    loreButtonTexts[i].text = _unlockedEntries[i + 5 * (_buttonPage - 1)].title;
+                }
+                else
+                    loreButtonRoots[i].gameObject.SetActive(false);
+            }
+            
+            if (_buttonPage > 1)
+            {
+                _prevDisabled = false;
+                prevImage.color = _baseColor;
+            }
+            else
+            {
+                _prevDisabled = true;
+                prevImage.color = _disabledColor;
+            }
+
+            if (max_index < _unlockedEntries.Count)
+            {
+                _nextDisabled = false;
+                nextImage.color = _baseColor;
+            }
+            else
+            {
+                _nextDisabled = true;
+                nextImage.color = _disabledColor;
+            }
+        }
+
+        public void PrevEntryPage()
+        {
+            _entryPage--;
+            UpdatePageButtons();
+        }
+        
+        public void NextEntryPage()
+        {
+            _entryPage++;
+            UpdatePageButtons();
+        }
+
+        public void UpdatePageButtons()
+        {
+            if (_entryPage > 0)
+                prevPageContainer.gameObject.SetActive(true);
+            else
+                prevPageContainer.gameObject.SetActive(false);
+
+            if (_entryPage < (_unlockedEntries[_selectedEntry].content.Count - 1))
+                nextPageContainer.gameObject.SetActive(true);
+            else
+                nextPageContainer.gameObject.SetActive(false);
+
+            loreImage.sprite = _unlockedEntries[_selectedEntry].content[_entryPage];
+        }
+
+        public void UnlockEntry(string entryId)
+        {
+            foreach (LoreEntryData entry in loreEntries)
+            {
+                if (entry.loreId == entryId)
+                {
+                    entry.unlocked = true;
+                    _unlockedEntries.Add(entry);
+                    audioSource.PlayOneShot(msgGet);
+                    _newNotif = true;
+                    _newEntryAmt++;
+                    notifImage.gameObject.SetActive(true);
+                }
+            }
+        }
+
+        [ContextMenu("UnlockEntry1")]
+        public void TestUnlock1()
+        {
+            UnlockEntry("test_1");
+        }
+
+        [ContextMenu("UnlockEntry2")]
+        public void TestUnlock2()
+        {
+            UnlockEntry("test_2");
+        }
+
+        [ContextMenu("UnlockOtherEntries")]
+        public void TestUnlockOthers()
+        {
+            UnlockEntry("test_3");
+            UnlockEntry("test_4");
+            UnlockEntry("test_5");
+            UnlockEntry("test_6");
+            UnlockEntry("test_7");
+        }
+
+        [ContextMenu("UnlockAllTestEntries")]
+        public void TestUnlockAll()
+        {
+            TestUnlock1();
+            TestUnlock2();
+            TestUnlockOthers();
         }
 
         // ─── Internal Playback ────────────────────────────────────────────────────
@@ -467,23 +746,41 @@ namespace SUNSET16.UI
 
             RuntimeLine line = _lines[_lineIndex];
 
+            if (line.switchToDOLOS)
+            {
+                _isDOLOS = true;
+                StartCoroutine(DOLOSTakeover());
+            }
+
             if (!line.repeated && line.text != "")
             {
+                if (closeImage != null) closeImage.color = _disabledColor;
+                if (chatButtonImage != null) chatButtonImage.color = _disabledColor;
+                if (loreButtonImage != null) loreButtonImage.color = _disabledColor;
+                _clickDisabled = true;
+
                 if (line.sendDelay)
                 {
-                    AlbertDelay.SetActive(true);
-                    dialogueBodyText = AlbertDelay.GetComponentInChildren<TextMeshProUGUI>();
-                    typewriterCharDelay = AlbertDelayAmt;
-                    //typewriterCharDelay = 1f;
-                    for(int i = 0; i <= line.delayRepeats; i++)
+                    if (!_isDOLOS)
                     {
-                        _typewriterCoroutine = StartCoroutine(TypewriterEffect("..."));
-                        yield return _typewriterCoroutine;
-                        _typewriterCoroutine = null;
-                    }
+                        AlbertDelay.SetActive(true);
+                        dialogueBodyText = AlbertDelay.GetComponentInChildren<TextMeshProUGUI>();
+                        typewriterCharDelay = AlbertDelayAmt;
+                        //typewriterCharDelay = 1f;
+                        for(int i = 0; i <= line.delayRepeats; i++)
+                        {
+                            _typewriterCoroutine = StartCoroutine(TypewriterEffect("..."));
+                            yield return _typewriterCoroutine;
+                            _typewriterCoroutine = null;
+                        }
 
-                    AlbertDelay.SetActive(false);
-                    typewriterCharDelay = 0.03f;
+                        AlbertDelay.SetActive(false);
+                        typewriterCharDelay = 0.03f;
+                    }
+                    else
+                    {
+                        yield return new WaitForSeconds(line.delayRepeats);
+                    }
                 }
 
                 GameObject message;
@@ -512,7 +809,10 @@ namespace SUNSET16.UI
 
                 Vector3 messagePos = new Vector3(albertX, messageY, 0);
 
-                message = Instantiate(AlbertMessage, dialogueParent.transform);
+                if (!_isDOLOS)
+                    message = Instantiate(AlbertMessage, dialogueParent.transform);
+                else
+                    message = Instantiate(DOLOSMessage, dialogueParent.transform);
                 _messages.Add(message);
                 message.transform.localPosition = messagePos;
                 dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
@@ -531,7 +831,15 @@ namespace SUNSET16.UI
                 }
 
                 if (line.advanceToLine == -1)
+                {
                     _isResponding = false;
+                    if (closeImage != null) closeImage.color = _baseColor;
+                    if (!_chatOpen)
+                        if (chatButtonImage != null) chatButtonImage.color = _baseColor;
+                    if (_chatOpen)
+                        if (loreButtonImage != null) loreButtonImage.color = _baseColor;
+                    _clickDisabled = false;
+                }
 
                 //hide controls while the typewriter is doing its thing
                 if (advanceButton != null) advanceButton.SetActive(false);
@@ -543,8 +851,23 @@ namespace SUNSET16.UI
                 _typewriterCoroutine = null;*/
                 dialogueBodyText.text = line.text;
             }
+            else if (line.text == "" && line.advanceToLine == -1)
+            {
+                if (closeImage != null) closeImage.color = _baseColor;
+                if (!_chatOpen)
+                    if (chatButtonImage != null) chatButtonImage.color = _baseColor;
+                if (_chatOpen)
+                    if (loreButtonImage != null) loreButtonImage.color = _baseColor;
+                _clickDisabled = false;
+            }
 
             ShowControlsForCurrentLine();
+
+            if (line.loreEntry != "")
+            {
+                yield return new WaitForSeconds(1);
+                UnlockEntry(line.loreEntry);
+            }
 
             if (line.HasChoices)
             {
@@ -674,6 +997,16 @@ namespace SUNSET16.UI
             _messages.RemoveAll(item => item == null);
         }
 
+        private IEnumerator DOLOSTakeover()
+        {
+            computerGlitch.transform.SetAsLastSibling();
+            audioSource.PlayOneShot(computerTakeover);
+            AudioManager.Instance.SwapToDOLOSAmbient();
+            computerGlitch.material.SetFloat("_Intensity", 1f);
+            yield return new WaitForSeconds(4);
+            computerGlitch.material.SetFloat("_Intensity", 0f);
+        }
+
         private void ShowControlsForCurrentLine()
         {
             if (_lines == null || _lineIndex >= _lines.Count) return;
@@ -697,7 +1030,11 @@ namespace SUNSET16.UI
 
         private void ShowChoiceButtons(List<RuntimeChoice> choices)
         {
-            closeImage.color = _baseColor;
+            if (closeImage != null) closeImage.color = _baseColor;
+            if (!_chatOpen)
+                if (chatButtonImage != null) chatButtonImage.color = _baseColor;
+            if (_chatOpen)
+                if (loreButtonImage != null) loreButtonImage.color = _baseColor;
             _clickDisabled = false;
 
             for (int i = 0; i < choiceButtonRoots.Length; i++)
@@ -717,17 +1054,15 @@ namespace SUNSET16.UI
 
                 if (show && choices[i].offPillChoice)
                 {
-                    choiceButtonImages[i].material.SetFloat("_DispGlitchOn", 1f);
-                    choiceButtonImages[i].material.SetFloat("_ColorGlitchOn", 1f);
+                    choiceButtonImages[i].material.SetFloat("_Intensity", intensity);
+                    choiceButtonImages[i].sprite = noPillChoice;
+                    choiceButtonImages[i].color = _noPillColor;
                 }
             }
         }
 
         private void HideAllChoiceButtons()
         {
-            if (closeImage != null) closeImage.color = _disabledColor;
-            _clickDisabled = true;
-
             foreach (var root in choiceButtonRoots)
                 if (root != null) root.SetActive(false);
         }

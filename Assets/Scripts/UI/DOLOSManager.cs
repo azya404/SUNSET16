@@ -45,6 +45,8 @@ namespace SUNSET16.UI
         [Header("Announcements")]
         [SerializeField] private DOLOSAnnouncement[] announcements;
 
+        [SerializeField] private string testAnnouncementId;
+
         // ─── State ────────────────────────────────────────────────────────────────
 
         public bool IsAnnouncementActive { get; private set; }
@@ -170,10 +172,12 @@ namespace SUNSET16.UI
                         if (hasChatted)
                         {
                             // Play announcement after chatting with Albert
+                            id = "dolos_day" + day + "_morning_computer";
                         }
                         else
                         {
                             // Play announcement after taking pill
+                            id = "dolos_day" + day + "_morning_mirror";
                         }
                     }
                     else
@@ -182,9 +186,10 @@ namespace SUNSET16.UI
                         id = "dolos_day" + day + "_morning_wakeup";
                     }
                 }
-                else if (hasChatted)
+                else
                 {
                     // Play night announcement
+                    id = "dolos_day" + day + "_night_bedroom";
                 }
             }
             else
@@ -192,10 +197,12 @@ namespace SUNSET16.UI
                 if (completedTask)
                 {
                     // Play announcement for completing all tasks
+                    id = "dolos_day" + day + "_task1";
                 }
                 else
                 {
                     // Play announcement for completing one task
+                    id = "dolos_day" + day + "_task2";
                 }
             }
 
@@ -307,6 +314,12 @@ namespace SUNSET16.UI
                 OnSettingsRequested?.Invoke();
                 Debug.Log("[DOLOS] Honoring queued settings request");
             }
+        }
+
+        [ContextMenu("TestVoiceline")]
+        public void TestVoiceline()
+        {
+            _announcementCoroutine = StartCoroutine(PlayAnnouncement(_announcementsDict[testAnnouncementId]));
         }
     }
 }

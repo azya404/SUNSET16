@@ -16,125 +16,346 @@ MonoBehaviour:
   lines:
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: Morning, Andy. Another beautiful day aboard the SUNSET16. DOLOS assigned
-      you a task at the boiler room. A fuse broke late last night there, and needs
-      some maintenance. You know the drill. Do your task and keep DOLOS happy.
+    text: "There\u2019s going to be a slight shift in plans today. Two fuse boxes
+      broke last night at the infirmary."
     sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 1
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: However, I have full confidence in your abilities to fix them and get optimal
+      power flowing for that quadrant again.
+    sendDelay: 1
     delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
-    - choiceText: Sounds good to me.
-      nextLineIndex: 1
-      offPillChoice: 0
-      showOnRepeat: 0
-    - choiceText: Another day, another wire.
+    - choiceText: "Sounds good to me. A few broken fuse boxes aren\u2019t an issue
+        for me."
       nextLineIndex: 2
       offPillChoice: 0
       showOnRepeat: 0
+    - choiceText: "How annoying\u2026 but I have no other choice. I\u2019ll get it
+        done."
+      nextLineIndex: 3
+      offPillChoice: 0
+      showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: "That\u2019s the spirit. Just keep on with those designated tasks."
+    text: "That\u2019s the spirit. Just keep on with keeping DOLOS happy, and everything
+      will be ok."
     sendDelay: 1
     delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices: []
-    advanceToLine: 3
+    advanceToLine: 8
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: "How it usually is. It\u2019s good you\u2019re like that."
+    text: "You\u2019re right. You don\u2019t."
     sendDelay: 1
     delayRepeats: 0
     autoAdvanceDelay: 0.5
     choices: []
-    advanceToLine: 3
+    advanceToLine: 4
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: Any questions before you head out? My shift starts soon, but I have some
-      time to burn.
+    text: "Get the job done, and keep DOLOS pleased. It\u2019s in your best interest."
     sendDelay: 1
     delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Wear and tear is the most likely answer. I assume some of the older technicians
+      didn\u2019t do the proper job of insulating the wires properly."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 6
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "But\u2026 that\u2019s why they\u2019re not on the SUNSET16 anymore."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 7
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "DOLOS doesn\u2019t tolerate failure. So be sure you complete this task
+      efficiently."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Regardless of your adjusted schedule for the day, I have some time to burn
+      before I start my rounds at the nuclear core. Got any questions for me?
+    sendDelay: 1
+    delayRepeats: 1
     autoAdvanceDelay: 0.5
     choices:
-    - choiceText: Any word on when more passengers are supposed to arrive? The ship
-        feels empty sometimes.
-      nextLineIndex: 4
+    - choiceText: In what way does the DOLOS Corporation determine what makes a good
+        employee when screening potential employees?
+      nextLineIndex: 9
       offPillChoice: 0
       showOnRepeat: 0
     - choiceText: "How\u2019s the nuclear core these days?"
-      nextLineIndex: 5
+      nextLineIndex: 17
       offPillChoice: 0
       showOnRepeat: 0
-    - choiceText: Heard anything about that NUSA CEO? After the bankruptcy scandal?
-      nextLineIndex: 8
+    - choiceText: Heard NUSA Electric filed for bankruptcy recently.
+      nextLineIndex: 23
       offPillChoice: 0
       showOnRepeat: 0
-    - choiceText: I have no more questions.
-      nextLineIndex: 11
+    - choiceText: I have no more questions. Message me tonight once I get those fuse
+        boxes repaired.
+      nextLineIndex: 33
       offPillChoice: 0
       showOnRepeat: 1
-    advanceToLine: 11
+    advanceToLine: 32
     repeat: 1
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: "Last I checked, passenger rotations were delayed indefinitely. Corporate
-      restructuring, I think. However, that was a few months ago. There\u2019s no
-      need to pay it any mind now."
+    text: Thinking back about how your screening went, I reckon?
     sendDelay: 1
-    delayRepeats: 1
-    autoAdvanceDelay: 0.01
-    choices: []
-    advanceToLine: 3
-    repeat: 0
-    repeated: 0
-  - speakerName: Albert
-    portrait: {fileID: 0}
-    text: "Smooth sailing as usual. The graphs are flat, and the readings are stable.
-      Boring, but that\u2019s the goal. There was a time when the core was\u2026
-      malfunctioning."
-    sendDelay: 1
-    delayRepeats: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
-    - choiceText: Really? How so?
-      nextLineIndex: 6
+    - choiceText: You could say that, yeah. The process was a ride to say the least.You
+        could say that, yeah. The process was a ride to say the least.
+      nextLineIndex: 10
       offPillChoice: 0
       showOnRepeat: 0
-    - choiceText: "Nothing you can\u2019t handle."
-      nextLineIndex: 7
+    - choiceText: I was thinking about what your screening was like.
+      nextLineIndex: 14
       offPillChoice: 0
       showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: "The cooling system was starting to fail. Worked my magic and turned things
-      around. That\u2019s why they hired me."
+    text: They had to meet the very specific criteria the DOLOS Corporation was looking
+      for.
     sendDelay: 1
-    delayRepeats: 1
-    autoAdvanceDelay: 0.01
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
     choices: []
-    advanceToLine: 3
+    advanceToLine: 11
     repeat: 0
     repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Since the SUNSET16 was an isolated environment, candidates with familial
+      connections or other relationships weren\u2019t the most ideal for the position. "
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 12
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Of course, having a solid technical background was also a major factor
+      in hiring, which you and I both had.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 13
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: So, as long as your profile matched what the corporation was looking for,
+      you were selected for the job.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: albert_interview
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "That was some time ago. I\u2019m sure the process was the same as yours."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 15
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: The standard background checks were asked, followed by questions to filter
+      out ideal candidates who could work in an environment like the SUNSET16.
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 16
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: As long as the candidate met the very specific requirements, they were
+      hired.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: albert_interview
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Smooth sailing as usual. The graphs are flat, and the readings are stable.
+      Boring, but that\u2019s the goal."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 18
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "There was a time when the core was\u2026 malfunctioning."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Really? How so?
+      nextLineIndex: 19
+      offPillChoice: 0
+      showOnRepeat: 0
+    - choiceText: "Well\u2026 a malfunction is something that you could handle."
+      nextLineIndex: 21
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: The cooling system was starting to fail. You could thank a virus being
+      uploaded by a foreign corporation for that.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 20
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Worked my magic with some other technicians in other parts of the ship,
+      and turned things around. That\u2019s why they hired me."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s for certain. It\u2019s part of the job package."
     sendDelay: 1
     delayRepeats: 0
-    autoAdvanceDelay: 0.01
+    autoAdvanceDelay: 0.5
     choices: []
-    advanceToLine: 3
+    advanceToLine: 22
     repeat: 0
     repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: The DOLOS Corporation expected good results from me, and I provided them.
+      They expect equally promising results from you.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "They made some\u2026 poor financial decisions in tandem with being attacked
+      by a rival competitor."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 24
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: The company ran out of money by the end of that conflict. Shelled out the
+      rest of their assets.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: What happened to the NUSA CEO then? After the bankruptcy scandal?
+      nextLineIndex: 25
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Last I heard, she had connections in China. After that, I don\u2019t know
@@ -144,9 +365,10 @@ MonoBehaviour:
     delayRepeats: 1
     autoAdvanceDelay: 0.5
     choices: []
-    advanceToLine: 9
+    advanceToLine: 26
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Why\u2019d you ask?"
@@ -154,24 +376,97 @@ MonoBehaviour:
     delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
+    - choiceText: No reason. Just passing time.
+      nextLineIndex: 27
+      offPillChoice: 0
+      showOnRepeat: 0
     - choiceText: Could the same happen here?
-      nextLineIndex: 10
+      nextLineIndex: 28
       offPillChoice: 0
       showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Uh huh\u2026"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 8
+    repeat: 0
+    repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "DOLOS is different. More structured than other mega corporations. We\u2019re
       not going anywhere. And neither are you."
     sendDelay: 1
-    delayRepeats: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.01
     choices: []
-    advanceToLine: 3
+    advanceToLine: 8
     repeat: 0
     repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Brushing up on old files?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: Something like that.
+      nextLineIndex: 30
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: They were an early program, before the Aegis Collars were designed. It
+      was actually the results of that program that led to their development.
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 31
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: After each major shift, it was company protocol to hook up to a terminal
+      and watch a series of lights and sound effects.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 32
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "What we have now with the capsules is significantly more streamlined in
+      boosting productivity and providing other benefits. That\u2019s why it\u2019s
+      important to take your capsule shots every day."
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "Right\u2026 yeah, of course."
+      nextLineIndex: 8
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Alright, I\u2019ll catch you later then."
@@ -182,3 +477,4 @@ MonoBehaviour:
     advanceToLine: -1
     repeat: 0
     repeated: 0
+    loreEntry: 

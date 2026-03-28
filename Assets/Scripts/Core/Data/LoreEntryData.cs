@@ -36,7 +36,7 @@ namespace SUNSET16.Core
 
         [Header("lore content")]
         [Tooltip("the main text for this lore entry")]
-        public List<Image> content;
+        public List<Sprite> content;
 
         [Header("metadata")]
         [Tooltip("if this lore is connected to a specific day, put the day number here (leave 0 if not tied to one)")]
@@ -45,5 +45,10 @@ namespace SUNSET16.Core
 
         [Tooltip("a short preview of the lore that shows up in the list before the player clicks it")]
         public string preview;
+
+        [Header("whether or not the player has unlocked the lore entry")]
+        public bool unlocked;
+
+        public bool viewed;
     }
 }
