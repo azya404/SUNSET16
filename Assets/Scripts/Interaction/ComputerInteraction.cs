@@ -9,9 +9,9 @@ standing in the trigger zone.
 
 flow when player presses E (mirror done):
   1. screen fades to black  (PillChoiceFade CanvasGroup referenced directly - no duplication)
-  2. ComputerCanvas activates, CutscenePanel (Frame 1 - deskview) activates behind black
-  3. fade in - Frame 1 revealed, player movement locked
-  4. hold cutsceneDuration seconds
+  2. ComputerCanvas activates, CutscenePanel (Frame 1 - loading video) activates behind black
+  3. fade in - Frame 1 revealed, video plays
+  4. wait for video to finish naturally (cutsceneDuration used as fallback if no video assigned)
   5. fade to black, swap: CutscenePanel off, OverlayPanel (Frame 2 - chat room bg) on
   6. fade in - Frame 2 revealed, teammate's DialogueUI children are live
   7. ShowDialogue() called - teammate drives from here
@@ -27,6 +27,7 @@ TODO: computer screen glow effect when player is in range
 */
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Video;
 using SUNSET16.Core;
 using SUNSET16.UI;
 using UnityEngine.UIElements;
@@ -42,18 +43,23 @@ namespace SUNSET16.Interaction
         [Header("Computer Canvas")]
         [Tooltip("The parent ComputerCanvas GO. Activated at start of sequence, deactivated at end.")]
         [SerializeField] private GameObject computerCanvas;
-        [Tooltip("Frame 1 child - static deskview image (albert_deskview_cutscene). Inactive by default.")]
+        [Tooltip("Frame 1 child - loading video panel. Inactive by default.")]
         [SerializeField] private GameObject cutscenePanel;
         [Tooltip("Frame 2 child - chat room background (computer_overlay_bg). Teammate's DialogueUI lives here. Inactive by default.")]
         [SerializeField] private GameObject overlayPanel;
+
+        [Header("Cutscene Video")]
+        [Tooltip("VideoPlayer on CutsceneImage. If unassigned, falls back to cutsceneDuration.")]
+        [SerializeField] private VideoPlayer cutsceneVideo;
+        [Tooltip("Filename only — file must be in Assets/StreamingAssets/. No path, no subfolders.")]
+        [SerializeField] private string cutsceneVideoFileName = "ComputerLoadV4.mp4";
+        [Tooltip("Fallback duration in seconds — only used if cutsceneVideo is not assigned.")]
+        [SerializeField] private float cutsceneDuration = 2f;
 
         [Header("Fade")]
         [Tooltip("CanvasGroup on PillChoiceFade - referenced directly, no duplication needed.")]
         [SerializeField] private CanvasGroup fadePanel;
         [SerializeField] private float fadeDuration = 0.5f;
-
-        [Header("Timing")]
-        [SerializeField] private float cutsceneDuration = 2f;
 
         [Header("Bedroom Content")]
         [Tooltip("GOs to hide while the computer overlay is open. Drag in the root bedroom scene objects (bg, props, player, etc).")]
@@ -155,11 +161,24 @@ namespace SUNSET16.Interaction
             if (computerCanvas != null) computerCanvas.SetActive(true);
             if (cutscenePanel  != null) cutscenePanel.SetActive(true);
 
-            // fade in - reveal Frame 1
+            // fade in - reveal Frame 1 / loading video
             yield return StartCoroutine(Fade(1f, 0f));
 
-            // hold deskview for set duration
-            yield return new WaitForSeconds(cutsceneDuration);
+            // play the loading video and wait for it to finish naturally
+            // falls back to cutsceneDuration if no VideoPlayer assigned
+            if (cutsceneVideo != null)
+            {
+                // StreamingAssets URL must be set at runtime — cannot assign in Inspector for StreamingAssets files
+                cutsceneVideo.url = Application.streamingAssetsPath + "/" + cutsceneVideoFileName;
+                bool videoEnded = false;
+                cutsceneVideo.loopPointReached += _ => videoEnded = true;
+                cutsceneVideo.Play();
+                yield return new WaitUntil(() => videoEnded);
+            }
+            else
+            {
+                yield return new WaitForSeconds(cutsceneDuration);
+            }
 
             // fade to black
             yield return StartCoroutine(Fade(0f, 1f));
@@ -169,7 +188,7 @@ namespace SUNSET16.Interaction
             if (overlayPanel  != null) overlayPanel.SetActive(true);
 
             _barrelWarp?.SetWarpActive(true);
-            
+
             // fade in - reveal Frame 2, teammate's UI children are now live
             yield return StartCoroutine(Fade(1f, 0f));
 
@@ -288,11 +307,11 @@ namespace SUNSET16.Interaction
             int pillsTaken = PillStateManager.Instance.GetPillsTakenCount();
             int pillsRefused = PillStateManager.Instance.GetPillsRefusedCount();
             DayPhase phase = DayManager.Instance.CurrentPhase;
-            
+
             // Override dialogue tree for final day
             if ((DayManager.Instance.CurrentDay == 4) && (phase == DayPhase.Night) && ((pillsRefused == 3) || (pillsTaken == 3)))
                 index++;
-            
+
             Debug.Log("Index before adjustment: " + index);
             if (pill == PillChoice.NotTaken)
                 index += dayOffset;
@@ -301,7 +320,7 @@ namespace SUNSET16.Interaction
 
             Debug.Log("[DIALOGUE] Day offset: " + dayOffset + ", Index: " + index + ", Pill choice: " + pill + ", Phase: " + phase);
             Debug.Log("[DIALOGUE] Dialogue Tree: " + daySequences[index].sequenceId);
-                
+
             if (index < 0 || index >= daySequences.Length) return null;
 
             return daySequences[index];
