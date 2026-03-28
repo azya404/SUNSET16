@@ -15,7 +15,7 @@ MonoBehaviour:
   loreId: usb_albert_death
   title: Crematorium Death Record
   content:
-  - {fileID: 21300000, guid: 7c5b9f8e7cf8a3241818f416679c4d02, type: 3}
+  - {fileID: 21300000, guid: 0aa7b3f43bd7c9349ae208b3ebe81060, type: 3}
   associatedDay: 0
   preview: 
   unlocked: 0
