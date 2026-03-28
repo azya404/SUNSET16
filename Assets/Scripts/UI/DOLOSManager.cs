@@ -60,6 +60,7 @@ namespace SUNSET16.UI
         private bool _linesSkipped;
         private Coroutine _linesCoroutine;
         private string _fullText;
+        public int taskCompleteCount = 0;
 
         // ─── Events ───────────────────────────────────────────────────────────────
 
@@ -158,7 +159,6 @@ namespace SUNSET16.UI
             DayPhase phase = DayManager.Instance.CurrentPhase;
             bool takenPill = PillStateManager.Instance.HasTakenPillToday();
             bool hasChatted = DialogueUIManager.Instance.GetFinishedDialogue();
-            bool completedTask = TaskManager.Instance.IsTaskCompleted(day);
             string id = "";
 
             // Naming convention for announcementID: dolos_day[#]_[phase]_[event]
@@ -194,15 +194,16 @@ namespace SUNSET16.UI
             }
             else
             {
-                if (completedTask)
+                if (taskCompleteCount == 2)
                 {
                     // Play announcement for completing all tasks
-                    id = "dolos_day" + day + "_task1";
+                    id = "dolos_day" + day + "_task2";
+                    taskCompleteCount = 0;
                 }
                 else
                 {
                     // Play announcement for completing one task
-                    id = "dolos_day" + day + "_task2";
+                    id = "dolos_day" + day + "_task1";
                 }
             }
 
