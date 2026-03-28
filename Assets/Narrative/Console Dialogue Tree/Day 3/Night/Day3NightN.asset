@@ -16,26 +16,30 @@ MonoBehaviour:
   lines:
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: Evening, Andy. Logs show that all systems are functional. How was the fix-up?
+    text: Good stuff, fixing those fuse boxes. Was it wear and tear? Or a different
+      issue?
     sendDelay: 0
     delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
-    - choiceText: "The fuse was blown. But the real issue was the boiler room. Fixed
-        them both. Everything\u2019s in the green now."
+    - choiceText: Yeah, wear and tear was the main issue with the wiring. Fixed both
+        fuse boxes, so everything should be in the green now.
       nextLineIndex: 1
       offPillChoice: 0
       showOnRepeat: 0
-    - choiceText: "It\u2019s done. All that matters."
+    - choiceText: "It doesn\u2019t matter. The problem is fixed, and that\u2019s
+        all that matters."
       nextLineIndex: 2
       offPillChoice: 0
       showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: Good catch. Some of the older panels can be deceptive.
+    text: Good stuff. This is why you passed your screening when hired by the DOLOS
+      Corporation.
     sendDelay: 1
     delayRepeats: 0
     autoAdvanceDelay: 0.5
@@ -43,9 +47,10 @@ MonoBehaviour:
     advanceToLine: 3
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: Efficient as always. Good work.
+    text: Agreed. Regardless, good work out there.
     sendDelay: 1
     delayRepeats: 0
     autoAdvanceDelay: 0.5
@@ -53,6 +58,7 @@ MonoBehaviour:
     advanceToLine: 3
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Any interesting thoughts today while on the clock?
@@ -65,31 +71,33 @@ MonoBehaviour:
       offPillChoice: 0
       showOnRepeat: 0
     - choiceText: When can we expect any new technicians on board the SUNSET16?
-      nextLineIndex: 7
+      nextLineIndex: 10
       offPillChoice: 0
       showOnRepeat: 0
     - choiceText: What were the standard protocols for evacuating the SUNSET16 again?
         I realized I had a lapse in memory when it came to the safety of personnel
         on the ship.
-      nextLineIndex: 10
-      offPillChoice: 1
-      showOnRepeat: 0
-    - choiceText: Cognitive Harmony Assessments. What were those again?
       nextLineIndex: 12
       offPillChoice: 1
       showOnRepeat: 0
+    - choiceText: I have this simple algebra problem. Could you, by any chance, help
+        me solve it?
+      nextLineIndex: 14
+      offPillChoice: 1
+      showOnRepeat: 0
     - choiceText: "I\u2019m getting tired. Ready for some shut-eye."
-      nextLineIndex: 9
+      nextLineIndex: 19
       offPillChoice: 0
       showOnRepeat: 1
-    advanceToLine: 9
+    advanceToLine: 19
     repeat: 1
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Steady, from what I can see. Profits are up, efficiency metrics are at
-      an all-time high across many divisions, and the shareholders are happy. Which
-      means we keep our jobs.
+      an all-time high across many of our divisions, and the shareholders are happy.
+      Which means we keep our jobs.
     sendDelay: 1
     delayRepeats: 1
     autoAdvanceDelay: 0
@@ -99,17 +107,47 @@ MonoBehaviour:
       offPillChoice: 0
       showOnRepeat: 0
     - choiceText: What about other companies?
-      nextLineIndex: 6
+      nextLineIndex: 8
       offPillChoice: 0
       showOnRepeat: 0
     advanceToLine: 0
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: "Some tech companies from Shanghai and New Tokyo are on the rise after
-      the cybercrash of 2101, but they\u2019re leagues behind what we produce at
-      the DOLOS Corporation."
+    text: Some tech companies from Shanghai and New Tokyo are on the rise after the
+      cybercrash of 2101, expanding into markets left vacant by other corporate giants
+      in the region.
+    sendDelay: 1
+    delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 6
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Amaterasu Dynamics looks pretty promising. They have a lot of cash to throw
+      around.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: How so?
+      nextLineIndex: 7
+      offPillChoice: 0
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "They\u2019re expanding into developing safer nuclear technologies. It\u2019s
+      a sector that the DOLOS Corporation and, subsequently, Erebus Holdings have
+      yet to expand into."
     sendDelay: 1
     delayRepeats: 1
     autoAdvanceDelay: 0.01
@@ -117,17 +155,31 @@ MonoBehaviour:
     advanceToLine: 3
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: "We have our fair share of rival companies, both domestic and international,
-      but we hold the majority when it comes to\u2026 well\u2026 everything."
+    text: We have our fair share of rival companies, both domestic and international,
+      but we hold the majority share in the divisions we specialize in.
     sendDelay: 1
     delayRepeats: 1
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 9
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Mainly aerospace, life-science, resource extraction, and *true* artificial
+      intelligence.
+    sendDelay: 1
+    delayRepeats: 0
     autoAdvanceDelay: 0.01
     choices: []
     advanceToLine: 3
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "You know, I used to ask that too, at least early on in my employment here.
@@ -137,9 +189,10 @@ MonoBehaviour:
     delayRepeats: 1
     autoAdvanceDelay: 0.5
     choices: []
-    advanceToLine: 8
+    advanceToLine: 11
     repeat: 0
     repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "They concluded that a smaller team is easier to manage. It\u2019s just
@@ -151,6 +204,100 @@ MonoBehaviour:
     advanceToLine: 3
     repeat: 0
     repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Oh, the evacuation protocol? I should have a text file somewhere on my
+      hard drive. If you just give me one moment\u2026"
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 13
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Here you go.
+    sendDelay: 1
+    delayRepeats: 2
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: albert_evacuation
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Sure, I can do my best.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: 4x - 7(2 - x) = 3x + 2
+      nextLineIndex: 15
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: x = 2
+    sendDelay: 0
+    delayRepeats: 0
+    autoAdvanceDelay: 0.5
+    choices: []
+    advanceToLine: 16
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: That should be the right answer. Tell me, why did you ask that?
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0
+    choices:
+    - choiceText: "\u2026No reason. Just wanted to see how much of a genius you are.
+        Solved that awfully quick\u2026"
+      nextLineIndex: 17
+      offPillChoice: 1
+      showOnRepeat: 0
+    - choiceText: "I wanted to brush up on my mental math problems. I want to keep
+        my mind\u2026 sharp."
+      nextLineIndex: 18
+      offPillChoice: 1
+      showOnRepeat: 0
+    advanceToLine: 0
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: "Hahaha, I\u2019m flattered."
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
+  - speakerName: Albert
+    portrait: {fileID: 0}
+    text: Of course, of course. Always a pleasure of mine to help a fellow crewmate
+      out.
+    sendDelay: 1
+    delayRepeats: 0
+    autoAdvanceDelay: 0.01
+    choices: []
+    advanceToLine: 3
+    repeat: 0
+    repeated: 0
+    loreEntry: 
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Rest well, Andy.
@@ -161,67 +308,4 @@ MonoBehaviour:
     advanceToLine: -1
     repeat: 0
     repeated: 0
-  - speakerName: Albert
-    portrait: {fileID: 0}
-    text: "Oh, the evacuation protocol? I should have a text file somewhere on my
-      hard drive. If you just give me one moment\u2026"
-    sendDelay: 1
-    delayRepeats: 1
-    autoAdvanceDelay: 0.5
-    choices: []
-    advanceToLine: 11
-    repeat: 0
-    repeated: 0
-  - speakerName: Albert
-    portrait: {fileID: 0}
-    text: Here you go.
-    sendDelay: 1
-    delayRepeats: 0
-    autoAdvanceDelay: 0.01
-    choices: []
-    advanceToLine: 3
-    repeat: 0
-    repeated: 0
-  - speakerName: Albert
-    portrait: {fileID: 0}
-    text: Brushing up on old files?
-    sendDelay: 1
-    delayRepeats: 0
-    autoAdvanceDelay: 0
-    choices:
-    - choiceText: Something like that.
-      nextLineIndex: 13
-      offPillChoice: 0
-      showOnRepeat: 0
-    advanceToLine: 0
-    repeat: 0
-    repeated: 0
-  - speakerName: Albert
-    portrait: {fileID: 0}
-    text: They were an early program, before the Aegis Collars were designed. It
-      was actually the results of that program that led to their development.
-    sendDelay: 1
-    delayRepeats: 1
-    autoAdvanceDelay: 0.5
-    choices: []
-    advanceToLine: 14
-    repeat: 0
-    repeated: 0
-  - speakerName: Albert
-    portrait: {fileID: 0}
-    text: "After each major shift, it was company protocol to hook up to a terminal
-      and watch a series of lights and sound effects. What we have now with the capsules
-      is significantly more streamlined in boosting productivity and providing other
-      benefits. That\u2019s why it\u2019s important to take your capsule shots every
-      day."
-    sendDelay: 1
-    delayRepeats: 2
-    autoAdvanceDelay: 0
-    choices:
-    - choiceText: "Right\u2026 yeah, of course."
-      nextLineIndex: 3
-      offPillChoice: 0
-      showOnRepeat: 0
-    advanceToLine: 0
-    repeat: 0
-    repeated: 0
+    loreEntry: 

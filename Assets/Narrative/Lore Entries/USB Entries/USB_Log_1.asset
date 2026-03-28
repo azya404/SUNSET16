@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc9e01a82ab1e2d4991d1b04549e741a, type: 3}
+  m_Name: USB_Log_1
+  m_EditorClassIdentifier: 
+  loreId: usb_log_1
+  title: Technician_Log_AF-01.enc
+  content:
+  - {fileID: 21300000, guid: 285000cd8d1c3634aba27e8eecef7e81, type: 3}
+  - {fileID: 21300000, guid: abbf1052d00fef44aa1329e3032abeca, type: 3}
+  associatedDay: 0
+  preview: 
+  unlocked: 0

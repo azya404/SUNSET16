@@ -168,10 +168,10 @@ namespace SUNSET16.Interaction
             if (cutscenePanel != null) cutscenePanel.SetActive(false);
             if (overlayPanel  != null) overlayPanel.SetActive(true);
 
+            _barrelWarp?.SetWarpActive(true);
+            
             // fade in - reveal Frame 2, teammate's UI children are now live
             yield return StartCoroutine(Fade(1f, 0f));
-
-            _barrelWarp?.SetWarpActive(true);
 
             // hand off to DialogueUIManager
             // if no SOs assigned yet, log warning and leave overlay open - expected during development
@@ -280,7 +280,13 @@ namespace SUNSET16.Interaction
             int dayOffset = daySequences.Length/4;
             int index = DayManager.Instance.CurrentDay - 1; // day 1 -> index 0
             PillChoice pill = PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay);
+            int pillsTaken = PillStateManager.Instance.GetPillsTakenCount();
+            int pillsRefused = PillStateManager.Instance.GetPillsRefusedCount();
             DayPhase phase = DayManager.Instance.CurrentPhase;
+            
+            // Override dialogue tree for final day
+            if ((DayManager.Instance.CurrentDay == 4) && (phase == DayPhase.Night) && ((pillsRefused == 3) || (pillsTaken == 3)))
+                index++;
             
             Debug.Log("Index before adjustment: " + index);
             if (pill == PillChoice.NotTaken)
@@ -316,7 +322,9 @@ namespace SUNSET16.Interaction
                     autoAdvanceDelay = dl.autoAdvanceDelay,
                     advanceToLine    = dl.advanceToLine,
                     repeat           = dl.repeat,
-                    repeated         = false
+                    repeated         = false,
+                    loreEntry        = dl.loreEntry,
+                    switchToDOLOS    = dl.switchToDOLOS
                 };
 
                 if (dl.choices != null && dl.choices.Count > 0)
