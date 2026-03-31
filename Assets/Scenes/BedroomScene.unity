@@ -659,8 +659,8 @@ MonoBehaviour:
   isChat: 0
   isLore: 0
   isNext: 0
-  isPrev: 0
-  isClose: 0
+  isPrev: 1
+  isOther: 0
 --- !u!1 &83314561
 GameObject:
   m_ObjectHideFlags: 0
@@ -1607,7 +1607,7 @@ MonoBehaviour:
   isLore: 0
   isNext: 0
   isPrev: 0
-  isClose: 1
+  isOther: 0
 --- !u!1 &189832369
 GameObject:
   m_ObjectHideFlags: 0
@@ -1978,7 +1978,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.09019608, g: 1, b: 0, a: 1}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -2026,8 +2026,8 @@ MonoBehaviour:
   isChat: 0
   isLore: 0
   isNext: 0
-  isPrev: 1
-  isClose: 0
+  isPrev: 0
+  isOther: 1
 --- !u!1 &261586332
 GameObject:
   m_ObjectHideFlags: 0
@@ -2272,7 +2272,7 @@ MonoBehaviour:
   isLore: 1
   isNext: 0
   isPrev: 0
-  isClose: 0
+  isOther: 0
 --- !u!1 &297832114
 GameObject:
   m_ObjectHideFlags: 0
@@ -2496,9 +2496,9 @@ MonoBehaviour:
   hoverColor: {r: 0.7059, g: 0.7059, b: 0.7059, a: 1}
   isChat: 0
   isLore: 0
-  isNext: 0
+  isNext: 1
   isPrev: 0
-  isClose: 0
+  isOther: 0
 --- !u!1 &395455114
 GameObject:
   m_ObjectHideFlags: 0
@@ -3341,7 +3341,7 @@ MonoBehaviour:
   isLore: 0
   isNext: 0
   isPrev: 0
-  isClose: 0
+  isOther: 0
 --- !u!1 &554551347
 GameObject:
   m_ObjectHideFlags: 0
@@ -9795,9 +9795,9 @@ MonoBehaviour:
   hoverColor: {r: 0.7059, g: 0.7059, b: 0.7059, a: 1}
   isChat: 0
   isLore: 0
-  isNext: 1
+  isNext: 0
   isPrev: 0
-  isClose: 0
+  isOther: 1
 --- !u!1 &1884131662
 GameObject:
   m_ObjectHideFlags: 0
