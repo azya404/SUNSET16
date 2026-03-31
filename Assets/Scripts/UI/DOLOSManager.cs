@@ -61,6 +61,7 @@ namespace SUNSET16.UI
         private Coroutine _linesCoroutine;
         private string _fullText;
         public int taskCompleteCount = 0;
+        private AudioClip _tempClip;
 
         // ─── Events ───────────────────────────────────────────────────────────────
 
@@ -233,7 +234,11 @@ namespace SUNSET16.UI
 
             if (announcementAudioSource != null && announcement.audioClip != null)
             {
-                announcementAudioSource.clip = announcement.audioClip;
+                // This deals with the playing of the announcement. If you want to send off the clip to the audio mixer you could probably do that here, and then set the 
+                _tempClip = announcement.audioClip;
+                // Send off temp clip to the audio mixer
+                announcementAudioSource.clip = _tempClip;
+                announcementAudioSource.volume = announcement.volume;
                 announcementAudioSource.Play();
             }
 
