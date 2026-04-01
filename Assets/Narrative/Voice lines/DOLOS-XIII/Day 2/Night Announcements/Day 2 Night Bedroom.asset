@@ -24,3 +24,4 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: 6334d285b5a38fa48817ca3de33ed204, type: 3}
   displayDuration: 14
   lineDurations: 0500000007000000
+  volume: 1

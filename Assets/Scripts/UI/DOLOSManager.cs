@@ -61,6 +61,7 @@ namespace SUNSET16.UI
         private Coroutine _linesCoroutine;
         private string _fullText;
         public int taskCompleteCount = 0;
+        private AudioClip _tempClip;
 
         // ─── Events ───────────────────────────────────────────────────────────────
 
@@ -233,7 +234,12 @@ namespace SUNSET16.UI
 
             if (announcementAudioSource != null && announcement.audioClip != null)
             {
-                announcementAudioSource.clip = announcement.audioClip;
+                // This deals with the playing of the announcement. If you want to send off the clip to the audio mixer you
+                // could probably do that here along with the audio clip's intended volume?
+                _tempClip = announcement.audioClip;
+                // Send off temp clip to the audio mixer? Use announcement.volume to take value from slider in the DOLOS announcement object
+                announcementAudioSource.clip = _tempClip;
+                announcementAudioSource.volume = announcement.volume; // This will need to be removed when the audio mixer is implemented
                 announcementAudioSource.Play();
             }
 
