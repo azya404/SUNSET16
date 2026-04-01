@@ -35,5 +35,8 @@ namespace SUNSET16.Core
 
         [Tooltip("How long to display each line. If audioClip is assigned, set this roughly equal to the audio length for each line.")]
         public List<int> lineDurations;
+
+        [Tooltip("How loud the given voiceline is. It's a range between 0.0 and 10.0 where 0.1 is 10%, 1.0 is 100%, and 10.0 is 1000%")]
+        [Range(0.0f, 10.0f)] public float volume = 1.0f;
     }
 }

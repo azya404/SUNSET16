@@ -77,8 +77,10 @@ namespace SUNSET16.UI
         [SerializeField] private Image nextImage;
         [SerializeField] private Transform prevPageContainer;
         [SerializeField] private GameObject prevPageButton;
+        [SerializeField] private Image prevPageImage;
         [SerializeField] private Transform nextPageContainer;
         [SerializeField] private GameObject nextPageButton;
+        [SerializeField] private Image nextPageImage;
 
         [Header("Choice Buttons (max 5)")]
         [SerializeField] private GameObject[] choiceButtonRoots = new GameObject[5];  // Parent GOs per choice
@@ -135,16 +137,16 @@ namespace SUNSET16.UI
         private int             _messageNum = 0;
         private List<GameObject> _messages = new List<GameObject>();
         private DayPhase        _phase;
-        private bool            _chatOpen = true;
+        public bool            chatOpen = true;
         private List<LoreEntryData> _unlockedEntries = new List<LoreEntryData>();
         private int             _selectedEntry;
         private int             _entryPage = 0;
         private int             _buttonPage = 1;
         private Color           _baseColor = new Color(1f, 1f, 1f, 1f);
         private Color           _disabledColor = new Color(0.5f, 0.5f, 0.5f, 1f);
-        private bool            _clickDisabled = false;
-        private bool            _prevDisabled = true;
-        private bool            _nextDisabled = true;
+        public bool            clickDisabled = false;
+        public bool            prevDisabled = true;
+        public bool            nextDisabled = true;
         private Color           _noPillColor = new Color(0.125f, 0.765f, 0.890f, 1f);
         private bool            _isDOLOS = false;
         private bool            _newNotif = false;
@@ -317,10 +319,12 @@ namespace SUNSET16.UI
                 prevPageButton = prevPageContainer.transform.GetChild(1).gameObject;
                 prevPageButton.GetComponent<Button>().onClick.AddListener(PrevEntryPage);
                 prevPageButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+                prevPageImage = prevPageContainer.GetChild(0).GetComponent<Image>();
                 nextPageContainer = dialogueParent.transform.GetChild(12);
                 nextPageButton = nextPageContainer.transform.GetChild(1).gameObject;
                 nextPageButton.GetComponent<Button>().onClick.AddListener(NextEntryPage);
                 nextPageButton.GetComponent<Button>().onClick.AddListener(MenuSound);
+                nextPageImage = nextPageContainer.GetChild(0).GetComponent<Image>();
 
                 computerGlitch = dialogueParent.transform.GetChild(13).GetComponent<RawImage>();
                 computerGlitch.material = Instantiate(computerGlitch.material);
@@ -332,7 +336,7 @@ namespace SUNSET16.UI
 
                 Debug.Log($"[DIALOGUE] Starting sequence '{sequence.sequenceId}'");
 
-                _chatOpen = true;
+                chatOpen = true;
                 _entryPage = 0;
                 _buttonPage = 1;
                 SwapToChat();
@@ -395,11 +399,11 @@ namespace SUNSET16.UI
             _isResponding      = false;
             _started           = false;
             _finished          = false;
-            _clickDisabled     = false;
+            clickDisabled     = false;
             _messageNum        = 0;
             _entryPage         = 1;
             _buttonPage        = 1;
-            _chatOpen          = true;
+            chatOpen          = true;
             _isDOLOS           = false;
             _lines.Clear();
             foreach (var msg in _messages) if (msg != null) Destroy(msg);
@@ -473,34 +477,34 @@ namespace SUNSET16.UI
             if (closeImage != null) closeImage.color = _disabledColor;
             if (chatButtonImage != null) chatButtonImage.color = _disabledColor;
             if (loreButtonImage != null) loreButtonImage.color = _disabledColor;
-            _clickDisabled = true;
+            clickDisabled = true;
 
             HideAllChoiceButtons();
         }
 
         public void MenuSound()
         {
-            if (!_clickDisabled)
+            if (!clickDisabled)
                 audioSource.PlayOneShot(menuClick);
         }
 
         public void PrevPageSound()
         {
-            if (!_prevDisabled)
+            if (!prevDisabled)
                 audioSource.PlayOneShot(menuClick);
         }
         public void NextPageSound()
         {
-            if (!_nextDisabled)
+            if (!nextDisabled)
                 audioSource.PlayOneShot(menuClick);
         }
 
         public void SwapToChat()
         {
             // IF IN LORE ENTRIES:
-            if (!_chatOpen && !_clickDisabled)
+            if (!chatOpen && !clickDisabled)
             {
-                _chatOpen = true;
+                chatOpen = true;
                 MenuSound();
                 loreButtonImage.color = _baseColor;
                 chatButtonImage.color = _disabledColor;
@@ -524,9 +528,9 @@ namespace SUNSET16.UI
         public void SwapToLore()
         {
             // IF IN CHAT:
-            if (_chatOpen && !_clickDisabled)
+            if (chatOpen && !clickDisabled)
             {
-                _chatOpen = false;
+                chatOpen = false;
                 MenuSound();
                 chatButtonImage.color = _baseColor;
                 loreButtonImage.color = _disabledColor;
@@ -549,9 +553,9 @@ namespace SUNSET16.UI
                 nextButtonContainer.gameObject.SetActive(true);
                 if (_unlockedEntries.Count == 0)
                 {
-                    _prevDisabled = true;
+                    prevDisabled = true;
                     prevImage.color = _disabledColor;
-                    _nextDisabled = true;
+                    nextDisabled = true;
                     nextImage.color = _disabledColor;
                 }
                 // Display last opened lore entry (nothing if none have been selected)
@@ -604,7 +608,7 @@ namespace SUNSET16.UI
 
         public void PrevButtonPage()
         {
-            if (!_prevDisabled)
+            if (!prevDisabled)
             {
                 _buttonPage--;
                 UpdateEntryButtons();
@@ -613,7 +617,7 @@ namespace SUNSET16.UI
         
         public void NextButtonPage()
         {
-            if (!_nextDisabled)
+            if (!nextDisabled)
             {
                 _buttonPage++;
                 UpdateEntryButtons();
@@ -644,23 +648,23 @@ namespace SUNSET16.UI
             
             if (_buttonPage > 1)
             {
-                _prevDisabled = false;
+                prevDisabled = false;
                 prevImage.color = _baseColor;
             }
             else
             {
-                _prevDisabled = true;
+                prevDisabled = true;
                 prevImage.color = _disabledColor;
             }
 
             if (max_index < _unlockedEntries.Count)
             {
-                _nextDisabled = false;
+                nextDisabled = false;
                 nextImage.color = _baseColor;
             }
             else
             {
-                _nextDisabled = true;
+                nextDisabled = true;
                 nextImage.color = _disabledColor;
             }
         }
@@ -680,12 +684,20 @@ namespace SUNSET16.UI
         public void UpdatePageButtons()
         {
             if (_entryPage > 0)
+            {
+                if (!prevPageContainer.gameObject.activeSelf)
+                    prevPageImage.color = _baseColor;
                 prevPageContainer.gameObject.SetActive(true);
+            }
             else
                 prevPageContainer.gameObject.SetActive(false);
 
             if (_entryPage < (_unlockedEntries[_selectedEntry].content.Count - 1))
+            {
+                if (!nextPageContainer.gameObject.activeSelf)
+                    nextPageImage.color = _baseColor;
                 nextPageContainer.gameObject.SetActive(true);
+            }
             else
                 nextPageContainer.gameObject.SetActive(false);
 
@@ -723,11 +735,13 @@ namespace SUNSET16.UI
         [ContextMenu("UnlockOtherEntries")]
         public void TestUnlockOthers()
         {
-            UnlockEntry("test_3");
+            /*UnlockEntry("test_3");
             UnlockEntry("test_4");
             UnlockEntry("test_5");
             UnlockEntry("test_6");
-            UnlockEntry("test_7");
+            UnlockEntry("test_7");*/
+            foreach (LoreEntryData entry in loreEntries)
+                UnlockEntry(entry.loreId);
         }
 
         [ContextMenu("UnlockAllTestEntries")]
@@ -767,7 +781,7 @@ namespace SUNSET16.UI
                 if (closeImage != null) closeImage.color = _disabledColor;
                 if (chatButtonImage != null) chatButtonImage.color = _disabledColor;
                 if (loreButtonImage != null) loreButtonImage.color = _disabledColor;
-                _clickDisabled = true;
+                clickDisabled = true;
 
                 if (line.sendDelay)
                 {
@@ -844,11 +858,11 @@ namespace SUNSET16.UI
                 {
                     _isResponding = false;
                     if (closeImage != null) closeImage.color = _baseColor;
-                    if (!_chatOpen)
+                    if (!chatOpen)
                         if (chatButtonImage != null) chatButtonImage.color = _baseColor;
-                    if (_chatOpen)
+                    if (chatOpen)
                         if (loreButtonImage != null) loreButtonImage.color = _baseColor;
-                    _clickDisabled = false;
+                    clickDisabled = false;
                 }
 
                 //hide controls while the typewriter is doing its thing
@@ -864,11 +878,11 @@ namespace SUNSET16.UI
             else if (line.text == "" && line.advanceToLine == -1)
             {
                 if (closeImage != null) closeImage.color = _baseColor;
-                if (!_chatOpen)
+                if (!chatOpen)
                     if (chatButtonImage != null) chatButtonImage.color = _baseColor;
-                if (_chatOpen)
+                if (chatOpen)
                     if (loreButtonImage != null) loreButtonImage.color = _baseColor;
-                _clickDisabled = false;
+                clickDisabled = false;
             }
 
             ShowControlsForCurrentLine();
@@ -1041,11 +1055,11 @@ namespace SUNSET16.UI
         private void ShowChoiceButtons(List<RuntimeChoice> choices)
         {
             if (closeImage != null) closeImage.color = _baseColor;
-            if (!_chatOpen)
+            if (!chatOpen)
                 if (chatButtonImage != null) chatButtonImage.color = _baseColor;
-            if (_chatOpen)
+            if (chatOpen)
                 if (loreButtonImage != null) loreButtonImage.color = _baseColor;
-            _clickDisabled = false;
+            clickDisabled = false;
 
             for (int i = 0; i < choiceButtonRoots.Length; i++)
             {
