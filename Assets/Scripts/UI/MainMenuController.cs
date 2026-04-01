@@ -9,22 +9,18 @@ if no save exists it just goes straight to the bedroom scene
 continue loads CoreScene which has all the managers and they
 auto-init and pull save data from PlayerPrefs
 
-settings just toggles the settings panel on/off
+settings just toggles the settings panel on/off and credits
+doesnt do anything yet lol
 
-credits loads NeutralCreditsScene — when returning from credits the menu
-fades in from black via ReturnedFromCredits static flag set by NeutralCreditsSceneController
-
-SETTINGS LIVE PREVIEW:
-main menu subscribes directly to SettingsManager events so sliders
-affect the menu itself without needing CoreScene's AudioManager or LightingController:
-- master volume: AudioListener.volume (handled inside SettingsManager.SetMasterVolume)
-- music volume: _musicVolumeMax drives MusicLoopWithFade's fade target
-- sfx volume: sfxSource.volume set directly
-- brightness: brightnessOverlay CanvasGroup alpha
-  mapping: 1.0 (default) = alpha 0 (fully clear), 0.0 = alpha 1 (fully black), linear
-
-TODO: animated bg for the menu (space station exterior maybe?)
+TODO: credits scene
 TODO: transition animation when going from menu to game
+
+FADE SEQUENCE (on New Game / Continue / Credits click):
+  Phase 1 - menu_character + menu_space_bg fade out simultaneously
+            buttons are disabled immediately, still visible
+  Phase 2 - menu_stars + ButtonGroup fade out simultaneously
+            only menu_title remains
+  Phase 3 - menu_title fades out, then scene loads
 */
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -58,27 +54,28 @@ namespace SUNSET16.UI
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private float       musicFadeDuration = 1.5f;
 
-        // set by NeutralCreditsSceneController before loading back to this scene
-        // so we know to fade in from black instead of appearing instantly
+        [Header("Layer CanvasGroups")]
+        [SerializeField] private CanvasGroup spaceBackgroundLayer;
+        [SerializeField] private CanvasGroup starsLayer;
+        [SerializeField] private CanvasGroup titleLayer;
+        [SerializeField] private CanvasGroup characterLayer;
+        [SerializeField] private CanvasGroup buttonsLayer;
+
+        [Header("Fade Durations")]
+        [SerializeField] private float phase1Duration = 0.6f;
+        [SerializeField] private float phase2Duration = 0.5f;
+        [SerializeField] private float phase3Duration = 0.8f;
+
+        [Header("Scene Names")]
+        [SerializeField] private string newGameSceneName  = "CoreScene";
+        [SerializeField] private string creditsSceneName  = "NeutralCreditsScene";
+        private const string CORE_SCENE_NAME = "CoreScene";
+
+        // set by NeutralCreditsSceneController before returning to this scene
         public static bool ReturnedFromCredits = false;
 
         private Coroutine _musicLoopCoroutine;
         private bool      _sceneFadeActive = false;
-        // tracks the current music volume ceiling — updated live by OnMusicVolumeChanged
-        private float     _musicVolumeMax = 1f;
-
-        [Header("Screen Transition")]
-        [Tooltip("Full-screen black CanvasGroup — starts transparent, fades to black on scene exit.")]
-        [SerializeField] private CanvasGroup screenFadePanel;
-        [SerializeField] private float       screenFadeDuration = 1.2f;
-
-        [Header("Brightness Overlay")]
-        [Tooltip("Full-screen black Image + CanvasGroup — alpha driven by brightness setting.\nDefault brightness (1.0) = alpha 0 (clear). Dragging slider left darkens the screen.")]
-        [SerializeField] private CanvasGroup brightnessOverlay;
-
-        [Header("Scene Names")]
-        [SerializeField] private string newGameSceneName = "CoreScene";
-        private const string CORE_SCENE_NAME = "CoreScene";
 
         private void Start()
         {
@@ -86,17 +83,6 @@ namespace SUNSET16.UI
             //GameManager doesnt exist here so nobody else is gonna do it
             SettingsManager.Instance.Initialize();
             SaveManager.Instance.Initialize();
-
-            // subscribe to settings events so sliders affect the menu live
-            SettingsManager.Instance.OnMusicVolumeChanged  += OnMusicVolumeChanged;
-            SettingsManager.Instance.OnSFXVolumeChanged    += OnSFXVolumeChanged;
-            SettingsManager.Instance.OnBrightnessChanged   += OnBrightnessChanged;
-
-            // apply current saved settings immediately on load
-            _musicVolumeMax = SettingsManager.Instance.MusicVolume;
-            if (sfxSource != null)
-                sfxSource.volume = SettingsManager.Instance.SFXVolume;
-            ApplyBrightness(SettingsManager.Instance.Brightness);
 
             //wire up all the button click listeners
             newGameButton.onClick.AddListener(OnNewGameClicked);
@@ -112,105 +98,41 @@ namespace SUNSET16.UI
                 newGameConfirmPanel.SetActive(false);
             }
 
-            //TODO: re-enable continue when save/load is fixed for submission
-            continueButton.interactable = false;
+            //gray out the continue button if theres no save to load
+            continueButton.interactable = SaveManager.Instance.SaveExists;
 
             if (settingsPanel != null)
-            {
                 settingsPanel.SetActive(false);
-            }
 
             if (musicSource != null)
             {
-                musicSource.loop   = false; // MusicLoopWithFade manages looping manually
+                musicSource.loop   = false;
                 musicSource.volume = 0f;
                 musicSource.Play();
                 _musicLoopCoroutine = StartCoroutine(MusicLoopWithFade());
             }
 
-            // returning from credits — fade the menu in from black
-            // otherwise just appear instantly (fresh game launch)
-            if (ReturnedFromCredits)
-            {
-                ReturnedFromCredits = false;
-                if (screenFadePanel != null)
-                {
-                    screenFadePanel.alpha = 1f;
-                    StartCoroutine(FadeScreen(1f, 0f, screenFadeDuration));
-                }
-            }
-            else if (screenFadePanel != null)
-            {
-                screenFadePanel.alpha = 0f;
-            }
-
             Debug.Log("[MAINMENU] Main menu initialized");
         }
 
-        private void OnDestroy()
-        {
-            // always unsub from SettingsManager events — this GO is destroyed on scene load
-            if (SettingsManager.Instance != null)
-            {
-                SettingsManager.Instance.OnMusicVolumeChanged  -= OnMusicVolumeChanged;
-                SettingsManager.Instance.OnSFXVolumeChanged    -= OnSFXVolumeChanged;
-                SettingsManager.Instance.OnBrightnessChanged   -= OnBrightnessChanged;
-            }
-        }
-
-        // --- settings live preview handlers ---
-
-        private void OnMusicVolumeChanged(float value)
-        {
-            _musicVolumeMax = value;
-            // apply immediately so dragging up restores volume without waiting for the next loop cycle
-            if (musicSource != null)
-                musicSource.volume = value;
-        }
-
-        private void OnSFXVolumeChanged(float value)
-        {
-            if (sfxSource != null)
-                sfxSource.volume = value;
-        }
-
-        private void OnBrightnessChanged(float value)
-        {
-            ApplyBrightness(value);
-        }
-
-        private void ApplyBrightness(float brightness)
-        {
-            if (brightnessOverlay == null) return;
-            // 1.0 (default) = alpha 0 (fully clear = 100% brightness)
-            // 0.5 = alpha 0.5 (half darkened)
-            // 0.0 = alpha 1 (fully black)
-            brightnessOverlay.alpha = Mathf.Clamp01(1f - brightness);
-        }
-
         // fade in → wait → fade out → restart → repeat until _sceneFadeActive
-        // fades to _musicVolumeMax instead of 1f so music volume setting is respected
         private IEnumerator MusicLoopWithFade()
         {
             while (!_sceneFadeActive)
             {
-                // fade in to current volume ceiling
-                yield return StartCoroutine(FadeMusic(0f, _musicVolumeMax, musicFadeDuration));
+                yield return StartCoroutine(FadeMusic(0f, 1f, musicFadeDuration));
 
-                // wait until musicFadeDuration seconds before the track ends
                 float waitTime = musicSource.clip.length - musicSource.time - musicFadeDuration;
                 if (waitTime > 0f)
                     yield return new WaitForSeconds(waitTime);
 
                 if (_sceneFadeActive) yield break;
 
-                // fade out to end of track
                 float timeLeft = Mathf.Max(musicSource.clip.length - musicSource.time, 0.1f);
                 yield return StartCoroutine(FadeMusic(musicSource.volume, 0f, timeLeft));
 
                 if (_sceneFadeActive) yield break;
 
-                // restart from the top
                 musicSource.Stop();
                 musicSource.volume = 0f;
                 musicSource.Play();
@@ -234,16 +156,10 @@ namespace SUNSET16.UI
         {
             sfxSource?.PlayOneShot(startButtonSFX);
 
-            //if they already have a save AND continue is available, warn before overwriting
-            //if continue is disabled there's nothing to protect so go straight to new game
-            if (SaveManager.Instance.SaveExists && newGameConfirmPanel != null && continueButton.interactable)
-            {
+            if (SaveManager.Instance.SaveExists && newGameConfirmPanel != null)
                 newGameConfirmPanel.SetActive(true);
-            }
             else
-            {
-                StartNewGame(); //no save exists so just go
-            }
+                StartNewGame();
         }
 
         private void OnConfirmNewGame()
@@ -262,68 +178,69 @@ namespace SUNSET16.UI
         private void StartNewGame()
         {
             SaveManager.Instance.ClearSaveData();
-            StartCoroutine(LoadSceneAfterSFX(newGameSceneName));
-        }
-
-        private IEnumerator LoadSceneAfterSFX(string sceneName)
-        {
-            // lock all buttons immediately — prevents button mashing during fade/SFX
-            newGameButton.interactable  = false;
-            continueButton.interactable = false;
-            settingsButton.interactable = false;
-            creditsButton.interactable  = false;
-
-            float sfxDuration = (startButtonSFX != null && sfxSource != null) ? startButtonSFX.length : 0f;
-            // fade duration matches SFX exactly — screenFadeDuration is fallback only if no clip assigned
-            float totalDuration = sfxDuration > 0f ? sfxDuration : screenFadeDuration;
-
-            _sceneFadeActive = true;
-            if (_musicLoopCoroutine != null) StopCoroutine(_musicLoopCoroutine);
-            if (musicSource != null && musicSource.isPlaying)
-                StartCoroutine(FadeMusic(musicSource.volume, 0f, totalDuration));
-            if (screenFadePanel != null)
-                StartCoroutine(FadeScreen(0f, 1f, totalDuration));
-
-            yield return new WaitForSeconds(totalDuration);
-            Debug.Log($"[MAINMENU] Loading {sceneName}");
-            SceneManager.LoadScene(sceneName);
-        }
-
-        private IEnumerator FadeScreen(float from, float to, float duration)
-        {
-            float timer = 0f;
-            while (timer < duration)
-            {
-                timer += Time.deltaTime;
-                if (screenFadePanel != null)
-                    screenFadePanel.alpha = Mathf.Lerp(from, to, timer / duration);
-                yield return null;
-            }
-            if (screenFadePanel != null) screenFadePanel.alpha = to;
+            StartCoroutine(LayerFadeAndLoad(newGameSceneName));
         }
 
         private void OnContinueClicked()
         {
-            // use startButtonSFX for continue too — same weight as starting a new game
             sfxSource?.PlayOneShot(startButtonSFX);
             Debug.Log("[MAINMENU] Continuing saved game");
-            StartCoroutine(LoadSceneAfterSFX(CORE_SCENE_NAME));
+            StartCoroutine(LayerFadeAndLoad(CORE_SCENE_NAME));
         }
 
         private void OnSettingsClicked()
         {
             sfxSource?.PlayOneShot(menuClickSFX);
-            //just flip the panel on/off, SettingsPanel.cs handles everything inside it
             if (settingsPanel != null)
-            {
                 settingsPanel.SetActive(!settingsPanel.activeSelf);
-            }
         }
 
         private void OnCreditsClicked()
         {
             sfxSource?.PlayOneShot(menuClickSFX);
-            StartCoroutine(LoadSceneAfterSFX("NeutralCreditsScene"));
+            StartCoroutine(LayerFadeAndLoad(creditsSceneName));
+        }
+
+        private IEnumerator LayerFadeAndLoad(string sceneName)
+        {
+            // lock all buttons immediately — no mashing during fade
+            newGameButton.interactable  = false;
+            continueButton.interactable = false;
+            settingsButton.interactable = false;
+            creditsButton.interactable  = false;
+
+            _sceneFadeActive = true;
+            if (_musicLoopCoroutine != null) StopCoroutine(_musicLoopCoroutine);
+
+            float totalDuration = phase1Duration + phase2Duration + phase3Duration;
+            StartCoroutine(FadeMusic(musicSource != null ? musicSource.volume : 1f, 0f, totalDuration));
+
+            // phase 1 — character + space bg fade out together
+            StartCoroutine(FadeCanvasGroup(characterLayer, 1f, 0f, phase1Duration));
+            yield return StartCoroutine(FadeCanvasGroup(spaceBackgroundLayer, 1f, 0f, phase1Duration));
+
+            // phase 2 — stars + buttons fade out together
+            StartCoroutine(FadeCanvasGroup(starsLayer, 1f, 0f, phase2Duration));
+            yield return StartCoroutine(FadeCanvasGroup(buttonsLayer, 1f, 0f, phase2Duration));
+
+            // phase 3 — title fades out last
+            yield return StartCoroutine(FadeCanvasGroup(titleLayer, 1f, 0f, phase3Duration));
+
+            Debug.Log($"[MAINMENU] Loading {sceneName}");
+            SceneManager.LoadScene(sceneName);
+        }
+
+        private IEnumerator FadeCanvasGroup(CanvasGroup cg, float from, float to, float duration)
+        {
+            if (cg == null) yield break;
+            float timer = 0f;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                cg.alpha = Mathf.Lerp(from, to, timer / duration);
+                yield return null;
+            }
+            cg.alpha = to;
         }
     }
 }

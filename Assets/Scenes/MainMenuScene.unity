@@ -217,6 +217,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 594095104}
   - {fileID: 604600866}
   - {fileID: 724848909}
   - {fileID: 70072521}
@@ -379,6 +380,7 @@ GameObject:
   - component: {fileID: 70072521}
   - component: {fileID: 70072523}
   - component: {fileID: 70072522}
+  - component: {fileID: 70072524}
   m_Layer: 5
   m_Name: menu_title
   m_TagString: Untagged
@@ -443,6 +445,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 70072520}
   m_CullTransparentMesh: 1
+--- !u!225 &70072524
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70072520}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &129905583
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,10 +715,16 @@ MonoBehaviour:
   menuClickSFX: {fileID: 8300000, guid: c6b2b27fc68788b4fbfec7ea1fcff911, type: 3}
   musicSource: {fileID: 824580562}
   musicFadeDuration: 1.5
-  screenFadePanel: {fileID: 945044800}
-  screenFadeDuration: 1.2
-  brightnessOverlay: {fileID: 2002191143}
+  spaceBackgroundLayer: {fileID: 604600867}
+  starsLayer: {fileID: 724848912}
+  titleLayer: {fileID: 70072524}
+  characterLayer: {fileID: 723511095}
+  buttonsLayer: {fileID: 1789025472}
+  phase1Duration: 0.6
+  phase2Duration: 0.5
+  phase3Duration: 0.8
   newGameSceneName: CoreScene
+  creditsSceneName: NeutralCreditsScene
 --- !u!82 &191470372
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1652,6 +1672,81 @@ RectTransform:
   m_AnchoredPosition: {x: 80, y: 75}
   m_SizeDelta: {x: 150, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &594095103
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 594095104}
+  - component: {fileID: 594095106}
+  - component: {fileID: 594095105}
+  m_Layer: 5
+  m_Name: menu_black_base
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &594095104
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594095103}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4865552}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &594095105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594095103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &594095106
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594095103}
+  m_CullTransparentMesh: 1
 --- !u!1 &602589886
 GameObject:
   m_ObjectHideFlags: 0
@@ -2304,6 +2399,7 @@ GameObject:
   - component: {fileID: 724848909}
   - component: {fileID: 724848911}
   - component: {fileID: 724848910}
+  - component: {fileID: 724848912}
   m_Layer: 5
   m_Name: menu_stars
   m_TagString: Untagged
@@ -2368,6 +2464,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 724848908}
   m_CullTransparentMesh: 1
+--- !u!225 &724848912
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724848908}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &791332422
 GameObject:
   m_ObjectHideFlags: 0
