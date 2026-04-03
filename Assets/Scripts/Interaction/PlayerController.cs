@@ -53,6 +53,9 @@ namespace SUNSET16.Core
         [SerializeField] private SpriteRenderer spriteRenderer;
         private bool hasAnimator = false;
         private float lastFacingX = 1f; //default facing right
+        private float lastFacingY = -1f;
+        private float moveX = 0;
+        private float moveY = 0;
 
         [Header("Footstep Audio (Optional)")]
         [SerializeField] private AudioSource footstepSource;
@@ -136,9 +139,30 @@ namespace SUNSET16.Core
         //the Animator Controller uses these to pick walk/idle animations
         void UpdateAnimations()
         {
-            float moveX = moveInput.x;
-            float moveY = moveInput.y;
+            if (moveInput.x != 0f && moveInput.y == 0f)
+            {
+                moveX = moveInput.x;
+                moveY = 0f;
+            }
+            else if (moveInput.y != 0f && moveInput.x == 0f)
+            {
+                moveY = moveInput.y;
+                moveX = 0f;
+            }
 
+            if (moveX != 0f && moveY == 0f)
+            {
+                lastFacingX = moveX;
+                lastFacingY = 0f;
+            }
+            if (moveY != 0f && moveX == 0f)
+            {
+                lastFacingY = moveY;
+                lastFacingX = 0;
+            }
+
+            animator.SetFloat("Ydir", lastFacingY);
+            animator.SetFloat("Xdir", lastFacingX);
             animator.SetFloat("MoveX", moveX);
             animator.SetFloat("MoveY", moveY);
             animator.SetBool("IsMoving", moveInput.magnitude > 0.1f); //small threshold so tiny drift doesnt count as moving
@@ -146,10 +170,6 @@ namespace SUNSET16.Core
             //flip sprite for left movement - reuses right-walk frames, no extra sprites needed
             //only update lastFacingX when actually moving horizontally so
             //the sprite doesnt un-flip when you switch to moving up/down
-            if (moveX != 0f)
-            {
-                lastFacingX = moveX;
-            }
 
             if (spriteRenderer != null)
             {
