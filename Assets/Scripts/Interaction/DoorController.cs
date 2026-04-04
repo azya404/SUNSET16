@@ -80,15 +80,69 @@ namespace SUNSET16.Core
             interactionSystem = GetComponent<InteractionSystem>();
             //if its a hidden room door, ask HiddenRoomManager what state its in
             //otherwise just set it to normal (unlocked, orange)
-            if (isHiddenRoomDoor && HiddenRoomManager.Instance != null)
-            {
-                DoorState state = HiddenRoomManager.Instance.GetDoorState(hiddenRoomID);
-                SetDoorState(state);
-            }
-            else
-            {
-                SetDoorState(DoorState.Normal);
-            }
+        if (targetSceneName  == "HallwayScene")
+        {
+            SetDoorState(DoorState.Normal);
+        }
+        else if (targetSceneName == "BedroomScene" &&
+            DayManager.Instance.CurrentPhase == DayPhase.Night &&
+            requiresAllTasksComplete == false)
+        {
+            SetDoorState(DoorState.Normal);
+            // SetDoorState(DoorState.Locked);
+            // if (targetSceneName == "BedroomScene" &&
+            // DayManager.Instance.CurrentPhase == DayPhase.Night &&
+            // requiresAllTasksComplete == true)
+            // {
+            //     SetDoorState(DoorState.Normal);
+            // }
+        }
+        else if (targetSceneName == "BoilerRoomScene" &&
+                DayManager.Instance.CurrentPhase == DayPhase.Morning &&
+                DayManager.Instance.CurrentDay == 1)
+        {
+            SetDoorState(DoorState.Normal);
+        }
+        else if (targetSceneName == "NavRoomScene" &&
+                DayManager.Instance.CurrentPhase == DayPhase.Morning &&
+                DayManager.Instance.CurrentDay == 2)
+        {
+            SetDoorState(DoorState.Normal);
+        }
+        else if (targetSceneName == "LabScene" &&
+                DayManager.Instance.CurrentPhase == DayPhase.Night &&
+                DayManager.Instance.CurrentDay == 2)
+        {
+            SetDoorState(DoorState.Normal);
+        }
+        else if (targetSceneName == "InfirmaryScene" &&
+                DayManager.Instance.CurrentPhase == DayPhase.Morning &&
+                DayManager.Instance.CurrentDay == 3)
+        {
+            SetDoorState(DoorState.Normal);
+        }
+        else if (targetSceneName == "ServerRoomScene" &&
+                DayManager.Instance.CurrentPhase == DayPhase.Night &&
+                DayManager.Instance.CurrentDay >= 3 &&
+                PillStateManager.Instance.GetPillsTakenCount() == 2)
+        {
+            SetDoorState(DoorState.Normal);
+        }
+        else
+        {
+            SetDoorState(DoorState.Locked);
+        }
+            
+            
+            // if (isHiddenRoomDoor && HiddenRoomManager.Instance != null)
+            // {
+            //     DoorState state = HiddenRoomManager.Instance.GetDoorState(hiddenRoomID);
+            //     SetDoorState(state);
+            // }
+            // else
+            // {
+            //     SetDoorState(DoorState.Normal);
+            // }
         }
 
         // ─── IProximityResponder ──────────────────────────────────────────────────
@@ -159,7 +213,7 @@ namespace SUNSET16.Core
                     PillStateManager.Instance != null &&
                     !PillStateManager.Instance.HasTakenPillToday())
                 {
-                    ShowLockedMessage("Maybe I should check the mirror first...");
+                    ShowLockedMessage("I should start my morning routine...");
                     return;
                 }
                 // gate 2 (morning): morning computer session not done
@@ -291,12 +345,13 @@ namespace SUNSET16.Core
                 return false;
             }
 
-            if (PillStateManager.Instance != null && PillStateManager.Instance.HasTakenPillToday())
+            if (PillStateManager.Instance != null &&
+                PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay) == PillChoice.Taken)
             {
                 ShowSleepyLockedMessage();
                 return false;
             }
-
+            
             //CanAccessRoom does the full check: night phase + off-pill + task done
             if (!HiddenRoomManager.Instance.CanAccessRoom(hiddenRoomID))
             {
