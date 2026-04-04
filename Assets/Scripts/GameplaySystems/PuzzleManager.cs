@@ -44,6 +44,8 @@ namespace SUNSET16.Core
         public event Action<string> OnPuzzleCompleted;
         public event Action<LoreEntryData> OnLoreUnlocked;
 
+        public int CompletePuzzleCount = 0;
+
         protected override void Awake()
         {
             base.Awake();
@@ -95,6 +97,15 @@ namespace SUNSET16.Core
             }
 
             SpawnPuzzle(puzzleData);
+        }
+        public void DonePuzzle()
+        {
+            CompletePuzzleCount = CompletePuzzleCount + 1;
+        }
+
+        public int DonePuzzleCount()
+        {
+            return CompletePuzzleCount;
         }
 
         private void OnSaveDeleted()

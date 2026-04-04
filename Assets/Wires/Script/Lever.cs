@@ -88,7 +88,6 @@ public class Lever : MonoBehaviour, IPointerClickHandler
                 DialogueUIManager.Instance.UnlockEntry("usb_albert_death");
             }
         }
-
     }
 
         private IEnumerator PlayWrongSequence()

@@ -75,7 +75,7 @@ namespace SUNSET16.Core
 
         private InteractionSystem interactionSystem;
 
-        void Start()
+        void Start() 
         {
             interactionSystem = GetComponent<InteractionSystem>();
             //if its a hidden room door, ask HiddenRoomManager what state its in
@@ -84,11 +84,28 @@ namespace SUNSET16.Core
         {
             SetDoorState(DoorState.Normal);
         }
-        else if (targetSceneName == "BedroomScene" &&
-            DayManager.Instance.CurrentPhase == DayPhase.Night &&
-            requiresAllTasksComplete == false)
+        else if (targetSceneName == "BedroomScene")
         {
-            SetDoorState(DoorState.Normal);
+            if (DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() == 1 && PuzzleManager.Instance.DonePuzzleCount() == 0)
+                {
+                    SetDoorState(DoorState.Locked);
+                }
+            else if (DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() == 2 && PuzzleManager.Instance.DonePuzzleCount() == 1)
+                {
+                    SetDoorState(DoorState.Locked);
+                }
+            else if (DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() == 3 && PuzzleManager.Instance.DonePuzzleCount() == 2)
+                {
+                    SetDoorState(DoorState.Locked);
+                }
+            else if (DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() == 4 && PuzzleManager.Instance.DonePuzzleCount() == 3)
+                {
+                    SetDoorState(DoorState.Locked);
+                }
+            else
+                {
+                    SetDoorState(DoorState.Normal);     
+                }
             // SetDoorState(DoorState.Locked);
             // if (targetSceneName == "BedroomScene" &&
             // DayManager.Instance.CurrentPhase == DayPhase.Night &&
@@ -124,7 +141,7 @@ namespace SUNSET16.Core
         else if (targetSceneName == "ServerRoomScene" &&
                 DayManager.Instance.CurrentPhase == DayPhase.Night &&
                 DayManager.Instance.CurrentDay >= 3 &&
-                PillStateManager.Instance.GetPillsTakenCount() == 2)
+                PillStateManager.Instance.GetPillsRefusedCount() == 2)
         {
             SetDoorState(DoorState.Normal);
         }
