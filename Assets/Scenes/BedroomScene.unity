@@ -1607,7 +1607,7 @@ MonoBehaviour:
   isLore: 0
   isNext: 0
   isPrev: 0
-  isOther: 1
+  isOther: 0
 --- !u!1 &189832369
 GameObject:
   m_ObjectHideFlags: 0
