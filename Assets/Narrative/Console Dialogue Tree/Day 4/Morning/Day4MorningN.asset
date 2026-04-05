@@ -16,8 +16,8 @@ MonoBehaviour:
   lines:
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: Morning, Andy. DOLOS has you at the ___ today. The circuit box over there
-      short-circuited last night.
+    text: Morning, Andy. DOLOS has you at the server room today. The circuit box
+      over there short-circuited last night.
     sendDelay: 0
     delayRepeats: 0
     autoAdvanceDelay: 0.5
@@ -26,6 +26,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Most likely the result of a corporate attack from a rival company. All
@@ -38,6 +39,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: All the circuit box needs is a full diagnostic check and some rewiring.
@@ -62,6 +64,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: We could always count on you. Keep up that work ethic. The higher-ups love
@@ -74,6 +77,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "We expect it. Even before Erebus Holdings bought it, it was a common occurrence.
@@ -86,6 +90,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Anyhow, do your job well.
@@ -97,6 +102,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Ethax Enterprise. A medium-sized conglomerate based in the North of the
@@ -115,6 +121,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "\u2026You don\u2019t have to worry about that."
@@ -126,6 +133,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Before you head out\u2026 you\u2019ve seemed different lately. Anything
@@ -155,6 +163,7 @@ MonoBehaviour:
     repeat: 1
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "\u2026Of course. As long as it doesn\u2019t hinder your performance as
@@ -172,6 +181,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Really? It doesn\u2019t feel like that to me. I feel like you\u2019re
@@ -184,6 +194,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Are you getting enough sleep, Andy?
@@ -195,6 +206,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Are the capsule injections not potent enough? Taking some extra dosages
@@ -207,6 +219,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Do you want me to report this to DOLOS?
@@ -222,10 +235,11 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "I will say this: space has a way of bringing up thoughts you don\u2019t
-      like if you *let it happen\u2026*"
+      like if you let it happen\u2026"
     sendDelay: 1
     delayRepeats: 0
     autoAdvanceDelay: 0
@@ -234,7 +248,7 @@ MonoBehaviour:
       nextLineIndex: 15
       offPillChoice: 1
       showOnRepeat: 0
-    - choiceText: "Don\u2019t act like I didn\u2019t see that Tame Impala reference."
+    - choiceText: "I\u2019m well aware, Al. There\u2019s no need to remind me."
       nextLineIndex: 16
       offPillChoice: 1
       showOnRepeat: 0
@@ -242,6 +256,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "It\u2019s better to push those thoughts down by doing your tasks. Besides,
@@ -254,10 +269,10 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: "Hahaha, guilty as charged. \u201CCurrents\u201D is still my favourite
-      album of all time."
+    text: Just looking out for ya, Andy.
     sendDelay: 1
     delayRepeats: 0
     autoAdvanceDelay: 0.01
@@ -266,6 +281,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Sure. What\u2019s on your mind?"
@@ -281,6 +297,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: '*&^&$#&#@'
@@ -292,6 +309,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: I had a daughter. But that was a long time ago. I work here now. Doing
@@ -304,6 +322,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Tell me, why are you thinking about that? I thought you hated Earth.
@@ -323,6 +342,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Are you sure?
@@ -338,6 +358,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "It happens. But there\u2019s a reason why you\u2019re here, and on this
@@ -351,6 +372,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Talk to you later then, Andy.
@@ -362,3 +384,4 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
