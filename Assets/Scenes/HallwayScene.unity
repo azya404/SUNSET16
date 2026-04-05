@@ -11827,7 +11827,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: LittleBoilerRoomScene
-  spawnPositionInTargetScene: {x: -5.39, y: -36.39, z: 0}
+  spawnPositionInTargetScene: {x: -8.51, y: -7.97, z: 0}
   roomType: 0
   isHiddenRoomDoor: 0
   hiddenRoomID: 
