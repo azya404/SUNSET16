@@ -2648,7 +2648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: HallwayScene
-  spawnPositionInTargetScene: {x: 17.2, y: -1.2, z: 0}
+  spawnPositionInTargetScene: {x: 36.09, y: -1.2, z: 0}
   roomType: 3
   isHiddenRoomDoor: 0
   hiddenRoomID: 
