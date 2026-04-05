@@ -26,6 +26,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: However, I have full confidence in your abilities to fix them and get optimal
@@ -48,6 +49,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s the spirit. Just keep on with keeping DOLOS happy, and everything
@@ -60,6 +62,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "You\u2019re right. You don\u2019t."
@@ -71,6 +74,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Get the job done, and keep DOLOS pleased. It\u2019s in your best interest."
@@ -82,6 +86,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Wear and tear is the most likely answer. I assume some of the older technicians
@@ -94,6 +99,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "But\u2026 that\u2019s why they\u2019re not on the SUNSET16 anymore."
@@ -105,6 +111,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "DOLOS doesn\u2019t tolerate failure. So be sure you complete this task
@@ -117,6 +124,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Regardless of your adjusted schedule for the day, I have some time to burn
@@ -147,6 +155,7 @@ MonoBehaviour:
     repeat: 1
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Thinking back about how your screening went, I reckon?
@@ -154,8 +163,7 @@ MonoBehaviour:
     delayRepeats: 0
     autoAdvanceDelay: 0
     choices:
-    - choiceText: You could say that, yeah. The process was a ride to say the least.You
-        could say that, yeah. The process was a ride to say the least.
+    - choiceText: You could say that, yeah. The process was a ride to say the least.
       nextLineIndex: 10
       offPillChoice: 0
       showOnRepeat: 0
@@ -167,6 +175,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: They had to meet the very specific criteria the DOLOS Corporation was looking
@@ -179,6 +188,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Since the SUNSET16 was an isolated environment, candidates with familial
@@ -191,6 +201,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Of course, having a solid technical background was also a major factor
@@ -203,6 +214,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: So, as long as your profile matched what the corporation was looking for,
@@ -215,6 +227,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_interview
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That was some time ago. I\u2019m sure the process was the same as yours."
@@ -226,6 +239,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: The standard background checks were asked, followed by questions to filter
@@ -238,6 +252,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: As long as the candidate met the very specific requirements, they were
@@ -250,6 +265,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_interview
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Smooth sailing as usual. The graphs are flat, and the readings are stable.
@@ -262,6 +278,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "There was a time when the core was\u2026 malfunctioning."
@@ -281,6 +298,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: The cooling system was starting to fail. You could thank a virus being
@@ -293,6 +311,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Worked my magic with some other technicians in other parts of the ship,
@@ -305,6 +324,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s for certain. It\u2019s part of the job package."
@@ -316,6 +336,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: The DOLOS Corporation expected good results from me, and I provided them.
@@ -328,6 +349,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "They made some\u2026 poor financial decisions in tandem with being attacked
@@ -340,6 +362,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: The company ran out of money by the end of that conflict. Shelled out the
@@ -356,6 +379,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Last I heard, she had connections in China. After that, I don\u2019t know
@@ -369,6 +393,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Why\u2019d you ask?"
@@ -388,6 +413,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Uh huh\u2026"
@@ -399,6 +425,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "DOLOS is different. More structured than other mega corporations. We\u2019re
@@ -411,6 +438,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Brushing up on old files?
@@ -426,6 +454,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: They were an early program, before the Aegis Collars were designed. It
@@ -438,6 +467,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: After each major shift, it was company protocol to hook up to a terminal
@@ -450,6 +480,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "What we have now with the capsules is significantly more streamlined in
@@ -467,6 +498,7 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Alright, I\u2019ll catch you later then."
@@ -478,3 +510,4 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0

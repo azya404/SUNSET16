@@ -514,6 +514,8 @@ namespace SUNSET16.UI
                 loreButtonContainer.gameObject.SetActive(false);
                 prevButtonContainer.gameObject.SetActive(false);
                 nextButtonContainer.gameObject.SetActive(false);
+                prevPageContainer.gameObject.SetActive(false);
+                nextPageContainer.gameObject.SetActive(false);
                 // Deactivate lore entry
                 loreImage.gameObject.SetActive(false);
                 // Activate appropriate response buttons

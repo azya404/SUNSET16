@@ -62,6 +62,7 @@ namespace SUNSET16.UI
         private string _fullText;
         public int taskCompleteCount = 0;
         private AudioClip _tempClip;
+        private bool _hasAnnouncedComputer = false;
 
         // ─── Events ───────────────────────────────────────────────────────────────
 
@@ -159,7 +160,7 @@ namespace SUNSET16.UI
             int day = DayManager.Instance.CurrentDay;
             DayPhase phase = DayManager.Instance.CurrentPhase;
             bool takenPill = PillStateManager.Instance.HasTakenPillToday();
-            bool hasChatted = DialogueUIManager.Instance.GetFinishedDialogue();
+            bool hasChatted = DialogueUIManager.Instance.announcementTriggered;
             string id = "";
 
             // Naming convention for announcementID: dolos_day[#]_[phase]_[event]
@@ -174,6 +175,7 @@ namespace SUNSET16.UI
                         {
                             // Play announcement after chatting with Albert
                             id = "dolos_day" + day + "_morning_computer";
+                            _hasAnnouncedComputer = true;
                         }
                         else
                         {
