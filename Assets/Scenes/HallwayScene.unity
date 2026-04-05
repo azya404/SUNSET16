@@ -6906,7 +6906,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSceneName: Server2RoomScene
   spawnPositionInTargetScene: {x: -5.39, y: -36.39, z: 0}
-  roomType: 1
+  roomType: 0
   isHiddenRoomDoor: 0
   hiddenRoomID: 
   isBedroomDoor: 0
@@ -11742,9 +11742,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSceneName: LittleBoilerRoomScene
   spawnPositionInTargetScene: {x: -5.39, y: -36.39, z: 0}
-  roomType: 1
-  isHiddenRoomDoor: 1
-  hiddenRoomID: room_4
+  roomType: 0
+  isHiddenRoomDoor: 0
+  hiddenRoomID: 
   isBedroomDoor: 0
   requiresAllTasksComplete: 0
   isMorningGated: 0
