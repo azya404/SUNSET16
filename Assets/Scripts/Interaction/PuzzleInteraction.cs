@@ -28,6 +28,7 @@ namespace SUNSET16.Interaction
         [SerializeField] private AudioClip puzzleThemeClip;
         [SerializeField] private float ambientDuckedVolume = 0.05f;
 
+
         [Header("Settings")]
         [SerializeField] private string interactionPrompt = "Press E to interact";
 
@@ -67,6 +68,7 @@ namespace SUNSET16.Interaction
         public void CloseOverlay()
         {
             if (!_overlayActive) return;
+            PuzzleManager.Instance.DonePuzzle();
             StartCoroutine(CloseSequence());
         }
 
