@@ -145,6 +145,18 @@ namespace SUNSET16.Core
         {
             SetDoorState(DoorState.Normal);
         }
+        else if (targetSceneName == "Server2RoomScene" &&
+                DayManager.Instance.CurrentPhase == DayPhase.Morning &&
+                DayManager.Instance.CurrentDay == 4)
+        {
+            SetDoorState(DoorState.Normal);
+        }
+        else if (targetSceneName == "LittleBoilerRoomScene" &&
+                DayManager.Instance.CurrentPhase == DayPhase.Morning &&
+                DayManager.Instance.CurrentDay == 5)
+        {
+            SetDoorState(DoorState.Normal);
+        }
         else
         {
             SetDoorState(DoorState.Locked);
