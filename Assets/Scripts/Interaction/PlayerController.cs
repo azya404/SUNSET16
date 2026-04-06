@@ -60,6 +60,7 @@ namespace SUNSET16.Core
         [SerializeField] [Range(0f, 1f)] private float footstepVolume = 0.6f;
         [SerializeField] private float footstepCooldown = 0.2f;
         private float lastFootstepTime = -1f;
+        private float _baseMoveSpeed;
 
         void Awake()
         {
@@ -83,6 +84,7 @@ namespace SUNSET16.Core
             rb.freezeRotation = true; //dont spin on collision
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous; //prevents phasing thru walls at high speed
             hasAnimator = animator != null;
+            _baseMoveSpeed = moveSpeed;
 
             Debug.Log("[PLAYERCONTROLLER] Initialized");
         }
@@ -103,6 +105,15 @@ namespace SUNSET16.Core
             if (hasAnimator)
             {
                 UpdateAnimations();
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftShift) || (Input.GetKey(KeyCode.LeftShift) && (moveSpeed == _baseMoveSpeed)))
+            {
+                moveSpeed = 2 * moveSpeed;
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                moveSpeed = moveSpeed / 2;
             }
         }
 

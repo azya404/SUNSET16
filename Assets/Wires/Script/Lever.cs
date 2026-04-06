@@ -71,10 +71,9 @@ public class Lever : MonoBehaviour, IPointerClickHandler
     {
         yield return StartCoroutine(PlayAndWait(clip_success, audioSource_success));
 
-        DOLOSManager.Instance.taskCompleteCount++;
-
         if (level.taskInteraction != null)
         {
+            DOLOSManager.Instance.taskCompleteCount++;
             level.taskInteraction.CloseOverlay();
             DOLOSManager.Instance.TriggerAnnouncement();
         }
@@ -88,7 +87,6 @@ public class Lever : MonoBehaviour, IPointerClickHandler
                 DialogueUIManager.Instance.UnlockEntry("usb_albert_death");
             }
         }
-
     }
 
         private IEnumerator PlayWrongSequence()
