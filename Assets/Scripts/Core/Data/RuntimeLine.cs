@@ -24,6 +24,7 @@ namespace SUNSET16.Core
         public bool sendDelay = true;
 
         public int delayRepeats;
+
         public float autoAdvanceDelay = 0f;
 
         public List<RuntimeChoice> choices;
@@ -36,7 +37,11 @@ namespace SUNSET16.Core
         public bool repeat;
 
         public bool repeated;
+
         public string loreEntry;
+
         public bool switchToDOLOS;
+
+        public bool glitch;
     }
 }

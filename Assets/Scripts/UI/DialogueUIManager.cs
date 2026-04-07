@@ -56,6 +56,9 @@ namespace SUNSET16.UI
         [SerializeField] private TMP_Text dialogueBodyText;
         [SerializeField] private Sprite   messagebox;
         [SerializeField] private Sprite   playerMessagebox;
+        [SerializeField] private Material glitchMaterial;
+        [SerializeField] private GameObject offlineNotification;
+        [SerializeField] private TextMeshProUGUI offlineText;
 
         [Header("Controls")]
         [SerializeField] private GameObject advanceButton;     // "▶ Continue" — visible after typewriter finishes
@@ -330,6 +333,9 @@ namespace SUNSET16.UI
                 computerGlitch.material = Instantiate(computerGlitch.material);
                 computerGlitch.material.SetFloat("_Intensity", 0f);
 
+                offlineNotification = dialogueParent.transform.GetChild(14).gameObject;
+                offlineText = offlineNotification.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+                offlineNotification.SetActive(false);
 
                 if (PlayerController.Instance != null)
                     PlayerController.Instance.LockMovement(true);
@@ -839,6 +845,12 @@ namespace SUNSET16.UI
                     message = Instantiate(AlbertMessage, dialogueParent.transform);
                 else
                     message = Instantiate(DOLOSMessage, dialogueParent.transform);
+                if (line.glitch)
+                {
+                    Debug.Log("Glitchy message");
+                    message.transform.GetChild(1).GetComponent<Image>().material = Instantiate(glitchMaterial);
+                    message.transform.GetChild(1).GetComponent<Image>().material.SetFloat("_Intensity", 1f);
+                }
                 _messages.Add(message);
                 message.transform.localPosition = messagePos;
                 dialogueBodyText = message.GetComponentInChildren<TextMeshProUGUI>();
@@ -856,17 +868,6 @@ namespace SUNSET16.UI
                     speakerPortrait.enabled = line.portrait != null;
                 }
 
-                if (line.advanceToLine == -1)
-                {
-                    _isResponding = false;
-                    if (closeImage != null) closeImage.color = _baseColor;
-                    if (!chatOpen)
-                        if (chatButtonImage != null) chatButtonImage.color = _baseColor;
-                    if (chatOpen)
-                        if (loreButtonImage != null) loreButtonImage.color = _baseColor;
-                    clickDisabled = false;
-                }
-
                 //hide controls while the typewriter is doing its thing
                 if (advanceButton != null) advanceButton.SetActive(false);
                 HideAllChoiceButtons();
@@ -876,6 +877,24 @@ namespace SUNSET16.UI
                 yield return _typewriterCoroutine;
                 _typewriterCoroutine = null;*/
                 dialogueBodyText.text = line.text;
+
+                if (line.advanceToLine == -1)
+                {
+                    _isResponding = false;
+                    if (closeImage != null) closeImage.color = _baseColor;
+                    if (!chatOpen)
+                        if (chatButtonImage != null) chatButtonImage.color = _baseColor;
+                    if (chatOpen)
+                        if (loreButtonImage != null) loreButtonImage.color = _baseColor;
+                    clickDisabled = false;
+                    yield return new WaitForSeconds(2);
+                    if (_isDOLOS)
+                        offlineText.text = "Terminal has been terminated";
+                    else
+                        offlineText.text = "Albert has gone offline";
+                    offlineNotification.SetActive(true);
+                    audioSource.PlayOneShot(msgGet);
+                }
             }
             else if (line.text == "" && line.advanceToLine == -1)
             {
@@ -885,6 +904,13 @@ namespace SUNSET16.UI
                 if (chatOpen)
                     if (loreButtonImage != null) loreButtonImage.color = _baseColor;
                 clickDisabled = false;
+                yield return new WaitForSeconds(2);
+                    if (_isDOLOS)
+                        offlineText.text = "Terminal has been terminated";
+                    else
+                        offlineText.text = "Albert has gone offline";
+                    offlineNotification.SetActive(true);
+                    audioSource.PlayOneShot(msgGet);
             }
 
             ShowControlsForCurrentLine();

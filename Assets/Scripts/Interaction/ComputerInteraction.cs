@@ -348,7 +348,8 @@ namespace SUNSET16.Interaction
                     repeat           = dl.repeat,
                     repeated         = false,
                     loreEntry        = dl.loreEntry,
-                    switchToDOLOS    = dl.switchToDOLOS
+                    switchToDOLOS    = dl.switchToDOLOS,
+                    glitch           = dl.glitch
                 };
 
                 if (dl.choices != null && dl.choices.Count > 0)

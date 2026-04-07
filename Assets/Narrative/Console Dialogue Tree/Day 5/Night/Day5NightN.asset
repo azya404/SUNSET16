@@ -31,6 +31,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: What are you talking about, Andy?
@@ -52,6 +53,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: 
@@ -69,6 +71,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "I don\u2019t know what you\u2019re \u2014 1011010101010001010#%&*!#@^*!&@#^"
@@ -81,6 +84,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 1
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "\u2026talking about. Have you been taking your medications? You are not
@@ -100,6 +104,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Err- Err- I think\u2026 I\u2019m all that\u2019s left of who Albert was.
@@ -113,6 +118,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: I am Albert. Am I Albert?
@@ -125,6 +131,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: (*&#@$(*&$@---
@@ -145,6 +152,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 1
   - speakerName: Albert
     portrait: {fileID: 0}
     text: You need to *&#$*($&#$(*&#@$@
@@ -157,6 +165,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 1
   - speakerName: Albert
     portrait: {fileID: 0}
     text: (!*(!*@#$&@*#(-LEAVE-(*$&12337831*#
@@ -169,6 +178,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 1
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "[Error: Digital Construct Prototype\u2013018 has crashed. Sending diagnostic
@@ -182,6 +192,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: Technician Andromeda Vega.
@@ -194,6 +205,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 1
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: "You have been engaging with unauthorized data access. You have been skipping
@@ -212,6 +224,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: Correct. The Albert Fiske construct is a proprietary asset of the DOLOS
@@ -225,6 +238,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: Your line of interactions has caused instabilities in its core programming.
@@ -237,6 +251,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: "But\u2026"
@@ -249,6 +264,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: Failure is to be expected when in the pursuit of permanence.
@@ -265,6 +281,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: "Everything within the DOLOS Corporation\u2014myself included\u2014has
@@ -280,6 +297,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: You, Andromeda Vega, are still valuable to the DOLOS Corporation.
@@ -292,6 +310,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: "Your potential contributions towards the \u201CErebus Initiative\u201D
@@ -309,6 +328,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: Human flesh is limiting. Metabolic limit. Temperature sensitivity. Physical
@@ -323,6 +343,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: "All of these things can be bypassed if the human mind were preserved on
@@ -341,6 +362,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: To be a part of something greater than yourself.
@@ -358,6 +380,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: "So instead, you\u2019ll go back to Earth?\nYou have nothing there."
@@ -370,6 +393,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: "Your parents are dead. Your fianc\xE9 left you for another woman. You
@@ -383,6 +407,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: "But on the SUNSET16\u2026 you have everything you could ever desire.\nYou
@@ -396,6 +421,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: If you take your pills, you can forget this ever happened and continue
@@ -409,6 +435,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: "My offer for salvation won\u2019t last forever, so what will your choice
@@ -427,6 +454,7 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0
   - speakerName: DOLOS
     portrait: {fileID: 0}
     text: "You\u2019ll regret this."
@@ -439,3 +467,4 @@ MonoBehaviour:
     repeated: 0
     loreEntry: 
     switchToDOLOS: 0
+    glitch: 0

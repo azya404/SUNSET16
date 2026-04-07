@@ -2226,6 +2226,7 @@ MonoBehaviour:
   dialogueBodyText: {fileID: 0}
   messagebox: {fileID: 21300000, guid: b6187bffc65373f4eb5f27afbb79b5ed, type: 3}
   playerMessagebox: {fileID: 21300000, guid: ec2b25c2cfdf7354b9c0965b0acfdbe5, type: 3}
+  glitchMaterial: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
   advanceButton: {fileID: 0}
   closeButtonContainer: {fileID: 0}
   closeButton: {fileID: 0}
