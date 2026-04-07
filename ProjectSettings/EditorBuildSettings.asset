@@ -44,4 +44,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Server2RoomScene.unity
     guid: b21f96491f75dde4fa3cb13c49dfcbb3
+  - enabled: 1
+    path: Assets/Scenes/LittleBoilerRoomScene.unity
+    guid: 4c2cccc5f29dbb1448aaa54e28046bf6
   m_configObjects: {}
