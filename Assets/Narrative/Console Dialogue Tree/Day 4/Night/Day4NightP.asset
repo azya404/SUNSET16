@@ -16,8 +16,8 @@ MonoBehaviour:
   lines:
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: Evening, Andy. The logs show that the circuits by ____ are back online.
-      How was it down there?
+    text: Evening, Andy. The logs show that the circuits by server room 1A are back
+      online. How was it down there?
     sendDelay: 0
     delayRepeats: 0
     autoAdvanceDelay: 0

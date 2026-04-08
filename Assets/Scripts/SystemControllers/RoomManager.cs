@@ -140,7 +140,7 @@ namespace SUNSET16.Core
                 Debug.Log($"[ROOMMANAGER] Player spawned at {spawnPos}");
             }
 
-            if (roomSceneName.Contains("Bedroom"))
+            if (roomSceneName.Contains("Bedroom") && (PillStateManager.Instance.GetPillsRefusedCount() < 3))
                 DOLOSManager.Instance.TriggerAnnouncement();
 
             OnRoomLoaded?.Invoke(roomSceneName);

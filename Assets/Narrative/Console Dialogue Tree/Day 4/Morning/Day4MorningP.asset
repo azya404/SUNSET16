@@ -16,8 +16,8 @@ MonoBehaviour:
   lines:
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: Morning, Andy. DOLOS has you at the server room today. The circuit box
-      over there short-circuited last night.
+    text: Morning, Andy. DOLOS has you at server room 1A today. The circuit box over
+      there short-circuited last night.
     sendDelay: 0
     delayRepeats: 0
     autoAdvanceDelay: 0.5
