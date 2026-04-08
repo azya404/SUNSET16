@@ -28,11 +28,11 @@ DOLOS and movement-lock blocking handled upstream by InteractionSystem
 replaces TechDemo/MirrorInteraction.cs
 */
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SUNSET16.Core;
 using SUNSET16.UI;
-using System.Collections.Generic;
 
 namespace SUNSET16.Interaction
 {
@@ -77,6 +77,12 @@ namespace SUNSET16.Interaction
         [Header("Settings")]
         [SerializeField] private string interactionPrompt = "Press E to look in mirror";
         [SerializeField] private List<string> lockedPrompt = new List<string>();
+
+        [Header("Day 2 Mirror Cutscene")]
+        [Tooltip("BedroomCutscenePlayer GO in BedroomScene — shared with PodInteraction.")]
+        [SerializeField] private BedroomCutscenePlayer cutscenePlayer;
+        [Tooltip("Video filename in StreamingAssets to play before the mirror overlay on Day 2 Morning.")]
+        [SerializeField] private string day2MirrorVideo = "CutscenePillBreak.mp4";
 
         private bool              _isOverlayActive    = false;
         private InteractionSystem _interactionSystem;
@@ -138,10 +144,47 @@ namespace SUNSET16.Interaction
                 return;
             }
 
+            // Day 2 morning only: play cutscene before the mirror overlay appears
+            if (cutscenePlayer != null
+                && DayManager.Instance != null
+                && DayManager.Instance.CurrentDay   == 2
+                && DayManager.Instance.CurrentPhase == DayPhase.Morning)
+            {
+                StartCoroutine(Day2MirrorSequence());
+                return;
+            }
+
             ShowOverlay();
         }
 
         public string GetInteractionPrompt() => PillStateManager.Instance.HasTakenPillToday() ? lockedPrompt[Random.Range(0, lockedPrompt.Count)] : interactionPrompt;
+
+        // ─── Day 2 Mirror Cutscene ────────────────────────────────────────────────
+
+        private IEnumerator Day2MirrorSequence()
+        {
+            // lock re-trigger immediately before any yield
+            _isOverlayActive = true;
+            _interactionSystem?.SetInteractionEnabled(false);
+            if (PlayerController.Instance != null)
+                PlayerController.Instance.LockMovement(true);
+
+            // fade to black via PodFadeCanvas (Sort Order 11, always active — reliable)
+            yield return StartCoroutine(cutscenePlayer.FadeOut());
+
+            // play cutscene — screen is already black, reveals video, plays to end, returns to black
+            yield return StartCoroutine(cutscenePlayer.PlayVideo(day2MirrorVideo));
+
+            // reset flag so ShowOverlay can set it cleanly
+            _isOverlayActive = false;
+
+            // ShowOverlay: activates mirrorOverlayCanvas, resets pillChoiceFade to alpha 0,
+            // locks movement, triggers audio crossfade — overlay is behind PodFadeCanvas (black)
+            ShowOverlay();
+
+            // fade in via PodFadeCanvas (1→0) to reveal the mirror overlay beneath
+            yield return StartCoroutine(cutscenePlayer.FadeIn());
+        }
 
         // ─── Button Callbacks (wired via Inspector OnClick) ───────────────────────
 
@@ -270,7 +313,7 @@ namespace SUNSET16.Interaction
 
             _isOverlayActive = false;
 
-            //disable interaction FIRST — before unlocking movement to avoid any physics re-trigger
+            //re-enable interaction FIRST — before unlocking movement to avoid any physics re-trigger
             if (_interactionSystem != null)
                 _interactionSystem.SetInteractionEnabled(true);
             else
