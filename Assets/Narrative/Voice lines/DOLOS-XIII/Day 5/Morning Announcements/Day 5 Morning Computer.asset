@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Day 5 Morning Computer
   m_EditorClassIdentifier: 
   announcementId: dolos_day5_morning_computer
-  text: 'Your tasks have been assigned.
+  text: 'Your assigned tasks are located in BOILER ROOM 1B.
 
-    Complete these assignments efficiently,
-    as per your contractual obligation.'
+    Complete these assignments
+    efficiently, as per your contractual obligation.'
   fontSize: 20
   audioClip: {fileID: 8300000, guid: 270ad57535c886a4298c70a0c3729d18, type: 3}
   displayDuration: 7

@@ -27,6 +27,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Your efficiency ratings have been stellar these past 5 years. DOLOS is
@@ -43,6 +45,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Exactly. Now, need a refresher on wiring protocols, or are you good on
@@ -63,6 +67,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "It\u2019s the standard grid-based alignment. Connect the correctly coloured
@@ -80,6 +86,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "You\u2019ve done this a thousand times. Still, check the manual\u2019s
@@ -93,9 +101,11 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: "Any other questions before you head out to the boiler room? My shift at
+    text: "Any other questions before you head out to boiler room 1A? My shift at
       Section M-67 doesn\u2019t begin for another 20."
     sendDelay: 1
     delayRepeats: 0
@@ -122,6 +132,8 @@ MonoBehaviour:
     repeat: 1
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "The usual. Monitoring the nuclear core output. All graphs and numbers.
@@ -135,6 +147,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Space has a way of changing your perception of time. But that\u2019s why
@@ -147,6 +161,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Trust me, it\u2019s better here than anywhere else on the planet."
@@ -158,6 +174,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Haha, yeah. The Aegis Collar is a precise system. The DOLOS Corporation
@@ -170,6 +188,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Our job is to wear the collar, not to accessorize it.
@@ -181,6 +201,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_aegis_collar
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Alright, I\u2019ll let you get to it. DOLOS loves a completed log."
@@ -192,3 +214,5 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
