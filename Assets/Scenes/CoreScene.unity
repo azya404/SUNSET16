@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 70302523}
   - component: {fileID: 70302522}
   - component: {fileID: 70302521}
+  - component: {fileID: 70302525}
   m_Layer: 5
   m_Name: HotbarPanel
   m_TagString: Untagged
@@ -270,6 +271,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &70302525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70302520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15798d36d34e4bd4c999f0ee3fc77902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterSprite: {fileID: 1777587247}
 --- !u!1 &271476227
 GameObject:
   m_ObjectHideFlags: 0
@@ -2227,6 +2241,8 @@ MonoBehaviour:
   messagebox: {fileID: 21300000, guid: b6187bffc65373f4eb5f27afbb79b5ed, type: 3}
   playerMessagebox: {fileID: 21300000, guid: ec2b25c2cfdf7354b9c0965b0acfdbe5, type: 3}
   glitchMaterial: {fileID: 2100000, guid: 6024102707ffc8e479fe5d4ae4aa29a2, type: 2}
+  offlineNotification: {fileID: 0}
+  offlineText: {fileID: 0}
   advanceButton: {fileID: 0}
   closeButtonContainer: {fileID: 0}
   closeButton: {fileID: 0}
