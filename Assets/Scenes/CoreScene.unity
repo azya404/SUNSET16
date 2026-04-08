@@ -284,6 +284,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSprite: {fileID: 1777587247}
+  textboxCanvasGroup: {fileID: 1649257882}
+  promptText: {fileID: 271476229}
+  fadeDuration: 0.2
 --- !u!1 &271476227
 GameObject:
   m_ObjectHideFlags: 0
@@ -2128,6 +2131,7 @@ GameObject:
   - component: {fileID: 1649257879}
   - component: {fileID: 1649257881}
   - component: {fileID: 1649257880}
+  - component: {fileID: 1649257882}
   m_Layer: 5
   m_Name: HotbarBkg
   m_TagString: Untagged
@@ -2193,6 +2197,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649257878}
   m_CullTransparentMesh: 1
+--- !u!225 &1649257882
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649257878}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1667455039
 GameObject:
   m_ObjectHideFlags: 0
