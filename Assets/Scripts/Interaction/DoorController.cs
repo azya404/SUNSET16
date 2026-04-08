@@ -102,6 +102,10 @@ namespace SUNSET16.Core
                 {
                     SetDoorState(DoorState.Locked);
                 }
+            else if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
+                {
+                    SetDoorState(DoorState.Locked);
+                }
             else
                 {
                     SetDoorState(DoorState.Normal);     
@@ -126,7 +130,7 @@ namespace SUNSET16.Core
         {
             SetDoorState(DoorState.Normal);
         }
-        else if (targetSceneName == "LabScene" &&
+        else if (targetSceneName == "LabScene" && //Sect
                 DayManager.Instance.CurrentPhase == DayPhase.Night &&
                 DayManager.Instance.CurrentDay == 2)
         {
@@ -138,7 +142,7 @@ namespace SUNSET16.Core
         {
             SetDoorState(DoorState.Normal);
         }
-        else if (targetSceneName == "ServerRoomScene" &&
+        else if (targetSceneName == "ServerRoomScene" && //Sect
                 DayManager.Instance.CurrentPhase == DayPhase.Night &&
                 DayManager.Instance.CurrentDay >= 3 &&
                 PillStateManager.Instance.GetPillsRefusedCount() == 2)
@@ -148,6 +152,13 @@ namespace SUNSET16.Core
         else if (targetSceneName == "Server2RoomScene" &&
                 DayManager.Instance.CurrentPhase == DayPhase.Morning &&
                 DayManager.Instance.CurrentDay == 4)
+        {
+            SetDoorState(DoorState.Normal);
+        }
+        else if (targetSceneName == "CrematoriumScene" && //Sect
+                DayManager.Instance.CurrentPhase == DayPhase.Night &&
+                DayManager.Instance.CurrentDay >= 4 &&
+                PillStateManager.Instance.GetPillsRefusedCount() == 3)
         {
             SetDoorState(DoorState.Normal);
         }
