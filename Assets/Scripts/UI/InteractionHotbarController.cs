@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 using SUNSET16.Core;
 
 namespace SUNSET16.UI
@@ -20,6 +21,10 @@ namespace SUNSET16.UI
         [SerializeField] private float       fadeDuration = 0.2f;
 
         private Coroutine _fadeCoroutine;
+        // tracks every zone the player is currently inside
+        // key = the InteractionSystem that owns the zone, value = its prompt text
+        // last entry added wins for display — only fades out when dict is fully empty
+        private Dictionary<InteractionSystem, string> _activePrompts = new Dictionary<InteractionSystem, string>();
 
         protected override void Awake()
         {
@@ -32,7 +37,6 @@ namespace SUNSET16.UI
             if (promptText == null)
                 Debug.LogError("[HOTBAR] promptText is not assigned in the Inspector.");
 
-            // textbox starts invisible
             if (textboxCanvasGroup != null)
             {
                 textboxCanvasGroup.alpha          = 0f;
@@ -41,16 +45,43 @@ namespace SUNSET16.UI
             }
         }
 
-        public void ShowPrompt(string text)
+        // called by InteractionSystem when player enters a trigger zone
+        public void RegisterPrompt(InteractionSystem source, string text)
+        {
+            _activePrompts[source] = text;
+            UpdateDisplay(text);
+        }
+
+        // called by InteractionSystem when player exits a trigger zone or interaction is disabled
+        public void UnregisterPrompt(InteractionSystem source)
+        {
+            _activePrompts.Remove(source);
+
+            if (_activePrompts.Count == 0)
+            {
+                FadeTo(0f);
+            }
+            else
+            {
+                // still inside at least one other zone...like show whichever is still active
+                string remaining = GetLastPrompt();
+                UpdateDisplay(remaining);
+            }
+        }
+
+        private void UpdateDisplay(string text)
         {
             if (promptText != null)
                 promptText.text = text;
             FadeTo(1f);
         }
 
-        public void HidePrompt()
+        private string GetLastPrompt()
         {
-            FadeTo(0f);
+            string last = "";
+            foreach (var entry in _activePrompts)
+                last = entry.Value;
+            return last;
         }
 
         private void FadeTo(float targetAlpha)
@@ -71,7 +102,7 @@ namespace SUNSET16.UI
             while (elapsed < fadeDuration)
             {
                 elapsed += Time.deltaTime;
-                textboxCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsed /fadeDuration);
+                textboxCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsed / fadeDuration);
                 yield return null;
             }
             textboxCanvasGroup.alpha = targetAlpha;
