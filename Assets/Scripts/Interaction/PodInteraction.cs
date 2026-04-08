@@ -23,10 +23,10 @@ TODO: night computer session requirement before sleep (design not finalised yet)
 TODO: different prompts/behaviour based on pill state (off-pill insomnia flavour text?)
 */
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using SUNSET16.Core;
 using SUNSET16.UI;
-using System.Collections.Generic;
 
 namespace SUNSET16.Interaction
 {
@@ -40,6 +40,14 @@ namespace SUNSET16.Interaction
         [Header("Timing")]
         [Tooltip("How long the screen holds at black between fade out and fade in.")]
         [SerializeField] private float sleepHoldDuration = 0.5f;
+
+        [Header("Sleep Cutscenes")]
+        [Tooltip("BedroomCutscenePlayer GO in BedroomScene — shared with MirrorInteraction.")]
+        [SerializeField] private BedroomCutscenePlayer cutscenePlayer;
+        [Tooltip("Video filename in StreamingAssets to play when sleeping Day 1 Night -> Day 2 Morning.")]
+        [SerializeField] private string day1ToDay2Video = "CutsceneDay2Morning.mp4";
+        [Tooltip("Video filename in StreamingAssets to play when sleeping Day 2 Night -> Day 3 Morning.")]
+        [SerializeField] private string day2ToDay3Video = "CutsceneDay3Morning.mp4";
 
         [Header("Prompts")]
         [SerializeField] private string sleepPrompt = "Sleep";
@@ -100,11 +108,24 @@ namespace SUNSET16.Interaction
             // fade to black
             yield return StartCoroutine(Fade(0f, 1f));
 
+            // capture day before advancing — needed to pick the right cutscene
+            int dayBefore = DayManager.Instance.CurrentDay;
+
             // advance phase - Night -> next day Morning (gates enforced inside AdvancePhase)
             DayManager.Instance.AdvancePhase();
 
             // Reset Dialogue
             DialogueUIManager.Instance.ResetDialogue();
+
+            // play sleep cutscene if one is configured for this transition (screen is already black)
+            if (cutscenePlayer != null)
+            {
+                string videoFile = dayBefore == 1 ? day1ToDay2Video
+                                 : dayBefore == 2 ? day2ToDay3Video
+                                 : null;
+                if (!string.IsNullOrEmpty(videoFile))
+                    yield return StartCoroutine(cutscenePlayer.Play(videoFile));
+            }
 
             // Reload Room
             RoomManager.Instance.LoadRoom(RoomManager.Instance.GetCurrentRoomName());
