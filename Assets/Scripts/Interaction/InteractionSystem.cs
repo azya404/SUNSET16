@@ -18,7 +18,6 @@ TODO: glowing outline on objects when youre in range
 TODO: multiple interaction types per object (like E to open, F to examine)
 */
 using UnityEngine;
-using TMPro;
 using SUNSET16.UI;
 
 namespace SUNSET16.Core
@@ -28,10 +27,6 @@ namespace SUNSET16.Core
     {
         [Header("Interaction Settings")]
         [SerializeField] private KeyCode interactionKey = KeyCode.E;
-
-        [Header("Prompt UI")]
-        [SerializeField] private GameObject promptCanvas;
-        [SerializeField] private TMP_Text promptText;
         [SerializeField] private string defaultPrompt = "Press E to interact";
 
         [Header("Detection")]
@@ -44,32 +39,24 @@ namespace SUNSET16.Core
 
         void Awake()
         {
-            //grab whatever IInteractable is on this same object (door, computer, etc)
             interactable = GetComponent<IInteractable>();
             if (interactable == null)
             {
                 Debug.LogError($"[INTERACTIONSYSTEM] {gameObject.name} requires IInteractable component!");
-                enabled = false; //no point running if theres nothing to interact with
+                enabled = false;
                 return;
             }
-            //optional - not all interactables need proximity feedback (mirrors, computers, etc)
             proximityResponder = GetComponent<IProximityResponder>();
-            //auto-fix if someone forgot to set the collider as a trigger
             triggerCollider = GetComponent<Collider2D>();
             if (!triggerCollider.isTrigger)
             {
                 Debug.LogWarning($"[INTERACTIONSYSTEM] {gameObject.name}: Collider2D should be a trigger! Auto-fixing...");
                 triggerCollider.isTrigger = true;
             }
-            if (promptCanvas != null)
-            {
-                promptCanvas.SetActive(false); //hide prompt until player walks up
-            }
         }
 
         void Update()
         {
-            //dont let the player interact if theyre locked (mid-puzzle, mid-task, etc)
             if (playerInRange && Input.GetKeyDown(interactionKey))
             {
                 if (PlayerController.Instance != null && PlayerController.Instance.IsMovementLocked())
@@ -78,8 +65,6 @@ namespace SUNSET16.Core
                     return;
                 }
 
-                // Block world-object interactions during DOLOS announcements
-                // (player can still move, but cannot trigger interactables)
                 if (DOLOSManager.Instance != null && DOLOSManager.Instance.IsAnnouncementActive)
                 {
                     Debug.Log($"[INTERACTIONSYSTEM] DOLOS active — interaction with {gameObject.name} blocked");
@@ -92,11 +77,9 @@ namespace SUNSET16.Core
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            //unity calls physics callbacks even on disabled MonoBehaviours
-            //guard here so disabling the component fully suppresses interaction
             if (!enabled) return;
 
-            if (other.CompareTag("Player")) //only react to the player, not random colliders
+            if (other.CompareTag("Player"))
             {
                 playerInRange = true;
                 ShowPrompt();
@@ -122,6 +105,7 @@ namespace SUNSET16.Core
         {
             if (interactable != null)
             {
+                InteractionHotbarController.Instance?.ForceHide();
                 interactable.Interact();
                 Debug.Log($"[INTERACTIONSYSTEM] Interacted with {gameObject.name}");
             }
@@ -129,53 +113,37 @@ namespace SUNSET16.Core
 
         void ShowPrompt()
         {
-            if (promptCanvas != null)
-            {
-                promptCanvas.SetActive(true);
-                if (promptText != null)
-                {
-                    //ask the interactable what its prompt should say (each one can be different)
-                    string customPrompt = interactable.GetInteractionPrompt();
-                    promptText.text = string.IsNullOrEmpty(customPrompt) ? defaultPrompt : customPrompt;
-                }
-            }
+            string text = interactable.GetInteractionPrompt();
+            if (string.IsNullOrEmpty(text)) text = defaultPrompt;
+            InteractionHotbarController.Instance?.RegisterPrompt(this, text);
         }
 
         void HidePrompt()
         {
-            if (promptCanvas != null)
-            {
-                promptCanvas.SetActive(false);
-            }
+            InteractionHotbarController.Instance?.UnregisterPrompt(this);
         }
 
-        //other scripts (like MirrorInteraction) call this to turn interaction on/off
-        //disabling also hides the prompt and resets playerInRange so it doesnt get stuck
         public void SetInteractionEnabled(bool enabled)
         {
             this.enabled = enabled;
 
             if (!enabled)
             {
-                HidePrompt();
+                InteractionHotbarController.Instance?.UnregisterPrompt(this);
                 playerInRange = false;
             }
         }
 
         public void UpdatePrompt(string newPrompt)
         {
-            if (promptText != null)
-            {
-                promptText.text = newPrompt;
-            }
+            if (playerInRange)
+                InteractionHotbarController.Instance?.RegisterPrompt(this, newPrompt);
         }
 
         public void RefreshPrompt()
         {
             if (playerInRange)
-            {
                 ShowPrompt();
-            }
         }
     }
 }
