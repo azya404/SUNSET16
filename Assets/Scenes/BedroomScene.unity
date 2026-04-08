@@ -322,8 +322,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 727391113}
-  promptText: {fileID: 2085716962}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -1220,8 +1218,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 727391113}
-  promptText: {fileID: 2085716962}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -4910,7 +4906,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CONSUME PILL
+  m_text: INJECT PILL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9df054ea77c9988449566b74e2f329b0, type: 2}
   m_sharedMaterial: {fileID: 9107269574892711767, guid: 9df054ea77c9988449566b74e2f329b0, type: 2}
@@ -6357,6 +6353,10 @@ MonoBehaviour:
   ambientSoftenVolume: 0.3
   ambientSoftenDuration: 1
   interactionPrompt: Press E to look in mirror
+  lockedPrompt:
+  - "\"I\u2019ve already done what I was supposed to here.\""
+  - '"I have better things to do right now."'
+  - "\"I\u2019ll be back here tomorrow.\""
 --- !u!114 &965765350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6370,8 +6370,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 727391113}
-  promptText: {fileID: 2085716962}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -8212,8 +8210,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 727391113}
-  promptText: {fileID: 2085716962}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -8233,8 +8229,11 @@ MonoBehaviour:
   fadePanel: {fileID: 829849846}
   fadeDuration: 1
   sleepHoldDuration: 0.5
-  sleepPrompt: Sleep
-  wrongPhasePrompt: I should wait until tonight...
+  sleepPrompt: Press E to sleep
+  wrongPhasePrompt:
+  - "\"Can\u2019t sleep now. Got work to do.\""
+  - '"I got better things to do than go back into my pod."'
+  - '"I can rest once my tasks are done for the day."'
 --- !u!1 &1365030099
 GameObject:
   m_ObjectHideFlags: 0
@@ -9007,8 +9006,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4292985632
+  m_fontColor: {r: 0.1254902, g: 0.7647059, b: 0.88235295, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -9203,7 +9202,10 @@ MonoBehaviour:
   - {fileID: 1383701519}
   - {fileID: 1368300093}
   interactionPrompt: Press E to use computer
-  lockedPrompt: Maybe I should check the mirror first...
+  lockedPrompt:
+  - '"I could probably do that later. I should head towards the mirror."'
+  - '"I heard the dispenser go off near the mirror. I should check that out."'
+  - '"Still need to do my daily morning routine at the mirror."'
 --- !u!114 &1695215910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9217,8 +9219,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 727391113}
-  promptText: {fileID: 2085716962}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2

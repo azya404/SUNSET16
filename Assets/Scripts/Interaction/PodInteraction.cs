@@ -26,6 +26,7 @@ using System.Collections;
 using UnityEngine;
 using SUNSET16.Core;
 using SUNSET16.UI;
+using System.Collections.Generic;
 
 namespace SUNSET16.Interaction
 {
@@ -42,7 +43,7 @@ namespace SUNSET16.Interaction
 
         [Header("Prompts")]
         [SerializeField] private string sleepPrompt = "Sleep";
-        [SerializeField] private string wrongPhasePrompt = "I should wait until tonight...";
+        [SerializeField] private List<string> wrongPhasePrompt = new List<string>();
 
         private InteractionSystem _interactionSystem;
         private bool _isSleeping;
@@ -82,7 +83,7 @@ namespace SUNSET16.Interaction
         public string GetInteractionPrompt()
         {
             if (DayManager.Instance != null && DayManager.Instance.CurrentPhase != DayPhase.Night)
-                return wrongPhasePrompt;
+                return wrongPhasePrompt[Random.Range(0, wrongPhasePrompt.Count)];
 
             return sleepPrompt;
         }

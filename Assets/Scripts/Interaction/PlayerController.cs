@@ -110,11 +110,11 @@ namespace SUNSET16.Core
                 UpdateAnimations();
             }
 
-            if (Input.GetKeyDown(KeyCode.LeftShift) || (Input.GetKey(KeyCode.LeftShift) && (moveSpeed == _baseMoveSpeed)))
+            if (Input.GetKeyDown(KeyCode.LeftShift) || (Input.GetKey(KeyCode.LeftShift) && (moveSpeed <= _baseMoveSpeed)))
             {
                 moveSpeed = 2 * moveSpeed;
             }
-            if (Input.GetKeyUp(KeyCode.LeftShift))
+            if (Input.GetKeyUp(KeyCode.LeftShift) || (Input.GetKey(KeyCode.LeftShift) && (moveSpeed > (2 *_baseMoveSpeed))))
             {
                 moveSpeed = moveSpeed / 2;
             }

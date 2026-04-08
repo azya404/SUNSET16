@@ -32,6 +32,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using SUNSET16.Core;
 using SUNSET16.UI;
+using System.Collections.Generic;
 
 namespace SUNSET16.Interaction
 {
@@ -75,6 +76,7 @@ namespace SUNSET16.Interaction
 
         [Header("Settings")]
         [SerializeField] private string interactionPrompt = "Press E to look in mirror";
+        [SerializeField] private List<string> lockedPrompt = new List<string>();
 
         private bool              _isOverlayActive    = false;
         private InteractionSystem _interactionSystem;
@@ -139,7 +141,7 @@ namespace SUNSET16.Interaction
             ShowOverlay();
         }
 
-        public string GetInteractionPrompt() => interactionPrompt;
+        public string GetInteractionPrompt() => PillStateManager.Instance.HasTakenPillToday() ? lockedPrompt[Random.Range(0, lockedPrompt.Count)] : interactionPrompt;
 
         // ─── Button Callbacks (wired via Inspector OnClick) ───────────────────────
 
@@ -270,7 +272,7 @@ namespace SUNSET16.Interaction
 
             //disable interaction FIRST — before unlocking movement to avoid any physics re-trigger
             if (_interactionSystem != null)
-                _interactionSystem.SetInteractionEnabled(false);
+                _interactionSystem.SetInteractionEnabled(true);
             else
                 Debug.LogError("[MIRROR] _interactionSystem is NULL — prompt will not be hidden. Check MirrorInteract GO has InteractionSystem component.");
 
