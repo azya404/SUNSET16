@@ -45,6 +45,28 @@ namespace SUNSET16.UI
             }
         }
 
+        private void Start()
+        {
+            if (RoomManager.Instance != null)
+                RoomManager.Instance.OnRoomUnloaded += HandleRoomUnloaded;
+            else
+                Debug.LogWarning("[HOTBAR] RoomManager not found — scene transition cleanup will not work.");
+        }
+
+        private void OnDestroy()
+        {
+            if (RoomManager.Instance != null)
+                RoomManager.Instance.OnRoomUnloaded -= HandleRoomUnloaded;
+        }
+
+        // called by RoomManager when a room scene unloads
+        // OnTriggerExit2D doesnt fire reliably during scene unloads so any
+        // prompt still showing at that point would get stuck without this
+        private void HandleRoomUnloaded(string roomName)
+        {
+            ForceHide();
+        }
+
         // called by InteractionSystem when player enters a trigger zone
         public void RegisterPrompt(InteractionSystem source, string text)
         {
@@ -66,6 +88,26 @@ namespace SUNSET16.UI
                 // still inside at least one other zone...like show whichever is still active
                 string remaining = GetLastPrompt();
                 UpdateDisplay(remaining);
+            }
+        }
+
+        // instantly hides the textbox and clears all active zones
+        // called by InteractionSystem.Interact() the moment E is pressed
+        // so the hotbar is gone before any overlay starts opening
+        public void ForceHide()
+        {
+            _activePrompts.Clear();
+
+            if (_fadeCoroutine != null)
+            {
+                StopCoroutine(_fadeCoroutine);
+                _fadeCoroutine = null;
+            }
+
+            if (textboxCanvasGroup != null)
+            {
+                textboxCanvasGroup.alpha          = 0f;
+                textboxCanvasGroup.blocksRaycasts = false;
             }
         }
 
