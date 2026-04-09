@@ -8679,7 +8679,10 @@ MonoBehaviour:
   day1ToDay2Video: CutsceneDay2Morning.mp4
   day2ToDay3Video: CutsceneDay3Morning.mp4
   sleepPrompt: Press E to sleep
-  wrongPhasePrompt: []
+  wrongPhasePrompt:
+  - "Can\u2019t sleep now. Got work to do."
+  - I got better things to do than go back into my pod.
+  - I can rest once my tasks are done for the day.
 --- !u!1 &1365030099
 GameObject:
   m_ObjectHideFlags: 0
