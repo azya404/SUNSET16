@@ -411,6 +411,7 @@ namespace SUNSET16.UI
             _buttonPage        = 1;
             chatOpen          = true;
             _isDOLOS           = false;
+            announcementTriggered = false;
             _lines.Clear();
             foreach (var msg in _messages) if (msg != null) Destroy(msg);
             _messages.Clear();
