@@ -31,6 +31,7 @@ using UnityEngine.Video;
 using SUNSET16.Core;
 using SUNSET16.UI;
 using UnityEngine.UIElements;
+using System.Collections.Generic;
 
 namespace SUNSET16.Interaction
 {
@@ -67,7 +68,7 @@ namespace SUNSET16.Interaction
 
         [Header("Settings")]
         [SerializeField] private string interactionPrompt = "Press E to use computer";
-        [SerializeField] private string lockedPrompt = "Maybe I should check the mirror first...";
+        [SerializeField] private List<string> lockedPrompt = new List<string>();
 
         private InteractionSystem _interactionSystem;
         private CRTBarrelWarpController _barrelWarp;
@@ -142,7 +143,7 @@ namespace SUNSET16.Interaction
         }
 
         // returns locked hint when mirror not done, normal prompt when ready
-        public string GetInteractionPrompt() => _mirrorCompleted ? interactionPrompt : lockedPrompt;
+        public string GetInteractionPrompt() => _mirrorCompleted ? interactionPrompt : lockedPrompt[Random.Range(0, lockedPrompt.Count)];
 
         // --- Computer sequence -------------------------------------------------------
 
@@ -348,7 +349,8 @@ namespace SUNSET16.Interaction
                     repeat           = dl.repeat,
                     repeated         = false,
                     loreEntry        = dl.loreEntry,
-                    switchToDOLOS    = dl.switchToDOLOS
+                    switchToDOLOS    = dl.switchToDOLOS,
+                    glitch           = dl.glitch
                 };
 
                 if (dl.choices != null && dl.choices.Count > 0)

@@ -229,15 +229,15 @@ public class Slot : MonoBehaviour,
         {
             level.check_connected(level.blue_node_1, "Blue", level.blue_node_2);
         }
-        else if (wire_id == "Purple")
+        else if (s.wire_id == "Purple")
         {
             level.check_connected(level.purple_node_1, "Purple", level.purple_node_2);
         }
-        else if (wire_id == "White")
+        else if (s.wire_id == "White")
         {
             level.check_connected(level.white_node_1, "White", level.white_node_2);
         }
-        else if (wire_id == "Black")
+        else if (s.wire_id == "Black")
         {
             level.check_connected(level.black_node_1, "Black", level.black_node_2);
         }

@@ -740,8 +740,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 102862558}
-  promptText: {fileID: 1258702053}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -970,8 +968,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 102862558}
-  promptText: {fileID: 1258702053}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -1045,8 +1041,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 102862558}
-  promptText: {fileID: 1258702053}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -4080,6 +4074,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 285985400}
     m_Modifications:
+    - target: {fileID: 101262397314266724, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
+      propertyPath: taskInteraction
+      value: 
+      objectReference: {fileID: 312986707}
     - target: {fileID: 6696849821335015716, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
       propertyPath: m_Name
       value: Medium_level3

@@ -16,8 +16,8 @@ MonoBehaviour:
   lines:
   - speakerName: Albert
     portrait: {fileID: 0}
-    text: Evening, Andy. The logs show that the circuits by ____ are back online.
-      How was it down there?
+    text: Evening, Andy. The logs show that the circuits by server room 1A are back
+      online. How was it down there?
     sendDelay: 0
     delayRepeats: 0
     autoAdvanceDelay: 0
@@ -30,6 +30,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "That\u2019s the spirit. An orderly day is a good day."
@@ -41,6 +43,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Are you sure? It seems like something is on your mind that\u2019s unrelated
@@ -58,6 +62,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Anyhow, any burning questions you wanted to ask me before curfew?
@@ -83,6 +89,8 @@ MonoBehaviour:
     repeat: 1
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Last I checked, passenger rotations were delayed indefinitely. Corporate
@@ -95,6 +103,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: However, that was a few months ago.
@@ -106,6 +116,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "There\u2019s no need to pay it any mind now. Focusing on the main task
@@ -118,6 +130,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Ah. The DOLOS-XIII Management System is\u2026 well, it\u2019s nothing
@@ -130,6 +144,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "The system is responsible for coordinating nearly everything on the ship.
@@ -143,6 +159,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: 'Of course, the company had previous iterations of the Management System.
@@ -155,6 +173,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: DOLOS-XIII, however, is the first designed for a fully habitable environment
@@ -167,6 +187,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "So far, it\u2019s been doing a flawless job."
@@ -182,6 +204,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: A few, yes.
@@ -193,6 +217,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "They run larger installations, like the Callisto mining colonies. I\u2019ve
@@ -206,6 +232,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Some corporations have tried to replicate DOLOS\u2019s source code. Competitors,
@@ -218,6 +246,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "They\u2019ve all failed."
@@ -229,6 +259,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "It\u2019s too complex\u2026 too unique. There are bogus online conspiracies
@@ -246,6 +278,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Don\u2019t quote me on that, haha. The point of all that is, the DOLOS
@@ -258,6 +292,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "It\u2019s why Erebus Holdings acquired the DOLOS Corporation in the first
@@ -270,6 +306,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: albert_acquired
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "My daughter\u2026? Her name was R-Ro-Ros\u2026"
@@ -281,6 +319,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: '&*^@#*&^'
@@ -292,6 +332,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 1
   - speakerName: Albert
     portrait: {fileID: 0}
     text: (*^@$#^*#&^!$$^
@@ -303,6 +345,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 1
   - speakerName: Albert
     portrait: {fileID: 0}
     text: '[Error: Message goes beyond current parameters]'
@@ -314,6 +358,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Apologies, my computer was malfunctioning for a moment. I had to run a
@@ -326,6 +372,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Everything is in the clear now, Andromeda. What were we talking about?
@@ -345,6 +393,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Fair enough.
@@ -356,6 +406,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: I did?
@@ -367,6 +419,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "I\u2019ve never had a daughter."
@@ -378,6 +432,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Are you sure you\u2019re not hallucinating things? The capsule injections
@@ -394,6 +450,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: "Excellent to hear. It\u2019s part of your contract to take them. You should
@@ -406,6 +464,8 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0
   - speakerName: Albert
     portrait: {fileID: 0}
     text: Night, Andy.
@@ -417,3 +477,5 @@ MonoBehaviour:
     repeat: 0
     repeated: 0
     loreEntry: 
+    switchToDOLOS: 0
+    glitch: 0

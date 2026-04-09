@@ -4392,9 +4392,9 @@ Transform:
   m_GameObject: {fileID: 576708879}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.04, y: -4.41, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: -26.5, y: -3.9, z: 0}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 650321836}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6998,11 +6998,11 @@ MonoBehaviour:
   isBedroomDoor: 0
   requiresAllTasksComplete: 0
   isMorningGated: 0
-  doorLight: {fileID: 1530619600}
-  doorSprite: {fileID: 1249687306}
-  lightSpriteRed: {fileID: 962071492}
-  lightSpriteYellow: {fileID: 308557036}
-  lightSpriteGreen: {fileID: 1551628920}
+  doorLight: {fileID: 1909198244}
+  doorSprite: {fileID: 1420453568}
+  lightSpriteRed: {fileID: 2044897120}
+  lightSpriteYellow: {fileID: 544144443}
+  lightSpriteGreen: {fileID: 668644038}
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -11834,11 +11834,11 @@ MonoBehaviour:
   isBedroomDoor: 0
   requiresAllTasksComplete: 0
   isMorningGated: 0
-  doorLight: {fileID: 1530619600}
-  doorSprite: {fileID: 1249687306}
-  lightSpriteRed: {fileID: 962071492}
-  lightSpriteYellow: {fileID: 308557036}
-  lightSpriteGreen: {fileID: 1551628920}
+  doorLight: {fileID: 427015823}
+  doorSprite: {fileID: 955014259}
+  lightSpriteRed: {fileID: 226103107}
+  lightSpriteYellow: {fileID: 1215974909}
+  lightSpriteGreen: {fileID: 1859825192}
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -12972,9 +12972,9 @@ Transform:
   m_GameObject: {fileID: 1713227723}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 28.75, y: -4.41, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 28.3, y: -3.9, z: 0}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 650321836}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

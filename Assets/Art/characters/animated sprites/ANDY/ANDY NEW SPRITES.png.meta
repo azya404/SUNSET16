@@ -70,9 +70,9 @@ TextureImporter:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
-    resizeAlgorithm: 0
+    resizeAlgorithm: 1
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -176,9 +176,9 @@ TextureImporter:
       name: andy_walk_down_4
       rect:
         serializedVersion: 2
-        x: 1381
+        x: 1370
         y: 3399
-        width: 240
+        width: 262
         height: 478
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -198,7 +198,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 37
-        y: 2740
+        y: 2737
         width: 262
         height: 478
       alignment: 7
@@ -219,9 +219,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 488
-        y: 2739
+        y: 2737
         width: 262
-        height: 474
+        height: 478
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -240,7 +240,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 882
-        y: 2735
+        y: 2737
         width: 262
         height: 478
       alignment: 7
@@ -261,9 +261,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1360
-        y: 2739
+        y: 2737
         width: 262
-        height: 474
+        height: 478
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
