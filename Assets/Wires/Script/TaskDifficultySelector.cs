@@ -29,13 +29,14 @@ public class TaskDifficultySelector : MonoBehaviour
             return;
         }
 
-        bool pillTaken = PillStateManager.Instance.HasTakenPillToday();
+        bool pillTaken = PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay) == PillChoice.Taken;
 
         if (taskIndex == 1)
         {
             if (pillTaken)
             {
                 set_content_active(easyContent, true);
+
             }
             else
             {
