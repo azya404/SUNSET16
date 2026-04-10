@@ -3551,10 +3551,24 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1045765583}
     m_Modifications:
+    - target: {fileID: 3069765510989719711, guid: 5811922616595034c9ea6b9bb1614c97, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
+      objectReference: {fileID: 0}
     - target: {fileID: 4841320090009294539, guid: 5811922616595034c9ea6b9bb1614c97, type: 3}
       propertyPath: taskInteraction
       value: 
       objectReference: {fileID: 86459409}
+    - target: {fileID: 6378879065002187068, guid: 5811922616595034c9ea6b9bb1614c97, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7530835098948603026, guid: 5811922616595034c9ea6b9bb1614c97, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3642,6 +3656,14 @@ PrefabInstance:
     - target: {fileID: 7759647974033207281, guid: 5811922616595034c9ea6b9bb1614c97, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863276532855160781, guid: 5811922616595034c9ea6b9bb1614c97, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863276532855160781, guid: 5811922616595034c9ea6b9bb1614c97, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3743,6 +3765,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4181692284605049863, guid: e64447825e04d6e498665d523ba6629b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689291006503966038, guid: e64447825e04d6e498665d523ba6629b, type: 3}
+      propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7820471663832835684, guid: e64447825e04d6e498665d523ba6629b, type: 3}

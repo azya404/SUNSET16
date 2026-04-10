@@ -1147,6 +1147,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7906801429424779053, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2479,6 +2483,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5268812289777938323, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5455047519442290615, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2674,6 +2682,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3399801910783100762, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2704,6 +2716,10 @@ PrefabInstance:
     - target: {fileID: 2130280525911773322, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_Name
       value: Hard_level4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268812289777938323, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5455047519442290615, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_Pivot.x
@@ -3778,6 +3794,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7906801429424779053, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4106,6 +4126,10 @@ PrefabInstance:
     - target: {fileID: 2154383392907694552, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: m_Name
       value: Easy_level4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3399801910783100762, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

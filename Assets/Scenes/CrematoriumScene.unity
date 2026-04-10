@@ -2903,6 +2903,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Puzzle_3
       objectReference: {fileID: 0}
+    - target: {fileID: 2451576997141256838, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5247926308968007607, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
       propertyPath: puzzleInteraction
       value: 

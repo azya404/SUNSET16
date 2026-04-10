@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 289d6a1b8ac37af43a966145458c86a9
+guid: 00655fe778b9a2f46a643829db03d351
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,22 +123,22 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Boiler_Sign
+      name: Untitled_Artwork-2 (1)_0
       rect:
         serializedVersion: 2
-        x: 127
-        y: 1553
-        width: 277
-        height: 158
+        x: 323
+        y: 421
+        width: 202
+        height: 94
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dbcc6986250dd0d4c92f97de9e8f858c
-      internalID: 1671083742
+      spriteID: ffe7b301f58473742b1757a89f1afb64
+      internalID: 1262024143
       vertices: []
       indices: 
       edges: []
@@ -154,7 +154,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Boiler_Sign: 1671083742
+      Untitled_Artwork-2 (1)_0: 1262024143
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
