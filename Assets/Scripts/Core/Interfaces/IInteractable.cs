@@ -29,5 +29,6 @@ namespace SUNSET16.Core
     {
         void Interact(); //called when player presses E while in range - each object does its own thing here
         string GetInteractionPrompt(); //returns the text to show like "Press E to open" or "Press E to examine" etc
+        bool GetLocked();
     }
 }

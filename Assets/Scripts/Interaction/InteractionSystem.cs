@@ -103,9 +103,11 @@ namespace SUNSET16.Core
 
         void Interact()
         {
+            
             if (interactable != null)
             {
-                InteractionHotbarController.Instance?.ForceHide();
+                if (!interactable.GetLocked())
+                    InteractionHotbarController.Instance?.ForceHide();
                 interactable.Interact();
                 Debug.Log($"[INTERACTIONSYSTEM] Interacted with {gameObject.name}");
             }

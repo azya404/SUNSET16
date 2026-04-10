@@ -57,6 +57,7 @@ namespace SUNSET16.Interaction
         [Header("Prompts")]
         [SerializeField] private string sleepPrompt = "Sleep";
         [SerializeField] private List<string> wrongPhasePrompt = new List<string>();
+        [SerializeField] private List<string> noNightChatPrompt = new List<string>();
 
         private InteractionSystem _interactionSystem;
         private bool _isSleeping;
@@ -90,6 +91,12 @@ namespace SUNSET16.Interaction
                 return;
             }
 
+            if (DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+            {
+                Debug.Log("[POD] Night chat not completed - sleep blocked");
+                return;
+            }
+
             StartCoroutine(SleepSequence());
         }
 
@@ -98,7 +105,18 @@ namespace SUNSET16.Interaction
             if (DayManager.Instance != null && DayManager.Instance.CurrentPhase != DayPhase.Night)
                 return wrongPhasePrompt[Random.Range(0, wrongPhasePrompt.Count)];
 
+            if (DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                return noNightChatPrompt[Random.Range(0, noNightChatPrompt.Count)];
+
             return sleepPrompt;
+        }
+
+        public bool GetLocked()
+        {
+            if (DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null)
+                return DialogueUIManager.Instance.HasCompletedTodayNightSequence == false;
+            else
+                return DayManager.Instance.CurrentPhase != DayPhase.Night;
         }
 
         // --- Sleep Sequence ----------------------------------------------------------

@@ -145,6 +145,11 @@ namespace SUNSET16.Interaction
         // returns locked hint when mirror not done, normal prompt when ready
         public string GetInteractionPrompt() => _mirrorCompleted ? interactionPrompt : lockedPrompt[Random.Range(0, lockedPrompt.Count)];
 
+        public bool GetLocked()
+        {
+            return _mirrorCompleted == false;
+        }
+
         // --- Computer sequence -------------------------------------------------------
 
         private IEnumerator ComputerSequence()

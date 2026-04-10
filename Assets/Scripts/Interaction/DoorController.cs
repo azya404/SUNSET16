@@ -24,10 +24,10 @@ TODO: PlayDoorOpen sfx is commented out - need the audio asset
 TODO: HUD locked message display (needs HUDManager which doesnt exist yet)
 */
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using SUNSET16.UI;
-using Unity.VisualScripting;
 
 namespace SUNSET16.Core
 {
@@ -49,6 +49,9 @@ namespace SUNSET16.Core
         [Header("Task Room")]
         [Tooltip("Block exit until all tasks are complete (use on BoilerRoom hallway door).")]
         [SerializeField] private bool requiresAllTasksComplete = false;
+        
+        [Header("Puzzle Room")]
+        [SerializeField] private bool requiresPuzzleComplete = false;
 
         [Header("Bedroom Door Gating")]
         [Tooltip("Enable morning/night dialogue gates on the bedroom exit door.")]
@@ -60,6 +63,15 @@ namespace SUNSET16.Core
         [SerializeField] private GameObject lightSpriteRed;    // LightR.png GO — shown when locked
         [SerializeField] private GameObject lightSpriteYellow; // YELLOW.png GO — shown when accessible
         [SerializeField] private GameObject lightSpriteGreen;  // LightG.png GO — shown when player in zone
+
+        [Header("Interaction Prompts")]
+        [SerializeField] private List<string> mirrorIncomplete = new List<string>();
+        [SerializeField] private List<string> computerIncomplete = new List<string>();
+        [SerializeField] private List<string> shouldSleep = new List<string>();
+        [SerializeField] private List<string> hallwayLockedDay = new List<string>();
+        [SerializeField] private List<string> hallwayLockedNightPill = new List<string>();
+        [SerializeField] private List<string> hallwayLockedNightNoPill = new List<string>();
+        [SerializeField] private List<string> taskIncomplete = new List<string>();
 
         [Header("Animation")]
         [SerializeField] private Sprite[] animationFrames; // drag DoorAnim_0 to DoorAnim_7 in order
@@ -73,6 +85,9 @@ namespace SUNSET16.Core
         private static readonly Color ColourLocked     = Color.red;
         private static readonly Color ColourAccessible = new Color(1f, 0.5f, 0f); // orange
         private static readonly Color ColourInZone     = Color.green;
+        private List<string> taskRooms = new List<string> {"boiler room 1A", "the navigation room", "the infirmary", "server room 1A", "boiler room 1B"};
+        private int guideToRoom;
+        
 
         private InteractionSystem interactionSystem;
 
@@ -156,6 +171,7 @@ namespace SUNSET16.Core
                 else
                 {
                     SetDoorState(DoorState.Locked); //After Done Puzzle
+                    //SetDoorState(DoorState.Normal);
                 }
         else if (targetSceneName == "Server2RoomScene" &&
                 DayManager.Instance.CurrentPhase == DayPhase.Morning &&
@@ -172,6 +188,7 @@ namespace SUNSET16.Core
                 else
                 {
                     SetDoorState(DoorState.Locked); //After Done Puzzle
+                    //SetDoorState(DoorState.Normal);
                 }
             } 
         else if (targetSceneName == "LittleBoilerRoomScene" &&
@@ -182,7 +199,7 @@ namespace SUNSET16.Core
         }
         else
         {
-            SetDoorState(DoorState.Normal);
+            SetDoorState(DoorState.Locked);
         }
             
             
@@ -257,6 +274,9 @@ namespace SUNSET16.Core
                 return;
             }
 
+            if (requiresPuzzleComplete && PuzzleManager.Instance != null && !PuzzleManager.Instance.completedPuzzle)
+                return;
+
             // bedroom exit gates: pill check, morning dialogue, night dialogue
             if (isMorningGated && DayManager.Instance != null)
             {
@@ -293,9 +313,7 @@ namespace SUNSET16.Core
                 //     but verify DialogueUIManager.Start() re-subscribes after scene reload if needed
                 //   - Off-pill path: HiddenRoom puzzle completion triggers IsNightRestrictionActive
                 //     for non-bedroom doors — confirm this still chains correctly into multi-day
-                if (DayManager.Instance.CurrentPhase == DayPhase.Night &&
-                    DialogueUIManager.Instance != null &&
-                    !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                if (DayManager.Instance.CurrentPhase == DayPhase.Night)
                 {
                     ShowLockedMessage("I should finish up before leaving.");
                     return;
@@ -308,23 +326,64 @@ namespace SUNSET16.Core
 
         public string GetInteractionPrompt()
         {
+            if (isMorningGated && DayManager.Instance != null)
+            {
+                if (DayManager.Instance.CurrentPhase == DayPhase.Morning && PillStateManager.Instance != null && !PillStateManager.Instance.HasTakenPillToday())
+                    return mirrorIncomplete[Random.Range(0, mirrorIncomplete.Count)];
+
+                if (DialogueUIManager.Instance != null && ((DayManager.Instance.CurrentPhase == DayPhase.Morning && !DialogueUIManager.Instance.HasCompletedTodaySequence) || 
+                    (DayManager.Instance.CurrentPhase == DayPhase.Night && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)))
+                    return computerIncomplete[Random.Range(0, computerIncomplete.Count)];
+
+                if (DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                    return shouldSleep[Random.Range(0, shouldSleep.Count)];
+            }
+
+            if ((requiresAllTasksComplete && TaskManager.Instance != null && !TaskManager.Instance.AreAllTasksCompleted) 
+                || (requiresPuzzleComplete && PuzzleManager.Instance != null && !PuzzleManager.Instance.completedPuzzle))
+                return taskIncomplete[Random.Range(0, taskIncomplete.Count)];
+            
             //prompt changes based on whether you can actually use the door
             if (isLocked)
-                return "Locked";
+            {
+                if (DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Morning)
+                {
+                    guideToRoom = Random.Range(0, 2);
+                    if (guideToRoom == 1)
+                        return "\"I need to go do my tasks in " + taskRooms[DayManager.Instance.CurrentDay - 1] + "\"";
+                    return hallwayLockedDay[Random.Range(0, hallwayLockedDay.Count)];
+                }
+                else if ((PillStateManager.Instance != null && (PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay) == PillChoice.Taken)) || PuzzleManager.Instance.completedPuzzle)
+                    return hallwayLockedNightPill[Random.Range(0, hallwayLockedNightPill.Count)];
+                else
+                    return hallwayLockedNightNoPill[Random.Range(0, hallwayLockedNightNoPill.Count)];
+            }
 
-            if (isHiddenRoomDoor && HiddenRoomManager.Instance != null)
+            /*if (isHiddenRoomDoor && HiddenRoomManager.Instance != null)
             {
                 if (!HiddenRoomManager.Instance.IsRoomDiscovered(hiddenRoomID))
-                    return "Locked"; //havent found this room yet
+                    return hallwayLockedDay[Random.Range(0, hallwayLockedDay.Count)]; //havent found this room yet
 
-                if (PillStateManager.Instance != null && PillStateManager.Instance.HasTakenPillToday())
+                if (PillStateManager.Instance != null && PillStateManager.Instance.GetPillChoice(DayManager.Instance.CurrentDay) == PillChoice.Taken)
                     return "Too drowsy..."; //took the pill so no exploring tonight
-            }
+            }*/
 
             if (!isBedroomDoor && IsNightRestrictionActive())
                 return "Too tired...";
 
             return "Press E to open";
+        }
+
+        public bool GetLocked()
+        {
+            if (RoomManager.Instance != null && RoomManager.Instance.GetCurrentRoomName().Contains("Bedroom"))
+                return isMorningGated;
+            else if (requiresAllTasksComplete && TaskManager.Instance != null)
+                return TaskManager.Instance.AreAllTasksCompleted == false;
+            else if (requiresPuzzleComplete && PuzzleManager.Instance != null)
+                return PuzzleManager.Instance.completedPuzzle == false;
+            else
+                return currentState == DoorState.Locked;
         }
 
         // ─── Animation ────────────────────────────────────────────────────────────
@@ -432,6 +491,7 @@ namespace SUNSET16.Core
 
         // ─── Room Transition ──────────────────────────────────────────────────────
 
+        [ContextMenu("Go into room")]
         void TransitionToRoom()
         {
             if (AudioManager.Instance != null)
