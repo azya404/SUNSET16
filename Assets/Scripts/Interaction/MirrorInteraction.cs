@@ -178,7 +178,8 @@ namespace SUNSET16.Interaction
             yield return StartCoroutine(cutscenePlayer.FadeOut());
 
             // play cutscene — screen is already black, reveals video, plays to end, returns to black
-            yield return StartCoroutine(cutscenePlayer.PlayVideo(day2MirrorVideo));
+            // Day 2 mirror cutscene is NOT skippable — it carries narrative weight
+            yield return StartCoroutine(cutscenePlayer.PlayVideo(day2MirrorVideo, false));
 
             // reset flag so ShowOverlay can set it cleanly
             _isOverlayActive = false;

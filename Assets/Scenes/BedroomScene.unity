@@ -301,6 +301,7 @@ MonoBehaviour:
   hiddenRoomID: 
   isBedroomDoor: 1
   requiresAllTasksComplete: 0
+  requiresPuzzleComplete: 0
   isMorningGated: 1
   doorLight: {fileID: 0}
   doorSprite: {fileID: 0}
@@ -319,6 +320,10 @@ MonoBehaviour:
   - "\"It\u2019s getting late, I should get some sleep.\""
   - "\"I need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my curfew.\""
   - "\"I\u2019m too tired to be doing this right now.\""
+  hallwayLockedDay: []
+  hallwayLockedNightPill: []
+  hallwayLockedNightNoPill: []
+  taskIncomplete: []
   animationFrames: []
   frameDelay: 0.07
 --- !u!114 &29539509
@@ -4015,7 +4020,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e8df7786a2780d4c8419175936c6ffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frames:
+  idleFrames:
   - {fileID: 21300000, guid: 8b3bf2e9482e3a1458e061984bb58089, type: 3}
   - {fileID: 21300000, guid: 802b18819f02cd440b8285395ea994c6, type: 3}
   - {fileID: 21300000, guid: 119471826989f79458660858c2b2d5ff, type: 3}
@@ -4040,6 +4045,31 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d19e1d7a3521aee47a709ea44919447a, type: 3}
   - {fileID: 21300000, guid: 4cba983cdf2e2414f915c4f701de05b9, type: 3}
   - {fileID: 21300000, guid: 42f2cdba592bc3b468436a815f44f09e, type: 3}
+  proximityFrames:
+  - {fileID: 21300000, guid: 21da65dc1c234b1488f77b1e9b00ef7c, type: 3}
+  - {fileID: 21300000, guid: 6f6d2363bcd207044ba36f0f88b49417, type: 3}
+  - {fileID: 21300000, guid: 51d5c94c37455384b8a6f56e3c5c905c, type: 3}
+  - {fileID: 21300000, guid: 0a53f86c08c321348a99930946e872a7, type: 3}
+  - {fileID: 21300000, guid: eb8dc7ee6a1d1c549a039d36d7e08917, type: 3}
+  - {fileID: 21300000, guid: 562e4c5001df2d748a324f2acf58305e, type: 3}
+  - {fileID: 21300000, guid: 21937ad05f1a63e4bbad97c8c1b39ded, type: 3}
+  - {fileID: 21300000, guid: 672d80e0f07f4ca4491b81f228c5932d, type: 3}
+  - {fileID: 21300000, guid: d20396514fb382e4ca89a8ab094ffd3d, type: 3}
+  - {fileID: 21300000, guid: a134ea1699febd346a27681bacf4fa36, type: 3}
+  - {fileID: 21300000, guid: b5f5a8d6adacb1d4bb84d198723b4316, type: 3}
+  - {fileID: 21300000, guid: a590cce5c0ac8f446896e5758392e393, type: 3}
+  - {fileID: 21300000, guid: 22c302ebf1cdfbf4aad7dd0e47396a00, type: 3}
+  - {fileID: 21300000, guid: 508174932d7bbf948a3310e17eb599b4, type: 3}
+  - {fileID: 21300000, guid: 0c77588d2f72ca5489328fb3a1c871ae, type: 3}
+  - {fileID: 21300000, guid: 312a87f2f82e86b41a65370634317334, type: 3}
+  - {fileID: 21300000, guid: b04359605893e2a4aadd0765ea81e070, type: 3}
+  - {fileID: 21300000, guid: e90050131d81c344eb9bb0f0b034b809, type: 3}
+  - {fileID: 21300000, guid: 12a8ab862042d2f4593d2e72b5247e8d, type: 3}
+  - {fileID: 21300000, guid: f48ba0d8798268e46aab0ea8d2538910, type: 3}
+  - {fileID: 21300000, guid: 4966387dcca993746ac24ce84e17fcaa, type: 3}
+  - {fileID: 21300000, guid: b0ba1945a168e4541a8d53afca2ad03f, type: 3}
+  - {fileID: 21300000, guid: 6014db4b1360ba04580ebfa69bfd4217, type: 3}
+  - {fileID: 21300000, guid: d7a0c2c37cbbd684c997593e61683992, type: 3}
   fps: 1
 --- !u!1 &616821390
 GameObject:
