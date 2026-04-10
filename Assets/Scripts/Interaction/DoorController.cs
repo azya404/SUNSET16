@@ -103,15 +103,19 @@ namespace SUNSET16.Core
         {
             interactionSystem = GetComponent<InteractionSystem>();
 
-            // Exit door: state set entirely by ending — skip all normal targetSceneName logic
+            // Exit door: override state only when ending is determined.
+            // Good ending → unlocked (player can escape).
+            // Bad ending → permanently sealed.
+            // Undetermined → fall through to normal targetSceneName logic below
+            //   so the door behaves as a regular isMorningGated door during normal gameplay.
             if (isExitDoor)
             {
                 string ending = PillStateManager.Instance != null
                     ? PillStateManager.Instance.DetermineEnding()
                     : "Undetermined";
-                // Good ending = escape is possible; anything else = door stays sealed
-                SetDoorState(ending == "Good" ? DoorState.Normal : DoorState.Locked);
-                return;
+                if (ending == "Good") { SetDoorState(DoorState.Normal); return; }
+                if (ending == "Bad")  { SetDoorState(DoorState.Locked); return; }
+                // "Undetermined" — continue to normal targetSceneName logic below
             }
 
             //if its a hidden room door, ask HiddenRoomManager what state its in
@@ -363,14 +367,18 @@ namespace SUNSET16.Core
 
         public string GetInteractionPrompt()
         {
-            // Exit door prompt: good ending = escape bark, otherwise = sealed
-            if (isExitDoor)
+            // Exit door prompts — only override when ending is determined.
+            // Undetermined falls through to normal isMorningGated prompts below.
+            if (isExitDoor && PillStateManager.Instance != null)
             {
-                if (PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Good")
+                string ending = PillStateManager.Instance.DetermineEnding();
+                if (ending == "Good")
                     return goodEndingExitBark.Count > 0
                         ? goodEndingExitBark[Random.Range(0, goodEndingExitBark.Count)]
                         : "I should at least try to leave the ship...right?";
-                return isLocked ? "The door is sealed." : "Press E to open";
+                if (ending == "Bad")
+                    return "The door is sealed.";
+                // "Undetermined" — fall through to normal isMorningGated prompts below
             }
 
             if (isMorningGated && DayManager.Instance != null)
