@@ -47,4 +47,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LittleBoilerRoomScene.unity
     guid: 4c2cccc5f29dbb1448aaa54e28046bf6
+  - enabled: 1
+    path: Assets/Scenes/GoodEndingScene.unity
+    guid: b1b1623f574f24942a3797fe69cf6840
   m_configObjects: {}
