@@ -1,21 +1,11 @@
 /*
 the main menu - first thing the player sees when they open the game
-has buttons for New Game, Continue, Settings, Credits
+has buttons for New Game, Settings, Credits
 
-new game will check if a save already exists and if so shows a
-confirmation popup so they dont accidentally overwrite their progress
-if no save exists it just goes straight to the bedroom scene
+New Game always starts a fresh save — no confirmation dialog,
+no continue button. SaveManager.ClearSaveData() runs every time.
 
-continue loads CoreScene which has all the managers and they
-auto-init and pull save data from PlayerPrefs
-
-settings just toggles the settings panel on/off and credits
-doesnt do anything yet lol
-
-TODO: credits scene
-TODO: transition animation when going from menu to game
-
-FADE SEQUENCE (on New Game / Continue / Credits click):
+FADE SEQUENCE (on New Game / Credits click):
   Phase 1 - menu_character + menu_space_bg fade out simultaneously
             buttons are disabled immediately, still visible
   Phase 2 - menu_stars + ButtonGroup fade out simultaneously
@@ -25,7 +15,6 @@ FADE SEQUENCE (on New Game / Continue / Credits click):
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 using System.Collections;
 using SUNSET16.Core;
 
@@ -35,17 +24,11 @@ namespace SUNSET16.UI
     {
         [Header("Buttons")]
         [SerializeField] private Button newGameButton;
-        [SerializeField] private Button continueButton;
         [SerializeField] private Button settingsButton;
         [SerializeField] private Button creditsButton;
 
         [Header("Panels")]
         [SerializeField] private GameObject settingsPanel;
-        [SerializeField] private GameObject newGameConfirmPanel;
-
-        [Header("Confirmation Dialog")]
-        [SerializeField] private Button confirmNewGameButton;
-        [SerializeField] private Button cancelNewGameButton;
 
         [Header("Audio")]
         [SerializeField] private AudioSource sfxSource;
@@ -67,9 +50,8 @@ namespace SUNSET16.UI
         [SerializeField] private float phase3Duration = 0.8f;
 
         [Header("Scene Names")]
-        [SerializeField] private string newGameSceneName  = "CoreScene";
-        [SerializeField] private string creditsSceneName  = "NeutralCreditsScene";
-        private const string CORE_SCENE_NAME = "CoreScene";
+        [SerializeField] private string newGameSceneName = "CoreScene";
+        [SerializeField] private string creditsSceneName = "NeutralCreditsScene";
 
         // set by NeutralCreditsSceneController before returning to this scene
         public static bool ReturnedFromCredits = false;
@@ -84,22 +66,9 @@ namespace SUNSET16.UI
             SettingsManager.Instance.Initialize();
             SaveManager.Instance.Initialize();
 
-            //wire up all the button click listeners
             newGameButton.onClick.AddListener(OnNewGameClicked);
-            continueButton.onClick.AddListener(OnContinueClicked);
             settingsButton.onClick.AddListener(OnSettingsClicked);
             creditsButton.onClick.AddListener(OnCreditsClicked);
-
-            //if theres a confirmation panel set up, wire those buttons too and hide it
-            if (newGameConfirmPanel != null)
-            {
-                confirmNewGameButton.onClick.AddListener(OnConfirmNewGame);
-                cancelNewGameButton.onClick.AddListener(OnCancelNewGame);
-                newGameConfirmPanel.SetActive(false);
-            }
-
-            //gray out the continue button if theres no save to load
-            continueButton.interactable = SaveManager.Instance.SaveExists;
 
             if (settingsPanel != null)
                 settingsPanel.SetActive(false);
@@ -155,37 +124,8 @@ namespace SUNSET16.UI
         private void OnNewGameClicked()
         {
             sfxSource?.PlayOneShot(startButtonSFX);
-
-            if (SaveManager.Instance.SaveExists && newGameConfirmPanel != null)
-                newGameConfirmPanel.SetActive(true);
-            else
-                StartNewGame();
-        }
-
-        private void OnConfirmNewGame()
-        {
-            newGameConfirmPanel.SetActive(false);
-            sfxSource?.PlayOneShot(menuClickSFX);
-            StartNewGame();
-        }
-
-        private void OnCancelNewGame()
-        {
-            sfxSource?.PlayOneShot(menuClickSFX);
-            newGameConfirmPanel.SetActive(false);
-        }
-
-        private void StartNewGame()
-        {
             SaveManager.Instance.ClearSaveData();
             StartCoroutine(LayerFadeAndLoad(newGameSceneName));
-        }
-
-        private void OnContinueClicked()
-        {
-            sfxSource?.PlayOneShot(startButtonSFX);
-            Debug.Log("[MAINMENU] Continuing saved game");
-            StartCoroutine(LayerFadeAndLoad(CORE_SCENE_NAME));
         }
 
         private void OnSettingsClicked()
@@ -205,7 +145,6 @@ namespace SUNSET16.UI
         {
             // lock all buttons immediately — no mashing during fade
             newGameButton.interactable  = false;
-            continueButton.interactable = false;
             settingsButton.interactable = false;
             creditsButton.interactable  = false;
 
