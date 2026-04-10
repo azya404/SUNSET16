@@ -3509,6 +3509,10 @@ PrefabInstance:
       propertyPath: allSlots.Array.data[38]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5963885414661754780, guid: 3a502cd6140f01a40960a1725224e055, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7070728042704541794, guid: 3a502cd6140f01a40960a1725224e055, type: 3}
       propertyPath: m_Name
       value: Quzzle_1
