@@ -76,52 +76,81 @@ namespace SUNSET16.Core
             SaveManager.Instance.OnSaveDeleted += OnSaveDeleted;
             SaveManager.Instance.OnGameLoaded += OnGameLoaded;
 
-            //snap to the correct lighting state immediately (no transition on startup)
-            if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
+            //hook into room changes
+            if (RoomManager.Instance != null)
             {
-                ApplyDayLighting(instant: true);
+                RoomManager.Instance.OnRoomLoaded += OnRoomLoaded;
             }
-            else
-            {
-                ApplyNightLighting(instant: true);
-            }
+
+            //snap to the correct lighting state immediately
+            RefreshLightingForCurrentRoom(true);
 
             Debug.Log("[LIGHTINGCONTROLLER] Initialized");
         }
 
-        //save got deleted = fresh game, snap back to morning defaults
+        //save got deleted = fresh game, refresh lighting instantly
         private void OnSaveDeleted()
         {
-            ApplyDayLighting(instant: true);
-            Debug.Log("[LIGHTINGCONTROLLER] Lighting reset to Morning defaults");
+            RefreshLightingForCurrentRoom(true);
+            Debug.Log("[LIGHTINGCONTROLLER] Lighting reset after save deletion");
         }
 
-        //loaded a save - snap to whatever phase we loaded into without transition
-                private void OnGameLoaded()
+        //loaded a save - snap to correct room/phase lighting without transition
+        private void OnGameLoaded()
         {
-            if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
-            {
-                ApplyDayLighting(instant: true);
-            }
-            else
-            {
-                ApplyNightLighting(instant: true);
-            }
+            RefreshLightingForCurrentRoom(true);
             Debug.Log($"[LIGHTINGCONTROLLER] Lighting re-applied after load ({DayManager.Instance.CurrentPhase})");
         }
 
-        //phase changed during gameplay - smooth transition so it looks nice
+        //phase changed during gameplay - smooth transition
         private void OnPhaseChanged(DayPhase newPhase)
         {
-            switch (newPhase)
-            {
-                case DayPhase.Morning:
-                    ApplyDayLighting(instant: false); //smooth fade to warm
-                    break;
+            RefreshLightingForCurrentRoom(false);
+        }
 
-                case DayPhase.Night:
-                    ApplyNightLighting(instant: false); //smooth fade to cool blue
-                    break;
+        //room changed - snap/apply correct room lighting
+        private void OnRoomLoaded(string roomSceneName)
+        {
+            RefreshLightingForCurrentRoom(true);
+            Debug.Log($"[LIGHTINGCONTROLLER] Room lighting updated for {roomSceneName}");
+        }
+
+        private void RefreshLightingForCurrentRoom(bool instant)
+        {
+            string currentRoomScene = "";
+
+            if (RoomManager.Instance != null)
+            {
+                currentRoomScene = RoomManager.Instance.GetCurrentRoomName();
+            }
+
+            //force day lighting in SaverScene
+            if (currentRoomScene == "ServerRoomScene")
+            {
+                ApplyDayLighting(instant);
+                return;
+            }
+            if (currentRoomScene == "CrematoriumScene")
+            {
+                ApplyDayLighting(instant);
+                return;
+            }
+
+            //force night lighting in HallwayScene
+            if (currentRoomScene == "HallwayScene" && DayManager.Instance.CurrentPhase == DayPhase.Night)
+            {
+                ApplyNightLighting(instant);
+                return;
+            }
+
+            //all other rooms follow normal day phase
+            if (DayManager.Instance.CurrentPhase == DayPhase.Morning)
+            {
+                ApplyDayLighting(instant);
+            }
+            else
+            {
+                ApplyNightLighting(instant);
             }
         }
 
@@ -164,7 +193,9 @@ namespace SUNSET16.Core
         private void StartTransition(Color targetColor, float targetIntensity)
         {
             if (_transitionCoroutine != null)
+            {
                 StopCoroutine(_transitionCoroutine);
+            }
 
             _transitionCoroutine = StartCoroutine(TransitionLighting(targetColor, targetIntensity));
         }
@@ -225,6 +256,11 @@ namespace SUNSET16.Core
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.OnInitializationComplete -= Initialize;
+            }
+
+            if (RoomManager.Instance != null)
+            {
+                RoomManager.Instance.OnRoomLoaded -= OnRoomLoaded;
             }
         }
     }

@@ -156,6 +156,7 @@ namespace SUNSET16.Core
                 else
                 {
                     SetDoorState(DoorState.Locked); //After Done Puzzle
+                    //SetDoorState(DoorState.Normal);
                 }
         else if (targetSceneName == "Server2RoomScene" &&
                 DayManager.Instance.CurrentPhase == DayPhase.Morning &&
@@ -172,6 +173,7 @@ namespace SUNSET16.Core
                 else
                 {
                     SetDoorState(DoorState.Locked); //After Done Puzzle
+                    //SetDoorState(DoorState.Normal);
                 }
             } 
         else if (targetSceneName == "LittleBoilerRoomScene" &&
@@ -182,7 +184,7 @@ namespace SUNSET16.Core
         }
         else
         {
-            SetDoorState(DoorState.Normal);
+            SetDoorState(DoorState.Locked);
         }
             
             
