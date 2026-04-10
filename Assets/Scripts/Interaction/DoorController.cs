@@ -27,6 +27,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using SUNSET16.UI;
 
 namespace SUNSET16.Core
@@ -57,6 +58,12 @@ namespace SUNSET16.Core
         [Tooltip("Enable morning/night dialogue gates on the bedroom exit door.")]
         [SerializeField] private bool isMorningGated = false;
 
+        [Header("Exit Door Settings")]
+        [Tooltip("Mark this as the ship's exit door. Good ending: unlocked, loads GoodEndingScene. Bad/undetermined ending: permanently locked.")]
+        [SerializeField] private bool isExitDoor = false;
+        [Tooltip("Bark lines shown when player approaches in good ending state. E.g. 'I should at least try to leave the ship...right?'")]
+        [SerializeField] private List<string> goodEndingExitBark = new List<string>();
+
         [Header("Visual")]
         [SerializeField] private Light2D doorLight;
         [SerializeField] private SpriteRenderer doorSprite;
@@ -85,6 +92,7 @@ namespace SUNSET16.Core
         private static readonly Color ColourLocked     = Color.red;
         private static readonly Color ColourAccessible = new Color(1f, 0.5f, 0f); // orange
         private static readonly Color ColourInZone     = Color.green;
+        private const string GOOD_ENDING_SCENE = "GoodEndingScene";
         private List<string> taskRooms = new List<string> {"boiler room 1A", "the navigation room", "the infirmary", "server room 1A", "boiler room 1B"};
         private int guideToRoom;
         
@@ -94,6 +102,18 @@ namespace SUNSET16.Core
         void Start() 
         {
             interactionSystem = GetComponent<InteractionSystem>();
+
+            // Exit door: state set entirely by ending — skip all normal targetSceneName logic
+            if (isExitDoor)
+            {
+                string ending = PillStateManager.Instance != null
+                    ? PillStateManager.Instance.DetermineEnding()
+                    : "Undetermined";
+                // Good ending = escape is possible; anything else = door stays sealed
+                SetDoorState(ending == "Good" ? DoorState.Normal : DoorState.Locked);
+                return;
+            }
+
             //if its a hidden room door, ask HiddenRoomManager what state its in
             //otherwise just set it to normal (unlocked, orange)
         if (targetSceneName  == "HallwayScene")
@@ -246,10 +266,18 @@ namespace SUNSET16.Core
                 Debug.Log("[DOORCONTROLLER] DOLOS announcement active — door transition blocked");
                 return;
             }
+            // Exit door in good ending state: bypass all other checks, go straight to GoodEndingScene
+            if (isExitDoor && PillStateManager.Instance != null &&
+                PillStateManager.Instance.DetermineEnding() == "Good")
+            {
+                StartCoroutine(PlayOpenAnimation());
+                return;
+            }
+
             //chain of checks - if any fail we bail early with a message
             if (isLocked)
             {
-                ShowLockedMessage("The door is locked.");
+                ShowLockedMessage("The door is sealed.");
                 return;
             }
 
@@ -326,6 +354,16 @@ namespace SUNSET16.Core
 
         public string GetInteractionPrompt()
         {
+            // Exit door prompt: good ending = escape bark, otherwise = sealed
+            if (isExitDoor)
+            {
+                if (PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Good")
+                    return goodEndingExitBark.Count > 0
+                        ? goodEndingExitBark[Random.Range(0, goodEndingExitBark.Count)]
+                        : "I should at least try to leave the ship...right?";
+                return isLocked ? "The door is sealed." : "Press E to open";
+            }
+
             if (isMorningGated && DayManager.Instance != null)
             {
                 if (DayManager.Instance.CurrentPhase == DayPhase.Morning && PillStateManager.Instance != null && !PillStateManager.Instance.HasTakenPillToday())
@@ -494,6 +532,15 @@ namespace SUNSET16.Core
         [ContextMenu("Go into room")]
         void TransitionToRoom()
         {
+            // Good ending escape: bypass RoomManager, load standalone GoodEndingScene directly
+            if (isExitDoor && PillStateManager.Instance != null &&
+                PillStateManager.Instance.DetermineEnding() == "Good")
+            {
+                Debug.Log("[DOORCONTROLLER] Good ending exit — loading GoodEndingScene");
+                SceneManager.LoadScene(GOOD_ENDING_SCENE);
+                return;
+            }
+
             if (AudioManager.Instance != null)
             {
                 // AudioManager.Instance.PlayDoorOpen();
