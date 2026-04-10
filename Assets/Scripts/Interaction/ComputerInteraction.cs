@@ -69,15 +69,13 @@ namespace SUNSET16.Interaction
         [Header("Settings")]
         [SerializeField] private string interactionPrompt = "Press E to use computer";
         [SerializeField] private List<string> lockedPrompt = new List<string>();
-        [Tooltip("Prompt shown when bad ending is active — computer is permanently sealed.")]
-        [SerializeField] private List<string> badEndingLockedPrompt = new List<string>();
 
         private InteractionSystem _interactionSystem;
         private CRTBarrelWarpController _barrelWarp;
-        private bool _mirrorCompleted  = false;
-        private bool _sequenceActive   = false;
-        private bool _sequenceCreated  = false;
-        private bool _badEndingActive  = false;
+        private bool _mirrorCompleted = false;
+        private bool _sequenceActive  = false;
+        private bool _sequenceCreated = false;
+        private bool _endingLocked    = false; // true after night session closes on the ending day
         RuntimeSequence runtimeSequence;
 
         // --- Lifecycle ---------------------------------------------------------------
@@ -96,10 +94,15 @@ namespace SUNSET16.Interaction
                 _mirrorCompleted = PillStateManager.Instance.HasTakenPillToday();
                 PillStateManager.Instance.OnPillTaken += OnPillChoiceMade;
 
-                // bad ending check — lock permanently if already reached on load
-                if (PillStateManager.Instance.DetermineEnding() == "Bad")
-                    _badEndingActive = true;
-                PillStateManager.Instance.OnEndingReached += OnEndingReached;
+                // if reloading scene after ending day night session already completed → lock immediately
+                if (PillStateManager.Instance.IsEndingReached
+                    && DayManager.Instance != null
+                    && DayManager.Instance.CurrentPhase == DayPhase.Night
+                    && DialogueUIManager.Instance != null
+                    && DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                {
+                    _endingLocked = true;
+                }
             }
             else
             {
@@ -113,20 +116,17 @@ namespace SUNSET16.Interaction
         private void OnDestroy()
         {
             if (PillStateManager.Instance != null)
-            {
-                PillStateManager.Instance.OnPillTaken     -= OnPillChoiceMade;
-                PillStateManager.Instance.OnEndingReached -= OnEndingReached;
-            }
+                PillStateManager.Instance.OnPillTaken -= OnPillChoiceMade;
         }
 
         // --- IInteractable -----------------------------------------------------------
 
         public void Interact()
         {
-            // bad ending — computer permanently sealed, player must go to the pod
-            if (_badEndingActive)
+            // night session on ending day is complete — computer is sealed
+            if (_endingLocked)
             {
-                Debug.Log("[COMPUTER] Bad ending active — computer permanently sealed");
+                Debug.Log("[COMPUTER] Ending night session complete — computer sealed");
                 return;
             }
 
@@ -161,14 +161,7 @@ namespace SUNSET16.Interaction
         }
 
         // returns locked hint when mirror not done, normal prompt when ready
-        public string GetInteractionPrompt()
-        {
-            if (_badEndingActive)
-                return badEndingLockedPrompt.Count > 0
-                    ? badEndingLockedPrompt[Random.Range(0, badEndingLockedPrompt.Count)]
-                    : "...";
-            return _mirrorCompleted ? interactionPrompt : lockedPrompt[Random.Range(0, lockedPrompt.Count)];
-        }
+        public string GetInteractionPrompt() => _mirrorCompleted ? interactionPrompt : lockedPrompt[Random.Range(0, lockedPrompt.Count)];
 
         public bool GetLocked()
         {
@@ -273,6 +266,20 @@ namespace SUNSET16.Interaction
 
             if (PlayerController.Instance != null) PlayerController.Instance.LockMovement(false);
             _sequenceActive = false;
+
+            // ending day night session just closed — seal the computer permanently
+            // this is the trigger point: player has had their final Albert conversation,
+            // now only the pod (bad ending) or the exit door (good ending) will respond
+            if (PillStateManager.Instance != null
+                && PillStateManager.Instance.IsEndingReached
+                && DayManager.Instance != null
+                && DayManager.Instance.CurrentPhase == DayPhase.Night)
+            {
+                _endingLocked = true;
+                _interactionSystem?.SetInteractionEnabled(false);
+                Debug.Log("[COMPUTER] Ending night session complete — computer sealed, ending exit now available");
+            }
+
             if (!DialogueUIManager.Instance.announcementTriggered && DayManager.Instance.CurrentPhase == DayPhase.Morning)
             {
                 DialogueUIManager.Instance.announcementTriggered = true;
@@ -323,13 +330,6 @@ namespace SUNSET16.Interaction
             Debug.Log($"[COMPUTER] Mirror complete (Day {day}: {choice}) - computer now available");
         }
 
-        private void OnEndingReached(string ending)
-        {
-            if (ending != "Bad") return;
-            _badEndingActive = true;
-            _interactionSystem?.SetInteractionEnabled(false);
-            Debug.Log("[COMPUTER] Bad ending reached — computer permanently sealed");
-        }
 
         // --- Internal ----------------------------------------------------------------
 

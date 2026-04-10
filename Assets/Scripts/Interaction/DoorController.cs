@@ -266,10 +266,19 @@ namespace SUNSET16.Core
                 Debug.Log("[DOORCONTROLLER] DOLOS announcement active — door transition blocked");
                 return;
             }
-            // Exit door in good ending state: bypass all other checks, go straight to GoodEndingScene
+            // Exit door in good ending state — only passable after night computer session is done
             if (isExitDoor && PillStateManager.Instance != null &&
                 PillStateManager.Instance.DetermineEnding() == "Good")
             {
+                // at night, must complete Albert's final dialogue before escaping
+                if (DayManager.Instance != null
+                    && DayManager.Instance.CurrentPhase == DayPhase.Night
+                    && DialogueUIManager.Instance != null
+                    && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                {
+                    ShowLockedMessage("I should finish up before leaving.");
+                    return;
+                }
                 StartCoroutine(PlayOpenAnimation());
                 return;
             }
