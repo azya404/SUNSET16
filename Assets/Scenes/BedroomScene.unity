@@ -307,6 +307,18 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 0}
   lightSpriteYellow: {fileID: 0}
   lightSpriteGreen: {fileID: 0}
+  mirrorIncomplete:
+  - '"I could probably do that later. I should head towards the mirror."'
+  - '"I heard the dispenser go off near the mirror. I should check that out."'
+  - '"Still need to do my daily morning routine at the mirror."'
+  computerIncomplete:
+  - '"Maybe I should talk with Albert for a bit."'
+  - '"Better see if Albert has left any new messages."'
+  - "I haven\u2019t talked with Albert yet. I should do that.\""
+  shouldSleep:
+  - "\"It\u2019s getting late, I should get some sleep.\""
+  - "\"I need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my curfew.\""
+  - "\"I\u2019m too tired to be doing this right now.\""
   animationFrames: []
   frameDelay: 0.07
 --- !u!114 &29539509
@@ -8678,11 +8690,19 @@ MonoBehaviour:
   cutscenePlayer: {fileID: 325183768}
   day1ToDay2Video: CutsceneDay2Morning.mp4
   day2ToDay3Video: CutsceneDay3Morning.mp4
+  day3TookVideo: CutsceneDay4Morning.mp4
+  day3RefusedVideo: CutsceneDay4Reveal.mp4
+  day4TookVideo: CutsceneDay5Morning.mp4
+  day4RefusedVideo: CutsceneDay5Reveal.mp4
   sleepPrompt: Press E to sleep
   wrongPhasePrompt:
-  - "Can\u2019t sleep now. Got work to do."
-  - I got better things to do than go back into my pod.
-  - I can rest once my tasks are done for the day.
+  - "\"Can\u2019t sleep now. Got work to do.\""
+  - '"I got better things to do than go back into my pod."'
+  - '"I can rest once my tasks are done for the day."'
+  noNightChatPrompt:
+  - '"I should check in with Albert before going to bed."'
+  - '"Better see if Albert has left any new messages."'
+  - '"Maybe I should talk with Albert for a bit."'
 --- !u!1 &1365030099
 GameObject:
   m_ObjectHideFlags: 0

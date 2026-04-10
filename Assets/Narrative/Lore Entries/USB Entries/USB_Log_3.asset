@@ -15,8 +15,9 @@ MonoBehaviour:
   loreId: usb_log_3
   title: Technician_Log_AF-03.enc
   content:
-  - {fileID: 21300000, guid: 4dc83cc24e6a734468d71e54cf0dff4d, type: 3}
+  - {fileID: 21300000, guid: fdb693b54c6fd2e4c89f0001193a82ba, type: 3}
   - {fileID: 21300000, guid: 026a1036ee3e71947b758c39c3896cdb, type: 3}
   associatedDay: 0
   preview: 
-  unlocked: 0
+  unlocked: 1
+  viewed: 1

@@ -81,6 +81,11 @@ namespace SUNSET16.Interaction
 
         public string GetInteractionPrompt() => interactionPrompt;
 
+        public bool GetLocked()
+        {
+            return enabled == false;
+        }
+
         // --- Overlay open ------------------------------------------------------------
 
         private IEnumerator OpenSequence()

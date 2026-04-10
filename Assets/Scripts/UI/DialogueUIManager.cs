@@ -156,6 +156,7 @@ namespace SUNSET16.UI
         private int             _newEntryAmt = 0;
         private Coroutine       _DOLOSCoroutine;
         public bool             announcementTriggered;
+        private bool            _offline = false;
 
         //DOLOSManager checks this before firing any announcement
         public bool IsDialogueActive { get; private set; }
@@ -240,6 +241,7 @@ namespace SUNSET16.UI
             {
                 _phase = DayManager.Instance.CurrentPhase;
                 announcementTriggered = false;
+                _isResponding = true;
 
                 dialogueParent = GameObject.FindGameObjectWithTag("MessagingUI");
                 responseButtonContainer = dialogueParent.transform.GetChild(1);
@@ -336,6 +338,7 @@ namespace SUNSET16.UI
                 offlineNotification = dialogueParent.transform.GetChild(14).gameObject;
                 offlineText = offlineNotification.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
                 offlineNotification.SetActive(false);
+                _offline = false;
 
                 if (PlayerController.Instance != null)
                     PlayerController.Instance.LockMovement(true);
@@ -412,6 +415,7 @@ namespace SUNSET16.UI
             chatOpen          = true;
             _isDOLOS           = false;
             announcementTriggered = false;
+            _offline = false;
             _lines.Clear();
             foreach (var msg in _messages) if (msg != null) Destroy(msg);
             _messages.Clear();
@@ -525,6 +529,7 @@ namespace SUNSET16.UI
                 nextPageContainer.gameObject.SetActive(false);
                 // Deactivate lore entry
                 loreImage.gameObject.SetActive(false);
+                offlineNotification.SetActive(_offline);
                 // Activate appropriate response buttons
                 responseButtonContainer.gameObject.SetActive(true);
                 ShowControlsForCurrentLine();
@@ -547,6 +552,7 @@ namespace SUNSET16.UI
                 /*foreach (GameObject choice in choiceButtonRoots)
                     choice.SetActive(false);*/
                 responseButtonContainer.gameObject.SetActive(false);
+                offlineNotification.SetActive(false);
                 // Deactivate all messages
                 foreach (GameObject msg in _messages)
                     msg.SetActive(false);
@@ -588,7 +594,7 @@ namespace SUNSET16.UI
 
         public void OnEntrySelected(int index)
         {
-            int entryNum = index + 5 * (_buttonPage - 1);
+            int entryNum = index + 4 * (_buttonPage - 1);
             _selectedEntry = entryNum;
             _entryPage = 0;
             loreImage.sprite = _unlockedEntries[entryNum].content[0];
@@ -635,21 +641,21 @@ namespace SUNSET16.UI
 
         public void UpdateEntryButtons()
         {
-            int max_index = _buttonPage * 5;
-            int max = 5;
+            int max_index = _buttonPage * 4;
+            int max = 4;
             if (max_index > _unlockedEntries.Count)
             {
-                max = _unlockedEntries.Count % 5;
+                max = _unlockedEntries.Count % 4;
                 if (max == 0)
-                    max = 5;
+                    max = 4;
             }
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 4; i++)
             {
-                Debug.Log("[DIALOGUE] Index: " + i + ", Max: " + max + ", Max Index: " + max_index + ", Entry Index: " + (i + 5 * (_buttonPage - 1)));
+                Debug.Log("[DIALOGUE] Index: " + i + ", Max: " + max + ", Max Index: " + max_index + ", Entry Index: " + (i + 4 * (_buttonPage - 1)));
                 if (i < max)
                 {
                     loreButtonRoots[i].gameObject.SetActive(true);
-                    loreButtonTexts[i].text = _unlockedEntries[i + 5 * (_buttonPage - 1)].title;
+                    loreButtonTexts[i].text = _unlockedEntries[i + 4 * (_buttonPage - 1)].title;
                 }
                 else
                     loreButtonRoots[i].gameObject.SetActive(false);
@@ -765,6 +771,12 @@ namespace SUNSET16.UI
         public void UnlockUSB()
         {
             UnlockEntry("usb_log_" + PillStateManager.Instance.GetPillsRefusedCount());
+        }
+
+        [ContextMenu("Simulate Crematorium")]
+        public void UnlockDeathRecord()
+        {
+            UnlockEntry("usb_albert_death");
         }
 
         // ─── Internal Playback ────────────────────────────────────────────────────
@@ -888,7 +900,8 @@ namespace SUNSET16.UI
                     if (chatOpen)
                         if (loreButtonImage != null) loreButtonImage.color = _baseColor;
                     clickDisabled = false;
-                    yield return new WaitForSeconds(2);
+                    yield return new WaitForSeconds(1);
+                    _offline = true;
                     if (_isDOLOS)
                         offlineText.text = "Terminal has been terminated";
                     else
@@ -899,19 +912,21 @@ namespace SUNSET16.UI
             }
             else if (line.text == "" && line.advanceToLine == -1)
             {
+                _isResponding = false;
                 if (closeImage != null) closeImage.color = _baseColor;
                 if (!chatOpen)
                     if (chatButtonImage != null) chatButtonImage.color = _baseColor;
                 if (chatOpen)
                     if (loreButtonImage != null) loreButtonImage.color = _baseColor;
                 clickDisabled = false;
-                yield return new WaitForSeconds(2);
-                    if (_isDOLOS)
-                        offlineText.text = "Terminal has been terminated";
-                    else
-                        offlineText.text = "Albert has gone offline";
-                    offlineNotification.SetActive(true);
-                    audioSource.PlayOneShot(msgGet);
+                yield return new WaitForSeconds(1);
+                _offline = true;
+                if (_isDOLOS)
+                    offlineText.text = "Terminal has been terminated";
+                else
+                    offlineText.text = "Albert has gone offline";
+                offlineNotification.SetActive(true);
+                audioSource.PlayOneShot(msgGet);
             }
 
             ShowControlsForCurrentLine();

@@ -3104,13 +3104,24 @@ MonoBehaviour:
   isHiddenRoomDoor: 0
   hiddenRoomID: 
   isBedroomDoor: 1
-  requiresAllTasksComplete: 0
+  requiresAllTasksComplete: 1
+  requiresPuzzleComplete: 0
   isMorningGated: 0
   doorLight: {fileID: 0}
   doorSprite: {fileID: 0}
   lightSpriteRed: {fileID: 0}
   lightSpriteYellow: {fileID: 0}
   lightSpriteGreen: {fileID: 0}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay: []
+  hallwayLockedNightPill: []
+  hallwayLockedNightNoPill: []
+  taskIncomplete:
+  - "\u201CI need to focus. Job\u2019s not done yet.\u201D"
+  - "\u201CThere\u2019s still something I need to do here.\u201D"
+  - "\u201CCan\u2019t head out right now, the wiring still isn\u2019t fixed.\u201D"
   animationFrames: []
   frameDelay: 0.07
 --- !u!61 &1828402648

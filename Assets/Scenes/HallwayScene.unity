@@ -1502,6 +1502,21 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 1647300346}
   lightSpriteYellow: {fileID: 1365197673}
   lightSpriteGreen: {fileID: 1383390053}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\"Locked\u2026 of course.\""
+  - '"Probably best not to enter something unauthorized. DOLOS has eyes nearly everywhere."'
+  - '"I have better things to do."'
+  hallwayLockedNightPill:
+  - "\"I need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my curfew.\""
+  - "\"I\u2019m too tired to be doing this right now.\""
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  hallwayLockedNightNoPill:
+  - "\"I thought I heard some other door open\u2026\""
+  - "\"Maybe DOLOS won\u2019t notice if I do a little extra investigation.\""
+  - "\"There\u2019s still somewhere I\u2019d like to check out first.\""
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -3259,6 +3274,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 241636328}
   lightSpriteYellow: {fileID: 544646620}
   lightSpriteGreen: {fileID: 986008749}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -6126,6 +6158,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 1946147275}
   lightSpriteYellow: {fileID: 1714604180}
   lightSpriteGreen: {fileID: 1979863773}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -7163,6 +7212,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 2044897120}
   lightSpriteYellow: {fileID: 544144443}
   lightSpriteGreen: {fileID: 668644038}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -10806,6 +10872,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 1990894594}
   lightSpriteYellow: {fileID: 1142317692}
   lightSpriteGreen: {fileID: 1486924887}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -11995,6 +12078,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 226103107}
   lightSpriteYellow: {fileID: 1215974909}
   lightSpriteGreen: {fileID: 1859825192}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -12516,6 +12616,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 1363623962}
   lightSpriteYellow: {fileID: 566315742}
   lightSpriteGreen: {fileID: 1169255439}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -13345,6 +13462,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 962071492}
   lightSpriteYellow: {fileID: 308557036}
   lightSpriteGreen: {fileID: 1551628920}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -13545,6 +13679,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 1155850799}
   lightSpriteYellow: {fileID: 1871421628}
   lightSpriteGreen: {fileID: 466677584}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}

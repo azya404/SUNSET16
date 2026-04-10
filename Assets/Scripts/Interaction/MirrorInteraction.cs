@@ -159,6 +159,11 @@ namespace SUNSET16.Interaction
 
         public string GetInteractionPrompt() => PillStateManager.Instance.HasTakenPillToday() ? lockedPrompt[Random.Range(0, lockedPrompt.Count)] : interactionPrompt;
 
+        public bool GetLocked()
+        {
+            return PillStateManager.Instance.HasTakenPillToday();
+        }
+
         // ─── Day 2 Mirror Cutscene ────────────────────────────────────────────────
 
         private IEnumerator Day2MirrorSequence()
