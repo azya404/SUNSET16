@@ -59,9 +59,9 @@ namespace SUNSET16.Interaction
         }
 
         // Play a video from StreamingAssets. Screen must already be black (FadeOut called).
-        // Fades in to reveal video, waits for end, fades back to black, then returns.
+        // Fades in to reveal video, waits for end (or Space if skippable), fades back to black, then returns.
         // Caller should call FadeIn() after this to reveal the reloaded scene.
-        public IEnumerator PlayVideo(string videoFileName)
+        public IEnumerator PlayVideo(string videoFileName, bool skippable = true)
         {
             // build RT explicitly — Create() ensures GPU memory is allocated before
             // VideoPlayer starts writing frames (auto-creation timing is unreliable)
@@ -86,8 +86,16 @@ namespace SUNSET16.Interaction
             // fade in to reveal video (podFadeGroup 1→0, video beneath becomes visible)
             yield return StartCoroutine(FadePodPanel(1f, 0f));
 
-            // wait for video to finish playing
-            yield return new WaitUntil(() => finished);
+            // wait for video to finish — Space skips if skippable
+            while (!finished)
+            {
+                if (skippable && Input.GetKeyDown(KeyCode.Space))
+                {
+                    videoPlayer.Stop();
+                    break;
+                }
+                yield return null;
+            }
 
             // fade back to black before returning control
             yield return StartCoroutine(FadePodPanel(0f, 1f));
