@@ -1608,13 +1608,24 @@ MonoBehaviour:
   isHiddenRoomDoor: 0
   hiddenRoomID: 
   isBedroomDoor: 1
-  requiresAllTasksComplete: 0
+  requiresAllTasksComplete: 1
+  requiresPuzzleComplete: 0
   isMorningGated: 0
   doorLight: {fileID: 0}
   doorSprite: {fileID: 0}
   lightSpriteRed: {fileID: 0}
   lightSpriteYellow: {fileID: 0}
   lightSpriteGreen: {fileID: 0}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay: []
+  hallwayLockedNightPill: []
+  hallwayLockedNightNoPill: []
+  taskIncomplete:
+  - "\u201CI need to focus. Job\u2019s not done yet.\u201D"
+  - "\u201CThere\u2019s still something I need to do here.\u201D"
+  - "\u201CCan\u2019t head out right now, the wiring still isn\u2019t fixed.\u201D"
   animationFrames: []
   frameDelay: 0.07
 --- !u!61 &544993162
@@ -2075,8 +2086,8 @@ MonoBehaviour:
   taskIndex: 2
   nextTaskObject: {fileID: 0}
   roomAmbient: {fileID: 0}
-  puzzleThemeSource: {fileID: 0}
-  puzzleThemeClip: {fileID: 0}
+  puzzleThemeSource: {fileID: 1800996463}
+  puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to work
 --- !u!114 &886885775
@@ -3176,8 +3187,8 @@ MonoBehaviour:
   taskIndex: 1
   nextTaskObject: {fileID: 886885773}
   roomAmbient: {fileID: 0}
-  puzzleThemeSource: {fileID: 0}
-  puzzleThemeClip: {fileID: 0}
+  puzzleThemeSource: {fileID: 1800996463}
+  puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to work
 --- !u!61 &1350061463
@@ -4111,6 +4122,134 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2154383392907694552, guid: dfee23845d1f7774590a27c66e735966, type: 3}
   m_PrefabInstance: {fileID: 1786683660}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1800996462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1800996464}
+  - component: {fileID: 1800996463}
+  m_Layer: 0
+  m_Name: PuzzleThemeAudio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1800996463
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800996462}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1800996464
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800996462}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.8663943, y: -4.0377016, z: 0.7153381}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1833239718
 GameObject:
   m_ObjectHideFlags: 0
@@ -4610,3 +4749,4 @@ SceneRoots:
   - {fileID: 780638404}
   - {fileID: 1260651709}
   - {fileID: 1204788972}
+  - {fileID: 1800996464}

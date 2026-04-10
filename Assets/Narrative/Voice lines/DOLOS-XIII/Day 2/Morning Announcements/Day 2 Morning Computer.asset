@@ -20,6 +20,6 @@ MonoBehaviour:
     data will be monitored, as per corporate safety mandate E-22.'
   fontSize: 20
   audioClip: {fileID: 8300000, guid: 2cdfdeece369bc7439e8eab3b026ab24, type: 3}
-  displayDuration: 15
+  displayDuration: 16
   lineDurations: 08000000
   volume: 1

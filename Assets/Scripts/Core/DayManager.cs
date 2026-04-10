@@ -183,6 +183,7 @@ namespace SUNSET16.Core
                     }
 
                     //NORMAL ADVANCEMENT: move to the next day
+                    PuzzleManager.Instance.completedPuzzle = false;
                     CurrentDay++;
                     CurrentPhase = DayPhase.Morning;
                     OnDayChanged?.Invoke(CurrentDay);      //tell everyone the day changed

@@ -82,8 +82,10 @@ public class Lever : MonoBehaviour, IPointerClickHandler
             level.puzzleInteraction.CloseOverlay();
             string id = "usb_log_" + PillStateManager.Instance.GetPillsRefusedCount();
             DialogueUIManager.Instance.UnlockEntry(id);
+            Debug.Log("Should be unlocking lore entries");
             if (RoomManager.Instance.GetCurrentRoomName().Contains("Crematorium"))
             {
+                Debug.Log("In crematorium!");
                 DialogueUIManager.Instance.UnlockEntry("usb_albert_death");
             }
         }

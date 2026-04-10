@@ -3126,7 +3126,7 @@ MonoBehaviour:
   dayAmbientColor: {r: 1, g: 0.95, b: 0.9, a: 1}
   nightAmbientColor: {r: 0.3, g: 0.4, b: 0.6, a: 1}
   dayIntensity: 1
-  nightIntensity: 0.4
+  nightIntensity: 0.2
   globalLight: {fileID: 695182766}
   transitionDuration: 2
 --- !u!4 &2086441543

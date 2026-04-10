@@ -42,13 +42,22 @@ namespace SUNSET16.Interaction
         [Tooltip("BedroomCutscenePlayer GO in BedroomScene — shared with MirrorInteraction.")]
         [SerializeField] private BedroomCutscenePlayer cutscenePlayer;
         [Tooltip("Video filename in StreamingAssets to play when sleeping Day 1 Night -> Day 2 Morning.")]
-        [SerializeField] private string day1ToDay2Video = "CutsceneDay2Morning.mp4";
+        [SerializeField] private string day1ToDay2Video    = "CutsceneDay2Morning.mp4";
         [Tooltip("Video filename in StreamingAssets to play when sleeping Day 2 Night -> Day 3 Morning.")]
-        [SerializeField] private string day2ToDay3Video = "CutsceneDay3Morning.mp4";
+        [SerializeField] private string day2ToDay3Video    = "CutsceneDay3Morning.mp4";
+        [Tooltip("Day 3 Night -> Day 4 Morning — player took pill on Day 3.")]
+        [SerializeField] private string day3TookVideo      = "CutsceneDay4Morning.mp4";
+        [Tooltip("Day 3 Night -> Day 4 Morning — player refused pill on Day 3.")]
+        [SerializeField] private string day3RefusedVideo   = "CutsceneDay4Reveal.mp4";
+        [Tooltip("Day 4 Night -> Day 5 Morning — player took pill on Day 4.")]
+        [SerializeField] private string day4TookVideo      = "CutsceneDay5Morning.mp4";
+        [Tooltip("Day 4 Night -> Day 5 Morning — player refused pill on Day 4.")]
+        [SerializeField] private string day4RefusedVideo   = "CutsceneDay5Reveal.mp4";
 
         [Header("Prompts")]
         [SerializeField] private string sleepPrompt = "Sleep";
         [SerializeField] private List<string> wrongPhasePrompt = new List<string>();
+        [SerializeField] private List<string> noNightChatPrompt = new List<string>();
 
         private InteractionSystem _interactionSystem;
         private bool _isSleeping;
@@ -82,6 +91,12 @@ namespace SUNSET16.Interaction
                 return;
             }
 
+            if (DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+            {
+                Debug.Log("[POD] Night chat not completed - sleep blocked");
+                return;
+            }
+
             StartCoroutine(SleepSequence());
         }
 
@@ -90,7 +105,18 @@ namespace SUNSET16.Interaction
             if (DayManager.Instance != null && DayManager.Instance.CurrentPhase != DayPhase.Night)
                 return wrongPhasePrompt[Random.Range(0, wrongPhasePrompt.Count)];
 
+            if (DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                return noNightChatPrompt[Random.Range(0, noNightChatPrompt.Count)];
+
             return sleepPrompt;
+        }
+
+        public bool GetLocked()
+        {
+            if (DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null)
+                return DialogueUIManager.Instance.HasCompletedTodayNightSequence == false;
+            else
+                return DayManager.Instance.CurrentPhase != DayPhase.Night;
         }
 
         // --- Sleep Sequence ----------------------------------------------------------
@@ -122,10 +148,38 @@ namespace SUNSET16.Interaction
             // Reset Dialogue
             DialogueUIManager.Instance.ResetDialogue();
 
-            // play sleep cutscene if one is configured for this transition (screen is already black)
-            string videoFile = dayBefore == 1 ? day1ToDay2Video
-                             : dayBefore == 2 ? day2ToDay3Video
-                             : null;
+            // pick cutscene based on day and pill choices
+            // days 1-2 are fixed; days 3-4 branch on the choice made that day
+            // day 4->5 also needs day 3's choice to resolve the correct branch
+            string videoFile = null;
+            if (PillStateManager.Instance != null)
+            {
+                PillChoice todayChoice = PillStateManager.Instance.GetPillChoice(dayBefore);
+                if (dayBefore == 1)
+                {
+                    videoFile = day1ToDay2Video;
+                }
+                else if (dayBefore == 2)
+                {
+                    videoFile = day2ToDay3Video;
+                }
+                else if (dayBefore == 3)
+                {
+                    videoFile = todayChoice == PillChoice.Taken ? day3TookVideo : day3RefusedVideo;
+                }
+                else if (dayBefore == 4)
+                {
+                    PillChoice day3Choice = PillStateManager.Instance.GetPillChoice(3);
+                    bool day3Took = day3Choice == PillChoice.Taken;
+                    bool day4Took = todayChoice == PillChoice.Taken;
+
+                    // same choice both days = ending reached, no transition cutscene
+                    if (day3Took && day4Took)   videoFile = null; // Bad Ending Day 4
+                    else if (!day3Took && !day4Took) videoFile = null; // Good Ending Day 4
+                    else if (day3Took && !day4Took)  videoFile = day4RefusedVideo;  // P then N -> Reveal Day 5
+                    else                             videoFile = day4TookVideo;     // N then P -> Morning Day 5
+                }
+            }
             if (!string.IsNullOrEmpty(videoFile))
                 yield return StartCoroutine(cutscenePlayer.PlayVideo(videoFile));
 

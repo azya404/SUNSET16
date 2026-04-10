@@ -1502,6 +1502,21 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 1647300346}
   lightSpriteYellow: {fileID: 1365197673}
   lightSpriteGreen: {fileID: 1383390053}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\"Locked\u2026 of course.\""
+  - '"Probably best not to enter something unauthorized. DOLOS has eyes nearly everywhere."'
+  - '"I have better things to do."'
+  hallwayLockedNightPill:
+  - "\"I need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my curfew.\""
+  - "\"I\u2019m too tired to be doing this right now.\""
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  hallwayLockedNightNoPill:
+  - "\"I thought I heard some other door open\u2026\""
+  - "\"Maybe DOLOS won\u2019t notice if I do a little extra investigation.\""
+  - "\"There\u2019s still somewhere I\u2019d like to check out first.\""
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -1570,8 +1585,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 1681677145}
-  promptText: {fileID: 8078063}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -1979,6 +1992,90 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 964ca8154b7bbf145ba846efe69fd0cf, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 18.03, y: 22.556774}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!1 &245360710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 245360711}
+  - component: {fileID: 245360712}
+  m_Layer: 8
+  m_Name: Nav_Sign (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &245360711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245360710}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.57, y: -1.85, z: 0}
+  m_LocalScale: {x: 0.5694735, y: 0.5694735, z: 0.5694735}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1903659390}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &245360712
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245360710}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 567096521
+  m_SortingLayer: 3
+  m_SortingOrder: 1
+  m_Sprite: {fileID: -205224882, guid: 28cafe6b38a09a04c99d916cffbc6838, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2661,6 +2758,90 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &384924974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 384924975}
+  - component: {fileID: 384924976}
+  m_Layer: 8
+  m_Name: Nav_Sign
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &384924975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384924974}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.57, y: -1.99, z: 0}
+  m_LocalScale: {x: 0.8277, y: 0.8277, z: 0.8277}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1903659390}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &384924976
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384924974}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 567096521
+  m_SortingLayer: 3
+  m_SortingOrder: 1
+  m_Sprite: {fileID: -1018794930, guid: 6374212c78a55e543a545ba49f810bf6, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 18.03, y: 22.556774}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &387625249
 GameObject:
   m_ObjectHideFlags: 0
@@ -3093,6 +3274,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 241636328}
   lightSpriteYellow: {fileID: 544646620}
   lightSpriteGreen: {fileID: 986008749}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -3116,8 +3314,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 137857003}
-  promptText: {fileID: 83224522}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -5933,8 +6129,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 1537638997}
-  promptText: {fileID: 673686637}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -5964,6 +6158,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 1946147275}
   lightSpriteYellow: {fileID: 1714604180}
   lightSpriteGreen: {fileID: 1979863773}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -6972,8 +7183,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 690989392}
-  promptText: {fileID: 941560558}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -7003,6 +7212,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 2044897120}
   lightSpriteYellow: {fileID: 544144443}
   lightSpriteGreen: {fileID: 668644038}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -10617,8 +10843,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 1066376874}
-  promptText: {fileID: 2027359935}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -10648,6 +10872,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 1990894594}
   lightSpriteYellow: {fileID: 1142317692}
   lightSpriteGreen: {fileID: 1486924887}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -11808,8 +12049,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 1630671317}
-  promptText: {fileID: 1706122298}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -11839,6 +12078,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 226103107}
   lightSpriteYellow: {fileID: 1215974909}
   lightSpriteGreen: {fileID: 1859825192}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -12331,8 +12587,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 1484614246}
-  promptText: {fileID: 465886588}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -12362,6 +12616,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 1363623962}
   lightSpriteYellow: {fileID: 566315742}
   lightSpriteGreen: {fileID: 1169255439}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -13162,8 +13433,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 574033452}
-  promptText: {fileID: 1298958848}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -13193,6 +13462,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 962071492}
   lightSpriteYellow: {fileID: 308557036}
   lightSpriteGreen: {fileID: 1551628920}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -13364,8 +13650,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionKey: 101
-  promptCanvas: {fileID: 10735863}
-  promptText: {fileID: 1198480816}
   defaultPrompt: Press E to interact
   playerLayer:
     serializedVersion: 2
@@ -13395,6 +13679,23 @@ MonoBehaviour:
   lightSpriteRed: {fileID: 1155850799}
   lightSpriteYellow: {fileID: 1871421628}
   lightSpriteGreen: {fileID: 466677584}
+  mirrorIncomplete: []
+  computerIncomplete: []
+  shouldSleep: []
+  hallwayLockedDay:
+  - "\u201CLocked\u2026 of course.\u201D"
+  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
+    everywhere.\u201D"
+  - "\u201CI have better things to do.\u201D"
+  hallwayLockedNightPill:
+  - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
+  - "\u201CI need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my
+    curfew.\u201D"
+  - "\u201CI\u2019m too tired to be doing this right now.\u201D"
+  hallwayLockedNightNoPill:
+  - "\u201CI thought I heard some other door open\u2026\u201D"
+  - "\u201CMaybe DOLOS won\u2019t notice if I do a little extra investigation.\u201D"
+  - "\u201CThere\u2019s still somewhere I\u2019d like to check out first.\u201D"
   animationFrames:
   - {fileID: 1806565830, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
   - {fileID: 1058431225, guid: 98682bb8258060448a885f928fe23d0f, type: 3}
@@ -14397,6 +14698,8 @@ Transform:
   - {fileID: 86819964}
   - {fileID: 1392475584}
   - {fileID: 932793587}
+  - {fileID: 384924975}
+  - {fileID: 245360711}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1909198242

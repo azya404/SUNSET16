@@ -24,6 +24,7 @@ TODO: puzzle timer for speed-run mode
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using SUNSET16.UI;
 
 namespace SUNSET16.Core
 {
@@ -45,6 +46,7 @@ namespace SUNSET16.Core
         public event Action<LoreEntryData> OnLoreUnlocked;
 
         public int CompletePuzzleCount = 0;
+        public bool completedPuzzle = false;
 
         protected override void Awake()
         {
@@ -101,6 +103,7 @@ namespace SUNSET16.Core
         public void DonePuzzle()
         {
             CompletePuzzleCount = CompletePuzzleCount + 1;
+            completedPuzzle = true;
         }
 
         public int DonePuzzleCount()
@@ -205,6 +208,16 @@ namespace SUNSET16.Core
             _unlockedLore.Add(loreEntry.loreId);
             OnLoreUnlocked?.Invoke(loreEntry); //TabletUIController will pick this up eventually
             Debug.Log($"[PUZZLEMANAGER] Lore unlocked: '{loreEntry.title}'");
+        }
+
+        [ContextMenu("Debug unlock")]
+        private void unlockCrematoriumLore()
+        {
+            if (RoomManager.Instance.GetCurrentRoomName().Contains("Crematorium"))
+            {
+                Debug.Log("In crematorium!");
+                DialogueUIManager.Instance.UnlockEntry("usb_albert_death");
+            }
         }
 
         public bool IsPuzzleCompleted(string puzzleId)
