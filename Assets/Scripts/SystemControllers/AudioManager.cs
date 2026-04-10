@@ -200,6 +200,17 @@ namespace SUNSET16.Core
             }
         }
 
+        // immediately stops music and cancels any in-progress crossfade
+        // used by PodInteraction at sleep sequence start so cutscene audio is not competing
+        public void StopMusicImmediate()
+        {
+            if (_crossfadeCoroutine != null) StopCoroutine(_crossfadeCoroutine);
+            _crossfadeCoroutine = null;
+            if (musicSource == null) return;
+            musicSource.Stop();
+            musicSource.volume = 0f;
+        }
+
         //crossfade coroutine: fade old track out -> swap clips -> fade new track in
         private IEnumerator CrossfadeMusic(AudioClip newClip)
         {

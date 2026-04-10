@@ -136,6 +136,9 @@ namespace SUNSET16.Interaction
                 yield break;
             }
 
+            // stop music immediately so cutscene audio is not competing with background tracks
+            AudioManager.Instance?.StopMusicImmediate();
+
             // fade to black via PodFadeCanvas (Sort Order 11, always active — reliable)
             yield return StartCoroutine(cutscenePlayer.FadeOut());
 
