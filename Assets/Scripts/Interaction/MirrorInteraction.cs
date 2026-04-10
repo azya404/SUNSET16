@@ -77,6 +77,8 @@ namespace SUNSET16.Interaction
         [Header("Settings")]
         [SerializeField] private string interactionPrompt = "Press E to look in mirror";
         [SerializeField] private List<string> lockedPrompt = new List<string>();
+        [Tooltip("Prompt shown when bad ending is active — mirror is permanently sealed.")]
+        [SerializeField] private List<string> badEndingLockedPrompt = new List<string>();
 
         [Header("Day 2 Mirror Cutscene")]
         [Tooltip("BedroomCutscenePlayer GO in BedroomScene — shared with PodInteraction.")]
@@ -85,6 +87,7 @@ namespace SUNSET16.Interaction
         [SerializeField] private string day2MirrorVideo = "CutscenePillBreak.mp4";
 
         private bool              _isOverlayActive    = false;
+        private bool              _badEndingActive    = false;
         private InteractionSystem _interactionSystem;
 
         // ─── Lifecycle ────────────────────────────────────────────────────────────
@@ -102,12 +105,22 @@ namespace SUNSET16.Interaction
             //subscribe to day changes so we can re-enable the prompt on a new morning
             if (DayManager.Instance != null)
                 DayManager.Instance.OnPhaseChanged += OnDayPhaseChanged;
+
+            // bad ending check — if already reached on load, lock permanently
+            if (PillStateManager.Instance != null)
+            {
+                if (PillStateManager.Instance.DetermineEnding() == "Bad")
+                    _badEndingActive = true;
+                PillStateManager.Instance.OnEndingReached += OnEndingReached;
+            }
         }
 
         private void OnDestroy()
         {
             if (DayManager.Instance != null)
                 DayManager.Instance.OnPhaseChanged -= OnDayPhaseChanged;
+            if (PillStateManager.Instance != null)
+                PillStateManager.Instance.OnEndingReached -= OnEndingReached;
         }
 
         // ─── Proximity Audio ──────────────────────────────────────────────────────
@@ -132,6 +145,12 @@ namespace SUNSET16.Interaction
 
         public void Interact()
         {
+            if (_badEndingActive)
+            {
+                Debug.Log("[MIRROR] Bad ending active — mirror permanently sealed");
+                return;
+            }
+
             if (_isOverlayActive)
             {
                 Debug.LogWarning("[MIRROR] Overlay already active — ignoring");
@@ -157,7 +176,16 @@ namespace SUNSET16.Interaction
             ShowOverlay();
         }
 
-        public string GetInteractionPrompt() => PillStateManager.Instance.HasTakenPillToday() ? lockedPrompt[Random.Range(0, lockedPrompt.Count)] : interactionPrompt;
+        public string GetInteractionPrompt()
+        {
+            if (_badEndingActive)
+                return badEndingLockedPrompt.Count > 0
+                    ? badEndingLockedPrompt[Random.Range(0, badEndingLockedPrompt.Count)]
+                    : "...";
+            return PillStateManager.Instance.HasTakenPillToday()
+                ? lockedPrompt[Random.Range(0, lockedPrompt.Count)]
+                : interactionPrompt;
+        }
 
         public bool GetLocked()
         {
@@ -348,10 +376,20 @@ namespace SUNSET16.Interaction
         {
             if (phase == DayPhase.Morning)
             {
+                // don't re-enable if bad ending has locked the mirror permanently
+                if (_badEndingActive) return;
                 //new day — re-enable so prompt shows and E key works again
                 _interactionSystem?.SetInteractionEnabled(true);
                 Debug.Log("[MIRROR] New day — mirror interaction re-enabled");
             }
+        }
+
+        private void OnEndingReached(string ending)
+        {
+            if (ending != "Bad") return;
+            _badEndingActive = true;
+            _interactionSystem?.SetInteractionEnabled(false);
+            Debug.Log("[MIRROR] Bad ending reached — mirror permanently sealed");
         }
     }
 }

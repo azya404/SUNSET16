@@ -303,6 +303,9 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 1
+  isExitDoor: 1
+  goodEndingExitBark:
+  - '"I should at least try to leave the ship...right?"'
   doorLight: {fileID: 0}
   doorSprite: {fileID: 0}
   lightSpriteRed: {fileID: 0}

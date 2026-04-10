@@ -69,12 +69,15 @@ namespace SUNSET16.Interaction
         [Header("Settings")]
         [SerializeField] private string interactionPrompt = "Press E to use computer";
         [SerializeField] private List<string> lockedPrompt = new List<string>();
+        [Tooltip("Prompt shown when bad ending is active — computer is permanently sealed.")]
+        [SerializeField] private List<string> badEndingLockedPrompt = new List<string>();
 
         private InteractionSystem _interactionSystem;
         private CRTBarrelWarpController _barrelWarp;
-        private bool _mirrorCompleted = false;
-        private bool _sequenceActive  = false;
-        private bool _sequenceCreated = false;
+        private bool _mirrorCompleted  = false;
+        private bool _sequenceActive   = false;
+        private bool _sequenceCreated  = false;
+        private bool _badEndingActive  = false;
         RuntimeSequence runtimeSequence;
 
         // --- Lifecycle ---------------------------------------------------------------
@@ -92,6 +95,11 @@ namespace SUNSET16.Interaction
                 // check if mirror was already done before this script started
                 _mirrorCompleted = PillStateManager.Instance.HasTakenPillToday();
                 PillStateManager.Instance.OnPillTaken += OnPillChoiceMade;
+
+                // bad ending check — lock permanently if already reached on load
+                if (PillStateManager.Instance.DetermineEnding() == "Bad")
+                    _badEndingActive = true;
+                PillStateManager.Instance.OnEndingReached += OnEndingReached;
             }
             else
             {
@@ -105,13 +113,23 @@ namespace SUNSET16.Interaction
         private void OnDestroy()
         {
             if (PillStateManager.Instance != null)
-                PillStateManager.Instance.OnPillTaken -= OnPillChoiceMade;
+            {
+                PillStateManager.Instance.OnPillTaken     -= OnPillChoiceMade;
+                PillStateManager.Instance.OnEndingReached -= OnEndingReached;
+            }
         }
 
         // --- IInteractable -----------------------------------------------------------
 
         public void Interact()
         {
+            // bad ending — computer permanently sealed, player must go to the pod
+            if (_badEndingActive)
+            {
+                Debug.Log("[COMPUTER] Bad ending active — computer permanently sealed");
+                return;
+            }
+
             // mirror not done - hint prompt is already showing via GetInteractionPrompt(), just block action
             if (!_mirrorCompleted)
             {
@@ -143,7 +161,14 @@ namespace SUNSET16.Interaction
         }
 
         // returns locked hint when mirror not done, normal prompt when ready
-        public string GetInteractionPrompt() => _mirrorCompleted ? interactionPrompt : lockedPrompt[Random.Range(0, lockedPrompt.Count)];
+        public string GetInteractionPrompt()
+        {
+            if (_badEndingActive)
+                return badEndingLockedPrompt.Count > 0
+                    ? badEndingLockedPrompt[Random.Range(0, badEndingLockedPrompt.Count)]
+                    : "...";
+            return _mirrorCompleted ? interactionPrompt : lockedPrompt[Random.Range(0, lockedPrompt.Count)];
+        }
 
         public bool GetLocked()
         {
@@ -296,6 +321,14 @@ namespace SUNSET16.Interaction
             _interactionSystem?.RefreshPrompt();
 
             Debug.Log($"[COMPUTER] Mirror complete (Day {day}: {choice}) - computer now available");
+        }
+
+        private void OnEndingReached(string ending)
+        {
+            if (ending != "Bad") return;
+            _badEndingActive = true;
+            _interactionSystem?.SetInteractionEnabled(false);
+            Debug.Log("[COMPUTER] Bad ending reached — computer permanently sealed");
         }
 
         // --- Internal ----------------------------------------------------------------
