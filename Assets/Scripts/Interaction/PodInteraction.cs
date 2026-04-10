@@ -58,6 +58,7 @@ namespace SUNSET16.Interaction
         [SerializeField] private string sleepPrompt = "Sleep";
         [SerializeField] private List<string> wrongPhasePrompt = new List<string>();
         [SerializeField] private List<string> noNightChatPrompt = new List<string>();
+        [SerializeField] private List<string> goodEnding = new List<string>();
 
         private InteractionSystem _interactionSystem;
         private bool _isSleeping;
@@ -91,9 +92,15 @@ namespace SUNSET16.Interaction
                 return;
             }
 
-            if (DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+            if (DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
             {
                 Debug.Log("[POD] Night chat not completed - sleep blocked");
+                return;
+            }
+
+            if (DayManager.Instance != null && PillStateManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() == 3)
+            {
+                Debug.Log("[POD] Good ending achieved - sleep blocked");
                 return;
             }
 
@@ -108,12 +115,17 @@ namespace SUNSET16.Interaction
             if (DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
                 return noNightChatPrompt[Random.Range(0, noNightChatPrompt.Count)];
 
+            if (DayManager.Instance != null && PillStateManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() == 3)
+                return goodEnding[Random.Range(0, goodEnding.Count)];
+
             return sleepPrompt;
         }
 
         public bool GetLocked()
         {
-            if (DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null)
+            if (DayManager.Instance != null && PillStateManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() == 3)
+                return true;
+            else if (DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null)
                 return DialogueUIManager.Instance.HasCompletedTodayNightSequence == false;
             else
                 return DayManager.Instance.CurrentPhase != DayPhase.Night;
