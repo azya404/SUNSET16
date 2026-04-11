@@ -157,7 +157,9 @@ namespace SUNSET16.Interaction
             ShowOverlay();
         }
 
-        public string GetInteractionPrompt() => PillStateManager.Instance.HasTakenPillToday() ? lockedPrompt[Random.Range(0, lockedPrompt.Count)] : interactionPrompt;
+        public string GetInteractionPrompt() => PillStateManager.Instance.HasTakenPillToday()
+            ? lockedPrompt[Random.Range(0, lockedPrompt.Count)]
+            : interactionPrompt;
 
         public bool GetLocked()
         {
@@ -273,6 +275,8 @@ namespace SUNSET16.Interaction
             //hide the interaction prompt immediately so it doesnt show during the sequence
             _interactionSystem?.SetInteractionEnabled(false);
 
+            InteractionHotbarController.Instance.characterState(false);
+
             if (mirrorOverlayCanvas != null)
                 mirrorOverlayCanvas.SetActive(true);
 
@@ -328,6 +332,8 @@ namespace SUNSET16.Interaction
             if (mirrorOverlayCanvas != null)
                 mirrorOverlayCanvas.SetActive(false);
 
+            InteractionHotbarController.Instance.characterState(true);
+
             //restore both buttons for the next time the overlay opens (next day)
             if (takePillButton   != null) takePillButton.gameObject.SetActive(true);
             if (concealPillButton != null) concealPillButton.gameObject.SetActive(true);
@@ -348,6 +354,9 @@ namespace SUNSET16.Interaction
         {
             if (phase == DayPhase.Morning)
             {
+                // don't re-enable on a new morning if the ending has already been determined
+                // (safety net — there should be no new days after an ending triggers)
+                if (PillStateManager.Instance != null && PillStateManager.Instance.IsEndingReached) return;
                 //new day — re-enable so prompt shows and E key works again
                 _interactionSystem?.SetInteractionEnabled(true);
                 Debug.Log("[MIRROR] New day — mirror interaction re-enabled");

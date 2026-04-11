@@ -75,6 +75,7 @@ namespace SUNSET16.Interaction
         private bool _mirrorCompleted = false;
         private bool _sequenceActive  = false;
         private bool _sequenceCreated = false;
+        private bool _endingLocked    = false; // true after night session closes on the ending day
         RuntimeSequence runtimeSequence;
 
         // --- Lifecycle ---------------------------------------------------------------
@@ -92,6 +93,16 @@ namespace SUNSET16.Interaction
                 // check if mirror was already done before this script started
                 _mirrorCompleted = PillStateManager.Instance.HasTakenPillToday();
                 PillStateManager.Instance.OnPillTaken += OnPillChoiceMade;
+
+                // if reloading scene after ending day night session already completed → lock immediately
+                if (PillStateManager.Instance.IsEndingReached
+                    && DayManager.Instance != null
+                    && DayManager.Instance.CurrentPhase == DayPhase.Night
+                    && DialogueUIManager.Instance != null
+                    && DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                {
+                    _endingLocked = true;
+                }
             }
             else
             {
@@ -112,6 +123,13 @@ namespace SUNSET16.Interaction
 
         public void Interact()
         {
+            // night session on ending day is complete — computer is sealed
+            if (_endingLocked)
+            {
+                Debug.Log("[COMPUTER] Ending night session complete — computer sealed");
+                return;
+            }
+
             // mirror not done - hint prompt is already showing via GetInteractionPrompt(), just block action
             if (!_mirrorCompleted)
             {
@@ -156,6 +174,8 @@ namespace SUNSET16.Interaction
         {
             _sequenceActive = true;
             if (PlayerController.Instance != null) PlayerController.Instance.LockMovement(true);
+
+            InteractionHotbarController.Instance.characterState(false);
 
             // fade to black (covers game view)
             yield return StartCoroutine(Fade(0f, 1f));
@@ -242,12 +262,27 @@ namespace SUNSET16.Interaction
 
             // restore bedroom scene before fading back in
             SetBedroomVisible(true);
+            InteractionHotbarController.Instance.characterState(true);
 
             // fade in - back to game view
             yield return StartCoroutine(Fade(1f, 0f));
 
             if (PlayerController.Instance != null) PlayerController.Instance.LockMovement(false);
             _sequenceActive = false;
+
+            // ending day night session just closed — seal the computer permanently
+            // this is the trigger point: player has had their final Albert conversation,
+            // now only the pod (bad ending) or the exit door (good ending) will respond
+            if (PillStateManager.Instance != null
+                && PillStateManager.Instance.IsEndingReached
+                && DayManager.Instance != null
+                && DayManager.Instance.CurrentPhase == DayPhase.Night)
+            {
+                _endingLocked = true;
+                _interactionSystem?.SetInteractionEnabled(false);
+                Debug.Log("[COMPUTER] Ending night session complete — computer sealed, ending exit now available");
+            }
+
             if (!DialogueUIManager.Instance.announcementTriggered && DayManager.Instance.CurrentPhase == DayPhase.Morning)
             {
                 DialogueUIManager.Instance.announcementTriggered = true;
@@ -297,6 +332,7 @@ namespace SUNSET16.Interaction
 
             Debug.Log($"[COMPUTER] Mirror complete (Day {day}: {choice}) - computer now available");
         }
+
 
         // --- Internal ----------------------------------------------------------------
 

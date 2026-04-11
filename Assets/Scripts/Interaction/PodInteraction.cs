@@ -20,13 +20,19 @@ flow when player presses E (Night phase, gates clear):
   7. screen fades back in via BedroomCutscenePlayer.FadeIn()
   8. _isSleeping guard cleared, interaction re-enabled
 
+bad ending path: if IsEndingReached and ending == "Bad", pod fades to black then loads
+NeutralCreditsScene as a full scene load instead of advancing the day. Night dialogue
+(HasCompletedTodayNightSequence) must still be done first — same gate as normal sleep.
+
+good ending path: pod is blocked entirely — player must use the exit door instead.
+
 TODO: add sleep sound effect or ambient audio crossfade before fade
-TODO: night computer session requirement before sleep (design not finalised yet)
 TODO: different prompts/behaviour based on pill state (off-pill insomnia flavour text?)
 */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using SUNSET16.Core;
 using SUNSET16.UI;
 
@@ -58,6 +64,9 @@ namespace SUNSET16.Interaction
         [SerializeField] private string sleepPrompt = "Sleep";
         [SerializeField] private List<string> wrongPhasePrompt = new List<string>();
         [SerializeField] private List<string> noNightChatPrompt = new List<string>();
+        [SerializeField] private List<string> goodEnding = new List<string>();
+
+        private const string NEUTRAL_CREDITS_SCENE = "NeutralCreditsScene";
 
         private InteractionSystem _interactionSystem;
         private bool _isSleeping;
@@ -91,9 +100,27 @@ namespace SUNSET16.Interaction
                 return;
             }
 
-            if (DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+            // night computer session must be completed before sleeping
+            if (DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
             {
                 Debug.Log("[POD] Night chat not completed - sleep blocked");
+                return;
+            }
+
+            // good ending: pod is sealed — player escapes through the exit door instead
+            if (PillStateManager.Instance != null && PillStateManager.Instance.GetPillsRefusedCount() >= 3)
+            {
+                Debug.Log("[POD] Good ending achieved - sleep blocked, player must use exit door");
+                return;
+            }
+
+            // bad ending: don't advance the day — fade to black then load NeutralCreditsScene
+            if (PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Bad"
+                && DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night
+                && DialogueUIManager.Instance != null && DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+            {
+                Debug.Log("[POD] Bad ending — loading NeutralCreditsScene");
+                StartCoroutine(BadEndingSequence());
                 return;
             }
 
@@ -108,15 +135,56 @@ namespace SUNSET16.Interaction
             if (DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
                 return noNightChatPrompt[Random.Range(0, noNightChatPrompt.Count)];
 
+            if (DayManager.Instance != null && PillStateManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() >= 3)
+                return goodEnding[Random.Range(0, goodEnding.Count)];
+
             return sleepPrompt;
         }
 
         public bool GetLocked()
         {
-            if (DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null)
+            // good ending — pod permanently sealed, player uses exit door
+            if (DayManager.Instance != null && PillStateManager.Instance != null
+                && DayManager.Instance.CurrentPhase == DayPhase.Night
+                && PillStateManager.Instance.GetPillsRefusedCount() >= 3)
+                return true;
+
+            if (DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null)
                 return DialogueUIManager.Instance.HasCompletedTodayNightSequence == false;
-            else
-                return DayManager.Instance.CurrentPhase != DayPhase.Night;
+
+            return DayManager.Instance.CurrentPhase != DayPhase.Night;
+        }
+
+        // --- Bad Ending Sequence -----------------------------------------------------
+
+        // fade to black then load NeutralCreditsScene — no day advancement, no cutscene
+        // this is the final action the player takes in the bad ending path
+        private IEnumerator BadEndingSequence()
+        {
+            _isSleeping = true;
+
+            if (_interactionSystem != null)
+                _interactionSystem.SetInteractionEnabled(false);
+
+            if (cutscenePlayer == null)
+            {
+                Debug.LogError("[POD] cutscenePlayer not assigned — bad ending sequence aborted.");
+                _isSleeping = false;
+                if (_interactionSystem != null) _interactionSystem.SetInteractionEnabled(true);
+                yield break;
+            }
+
+            AudioManager.Instance?.StopAmbient();
+
+            InteractionHotbarController.Instance.characterState(false);
+
+            // fade to black — same fade canvas as normal sleep
+            yield return StartCoroutine(cutscenePlayer.FadeOut());
+
+            SaveManager.Instance.ClearSaveData();
+
+            // load standalone credits scene — no RoomManager, no CoreScene dependency
+            SceneManager.LoadScene(NEUTRAL_CREDITS_SCENE);
         }
 
         // --- Sleep Sequence ----------------------------------------------------------
@@ -137,7 +205,9 @@ namespace SUNSET16.Interaction
             }
 
             // stop music immediately so cutscene audio is not competing with background tracks
-            AudioManager.Instance?.StopMusicImmediate();
+            AudioManager.Instance?.StopAmbient();
+
+            InteractionHotbarController.Instance.characterState(false);
 
             // fade to black via PodFadeCanvas (Sort Order 11, always active — reliable)
             yield return StartCoroutine(cutscenePlayer.FadeOut());
@@ -177,7 +247,7 @@ namespace SUNSET16.Interaction
                     bool day4Took = todayChoice == PillChoice.Taken;
 
                     // same choice both days = ending reached, no transition cutscene
-                    if (day3Took && day4Took)   videoFile = null; // Bad Ending Day 4
+                    if (day3Took && day4Took)        videoFile = null; // Bad Ending Day 4
                     else if (!day3Took && !day4Took) videoFile = null; // Good Ending Day 4
                     else if (day3Took && !day4Took)  videoFile = day4RefusedVideo;  // P then N -> Reveal Day 5
                     else                             videoFile = day4TookVideo;     // N then P -> Morning Day 5
@@ -194,6 +264,7 @@ namespace SUNSET16.Interaction
 
             // fade back in to reveal the new morning
             yield return StartCoroutine(cutscenePlayer.FadeIn());
+            InteractionHotbarController.Instance.characterState(true);
 
             _isSleeping = false;
 

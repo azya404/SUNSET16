@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Day 4 Morning Computer
   m_EditorClassIdentifier: 
   announcementId: dolos_day4_morning_computer
-  text: 'Proceed to SERVER ROOM 1A and repair the circuit box, effective immediately.
+  text: 'Proceed to the SERVER ROOM and repair the circuit box.
 
-    The
-    DOLOS Corporation expects nothing but perfection from an employee such as yourself.'
+    The DOLOS Corporation
+    expects nothing but perfection from an employee such as yourself.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: f66a54a33e5fa8146a6d97dc79afff5b, type: 3}
-  displayDuration: 21
-  lineDurations: 0a000000
+  audioClip: {fileID: 8300000, guid: 9e3af6d55be85fa43a9e0af70ea4c1ef, type: 3}
+  displayDuration: 20
+  lineDurations: 09000000
   volume: 1

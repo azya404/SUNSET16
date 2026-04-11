@@ -1498,6 +1498,8 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 0
+  isExitDoor: 0
+  goodEndingExitBark: []
   doorLight: {fileID: 1512166164}
   doorSprite: {fileID: 322012789}
   lightSpriteRed: {fileID: 1647300346}
@@ -1507,8 +1509,8 @@ MonoBehaviour:
   computerIncomplete: []
   shouldSleep: []
   hallwayLockedDay:
-  - "\"Locked\u2026 of course.\""
-  - '"Probably best not to enter something unauthorized. DOLOS has eyes nearly everywhere."'
+  - '"Can''t go back to my room yet, I have work to do."'
+  - '"My tasks still need to be done for today before I can rest."'
   - '"I have better things to do."'
   hallwayLockedNightPill:
   - "\"I need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my curfew.\""
@@ -3440,6 +3442,8 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 0
+  isExitDoor: 0
+  goodEndingExitBark: []
   doorLight: {fileID: 1060623776}
   doorSprite: {fileID: 1654529700}
   lightSpriteRed: {fileID: 241636328}
@@ -3450,8 +3454,7 @@ MonoBehaviour:
   shouldSleep: []
   hallwayLockedDay:
   - "\u201CLocked\u2026 of course.\u201D"
-  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
-    everywhere.\u201D"
+  - "\u201CI could probably use my time better instead of looking at locked doors.\u201D"
   - "\u201CI have better things to do.\u201D"
   hallwayLockedNightPill:
   - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
@@ -6494,6 +6497,8 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 0
+  isExitDoor: 0
+  goodEndingExitBark: []
   doorLight: {fileID: 783651254}
   doorSprite: {fileID: 42459931}
   lightSpriteRed: {fileID: 1946147275}
@@ -6504,8 +6509,7 @@ MonoBehaviour:
   shouldSleep: []
   hallwayLockedDay:
   - "\u201CLocked\u2026 of course.\u201D"
-  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
-    everywhere.\u201D"
+  - "\u201CI could probably use my time better instead of looking at locked doors.\u201D"
   - "\u201CI have better things to do.\u201D"
   hallwayLockedNightPill:
   - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
@@ -7634,6 +7638,8 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 0
+  isExitDoor: 0
+  goodEndingExitBark: []
   doorLight: {fileID: 1909198244}
   doorSprite: {fileID: 1420453568}
   lightSpriteRed: {fileID: 2044897120}
@@ -11464,6 +11470,8 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 0
+  isExitDoor: 0
+  goodEndingExitBark: []
   doorLight: {fileID: 892035158}
   doorSprite: {fileID: 1497061756}
   lightSpriteRed: {fileID: 1990894594}
@@ -12840,6 +12848,8 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 0
+  isExitDoor: 0
+  goodEndingExitBark: []
   doorLight: {fileID: 427015823}
   doorSprite: {fileID: 955014259}
   lightSpriteRed: {fileID: 226103107}
@@ -12850,8 +12860,7 @@ MonoBehaviour:
   shouldSleep: []
   hallwayLockedDay:
   - "\u201CLocked\u2026 of course.\u201D"
-  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
-    everywhere.\u201D"
+  - "\u201CI could probably use my time better instead of looking at locked doors.\u201D"
   - "\u201CI have better things to do.\u201D"
   hallwayLockedNightPill:
   - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
@@ -13548,6 +13557,8 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 0
+  isExitDoor: 0
+  goodEndingExitBark: []
   doorLight: {fileID: 1512501093}
   doorSprite: {fileID: 1389957094}
   lightSpriteRed: {fileID: 1363623962}
@@ -14396,6 +14407,8 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 0
+  isExitDoor: 0
+  goodEndingExitBark: []
   doorLight: {fileID: 1530619600}
   doorSprite: {fileID: 1249687306}
   lightSpriteRed: {fileID: 962071492}
@@ -14406,8 +14419,7 @@ MonoBehaviour:
   shouldSleep: []
   hallwayLockedDay:
   - "\u201CLocked\u2026 of course.\u201D"
-  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
-    everywhere.\u201D"
+  - "\u201CI could probably use my time better instead of looking at locked doors.\u201D"
   - "\u201CI have better things to do.\u201D"
   hallwayLockedNightPill:
   - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"
@@ -14615,6 +14627,8 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 0
+  isExitDoor: 0
+  goodEndingExitBark: []
   doorLight: {fileID: 1486602709}
   doorSprite: {fileID: 997003440}
   lightSpriteRed: {fileID: 1155850799}
@@ -14625,8 +14639,7 @@ MonoBehaviour:
   shouldSleep: []
   hallwayLockedDay:
   - "\u201CLocked\u2026 of course.\u201D"
-  - "\u201CProbably best not to enter something unauthorized. DOLOS has eyes nearly
-    everywhere.\u201D"
+  - "\u201CI could probably use my time better instead of looking at locked doors.\u201D"
   - "\u201CI have better things to do.\u201D"
   hallwayLockedNightPill:
   - "\u201CIt\u2019s getting late, I should get some sleep.\u201D"

@@ -303,6 +303,11 @@ MonoBehaviour:
   requiresAllTasksComplete: 0
   requiresPuzzleComplete: 0
   isMorningGated: 1
+  isExitDoor: 1
+  goodEndingExitBark:
+  - '"It''s time for me to leave this ship for good."'
+  - '"I''ll have to use an escape pod to get back to Earth."'
+  - '"Time to go back to Earth I guess..."'
   doorLight: {fileID: 0}
   doorSprite: {fileID: 0}
   lightSpriteRed: {fileID: 0}
@@ -315,7 +320,7 @@ MonoBehaviour:
   computerIncomplete:
   - '"Maybe I should talk with Albert for a bit."'
   - '"Better see if Albert has left any new messages."'
-  - "I haven\u2019t talked with Albert yet. I should do that.\""
+  - "\"I haven\u2019t talked with Albert yet. I should do that.\""
   shouldSleep:
   - "\"It\u2019s getting late, I should get some sleep.\""
   - "\"I need to go to bed. DOLOS will wonder what I\u2019m doing if I pass my curfew.\""
@@ -8733,6 +8738,10 @@ MonoBehaviour:
   - '"I should check in with Albert before going to bed."'
   - '"Better see if Albert has left any new messages."'
   - '"Maybe I should talk with Albert for a bit."'
+  goodEnding:
+  - "\u201CScrew this place, I\u2019m getting out of here.\u201D"
+  - "\u201CI hate Earth\u2026 But I can\u2019t stay here.\u201D"
+  - "\u201CWhy would I sleep now? I have to escape from this place.\u201D"
 --- !u!1 &1365030099
 GameObject:
   m_ObjectHideFlags: 0
