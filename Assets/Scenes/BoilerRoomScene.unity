@@ -1890,6 +1890,8 @@ MonoBehaviour:
   requiresAllTasksComplete: 1
   requiresPuzzleComplete: 0
   isMorningGated: 0
+  isExitDoor: 0
+  goodEndingExitBark: []
   doorLight: {fileID: 0}
   doorSprite: {fileID: 0}
   lightSpriteRed: {fileID: 0}
@@ -3366,7 +3368,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 203540239509aee4285fec8e21700d4f, type: 3}
+  m_audioClip: {fileID: 8300000, guid: bddafe6dc5cf8de4cb93f408696c6184, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1
