@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: Day 1 Morning Computer
   m_EditorClassIdentifier: 
   announcementId: dolos_day1_morning_computer
-  text: "Please proceed to your designated task location: Section C-12, Primary Wire
-    Grid Alignment at BOILER ROOM 1A. \nYour performance metrics and data will be
-    collected in real-time, as per the proprietary rights and safety regulations
-    of the DOLOS Corporation, a subsidiary of the Erebus Holdings."
+  text: 'Proceed to your designated task location: BOILER ROOM 1A in section C-12.
+
+    Your
+    performance metrics and data will be collected in real-time, as per the proprietary
+    rights and safety regulations of the DOLOS Corporation, a subsidiary of Erebus
+    Holdings.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: f66a54a33e5fa8146a6d97dc79afff5b, type: 3}
+  audioClip: {fileID: 8300000, guid: 794ed91f347a33d40ab6a37bbdbd4cc7, type: 3}
   displayDuration: 21
   lineDurations: 0a000000
   volume: 1

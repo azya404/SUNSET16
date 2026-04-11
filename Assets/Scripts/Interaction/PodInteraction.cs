@@ -115,7 +115,9 @@ namespace SUNSET16.Interaction
             }
 
             // bad ending: don't advance the day — fade to black then load NeutralCreditsScene
-            if (PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Bad")
+            if (PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Bad"
+                && DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night
+                && DialogueUIManager.Instance != null && DialogueUIManager.Instance.HasCompletedTodayNightSequence)
             {
                 Debug.Log("[POD] Bad ending — loading NeutralCreditsScene");
                 StartCoroutine(BadEndingSequence());
@@ -172,10 +174,14 @@ namespace SUNSET16.Interaction
                 yield break;
             }
 
-            AudioManager.Instance?.StopMusicImmediate();
+            AudioManager.Instance?.StopAmbient();
+
+            InteractionHotbarController.Instance.characterState(false);
 
             // fade to black — same fade canvas as normal sleep
             yield return StartCoroutine(cutscenePlayer.FadeOut());
+
+            SaveManager.Instance.ClearSaveData();
 
             // load standalone credits scene — no RoomManager, no CoreScene dependency
             SceneManager.LoadScene(NEUTRAL_CREDITS_SCENE);
@@ -199,7 +205,9 @@ namespace SUNSET16.Interaction
             }
 
             // stop music immediately so cutscene audio is not competing with background tracks
-            AudioManager.Instance?.StopMusicImmediate();
+            AudioManager.Instance?.StopAmbient();
+
+            InteractionHotbarController.Instance.characterState(false);
 
             // fade to black via PodFadeCanvas (Sort Order 11, always active — reliable)
             yield return StartCoroutine(cutscenePlayer.FadeOut());
@@ -256,6 +264,7 @@ namespace SUNSET16.Interaction
 
             // fade back in to reveal the new morning
             yield return StartCoroutine(cutscenePlayer.FadeIn());
+            InteractionHotbarController.Instance.characterState(true);
 
             _isSleeping = false;
 

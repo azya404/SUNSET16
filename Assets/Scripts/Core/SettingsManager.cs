@@ -40,9 +40,9 @@ namespace SUNSET16.Core
         //default values for first-time players (before they change anything)
         //chose 0.8 for master and 0.7 for music/sfx cos full volume is kinda aggressive
         //brightness 1.0 = fully clear (no darkening), 0.0 = fully black
-        private const float DEFAULT_MASTER_VOLUME = 0.8f;
-        private const float DEFAULT_MUSIC_VOLUME = 0.7f;
-        private const float DEFAULT_SFX_VOLUME = 0.7f;
+        private const float DEFAULT_MASTER_VOLUME = 1.0f;
+        private const float DEFAULT_MUSIC_VOLUME = 1.0f;
+        private const float DEFAULT_SFX_VOLUME = 1.0f;
         private const float DEFAULT_BRIGHTNESS = 1.0f;
     
         //current values - public get for other systems to read, private set so only we can change them

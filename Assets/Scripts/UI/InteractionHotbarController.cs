@@ -7,6 +7,7 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using SUNSET16.Core;
+using UnityEngine.Video;
 
 namespace SUNSET16.UI
 {
@@ -150,6 +151,16 @@ namespace SUNSET16.UI
             textboxCanvasGroup.alpha = targetAlpha;
             textboxCanvasGroup.blocksRaycasts = targetAlpha > 0f;
             _fadeCoroutine = null;
+        }
+
+        public void characterState(bool active)
+        {
+            characterSprite.gameObject.SetActive(active);
+        }
+
+        public bool isCharacterActive()
+        {
+            return characterSprite.gameObject.activeSelf;
         }
     }
 }

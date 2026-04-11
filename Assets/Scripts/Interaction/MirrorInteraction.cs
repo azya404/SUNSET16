@@ -275,6 +275,8 @@ namespace SUNSET16.Interaction
             //hide the interaction prompt immediately so it doesnt show during the sequence
             _interactionSystem?.SetInteractionEnabled(false);
 
+            InteractionHotbarController.Instance.characterState(false);
+
             if (mirrorOverlayCanvas != null)
                 mirrorOverlayCanvas.SetActive(true);
 
@@ -329,6 +331,8 @@ namespace SUNSET16.Interaction
 
             if (mirrorOverlayCanvas != null)
                 mirrorOverlayCanvas.SetActive(false);
+
+            InteractionHotbarController.Instance.characterState(true);
 
             //restore both buttons for the next time the overlay opens (next day)
             if (takePillButton   != null) takePillButton.gameObject.SetActive(true);

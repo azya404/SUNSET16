@@ -175,6 +175,8 @@ namespace SUNSET16.Interaction
             _sequenceActive = true;
             if (PlayerController.Instance != null) PlayerController.Instance.LockMovement(true);
 
+            InteractionHotbarController.Instance.characterState(false);
+
             // fade to black (covers game view)
             yield return StartCoroutine(Fade(0f, 1f));
 
@@ -260,6 +262,7 @@ namespace SUNSET16.Interaction
 
             // restore bedroom scene before fading back in
             SetBedroomVisible(true);
+            InteractionHotbarController.Instance.characterState(true);
 
             // fade in - back to game view
             yield return StartCoroutine(Fade(1f, 0f));

@@ -271,12 +271,11 @@ namespace SUNSET16.Core
                 return;
             }
             // Exit door in good ending state — only passable after night computer session is done
-            if (isExitDoor && PillStateManager.Instance != null &&
-                PillStateManager.Instance.DetermineEnding() == "Good")
+            if (isExitDoor && PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Good" 
+                && DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night)
             {
                 // at night, must complete Albert's final dialogue before escaping
                 if (DayManager.Instance != null
-                    && DayManager.Instance.CurrentPhase == DayPhase.Night
                     && DialogueUIManager.Instance != null
                     && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
                 {
@@ -375,9 +374,9 @@ namespace SUNSET16.Core
                 if (ending == "Good")
                     return goodEndingExitBark.Count > 0
                         ? goodEndingExitBark[Random.Range(0, goodEndingExitBark.Count)]
-                        : "I should at least try to leave the ship...right?";
+                        : "It's time for me to leave this ship for good.";
                 if (ending == "Bad")
-                    return "The door is sealed.";
+                    return "\"The door is sealed...\"";
                 // "Undetermined" — fall through to normal isMorningGated prompts below
             }
 
@@ -550,11 +549,15 @@ namespace SUNSET16.Core
         void TransitionToRoom()
         {
             // Good ending escape: bypass RoomManager, load standalone GoodEndingScene directly
-            if (isExitDoor && PillStateManager.Instance != null &&
-                PillStateManager.Instance.DetermineEnding() == "Good")
+            if (isExitDoor && PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Good"
+                && DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night
+                && DialogueUIManager.Instance != null && DialogueUIManager.Instance.HasCompletedTodayNightSequence)
             {
                 Debug.Log("[DOORCONTROLLER] Good ending exit — loading GoodEndingScene");
+                AudioManager.Instance?.StopAmbient();
+                SaveManager.Instance.ClearSaveData();
                 SceneManager.LoadScene(GOOD_ENDING_SCENE);
+                SceneManager.UnloadSceneAsync("CoreScene");
                 return;
             }
 
