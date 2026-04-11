@@ -27,6 +27,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using SUNSET16.UI;
 
 namespace SUNSET16.Core
@@ -57,6 +58,12 @@ namespace SUNSET16.Core
         [Tooltip("Enable morning/night dialogue gates on the bedroom exit door.")]
         [SerializeField] private bool isMorningGated = false;
 
+        [Header("Exit Door Settings")]
+        [Tooltip("Mark this as the ship's exit door. Good ending: unlocked, loads GoodEndingScene. Bad/undetermined ending: permanently locked.")]
+        [SerializeField] private bool isExitDoor = false;
+        [Tooltip("Bark lines shown when player approaches in good ending state. E.g. 'I should at least try to leave the ship...right?'")]
+        [SerializeField] private List<string> goodEndingExitBark = new List<string>();
+
         [Header("Visual")]
         [SerializeField] private Light2D doorLight;
         [SerializeField] private SpriteRenderer doorSprite;
@@ -85,6 +92,7 @@ namespace SUNSET16.Core
         private static readonly Color ColourLocked     = Color.red;
         private static readonly Color ColourAccessible = new Color(1f, 0.5f, 0f); // orange
         private static readonly Color ColourInZone     = Color.green;
+        private const string GOOD_ENDING_SCENE = "GoodEndingScene";
         private List<string> taskRooms = new List<string> {"boiler room 1A", "the navigation room", "the infirmary", "server room 1A", "boiler room 1B"};
         private int guideToRoom;
         
@@ -94,6 +102,22 @@ namespace SUNSET16.Core
         void Start() 
         {
             interactionSystem = GetComponent<InteractionSystem>();
+
+            // Exit door: override state only when ending is determined.
+            // Good ending → unlocked (player can escape).
+            // Bad ending → permanently sealed.
+            // Undetermined → fall through to normal targetSceneName logic below
+            //   so the door behaves as a regular isMorningGated door during normal gameplay.
+            if (isExitDoor)
+            {
+                string ending = PillStateManager.Instance != null
+                    ? PillStateManager.Instance.DetermineEnding()
+                    : "Undetermined";
+                if (ending == "Good") { SetDoorState(DoorState.Normal); return; }
+                if (ending == "Bad")  { SetDoorState(DoorState.Locked); return; }
+                // "Undetermined" — continue to normal targetSceneName logic below
+            }
+
             //if its a hidden room door, ask HiddenRoomManager what state its in
             //otherwise just set it to normal (unlocked, orange)
         if (targetSceneName  == "HallwayScene")
@@ -246,10 +270,26 @@ namespace SUNSET16.Core
                 Debug.Log("[DOORCONTROLLER] DOLOS announcement active — door transition blocked");
                 return;
             }
+            // Exit door in good ending state — only passable after night computer session is done
+            if (isExitDoor && PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Good" 
+                && DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night)
+            {
+                // at night, must complete Albert's final dialogue before escaping
+                if (DayManager.Instance != null
+                    && DialogueUIManager.Instance != null
+                    && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                {
+                    ShowLockedMessage("I should finish up before leaving.");
+                    return;
+                }
+                StartCoroutine(PlayOpenAnimation());
+                return;
+            }
+
             //chain of checks - if any fail we bail early with a message
             if (isLocked)
             {
-                ShowLockedMessage("The door is locked.");
+                ShowLockedMessage("The door is sealed.");
                 return;
             }
 
@@ -326,6 +366,20 @@ namespace SUNSET16.Core
 
         public string GetInteractionPrompt()
         {
+            // Exit door prompts — only override when ending is determined.
+            // Undetermined falls through to normal isMorningGated prompts below.
+            if (isExitDoor && PillStateManager.Instance != null)
+            {
+                string ending = PillStateManager.Instance.DetermineEnding();
+                if (ending == "Good")
+                    return goodEndingExitBark.Count > 0
+                        ? goodEndingExitBark[Random.Range(0, goodEndingExitBark.Count)]
+                        : "It's time for me to leave this ship for good.";
+                if (ending == "Bad")
+                    return "\"The door is sealed...\"";
+                // "Undetermined" — fall through to normal isMorningGated prompts below
+            }
+
             if (isMorningGated && DayManager.Instance != null)
             {
                 if (DayManager.Instance.CurrentPhase == DayPhase.Morning && PillStateManager.Instance != null && !PillStateManager.Instance.HasTakenPillToday())
@@ -494,6 +548,19 @@ namespace SUNSET16.Core
         [ContextMenu("Go into room")]
         void TransitionToRoom()
         {
+            // Good ending escape: bypass RoomManager, load standalone GoodEndingScene directly
+            if (isExitDoor && PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Good"
+                && DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night
+                && DialogueUIManager.Instance != null && DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+            {
+                Debug.Log("[DOORCONTROLLER] Good ending exit — loading GoodEndingScene");
+                AudioManager.Instance?.StopAmbient();
+                SaveManager.Instance.ClearSaveData();
+                SceneManager.LoadScene(GOOD_ENDING_SCENE);
+                SceneManager.UnloadSceneAsync("CoreScene");
+                return;
+            }
+
             if (AudioManager.Instance != null)
             {
                 // AudioManager.Instance.PlayDoorOpen();

@@ -27,6 +27,7 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
 using SUNSET16.UI;
+using Unity.VisualScripting;
 
 namespace SUNSET16.Core
 {
@@ -140,8 +141,13 @@ namespace SUNSET16.Core
                 Debug.Log($"[ROOMMANAGER] Player spawned at {spawnPos}");
             }
 
-            if (roomSceneName.Contains("Bedroom") && (PillStateManager.Instance.GetPillsRefusedCount() < 3))
-                DOLOSManager.Instance.TriggerAnnouncement();
+            if (roomSceneName.Contains("Bedroom"))
+            {
+                if (InteractionHotbarController.Instance != null && !InteractionHotbarController.Instance.isCharacterActive())
+                    InteractionHotbarController.Instance.characterState(true);
+                if (PillStateManager.Instance != null && PillStateManager.Instance.GetPillsRefusedCount() < 3)
+                    DOLOSManager.Instance.TriggerAnnouncement();
+            }
 
             OnRoomLoaded?.Invoke(roomSceneName);
 

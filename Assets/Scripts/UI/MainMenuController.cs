@@ -1,31 +1,22 @@
 /*
 the main menu - first thing the player sees when they open the game
-has buttons for New Game, Continue, Settings, Credits
+has buttons for New Game, Settings, Credits
 
-new game will check if a save already exists and if so shows a
-confirmation popup so they dont accidentally overwrite their progress
-if no save exists it just goes straight to the bedroom scene
+New Game always starts a fresh save — no confirmation dialog,
+no continue button. SaveManager.ClearSaveData() runs every time.
 
-continue loads CoreScene which has all the managers and they
-auto-init and pull save data from PlayerPrefs
-
-settings just toggles the settings panel on/off and credits
-doesnt do anything yet lol
-
-TODO: credits scene
-TODO: transition animation when going from menu to game
-
-FADE SEQUENCE (on New Game / Continue / Credits click):
-  Phase 1 - menu_character + menu_space_bg fade out simultaneously
-            buttons are disabled immediately, still visible
-  Phase 2 - menu_stars + ButtonGroup fade out simultaneously
-            only menu_title remains
-  Phase 3 - menu_title fades out, then scene loads
+FADE SEQUENCE (on New Game / Credits click):
+  Phase 1 - buttons locked, nothing visual changes, music plays
+            holds for startButtonSFX.length + 0.25s
+  Phase 2 - buttons fade out over 0.5s, everything else still visible
+  Phase 3 - character, space bg, stars all fade out over 0.5s
+            title remains on screen, music still plays
+  Phase 4 - title fades out over 4s, music fades simultaneously
+            scene loads when complete
 */
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 using System.Collections;
 using SUNSET16.Core;
 
@@ -35,17 +26,11 @@ namespace SUNSET16.UI
     {
         [Header("Buttons")]
         [SerializeField] private Button newGameButton;
-        [SerializeField] private Button continueButton;
         [SerializeField] private Button settingsButton;
         [SerializeField] private Button creditsButton;
 
         [Header("Panels")]
         [SerializeField] private GameObject settingsPanel;
-        [SerializeField] private GameObject newGameConfirmPanel;
-
-        [Header("Confirmation Dialog")]
-        [SerializeField] private Button confirmNewGameButton;
-        [SerializeField] private Button cancelNewGameButton;
 
         [Header("Audio")]
         [SerializeField] private AudioSource sfxSource;
@@ -61,21 +46,22 @@ namespace SUNSET16.UI
         [SerializeField] private CanvasGroup characterLayer;
         [SerializeField] private CanvasGroup buttonsLayer;
 
-        [Header("Fade Durations")]
-        [SerializeField] private float phase1Duration = 0.6f;
-        [SerializeField] private float phase2Duration = 0.5f;
-        [SerializeField] private float phase3Duration = 0.8f;
-
         [Header("Scene Names")]
-        [SerializeField] private string newGameSceneName  = "CoreScene";
-        [SerializeField] private string creditsSceneName  = "NeutralCreditsScene";
-        private const string CORE_SCENE_NAME = "CoreScene";
+        [SerializeField] private string newGameSceneName = "CoreScene";
+        [SerializeField] private string creditsSceneName = "NeutralCreditsScene";
 
         // set by NeutralCreditsSceneController before returning to this scene
         public static bool ReturnedFromCredits = false;
 
         private Coroutine _musicLoopCoroutine;
         private bool      _sceneFadeActive = false;
+        private float     _sfxDuration;
+
+        // fade sequence durations — fixed, read once from clip in Start()
+        private const float SfxHoldPadding    = 0.25f;
+        private const float ButtonFadeDuration = 0.5f;
+        private const float LayerFadeDuration  = 0.5f;
+        private const float TitleFadeDuration  = 4f;
 
         private void Start()
         {
@@ -84,22 +70,12 @@ namespace SUNSET16.UI
             SettingsManager.Instance.Initialize();
             SaveManager.Instance.Initialize();
 
-            //wire up all the button click listeners
+            // read SFX length once — used as phase 1 hold duration
+            _sfxDuration = startButtonSFX != null ? startButtonSFX.length : 0f;
+
             newGameButton.onClick.AddListener(OnNewGameClicked);
-            continueButton.onClick.AddListener(OnContinueClicked);
             settingsButton.onClick.AddListener(OnSettingsClicked);
             creditsButton.onClick.AddListener(OnCreditsClicked);
-
-            //if theres a confirmation panel set up, wire those buttons too and hide it
-            if (newGameConfirmPanel != null)
-            {
-                confirmNewGameButton.onClick.AddListener(OnConfirmNewGame);
-                cancelNewGameButton.onClick.AddListener(OnCancelNewGame);
-                newGameConfirmPanel.SetActive(false);
-            }
-
-            //gray out the continue button if theres no save to load
-            continueButton.interactable = SaveManager.Instance.SaveExists;
 
             if (settingsPanel != null)
                 settingsPanel.SetActive(false);
@@ -155,37 +131,8 @@ namespace SUNSET16.UI
         private void OnNewGameClicked()
         {
             sfxSource?.PlayOneShot(startButtonSFX);
-
-            if (SaveManager.Instance.SaveExists && newGameConfirmPanel != null)
-                newGameConfirmPanel.SetActive(true);
-            else
-                StartNewGame();
-        }
-
-        private void OnConfirmNewGame()
-        {
-            newGameConfirmPanel.SetActive(false);
-            sfxSource?.PlayOneShot(menuClickSFX);
-            StartNewGame();
-        }
-
-        private void OnCancelNewGame()
-        {
-            sfxSource?.PlayOneShot(menuClickSFX);
-            newGameConfirmPanel.SetActive(false);
-        }
-
-        private void StartNewGame()
-        {
             SaveManager.Instance.ClearSaveData();
             StartCoroutine(LayerFadeAndLoad(newGameSceneName));
-        }
-
-        private void OnContinueClicked()
-        {
-            sfxSource?.PlayOneShot(startButtonSFX);
-            Debug.Log("[MAINMENU] Continuing saved game");
-            StartCoroutine(LayerFadeAndLoad(CORE_SCENE_NAME));
         }
 
         private void OnSettingsClicked()
@@ -203,28 +150,28 @@ namespace SUNSET16.UI
 
         private IEnumerator LayerFadeAndLoad(string sceneName)
         {
-            // lock all buttons immediately — no mashing during fade
+            // lock all buttons immediately — no visual change yet
             newGameButton.interactable  = false;
-            continueButton.interactable = false;
             settingsButton.interactable = false;
             creditsButton.interactable  = false;
 
             _sceneFadeActive = true;
             if (_musicLoopCoroutine != null) StopCoroutine(_musicLoopCoroutine);
 
-            float totalDuration = phase1Duration + phase2Duration + phase3Duration;
-            StartCoroutine(FadeMusic(musicSource != null ? musicSource.volume : 1f, 0f, totalDuration));
+            // phase 1 — hold for SFX length + padding, everything visible, music plays
+            yield return new WaitForSeconds(_sfxDuration + SfxHoldPadding);
 
-            // phase 1 — character + space bg fade out together
-            StartCoroutine(FadeCanvasGroup(characterLayer, 1f, 0f, phase1Duration));
-            yield return StartCoroutine(FadeCanvasGroup(spaceBackgroundLayer, 1f, 0f, phase1Duration));
+            // phase 2 — buttons fade out, everything else still visible, music plays
+            yield return StartCoroutine(FadeCanvasGroup(buttonsLayer, 1f, 0f, ButtonFadeDuration));
 
-            // phase 2 — stars + buttons fade out together
-            StartCoroutine(FadeCanvasGroup(starsLayer, 1f, 0f, phase2Duration));
-            yield return StartCoroutine(FadeCanvasGroup(buttonsLayer, 1f, 0f, phase2Duration));
+            // phase 3 — character, space bg, stars fade out simultaneously, title remains, music plays
+            StartCoroutine(FadeCanvasGroup(characterLayer, 1f, 0f, LayerFadeDuration));
+            StartCoroutine(FadeCanvasGroup(spaceBackgroundLayer, 1f, 0f, LayerFadeDuration));
+            yield return StartCoroutine(FadeCanvasGroup(starsLayer, 1f, 0f, LayerFadeDuration));
 
-            // phase 3 — title fades out last
-            yield return StartCoroutine(FadeCanvasGroup(titleLayer, 1f, 0f, phase3Duration));
+            // phase 4 — title fades out, music fades simultaneously, then scene loads
+            StartCoroutine(FadeMusic(musicSource != null ? musicSource.volume : 1f, 0f, TitleFadeDuration));
+            yield return StartCoroutine(FadeCanvasGroup(titleLayer, 1f, 0f, TitleFadeDuration));
 
             Debug.Log($"[MAINMENU] Loading {sceneName}");
             SceneManager.LoadScene(sceneName);

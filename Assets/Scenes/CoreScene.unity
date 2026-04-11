@@ -2710,7 +2710,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1777587246
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3079,6 +3079,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 951c03b2962a68e418151ce66c73268b, type: 2}
   _puzzleSpawnPoint: {fileID: 0}
   CompletePuzzleCount: 0
+  completedPuzzle: 0
 --- !u!4 &2055875353
 Transform:
   m_ObjectHideFlags: 0

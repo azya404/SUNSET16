@@ -730,7 +730,8 @@ namespace SUNSET16.UI
                     audioSource.PlayOneShot(msgGet);
                     _newNotif = true;
                     _newEntryAmt++;
-                    notifImage.gameObject.SetActive(true);
+                    if (notifImage != null)
+                        notifImage.gameObject.SetActive(true);
                 }
             }
         }

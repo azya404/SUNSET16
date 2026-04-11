@@ -2991,6 +2991,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1860292747}
     m_Modifications:
+    - target: {fileID: 2659192116216843611, guid: 97fdc02f4c98ac54282306e999f5ab1c, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4225548563768978637, guid: 97fdc02f4c98ac54282306e999f5ab1c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3240,6 +3244,10 @@ PrefabInstance:
     - target: {fileID: 7355502286200623564, guid: cb9676ffb4e89f54984b1e715235b615, type: 3}
       propertyPath: down_slot
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153581762456391432, guid: cb9676ffb4e89f54984b1e715235b615, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

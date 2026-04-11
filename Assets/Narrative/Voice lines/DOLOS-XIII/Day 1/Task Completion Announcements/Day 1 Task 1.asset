@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Day 1 Task 1
   m_EditorClassIdentifier: 
   announcementId: dolos_day1_task1
-  text: "Task complete. The primary wire grid in Section C-12 is now showing increased
-    electrical flow. \nYour performance has been logged. Efficiency rating 95%.\nPlease
-    proceed to the remaining assignment at your earliest convenience."
+  text: "Task complete. The primary wire grid in BOILER ROOM 1A is now showing increased
+    electrical flow. \nYour performance has been logged. Efficiency rating 95%.\nComplete
+    the remainder of your assignment."
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: b3f17bd5dd5e6784e8a875dbe5af843b, type: 3}
-  displayDuration: 18
+  audioClip: {fileID: 8300000, guid: 0a5fbfa62bc258243998965af75c5dd8, type: 3}
+  displayDuration: 17
   lineDurations: 0800000006000000
   volume: 1

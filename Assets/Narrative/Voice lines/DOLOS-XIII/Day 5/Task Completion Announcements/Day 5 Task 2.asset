@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Day 5 Task 2
   m_EditorClassIdentifier: 
   announcementId: dolos_day5_task2
-  text: "Task completed. The SUNSET16\u2019s internal systems for Section C-12 are
-    now receiving the appropriate levels of power.\nGood work, Technician. You may
-    head back to your personal quarters at your convenience."
+  text: "Task completed. Boiler room 1B\u2019s wiring is now receiving the ideal
+    level of power.\nGood work, Technician. You may head back to your personal quarters
+    at your convenience."
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: eeec9c4fd7fe79d4989e516803c84336, type: 3}
+  audioClip: {fileID: 8300000, guid: e8d8cda23e779764fb708d2699e51add, type: 3}
   displayDuration: 14
   lineDurations: 09000000
   volume: 1
