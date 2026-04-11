@@ -595,7 +595,7 @@ MonoBehaviour:
   fadeDuration: 0.5
   taskIndex: 2
   nextTaskObject: {fileID: 0}
-  roomAmbient: {fileID: 0}
+  roomAmbient: {fileID: 1357160470}
   puzzleThemeSource: {fileID: 1993564418}
   puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
   ambientDuckedVolume: 0.05
@@ -863,7 +863,7 @@ MonoBehaviour:
   fadeDuration: 0.5
   taskIndex: 1
   nextTaskObject: {fileID: 172620038}
-  roomAmbient: {fileID: 0}
+  roomAmbient: {fileID: 1357160470}
   puzzleThemeSource: {fileID: 1993564418}
   puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
   ambientDuckedVolume: 0.05

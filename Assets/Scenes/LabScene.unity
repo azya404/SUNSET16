@@ -1896,7 +1896,7 @@ MonoBehaviour:
   puzzleOverlayCanvas: {fileID: 1540433800}
   fadePanel: {fileID: 1809367647}
   fadeDuration: 0.5
-  roomAmbient: {fileID: 0}
+  roomAmbient: {fileID: 435782967}
   puzzleThemeSource: {fileID: 1428683728}
   puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
   ambientDuckedVolume: 0.05
