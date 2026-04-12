@@ -17,9 +17,12 @@ SoftenAmbient/RestoreAmbient called by MirrorInteraction on proximity
 FadeOutAndPauseAmbient/ResumeAmbientWithFadeIn called during pill sequence
 volume tracks masterVolume only - can add dedicated ambient slider later
 
-hallwaySource plays the persistent ship ambient that carries across all
-non-bedroom and non-crematorium scenes. it is never stopped - only paused
-and resumed so playback position is preserved across scene transitions.
+hallwaySource plays the persistent ship ambient that carries across a
+strict whitelist of scenes: HallwayScene, BoilerRoomScene,
+LittleBoilerRoomScene, NavRoomScene, InfirmaryScene, ServerRoomScene,
+Server2RoomScene, LabScene. it is stopped completely for everything else
+(cutscenes, endings, bedroom, credits) and restarts fresh next time the
+player enters a whitelisted scene.
 PauseHallwayAmbient / ResumeHallwayAmbient are public so TaskInteraction
 and PuzzleInteraction can pause it when their overlays open and close.
 
@@ -34,6 +37,7 @@ TODO: morning music should change based on pill choice
 TODO: audio ducking (lower music when sfx plays)
 */
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
@@ -98,6 +102,19 @@ namespace SUNSET16.Core
         private bool _ambientPaused  = false; //tracks whether bedroom ambient was paused by an interaction
         private bool _hallwayPaused  = false; //tracks whether hallway ambient is paused (preserve position)
         private bool _hallwayStarted = false; //true once hallway ambient has been started for the first time
+
+        // explicit whitelist - ship theme ONLY plays in these scenes, nothing else
+        private static readonly HashSet<string> _shipThemeScenes = new HashSet<string>
+        {
+            "HallwayScene",
+            "BoilerRoomScene",
+            "LittleBoilerRoomScene",
+            "NavRoomScene",
+            "InfirmaryScene",
+            "ServerRoomScene",
+            "Server2RoomScene",
+            "LabScene"
+        };
 
         protected override void Awake()
         {
@@ -327,27 +344,18 @@ namespace SUNSET16.Core
         {
             if (roomName.Contains("Bedroom"))
             {
-                // entering bedroom: pause ship ambient to preserve playback position,
-                // stop any previous room ambient, start bedroom ambient
-                PauseHallwayAmbient();
+                // entering bedroom: stop ship theme completely, start bedroom ambient
+                StopHallwayAmbient();
                 StopAmbient();
                 if (bedroomAmbientClip != null)
                 {
                     PlayAmbient(bedroomAmbientClip);
-                    Debug.Log("[AUDIOMANAGER] Bedroom ambient started, hallway ambient paused");
+                    Debug.Log("[AUDIOMANAGER] Bedroom ambient started, ship theme stopped");
                 }
             }
-            else if (roomName.Contains("Crematorium"))
+            else if (_shipThemeScenes.Contains(roomName))
             {
-                // crematorium has its own standalone scene-local ambient
-                // ship theme does not play here - pause it to preserve position
-                PauseHallwayAmbient();
-                StopAmbient();
-                Debug.Log("[AUDIOMANAGER] Crematorium room — hallway ambient paused");
-            }
-            else
-            {
-                // hallway or any task/puzzle room: stop bedroom ambient, resume ship ambient
+                // whitelisted ship-theme scene: stop bedroom ambient, start or resume ship theme
                 StopAmbient();
                 if (!_hallwayStarted)
                     StartHallwayAmbient();
@@ -355,7 +363,15 @@ namespace SUNSET16.Core
                     ResumeHallwayAmbient();
                 // already playing (e.g. hallway -> boilerroom) — do nothing, it continues
 
-                Debug.Log($"[AUDIOMANAGER] Hallway ambient active for {roomName}");
+                Debug.Log($"[AUDIOMANAGER] Ship theme active for {roomName}");
+            }
+            else
+            {
+                // cutscenes, endings, credits, any non-whitelisted scene
+                // ship theme has no business playing here — stop it completely
+                StopHallwayAmbient();
+                StopAmbient();
+                Debug.Log($"[AUDIOMANAGER] Ship theme stopped for non-ship scene: {roomName}");
             }
         }
 
@@ -401,6 +417,17 @@ namespace SUNSET16.Core
                 _hallwayPaused = false;
                 Debug.Log("[AUDIOMANAGER] Hallway ambient resumed");
             }
+        }
+
+        // stops ship theme completely and resets state — used for non-ship scenes
+        // next time player enters a ship-theme scene, StartHallwayAmbient() fires fresh
+        private void StopHallwayAmbient()
+        {
+            if (_hallwayFadeCoroutine != null) StopCoroutine(_hallwayFadeCoroutine);
+            if (hallwaySource != null) hallwaySource.Stop();
+            _hallwayPaused  = false;
+            _hallwayStarted = false;
+            Debug.Log("[AUDIOMANAGER] Ship theme stopped and reset");
         }
 
         private IEnumerator FadeHallwayCoroutine(float targetVolume, float duration)
