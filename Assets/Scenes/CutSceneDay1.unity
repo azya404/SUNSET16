@@ -155,7 +155,7 @@ MonoBehaviour:
   nextSceneName: BedroomScene
   videoPlayer: {fileID: 1887911021}
   videoFileName: CutsceneDay1.mp4
-  videoVolume: 0.697
+  videoVolume: 0.312
 --- !u!4 &653908601
 Transform:
   m_ObjectHideFlags: 0
