@@ -3562,6 +3562,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 545050835}
     m_Modifications:
+    - target: {fileID: 103558215739275464, guid: 96dda7e812975a84b8a7006539639e05, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 700661984443108455, guid: 96dda7e812975a84b8a7006539639e05, type: 3}
       propertyPath: puzzleInteraction
       value: 
@@ -3645,6 +3649,10 @@ PrefabInstance:
     - target: {fileID: 1217967771665230160, guid: 96dda7e812975a84b8a7006539639e05, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1326295717171766189, guid: 96dda7e812975a84b8a7006539639e05, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5042015579748165262, guid: 96dda7e812975a84b8a7006539639e05, type: 3}
       propertyPath: m_fontColor.b

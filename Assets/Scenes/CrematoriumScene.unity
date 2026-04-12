@@ -3062,6 +3062,10 @@ PrefabInstance:
         NOT open the chamber during operation.\n\n\rAt the DOLOS Corporation, immortality
         is our priority.\r\n\nSigned,\r\nDOLOS-XIII Management System\r\n"
       objectReference: {fileID: 0}
+    - target: {fileID: 2442341990522673217, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 2451576997141256838, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0

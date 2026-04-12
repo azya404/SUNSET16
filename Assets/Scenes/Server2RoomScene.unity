@@ -514,6 +514,10 @@ PrefabInstance:
       propertyPath: taskInteraction
       value: 
       objectReference: {fileID: 1172047934}
+    - target: {fileID: 1467593321598478561, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1836196271927065583, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: m_fontSize
       value: 17
@@ -530,9 +534,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3326296176890166343, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 3399801910783100762, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432797641366972669, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7242316606028740606, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: long_message
@@ -1073,6 +1085,10 @@ PrefabInstance:
         wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
         System"
       objectReference: {fileID: 0}
+    - target: {fileID: 2529138841635603102, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5681720576832364303, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: taskInteraction
       value: 
@@ -1084,6 +1100,10 @@ PrefabInstance:
     - target: {fileID: 5781338758826426024, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6250274757423079074, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6626288602142638647, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_Pivot.x
@@ -1165,6 +1185,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6821777429632510228, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 7906801429424779053, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
@@ -1229,6 +1253,14 @@ PrefabInstance:
         coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
         wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
         System"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3445892266649263527, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3447324538951933571, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5268812289777938323, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_PlayOnAwake
@@ -1313,6 +1345,10 @@ PrefabInstance:
     - target: {fileID: 5455047519442290615, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8430236179096994878, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3956,6 +3992,10 @@ PrefabInstance:
         wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
         System"
       objectReference: {fileID: 0}
+    - target: {fileID: 2529138841635603102, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5681720576832364303, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: taskInteraction
       value: 
@@ -3967,6 +4007,10 @@ PrefabInstance:
     - target: {fileID: 5781338758826426024, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6250274757423079074, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6626288602142638647, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_Pivot.x
@@ -4047,6 +4091,10 @@ PrefabInstance:
     - target: {fileID: 6626288602142638647, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6821777429632510228, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7906801429424779053, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_PlayOnAwake
@@ -4755,6 +4803,10 @@ PrefabInstance:
       propertyPath: taskInteraction
       value: 
       objectReference: {fileID: 675260481}
+    - target: {fileID: 1467593321598478561, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1836196271927065583, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: m_fontSize
       value: 17
@@ -4771,9 +4823,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3326296176890166343, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 3399801910783100762, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432797641366972669, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7242316606028740606, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: long_message
@@ -4827,6 +4887,14 @@ PrefabInstance:
         coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
         wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
         System"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3445892266649263527, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3447324538951933571, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5268812289777938323, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_PlayOnAwake
@@ -4911,6 +4979,10 @@ PrefabInstance:
     - target: {fileID: 5455047519442290615, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8430236179096994878, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

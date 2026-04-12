@@ -3666,6 +3666,10 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 3978190361869577248, guid: 3a502cd6140f01a40960a1725224e055, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 4061709481049981058, guid: 3a502cd6140f01a40960a1725224e055, type: 3}
       propertyPath: m_fontColor.b
       value: 0.84313726
