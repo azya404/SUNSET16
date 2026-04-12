@@ -638,7 +638,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 0f2e9cd2b08705e40b2ff7749ac9618b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2417,7 +2417,7 @@ MonoBehaviour:
   fadeDuration: 0.5
   roomAmbient: {fileID: 1718840512}
   puzzleThemeSource: {fileID: 388767165}
-  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 0f2e9cd2b08705e40b2ff7749ac9618b, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to interact
 --- !u!60 &1777201889
@@ -3060,7 +3060,7 @@ PrefabInstance:
         the CADAVER on the designated surface.\nClose the chamber and confirm temperature
         (1,000\xB0C standard).\r \n\nThe cycle takes approximately two hours.\n\rDo
         NOT open the chamber during operation.\n\n\rAt the DOLOS Corporation, immortality
-        is our priority.\r\n\nSigned,\r\nDOLOS-XIII Management System\r\n"
+        is our priority.\r\n\nSigned,\r\nDOLOS-XIII Management System\n\r"
       objectReference: {fileID: 0}
     - target: {fileID: 2442341990522673217, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
       propertyPath: m_Volume

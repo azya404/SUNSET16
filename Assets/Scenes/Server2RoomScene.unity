@@ -1019,7 +1019,7 @@ MonoBehaviour:
   nextTaskObject: {fileID: 1172047933}
   roomAmbient: {fileID: 1232053207}
   puzzleThemeSource: {fileID: 814217354}
-  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 0f2e9cd2b08705e40b2ff7749ac9618b, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to work
 --- !u!61 &675260482
@@ -1392,7 +1392,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 0f2e9cd2b08705e40b2ff7749ac9618b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2319,7 +2319,7 @@ MonoBehaviour:
   nextTaskObject: {fileID: 0}
   roomAmbient: {fileID: 1232053207}
   puzzleThemeSource: {fileID: 814217354}
-  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 0f2e9cd2b08705e40b2ff7749ac9618b, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to work
 --- !u!114 &1172047935
