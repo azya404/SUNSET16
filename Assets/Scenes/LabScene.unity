@@ -1898,7 +1898,7 @@ MonoBehaviour:
   fadeDuration: 0.5
   roomAmbient: {fileID: 435782967}
   puzzleThemeSource: {fileID: 1428683728}
-  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 0f2e9cd2b08705e40b2ff7749ac9618b, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to interact
 --- !u!60 &1231231397
@@ -2197,7 +2197,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 0f2e9cd2b08705e40b2ff7749ac9618b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -3628,19 +3628,15 @@ PrefabInstance:
       value: '[AEGIS-077 Instructional Slab]
 
 
-
         Pharmacy Staff,
-
 
 
         Daily
         supplements must be prepared and loaded into the Aegis Collar.
 
 
-
         First,
         verify the batch number with your company ID.
-
 
 
         Next, insert the
@@ -3648,21 +3644,18 @@ PrefabInstance:
         last for roughly 24 hours.
 
 
-
         Do not tamper with the collar or attempt
         to extract its raw compounds. Ever.
 
+        At the DOLOS Corporation, compliance
+        is mandatory.
 
-
-        At the DOLOS Corporation,
-        compliance is mandatory.
 
 
 
         Signed,
 
-        DOLOS-XIII Management
-        System
+        DOLOS-XIII Management System
 
 '
       objectReference: {fileID: 0}
