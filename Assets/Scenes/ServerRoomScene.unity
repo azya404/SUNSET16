@@ -429,7 +429,7 @@ MonoBehaviour:
   fadeDuration: 0.5
   roomAmbient: {fileID: 1919609941}
   puzzleThemeSource: {fileID: 1653557029}
-  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 0f2e9cd2b08705e40b2ff7749ac9618b, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to interact
 --- !u!60 &75021105
@@ -2305,7 +2305,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 0f2e9cd2b08705e40b2ff7749ac9618b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -3679,15 +3679,12 @@ PrefabInstance:
       value: '[AEGIS-077 Instructional Slab]
 
 
-
         Senior Technician,
-
 
 
         To
         ensure system proficiency, data must be reviewed and archived regularly.
         Access the terminal and [REDACTED].
-
 
 
         Confirm the [REDACTED]. This
@@ -3699,9 +3696,7 @@ PrefabInstance:
         required.
 
 
-
         At the DOLOS Corporation, all data must be efficient.
-
 
 
 
