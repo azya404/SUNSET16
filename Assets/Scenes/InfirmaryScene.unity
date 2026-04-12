@@ -597,7 +597,7 @@ MonoBehaviour:
   nextTaskObject: {fileID: 0}
   roomAmbient: {fileID: 1357160470}
   puzzleThemeSource: {fileID: 1993564418}
-  puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to work
 --- !u!114 &172620042
@@ -865,7 +865,7 @@ MonoBehaviour:
   nextTaskObject: {fileID: 172620038}
   roomAmbient: {fileID: 1357160470}
   puzzleThemeSource: {fileID: 1993564418}
-  puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to work
 --- !u!1 &332742096
@@ -1664,6 +1664,14 @@ PrefabInstance:
       propertyPath: taskInteraction
       value: 
       objectReference: {fileID: 172620041}
+    - target: {fileID: 4212689125818995572, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 4212689125818995572, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 6696849821335015716, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
       propertyPath: m_Name
       value: Medium_level3
@@ -1671,6 +1679,16 @@ PrefabInstance:
     - target: {fileID: 6696849821335015716, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6990417212088795738, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
       objectReference: {fileID: 0}
     - target: {fileID: 8068199947891450786, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
       propertyPath: m_PlayOnAwake
@@ -2164,6 +2182,24 @@ PrefabInstance:
       propertyPath: taskInteraction
       value: 
       objectReference: {fileID: 312986707}
+    - target: {fileID: 2663973843337379939, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2663973843337379939, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 4581647346711264716, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
+      objectReference: {fileID: 0}
     - target: {fileID: 4821454543984425530, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
       propertyPath: m_Name
       value: Easy_level3
@@ -2175,6 +2211,10 @@ PrefabInstance:
     - target: {fileID: 6663977354389203564, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7174565994896854660, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8014694201120630402, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
       propertyPath: m_Pivot.x
@@ -2798,6 +2838,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1516633958}
     m_Modifications:
+    - target: {fileID: 757514762207830851, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 757514762207830851, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 2173174957346618495, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
       propertyPath: taskInteraction
       value: 
@@ -2885,6 +2933,16 @@ PrefabInstance:
     - target: {fileID: 4183375100334918223, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5731357811276581830, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
       objectReference: {fileID: 0}
     - target: {fileID: 6557411850378239544, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
       propertyPath: m_Name
@@ -3717,6 +3775,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 285985400}
     m_Modifications:
+    - target: {fileID: 757514762207830851, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 757514762207830851, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 2173174957346618495, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
       propertyPath: taskInteraction
       value: 
@@ -3804,6 +3870,16 @@ PrefabInstance:
     - target: {fileID: 4183375100334918223, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5731357811276581830, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
       objectReference: {fileID: 0}
     - target: {fileID: 6557411850378239544, guid: 274f19151f271cb429e0f021e67f4603, type: 3}
       propertyPath: m_Name
@@ -4306,6 +4382,14 @@ PrefabInstance:
       propertyPath: taskInteraction
       value: 
       objectReference: {fileID: 312986707}
+    - target: {fileID: 4212689125818995572, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 4212689125818995572, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 6696849821335015716, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
       propertyPath: m_Name
       value: Medium_level3
@@ -4313,6 +4397,16 @@ PrefabInstance:
     - target: {fileID: 6696849821335015716, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6990417212088795738, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
       objectReference: {fileID: 0}
     - target: {fileID: 8068199947891450786, guid: 7cca91bde55e0f64485378f53438c759, type: 3}
       propertyPath: m_PlayOnAwake
@@ -4652,6 +4746,24 @@ PrefabInstance:
       propertyPath: taskInteraction
       value: 
       objectReference: {fileID: 172620041}
+    - target: {fileID: 2663973843337379939, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2663973843337379939, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 4581647346711264716, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
+      objectReference: {fileID: 0}
     - target: {fileID: 4821454543984425530, guid: 14517ce473f3a2d41a17a23af3aaf3e5, type: 3}
       propertyPath: m_Name
       value: Easy_level3
@@ -4918,7 +5030,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

@@ -2125,7 +2125,7 @@ MonoBehaviour:
   nextTaskObject: {fileID: 1425292893}
   roomAmbient: {fileID: 311472650}
   puzzleThemeSource: {fileID: 1764253377}
-  puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to work
 --- !u!1 &1330035843
@@ -2320,7 +2320,7 @@ MonoBehaviour:
   nextTaskObject: {fileID: 0}
   roomAmbient: {fileID: 311472650}
   puzzleThemeSource: {fileID: 1764253377}
-  puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to work
 --- !u!1 &1559457822
@@ -2636,7 +2636,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -3217,6 +3217,24 @@ PrefabInstance:
       propertyPath: taskInteraction
       value: 
       objectReference: {fileID: 1425292897}
+    - target: {fileID: 7450576422065107608, guid: 97fdc02f4c98ac54282306e999f5ab1c, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837716195808215227, guid: 97fdc02f4c98ac54282306e999f5ab1c, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 8837716195808215227, guid: 97fdc02f4c98ac54282306e999f5ab1c, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3371,9 +3389,27 @@ PrefabInstance:
       propertyPath: right_slot
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6983389025672734998, guid: cb9676ffb4e89f54984b1e715235b615, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
+      objectReference: {fileID: 0}
     - target: {fileID: 7355502286200623564, guid: cb9676ffb4e89f54984b1e715235b615, type: 3}
       propertyPath: down_slot
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8004419982844074309, guid: cb9676ffb4e89f54984b1e715235b615, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 8004419982844074309, guid: cb9676ffb4e89f54984b1e715235b615, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 9153581762456391432, guid: cb9676ffb4e89f54984b1e715235b615, type: 3}
       propertyPath: m_PlayOnAwake
