@@ -277,7 +277,7 @@ namespace SUNSET16.Core
                 // at night, must complete Albert's final dialogue before escaping
                 if (DayManager.Instance != null
                     && DialogueUIManager.Instance != null
-                    && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                    && !DialogueUIManager.Instance.GetFinishedDialogue())
                 {
                     ShowLockedMessage("I should finish up before leaving.");
                     return;
@@ -551,7 +551,7 @@ namespace SUNSET16.Core
             // Good ending escape: bypass RoomManager, load standalone GoodEndingScene directly
             if (isExitDoor && PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Good"
                 && DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night
-                && DialogueUIManager.Instance != null && DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                && DialogueUIManager.Instance != null && DialogueUIManager.Instance.GetFinishedDialogue())
             {
                 Debug.Log("[DOORCONTROLLER] Good ending exit — loading GoodEndingScene");
                 AudioManager.Instance?.StopAmbient();
