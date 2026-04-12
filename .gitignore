@@ -152,3 +152,9 @@ Desktop.ini
 
 # Temporary test builds
 /TestBuilds/
+
+# RenderTextures - Unity rewrites these every editor session (metadata churn, no pixel content stored)
+Assets/Art/Locations/Bedroom/ComputerLoadRT.renderTexture
+Assets/Art/Locations/Bedroom/ComputerLoadRT.renderTexture.meta
+Assets/Materials/NavRoom/RT_NavWalls.renderTexture
+Assets/Materials/NavRoom/RT_NavWalls.renderTexture.meta

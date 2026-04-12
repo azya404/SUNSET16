@@ -7630,7 +7630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: Server2RoomScene
-  spawnPositionInTargetScene: {x: -5.39, y: -36.39, z: 0}
+  spawnPositionInTargetScene: {x: -5.39, y: -21.91, z: 0}
   roomType: 0
   isHiddenRoomDoor: 0
   hiddenRoomID: 
@@ -14399,7 +14399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: ServerRoomScene
-  spawnPositionInTargetScene: {x: -5.39, y: -36.39, z: 0}
+  spawnPositionInTargetScene: {x: -5.39, y: -22.07, z: 0}
   roomType: 1
   isHiddenRoomDoor: 1
   hiddenRoomID: room_2
