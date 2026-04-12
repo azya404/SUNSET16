@@ -514,13 +514,47 @@ PrefabInstance:
       propertyPath: taskInteraction
       value: 
       objectReference: {fileID: 1172047934}
+    - target: {fileID: 1467593321598478561, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1836196271927065583, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 1836196271927065583, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 2154383392907694552, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: m_Name
       value: Easy_level4
       objectReference: {fileID: 0}
+    - target: {fileID: 2154383392907694552, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3326296176890166343, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 3399801910783100762, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432797641366972669, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242316606028740606, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -985,7 +1019,7 @@ MonoBehaviour:
   nextTaskObject: {fileID: 1172047933}
   roomAmbient: {fileID: 1232053207}
   puzzleThemeSource: {fileID: 814217354}
-  puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to work
 --- !u!61 &675260482
@@ -1041,6 +1075,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1685992239}
     m_Modifications:
+    - target: {fileID: 20392555200276060, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529138841635603102, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5681720576832364303, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: taskInteraction
       value: 
@@ -1048,6 +1096,14 @@ PrefabInstance:
     - target: {fileID: 5781338758826426024, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_Name
       value: Medium_level4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781338758826426024, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6250274757423079074, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6626288602142638647, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_Pivot.x
@@ -1129,9 +1185,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6821777429632510228, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 7906801429424779053, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8699456340175590291, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 8699456340175590291, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1163,6 +1231,36 @@ PrefabInstance:
     - target: {fileID: 2130280525911773322, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_Name
       value: Hard_level4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2130280525911773322, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848205599391404124, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848205599391404124, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2869778519533436363, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3445892266649263527, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3447324538951933571, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5268812289777938323, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_PlayOnAwake
@@ -1248,6 +1346,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8430236179096994878, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1290,7 +1392,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2217,7 +2319,7 @@ MonoBehaviour:
   nextTaskObject: {fileID: 0}
   roomAmbient: {fileID: 1232053207}
   puzzleThemeSource: {fileID: 814217354}
-  puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to work
 --- !u!114 &1172047935
@@ -2866,6 +2968,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1723775581}
   - component: {fileID: 1723775580}
+  - component: {fileID: 1723775582}
   m_Layer: 0
   m_Name: HazardRight
   m_TagString: Untagged
@@ -2940,6 +3043,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1995404900}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1723775582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723775579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e478992838258c94cae91023490be845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target_sprite: {fileID: 1723775580}
+  fade_duration: 3
 --- !u!1 &1792478545
 GameObject:
   m_ObjectHideFlags: 0
@@ -3865,6 +3982,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1820732517}
     m_Modifications:
+    - target: {fileID: 20392555200276060, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529138841635603102, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5681720576832364303, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: taskInteraction
       value: 
@@ -3876,6 +4007,10 @@ PrefabInstance:
     - target: {fileID: 5781338758826426024, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6250274757423079074, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6626288602142638647, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_Pivot.x
@@ -3957,9 +4092,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6821777429632510228, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 7906801429424779053, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8699456340175590291, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 8699456340175590291, guid: 28a25f84d342d2849884ccbf1fd7f638, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4291,6 +4438,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2047138560}
   - component: {fileID: 2047138561}
+  - component: {fileID: 2047138562}
   m_Layer: 0
   m_Name: HazardLeft
   m_TagString: Untagged
@@ -4365,6 +4513,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2047138562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2047138559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e478992838258c94cae91023490be845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target_sprite: {fileID: 2047138561}
+  fade_duration: 3
 --- !u!1 &2141750831
 GameObject:
   m_ObjectHideFlags: 0
@@ -4641,6 +4803,18 @@ PrefabInstance:
       propertyPath: taskInteraction
       value: 
       objectReference: {fileID: 675260481}
+    - target: {fileID: 1467593321598478561, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1836196271927065583, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 1836196271927065583, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 2154383392907694552, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: m_Name
       value: Easy_level4
@@ -4649,9 +4823,27 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3326296176890166343, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 3399801910783100762, guid: dfee23845d1f7774590a27c66e735966, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432797641366972669, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242316606028740606, guid: dfee23845d1f7774590a27c66e735966, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4677,6 +4869,32 @@ PrefabInstance:
     - target: {fileID: 2130280525911773322, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848205599391404124, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848205599391404124, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2869778519533436363, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nWelcome Technician,\r\n\r\nComplete
+        the circuit by connecting all wires node-to-node based on colour.\r\n\nWires
+        can be placed in all 4 cardinal directions.\r\nIf you select the incorrect
+        wire, let go to reset it.\r\n\nTo delete undesired wires, right-click.\r\n\r\nDifferent
+        coloured wires CANNOT cross paths. \r\nAt the DOLOS Corporation, disordered
+        wiring is a cause for concern.\r\n\r\n\n\nSigned,\r\nDOLOS-XIII Management
+        System"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3445892266649263527, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3447324538951933571, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5268812289777938323, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_PlayOnAwake
@@ -4761,6 +4979,10 @@ PrefabInstance:
     - target: {fileID: 5455047519442290615, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8430236179096994878, guid: 7e839f229d4dc154bacc6a0d6ac7847d, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

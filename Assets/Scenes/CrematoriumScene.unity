@@ -638,7 +638,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2417,7 +2417,7 @@ MonoBehaviour:
   fadeDuration: 0.5
   roomAmbient: {fileID: 1718840512}
   puzzleThemeSource: {fileID: 388767165}
-  puzzleThemeClip: {fileID: 8300000, guid: 997933809e136904682b3410c03d26ea, type: 3}
+  puzzleThemeClip: {fileID: 8300000, guid: 24b70329c0dfedc4aade139e989f36b8, type: 3}
   ambientDuckedVolume: 0.05
   interactionPrompt: Press E to interact
 --- !u!60 &1777201889
@@ -3033,6 +3033,39 @@ PrefabInstance:
       propertyPath: m_Name
       value: Puzzle_3
       objectReference: {fileID: 0}
+    - target: {fileID: 1770833678185839196, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1770833678185839196, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.6509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1770833678185839196, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.8980392
+      objectReference: {fileID: 0}
+    - target: {fileID: 1805574577063844602, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: flash_time
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1805574577063844602, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: type_speed
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1805574577063844602, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: long_message
+      value: "[AEGIS-077 Instructional Slab]\r\n\r\nFor any crematorium staff, \r\n\r\nWhen
+        the contract reaches its final phase, Albert Fiske [CORPSE] must be processed.\n\r\nPlace
+        the CADAVER on the designated surface.\nClose the chamber and confirm temperature
+        (1,000\xB0C standard).\r \n\nThe cycle takes approximately two hours.\n\rDo
+        NOT open the chamber during operation.\n\n\rAt the DOLOS Corporation, immortality
+        is our priority.\r\n\nSigned,\r\nDOLOS-XIII Management System\r\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2442341990522673217, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_Volume
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 2451576997141256838, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
@@ -3041,6 +3074,26 @@ PrefabInstance:
       propertyPath: puzzleInteraction
       value: 
       objectReference: {fileID: 1777201888}
+    - target: {fileID: 5400712142461120732, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_fontSize
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400712142461120732, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400712142461120732, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.6509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400712142461120732, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.8980392
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400712142461120732, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 6038389189192113556, guid: e3a62a298422b6744a8700a92ac7ac3d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
