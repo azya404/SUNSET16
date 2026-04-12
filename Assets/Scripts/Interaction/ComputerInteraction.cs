@@ -187,22 +187,41 @@ namespace SUNSET16.Interaction
             if (computerCanvas != null) computerCanvas.SetActive(true);
             if (cutscenePanel  != null) cutscenePanel.SetActive(true);
 
-            // fade in - reveal Frame 1 / loading video
-            yield return StartCoroutine(Fade(1f, 0f));
-
-            // play the loading video and wait for it to finish naturally
-            // falls back to cutsceneDuration if no VideoPlayer assigned
+            // prepare and start video while screen is still black — this guarantees frame 0
+            // is written into the RenderTexture before the fade reveals it, preventing the
+            // stale last-frame flash on repeat plays.
+            // falls back to cutsceneDuration fade-in if no VideoPlayer assigned.
             if (cutsceneVideo != null)
             {
+                // reset fully so replays always start from the beginning
+                cutsceneVideo.Stop();
+                cutsceneVideo.time = 0;
+
                 // StreamingAssets URL must be set at runtime — cannot assign in Inspector for StreamingAssets files
                 cutsceneVideo.url = Application.streamingAssetsPath + "/" + cutsceneVideoFileName;
+                cutsceneVideo.Prepare();
+                yield return new WaitUntil(() => cutsceneVideo.isPrepared);
+
+                // use a named handler so we can unsubscribe after — prevents stacking
+                // delegates across multiple computer sessions (would cause early finish on replays)
                 bool videoEnded = false;
-                cutsceneVideo.loopPointReached += _ => videoEnded = true;
+                VideoPlayer.EventHandler onLoopPoint = null;
+                onLoopPoint = _ => videoEnded = true;
+                cutsceneVideo.loopPointReached += onLoopPoint;
+
                 cutsceneVideo.Play();
+                yield return null; // one frame so frame 0 is written into the RenderTexture
+
+                // NOW fade in — RT shows frame 0, not the stale last frame
+                yield return StartCoroutine(Fade(1f, 0f));
+
+                // wait for the rest of the video
                 yield return new WaitUntil(() => videoEnded);
+                cutsceneVideo.loopPointReached -= onLoopPoint; // clean up delegate
             }
             else
             {
+                yield return StartCoroutine(Fade(1f, 0f));
                 yield return new WaitForSeconds(cutsceneDuration);
             }
 
