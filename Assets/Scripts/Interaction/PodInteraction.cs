@@ -117,7 +117,7 @@ namespace SUNSET16.Interaction
             // bad ending: don't advance the day — fade to black then load NeutralCreditsScene
             if (PillStateManager.Instance != null && PillStateManager.Instance.DetermineEnding() == "Bad"
                 && DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night
-                && DialogueUIManager.Instance != null && DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                && DialogueUIManager.Instance != null && DialogueUIManager.Instance.GetFinishedDialogue())
             {
                 Debug.Log("[POD] Bad ending — loading NeutralCreditsScene");
                 StartCoroutine(BadEndingSequence());

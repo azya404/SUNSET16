@@ -2660,9 +2660,12 @@ MonoBehaviour:
   ambientSource: {fileID: 0}
   mirrorSource: {fileID: 0}
   pillSFXSource: {fileID: 0}
+  hallwaySource: {fileID: 0}
   bedroomAmbientClip: {fileID: 8300000, guid: e8a16eec507381340a762a4f68dd952d, type: 3}
   evilBedroomAmbient: {fileID: 8300000, guid: d7a9235faccc6374eae38d19ddb78122, type: 3}
   mirrorAmbientClip: {fileID: 8300000, guid: 5e91785b7079eaf439adc17e0b33e99b, type: 3}
+  hallwayAmbientClip: {fileID: 8300000, guid: 1b8a2c63685379244b85e0fa3a69b75d, type: 3}
+  hallwayFadeInDuration: 1
   onPillMusic: {fileID: 0}
   offPillMusic: {fileID: 0}
   nightMusic: {fileID: 0}

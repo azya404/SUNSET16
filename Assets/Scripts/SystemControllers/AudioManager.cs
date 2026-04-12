@@ -17,6 +17,12 @@ SoftenAmbient/RestoreAmbient called by MirrorInteraction on proximity
 FadeOutAndPauseAmbient/ResumeAmbientWithFadeIn called during pill sequence
 volume tracks masterVolume only - can add dedicated ambient slider later
 
+hallwaySource plays the persistent ship ambient that carries across all
+non-bedroom and non-crematorium scenes. it is never stopped - only paused
+and resumed so playback position is preserved across scene transitions.
+PauseHallwayAmbient / ResumeHallwayAmbient are public so TaskInteraction
+and PuzzleInteraction can pause it when their overlays open and close.
+
 mirrorSource plays the mirror overlay audio and fades out on button click
 pillSFXSource plays the pill choice SFX with independent fade in/out control
 
@@ -26,7 +32,6 @@ OnDestroy unsubs from everything cos singletons can outlive what they sub to
 
 TODO: morning music should change based on pill choice
 TODO: audio ducking (lower music when sfx plays)
-TODO: per-room ambient clip dictionary instead of single bedroomAmbientClip
 */
 using System;
 using UnityEngine;
@@ -42,14 +47,19 @@ namespace SUNSET16.Core
         [Header("Audio Sources")]
         [SerializeField] private AudioSource musicSource;     //looping music player
         [SerializeField] private AudioSource sfxSource;       //one-shot sound effects player
-        [SerializeField] private AudioSource ambientSource;   //looping ambient (Albert's theme, etc)
+        [SerializeField] private AudioSource ambientSource;   //looping ambient - bedroom only
         [SerializeField] private AudioSource mirrorSource;    //mirror overlay audio - fades out on button click
         [SerializeField] private AudioSource pillSFXSource;   //pill choice SFX - independent fade in/out
+        [SerializeField] private AudioSource hallwaySource;   //persistent ship ambient - pauses/resumes across scenes
 
         [Header("Ambient")]
         [SerializeField] private AudioClip bedroomAmbientClip; //ambient loop for BedroomScene (Albert's theme)
         [SerializeField] private AudioClip evilBedroomAmbient;
         [SerializeField] private AudioClip mirrorAmbientClip;  //plays while mirror overlay is open
+
+        [Header("Hallway Ambient")]
+        [SerializeField] private AudioClip hallwayAmbientClip; //persistent ship ambient - carries across all non-bedroom non-crematorium scenes
+        [SerializeField] private float hallwayFadeInDuration = 1.0f;
 
         [Header("Music Tracks")]
         [SerializeField] private AudioClip onPillMusic;       //dull, atmospheric, drowsy feeling
@@ -83,8 +93,11 @@ namespace SUNSET16.Core
         private Coroutine _ambientFadeCoroutine; //reference to ambient fade so new fades cancel old ones
         private Coroutine _mirrorFadeCoroutine;  //reference to mirror fade so fade-in and fade-out dont clash
         private Coroutine _pillSFXFadeCoroutine; //reference to pill SFX fade
+        private Coroutine _hallwayFadeCoroutine; //reference to hallway fade-in on first start
 
-        private bool _ambientPaused = false; //tracks whether ambient was paused by an interaction
+        private bool _ambientPaused  = false; //tracks whether bedroom ambient was paused by an interaction
+        private bool _hallwayPaused  = false; //tracks whether hallway ambient is paused (preserve position)
+        private bool _hallwayStarted = false; //true once hallway ambient has been started for the first time
 
         protected override void Awake()
         {
@@ -168,6 +181,13 @@ namespace SUNSET16.Core
                 pillSFXSource.loop        = false;
                 pillSFXSource.playOnAwake = false;
                 pillSFXSource.volume      = 0f;
+            }
+
+            if (hallwaySource == null)
+            {
+                hallwaySource = gameObject.AddComponent<AudioSource>();
+                hallwaySource.loop        = true;
+                hallwaySource.playOnAwake = false;
             }
         }
 
@@ -302,15 +322,100 @@ namespace SUNSET16.Core
 
         // ─── AMBIENT (bedroom) ────────────────────────────────────────────────────
 
-        //called by RoomManager.OnRoomLoaded — starts the right ambient for each room
+        //called by RoomManager.OnRoomLoaded — manages bedroom ambient and persistent hallway ambient
         private void OnRoomLoaded(string roomName)
         {
-            StopAmbient();
-            if (roomName.Contains("Bedroom") && bedroomAmbientClip != null)
+            if (roomName.Contains("Bedroom"))
             {
-                PlayAmbient(bedroomAmbientClip);
-                Debug.Log("[AUDIOMANAGER] Bedroom ambient started");
+                // entering bedroom: pause ship ambient to preserve playback position,
+                // stop any previous room ambient, start bedroom ambient
+                PauseHallwayAmbient();
+                StopAmbient();
+                if (bedroomAmbientClip != null)
+                {
+                    PlayAmbient(bedroomAmbientClip);
+                    Debug.Log("[AUDIOMANAGER] Bedroom ambient started, hallway ambient paused");
+                }
             }
+            else if (roomName.Contains("Crematorium"))
+            {
+                // crematorium has its own standalone scene-local ambient
+                // ship theme does not play here - pause it to preserve position
+                PauseHallwayAmbient();
+                StopAmbient();
+                Debug.Log("[AUDIOMANAGER] Crematorium room — hallway ambient paused");
+            }
+            else
+            {
+                // hallway or any task/puzzle room: stop bedroom ambient, resume ship ambient
+                StopAmbient();
+                if (!_hallwayStarted)
+                    StartHallwayAmbient();
+                else if (_hallwayPaused)
+                    ResumeHallwayAmbient();
+                // already playing (e.g. hallway -> boilerroom) — do nothing, it continues
+
+                Debug.Log($"[AUDIOMANAGER] Hallway ambient active for {roomName}");
+            }
+        }
+
+        // starts ship ambient for the first time with a fade in
+        private void StartHallwayAmbient()
+        {
+            if (hallwayAmbientClip == null) return;
+            if (_hallwayFadeCoroutine != null) StopCoroutine(_hallwayFadeCoroutine);
+            hallwaySource.clip   = hallwayAmbientClip;
+            hallwaySource.volume = 0f;
+            hallwaySource.Play();
+            _hallwayStarted = true;
+            _hallwayPaused  = false;
+            _hallwayFadeCoroutine = StartCoroutine(FadeHallwayCoroutine(_masterVolume, hallwayFadeInDuration));
+        }
+
+        // pauses ship ambient preserving exact playback position
+        // called on bedroom/crematorium entry and when task/puzzle overlays open
+        public void PauseHallwayAmbient()
+        {
+            if (hallwaySource != null && hallwaySource.isPlaying)
+            {
+                if (_hallwayFadeCoroutine != null) StopCoroutine(_hallwayFadeCoroutine);
+                hallwaySource.Pause();
+                _hallwayPaused = true;
+                Debug.Log("[AUDIOMANAGER] Hallway ambient paused");
+            }
+        }
+
+        // resumes ship ambient from exact position it was paused at
+        // called on non-bedroom/non-crematorium room load and when overlays close
+        public void ResumeHallwayAmbient()
+        {
+            if (hallwayAmbientClip == null) return;
+            if (!_hallwayStarted)
+            {
+                StartHallwayAmbient();
+                return;
+            }
+            if (_hallwayPaused && hallwaySource != null)
+            {
+                hallwaySource.UnPause();
+                _hallwayPaused = false;
+                Debug.Log("[AUDIOMANAGER] Hallway ambient resumed");
+            }
+        }
+
+        private IEnumerator FadeHallwayCoroutine(float targetVolume, float duration)
+        {
+            float startVolume = hallwaySource != null ? hallwaySource.volume : 0f;
+            float timer       = 0f;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                if (hallwaySource != null)
+                    hallwaySource.volume = Mathf.Lerp(startVolume, targetVolume, timer / duration);
+                yield return null;
+            }
+            if (hallwaySource != null) hallwaySource.volume = targetVolume;
+            _hallwayFadeCoroutine = null;
         }
 
         //starts an ambient loop at full volume
@@ -486,6 +591,8 @@ namespace SUNSET16.Core
         {
             if (ambientSource != null && !_ambientPaused)
                 ambientSource.volume = _masterVolume;
+            if (hallwaySource != null && !_hallwayPaused)
+                hallwaySource.volume = _masterVolume;
         }
 
         // ─── EVENT HANDLERS ───────────────────────────────────────────────────────
@@ -545,8 +652,6 @@ namespace SUNSET16.Core
 
         public void SwapToDOLOSAmbient()
         {
-            float t = ambientSource.time;
-            ambientSource.time = t;
             PlayAmbient(evilBedroomAmbient);
         }
 

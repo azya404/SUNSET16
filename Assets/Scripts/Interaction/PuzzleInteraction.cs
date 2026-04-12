@@ -53,9 +53,14 @@ namespace SUNSET16.Interaction
             _overlayActive = true;
             if (PlayerController.Instance != null) PlayerController.Instance.LockMovement(true);
 
+            // fade room ambient to silence and pause hallway ambient - both happen in parallel with screen fade to black
             _originalAmbientVolume = roomAmbient != null ? roomAmbient.volume : 1f;
-            StartCoroutine(FadeAudio(roomAmbient, _originalAmbientVolume, ambientDuckedVolume, fadeDuration));
+            StartCoroutine(FadeAudio(roomAmbient, _originalAmbientVolume, 0f, fadeDuration));
+            AudioManager.Instance?.PauseHallwayAmbient();
             yield return StartCoroutine(Fade(0f, 1f));
+
+            // room ambient is now silent - pause it so position is preserved if needed
+            if (roomAmbient != null && roomAmbient.isPlaying) roomAmbient.Pause();
 
             if (puzzleOverlayCanvas != null) puzzleOverlayCanvas.SetActive(true);
 
@@ -94,7 +99,10 @@ namespace SUNSET16.Interaction
 
             yield return StartCoroutine(Fade(1f, 0f));
 
-            StartCoroutine(FadeAudio(roomAmbient, ambientDuckedVolume, _originalAmbientVolume, fadeDuration));
+            // unpause and restore room ambient, resume hallway ambient, stop puzzle theme
+            if (roomAmbient != null) roomAmbient.UnPause();
+            StartCoroutine(FadeAudio(roomAmbient, 0f, _originalAmbientVolume, fadeDuration));
+            AudioManager.Instance?.ResumeHallwayAmbient();
             if (puzzleThemeSource != null) puzzleThemeSource.Stop();
 
             if (PlayerController.Instance != null) PlayerController.Instance.LockMovement(false);
