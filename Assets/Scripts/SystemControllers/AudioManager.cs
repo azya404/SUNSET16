@@ -388,8 +388,7 @@ namespace SUNSET16.Core
             _hallwayFadeCoroutine = StartCoroutine(FadeHallwayCoroutine(_masterVolume, hallwayFadeInDuration));
         }
 
-        // pauses ship ambient preserving exact playback position
-        // called on bedroom/crematorium entry and when task/puzzle overlays open
+        // pauses ship ambient instantly — used for scene transitions (bedroom/non-ship scenes)
         public void PauseHallwayAmbient()
         {
             if (hallwaySource != null && hallwaySource.isPlaying)
@@ -397,12 +396,11 @@ namespace SUNSET16.Core
                 if (_hallwayFadeCoroutine != null) StopCoroutine(_hallwayFadeCoroutine);
                 hallwaySource.Pause();
                 _hallwayPaused = true;
-                Debug.Log("[AUDIOMANAGER] Hallway ambient paused");
+                Debug.Log("[AUDIOMANAGER] Ship theme paused");
             }
         }
 
-        // resumes ship ambient from exact position it was paused at
-        // called on non-bedroom/non-crematorium room load and when overlays close
+        // resumes ship ambient instantly — used for scene transitions
         public void ResumeHallwayAmbient()
         {
             if (hallwayAmbientClip == null) return;
@@ -415,8 +413,57 @@ namespace SUNSET16.Core
             {
                 hallwaySource.UnPause();
                 _hallwayPaused = false;
-                Debug.Log("[AUDIOMANAGER] Hallway ambient resumed");
+                Debug.Log("[AUDIOMANAGER] Ship theme resumed");
             }
+        }
+
+        // fades ship theme to 0 then pauses — called when task/puzzle overlay opens
+        // duration should match the overlay's screen fade duration so it feels natural
+        public void FadeAndPauseHallwayAmbient(float duration)
+        {
+            if (hallwaySource == null || !hallwaySource.isPlaying) return;
+            if (_hallwayFadeCoroutine != null) StopCoroutine(_hallwayFadeCoroutine);
+            _hallwayFadeCoroutine = StartCoroutine(FadeHallwayThenPauseCoroutine(duration));
+        }
+
+        private IEnumerator FadeHallwayThenPauseCoroutine(float duration)
+        {
+            float startVolume = hallwaySource.volume;
+            float timer       = 0f;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                if (hallwaySource != null)
+                    hallwaySource.volume = Mathf.Lerp(startVolume, 0f, timer / duration);
+                yield return null;
+            }
+            if (hallwaySource != null)
+            {
+                hallwaySource.volume = 0f;
+                hallwaySource.Pause();
+            }
+            _hallwayPaused        = true;
+            _hallwayFadeCoroutine = null;
+            Debug.Log("[AUDIOMANAGER] Ship theme faded out and paused");
+        }
+
+        // unpauses ship theme at 0 and fades in — called when task/puzzle overlay closes
+        // duration should match the overlay's screen fade duration
+        public void FadeInAndResumeHallwayAmbient(float duration)
+        {
+            if (hallwayAmbientClip == null) return;
+            if (!_hallwayStarted)
+            {
+                StartHallwayAmbient();
+                return;
+            }
+            if (!_hallwayPaused || hallwaySource == null) return;
+            if (_hallwayFadeCoroutine != null) StopCoroutine(_hallwayFadeCoroutine);
+            hallwaySource.volume = 0f;
+            hallwaySource.UnPause();
+            _hallwayPaused = false;
+            _hallwayFadeCoroutine = StartCoroutine(FadeHallwayCoroutine(_masterVolume, duration));
+            Debug.Log("[AUDIOMANAGER] Ship theme unpaused and fading in");
         }
 
         // stops ship theme completely and resets state — used for non-ship scenes
