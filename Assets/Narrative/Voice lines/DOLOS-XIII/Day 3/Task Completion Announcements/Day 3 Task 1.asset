@@ -17,7 +17,7 @@ MonoBehaviour:
     flow.\nYour performance has been logged for my future reference. Fix the last
     remaining fuse box."
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 4c706472b8b403d4e831655c97810506, type: 3}
+  audioClip: {fileID: 8300000, guid: 6347c95863488334b8019291290b76b2, type: 3}
   displayDuration: 14
   lineDurations: 08000000
   volume: 1

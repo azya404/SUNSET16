@@ -42,7 +42,7 @@ namespace SUNSET16.Core
         [Tooltip("Full-screen black CanvasGroup in CoreScene — alpha 0 at rest, driven up/down during transitions.")]
         [SerializeField] private CanvasGroup screenFadePanel;
 
-        private bool _isTransitioning = false;
+        public bool _isTransitioning = false;
 
         [Header("Spawn Position Management")]
         private Vector3 _nextSpawnPosition = Vector3.zero;

@@ -18,7 +18,7 @@ MonoBehaviour:
     since the previous biometric scan.\nProceed to your Aegis Collar Supplement Dispenser
     for your mandatory daily wellness protocol at your earliest convenience."
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 4b2ba7adbb38aac42b6580924296ed47, type: 3}
+  audioClip: {fileID: 8300000, guid: 8572b370a0e22d546866bad8a0b64111, type: 3}
   displayDuration: 23
   lineDurations: 060000000a000000
   volume: 1

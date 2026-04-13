@@ -726,7 +726,7 @@ namespace SUNSET16.UI
                 if (entry.loreId == entryId)
                 {
                     entry.unlocked = true;
-                    _unlockedEntries.Add(entry);
+                    _unlockedEntries.Insert(0, entry);
                     audioSource.PlayOneShot(msgGet);
                     _newNotif = true;
                     _newEntryAmt++;

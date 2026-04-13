@@ -17,7 +17,7 @@ MonoBehaviour:
     efficiently, and you will be rewarded accordingly.\nYour efforts will be monitored
     and calculated in real time, as per your contract."
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: bbf568613f612b7408df7654968fb3cb, type: 3}
+  audioClip: {fileID: 8300000, guid: 275515147f0889440849c405f2443ac6, type: 3}
   displayDuration: 15
   lineDurations: 0400000005000000
   volume: 1

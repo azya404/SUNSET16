@@ -17,7 +17,7 @@ MonoBehaviour:
     briefing.\nToday\u2019s maintenance is a variation on the standard rotation.
     You know the drill."
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 38d64fce199336349b1d4d194b5c9e9a, type: 3}
+  audioClip: {fileID: 8300000, guid: 38b08fe135ceee545990bf55af5c246f, type: 3}
   displayDuration: 11
   lineDurations: 06000000
   volume: 1

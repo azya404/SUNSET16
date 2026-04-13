@@ -19,7 +19,7 @@ MonoBehaviour:
     One more circuit box still requires maintenance. Fix it at your
     earliest convenience.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 103411d09b629b3418b2076bda6bb2f0, type: 3}
+  audioClip: {fileID: 8300000, guid: c2fc824909eebf24ca6d4f30300ed420, type: 3}
   displayDuration: 12
   lineDurations: 06000000
   volume: 1

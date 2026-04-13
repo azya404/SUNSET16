@@ -24,7 +24,7 @@ MonoBehaviour:
     Failure is not
     tolerated onboard the SUNSET16.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: e10ed024f24b34b44913c1f27f077fbc, type: 3}
+  audioClip: {fileID: 8300000, guid: 24ccb973768c36a4098c6c872835209c, type: 3}
   displayDuration: 22
   lineDurations: 060000000700000005000000
   volume: 1

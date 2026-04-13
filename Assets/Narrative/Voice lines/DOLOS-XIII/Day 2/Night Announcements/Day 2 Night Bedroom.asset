@@ -21,7 +21,7 @@ MonoBehaviour:
 
     Good work today, Technician.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 6334d285b5a38fa48817ca3de33ed204, type: 3}
+  audioClip: {fileID: 8300000, guid: 456bd78e83e729d4ebe0afc640dda0e1, type: 3}
   displayDuration: 14
   lineDurations: 0500000007000000
   volume: 1

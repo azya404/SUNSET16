@@ -22,7 +22,7 @@ MonoBehaviour:
     proceed to your Aegis Collar Supplement Dispenser for your mandatory daily wellness
     protocol at your earliest convenience.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 12cdcaf3798cc5944b026879883ccd15, type: 3}
+  audioClip: {fileID: 8300000, guid: 53f7bf25dfeb1d84990850457662277e, type: 3}
   displayDuration: 18
   lineDurations: 0600000005000000
   volume: 1

@@ -215,6 +215,8 @@ namespace SUNSET16.Interaction
             // 1. screen fades to black AND mirror ambient fades out simultaneously
             AudioManager.Instance?.FadeMirrorAmbientOut(fadeOutDuration); //fire and forget
             yield return StartCoroutine(FadePillOverlay(0f, 1f, fadeOutDuration));
+            if (takePillButton   != null) takePillButton.gameObject.SetActive(false);
+            if (concealPillButton != null) concealPillButton.gameObject.SetActive(false);
 
             // 2. pill SFX fades in on the black screen
             AudioClip clip = (choice == PillChoice.Taken) ? pillTakeSFX : pillHideSFX;

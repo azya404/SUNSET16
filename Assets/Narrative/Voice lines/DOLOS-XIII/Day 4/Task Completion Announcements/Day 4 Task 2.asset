@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: Day 4 Task 2
   m_EditorClassIdentifier: 
   announcementId: dolos_day4_task2
-  text: 'Task completed. All broken circuit boxes in server room 1A are now reporting
+  text: 'Task completed. All broken circuit boxes in SERVER ROOM 1A are now reporting
     optimal status.
 
-    You may return to your personal quarters at your earliest
-    convenience.'
+    You may return to your personal quarters at your convenience.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: ec2586f76784d644eb6092242a50d5f9, type: 3}
-  displayDuration: 11
-  lineDurations: 07000000
+  audioClip: {fileID: 8300000, guid: a4cd7d002d8ed3e40bd8229d41539bd7, type: 3}
+  displayDuration: 12
+  lineDurations: 08000000
   volume: 1

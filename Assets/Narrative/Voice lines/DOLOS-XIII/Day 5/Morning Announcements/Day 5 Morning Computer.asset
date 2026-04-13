@@ -18,7 +18,7 @@ MonoBehaviour:
     Complete these assignments
     efficiently, as per your contractual obligation.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: b8944d0fa5f9b6744aa32548040b999c, type: 3}
-  displayDuration: 7
-  lineDurations: 03000000
+  audioClip: {fileID: 8300000, guid: a33483df4b638ab4ab473d7815e70127, type: 3}
+  displayDuration: 11
+  lineDurations: 06000000
   volume: 1
