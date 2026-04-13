@@ -368,7 +368,7 @@ namespace SUNSET16.UI
 
         public void HideDialogue()
         {
-            if (!IsDialogueActive || _isTypewriting || _isResponding) return;
+            if (!IsDialogueActive || _isTypewriting || _isResponding || notifCanvas.activeSelf) return;
 
             StopAllCoroutines();
             _playCoroutine      = null;
