@@ -20,7 +20,7 @@ MonoBehaviour:
     rights and safety regulations of the DOLOS Corporation, a subsidiary of Erebus
     Holdings.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 794ed91f347a33d40ab6a37bbdbd4cc7, type: 3}
-  displayDuration: 21
-  lineDurations: 0a000000
+  audioClip: {fileID: 8300000, guid: 237c79e8f7b6df54ba626868658d6d7e, type: 3}
+  displayDuration: 19
+  lineDurations: 08000000
   volume: 1

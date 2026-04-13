@@ -24,7 +24,7 @@ MonoBehaviour:
     Failure is never tolerated on
     my starliner.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 4c8ed2f94ad0050478c9e9aec5d8a6db, type: 3}
+  audioClip: {fileID: 8300000, guid: fed4f9b296a6f754992957b0a5e7175b, type: 3}
   displayDuration: 18
   lineDurations: 050000000500000004000000
   volume: 1

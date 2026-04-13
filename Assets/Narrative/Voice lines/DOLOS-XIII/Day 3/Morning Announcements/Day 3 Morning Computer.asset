@@ -18,7 +18,7 @@ MonoBehaviour:
     You know the drill:
     fix the broken fuse boxes. Complete your assignments efficiently.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 4d87234c988d50248b77f94cfdec313f, type: 3}
+  audioClip: {fileID: 8300000, guid: 4b18f742e824a4a468869bb0fb09cada, type: 3}
   displayDuration: 9
   lineDurations: 04000000
   volume: 1

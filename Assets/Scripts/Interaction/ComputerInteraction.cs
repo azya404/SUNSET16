@@ -99,7 +99,7 @@ namespace SUNSET16.Interaction
                     && DayManager.Instance != null
                     && DayManager.Instance.CurrentPhase == DayPhase.Night
                     && DialogueUIManager.Instance != null
-                    && DialogueUIManager.Instance.HasCompletedTodayNightSequence)
+                    && DialogueUIManager.Instance.GetFinishedDialogue())
                 {
                     _endingLocked = true;
                 }
@@ -292,10 +292,9 @@ namespace SUNSET16.Interaction
             // ending day night session just closed — seal the computer permanently
             // this is the trigger point: player has had their final Albert conversation,
             // now only the pod (bad ending) or the exit door (good ending) will respond
-            if (PillStateManager.Instance != null
-                && PillStateManager.Instance.IsEndingReached
-                && DayManager.Instance != null
-                && DayManager.Instance.CurrentPhase == DayPhase.Night)
+            if (PillStateManager.Instance != null && PillStateManager.Instance.IsEndingReached
+                && DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night
+                && DialogueUIManager.Instance != null && DialogueUIManager.Instance.GetFinishedDialogue())
             {
                 _endingLocked = true;
                 _interactionSystem?.SetInteractionEnabled(false);

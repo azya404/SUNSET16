@@ -17,7 +17,7 @@ MonoBehaviour:
     systems are within their expected parameters. Your performance has been logged\u2014efficiency
     rating: 92%.\nReturn to your quarters at your own convenience."
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 229ee73365111274b832634d24839567, type: 3}
+  audioClip: {fileID: 8300000, guid: 47f854151af1fd147bdca7170f16bcdd, type: 3}
   displayDuration: 18
   lineDurations: 0600000008000000
   volume: 1

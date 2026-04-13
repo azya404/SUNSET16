@@ -115,7 +115,18 @@ namespace SUNSET16.UI
         private void UpdateDisplay(string text)
         {
             if (promptText != null)
-                promptText.text = text;
+            {
+                string trimmed = text.TrimStart();
+                promptText.text = trimmed;
+                if (!string.IsNullOrEmpty(trimmed) && trimmed[0] == 'P')
+                {
+                    promptText.fontStyle = FontStyles.Bold;
+                }
+                else
+                {
+                    promptText.fontStyle = FontStyles.Italic;
+                }
+            }
             FadeTo(1f);
         }
 

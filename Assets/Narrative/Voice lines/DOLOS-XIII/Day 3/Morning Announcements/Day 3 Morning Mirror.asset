@@ -17,7 +17,7 @@ MonoBehaviour:
     pre-shift briefing.\nToday\u2019s maintenance schedule is a standard rotation.
     You are familiar with the procedure."
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 2e0aa9249924fb142ae6aea5801f5dba, type: 3}
+  audioClip: {fileID: 8300000, guid: 85298925d42c1e5419e311e58907dec3, type: 3}
   displayDuration: 12
   lineDurations: 07000000
   volume: 1

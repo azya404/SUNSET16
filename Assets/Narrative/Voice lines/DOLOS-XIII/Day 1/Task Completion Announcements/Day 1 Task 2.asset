@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Day 1 Task 2
   m_EditorClassIdentifier: 
   announcementId: dolos_day1_task2
-  text: "Task complete. The primary wire grid in BOILER ROOM 1A is now showing optimized
+  text: "Task completed. The primary wire grid in BOILER ROOM 1A is now showing optimized
     electrical flow. \nYour performance has been logged. Efficiency rating 99%.\nYou
     may return to your personal quarters at your convenience."
   fontSize: 20

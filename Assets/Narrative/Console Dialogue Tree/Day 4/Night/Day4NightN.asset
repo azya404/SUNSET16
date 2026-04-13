@@ -80,8 +80,7 @@ MonoBehaviour:
       nextLineIndex: 4
       offPillChoice: 0
       showOnRepeat: 0
-    - choiceText: The DOLOS-XIII Management System. How do you view it all?The DOLOS-XIII
-        Management System. How do you view it all?
+    - choiceText: The DOLOS-XIII Management System. How do you view it all?
       nextLineIndex: 7
       offPillChoice: 0
       showOnRepeat: 0

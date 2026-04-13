@@ -21,7 +21,7 @@ MonoBehaviour:
     A reminder: all employees
     of the DOLOS Corporation must take it, in adherence to their contractual obligations.'
   fontSize: 20
-  audioClip: {fileID: 8300000, guid: 615c2f84f0b91934abc581e873bdfbf6, type: 3}
+  audioClip: {fileID: 8300000, guid: 51afcf193ea64f647beac8cea173f04f, type: 3}
   displayDuration: 19
   lineDurations: 0500000005000000
   volume: 1

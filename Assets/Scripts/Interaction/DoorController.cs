@@ -264,6 +264,8 @@ namespace SUNSET16.Core
 
             if (isAnimating) return; // dont interrupt an animation already playing
 
+            if (RoomManager.Instance != null && RoomManager.Instance._isTransitioning) return;
+
             // andy can move, but not change rooms when DOLOS is announcing things
             if (DOLOSManager.Instance != null && DOLOSManager.Instance.IsAnnouncementActive)
             {
@@ -371,12 +373,16 @@ namespace SUNSET16.Core
             if (isExitDoor && PillStateManager.Instance != null)
             {
                 string ending = PillStateManager.Instance.DetermineEnding();
-                if (ending == "Good")
-                    return goodEndingExitBark.Count > 0
-                        ? goodEndingExitBark[Random.Range(0, goodEndingExitBark.Count)]
-                        : "It's time for me to leave this ship for good.";
-                if (ending == "Bad")
-                    return "\"The door is sealed...\"";
+                if (DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night
+                    && DialogueUIManager.Instance != null && DialogueUIManager.Instance.GetFinishedDialogue())
+                {
+                    if (ending == "Good")
+                        return goodEndingExitBark.Count > 0
+                            ? goodEndingExitBark[Random.Range(0, goodEndingExitBark.Count)]
+                            : "It's time for me to leave this ship for good.";
+                    if (ending == "Bad")
+                        return "\"The door is sealed...\"";
+                }
                 // "Undetermined" — fall through to normal isMorningGated prompts below
             }
 
@@ -554,6 +560,7 @@ namespace SUNSET16.Core
                 && DialogueUIManager.Instance != null && DialogueUIManager.Instance.GetFinishedDialogue())
             {
                 Debug.Log("[DOORCONTROLLER] Good ending exit — loading GoodEndingScene");
+                InteractionHotbarController.Instance.characterState(false);
                 AudioManager.Instance?.StopAmbient();
                 SaveManager.Instance.ClearSaveData();
                 SceneManager.LoadScene(GOOD_ENDING_SCENE);
