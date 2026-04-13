@@ -103,6 +103,14 @@ namespace SUNSET16.UI
         [SerializeField] private Image[]      loreButtonImages = new Image[5];
         [SerializeField] private List<LoreEntryData> loreEntries;
 
+        [Header("Lore Notification")]
+        [SerializeField] private GameObject         notifCanvas;
+        [SerializeField] private Image              unlockImage;
+        [SerializeField] private TextMeshProUGUI    unlockText;
+        [SerializeField] private GameObject         deathCanvas;
+        [SerializeField] private Image              deathImage;
+        [SerializeField] private TextMeshProUGUI    deathText;
+
         [Header("Typewriter")]
         [SerializeField] private float typewriterCharDelay = 0.03f;
         [SerializeField] private float AlbertDelayAmt = 0.5f;
@@ -727,13 +735,70 @@ namespace SUNSET16.UI
                 {
                     entry.unlocked = true;
                     _unlockedEntries.Insert(0, entry);
-                    audioSource.PlayOneShot(msgGet);
                     _newNotif = true;
                     _newEntryAmt++;
                     if (notifImage != null)
                         notifImage.gameObject.SetActive(true);
+                    if(entry.loreId == "usb_albert_death")
+                        StartCoroutine(ShowDeath());
+                    else
+                        StartCoroutine(ShowNotification(entry.title));
                 }
             }
+        }
+
+        private IEnumerator ShowNotification(string text)
+        {
+            unlockText.text = "Document Discovered:\n" + text;
+            if (text.Contains("Technician_Log"))
+                unlockText.color = _noPillColor;
+            else
+                unlockText.color = _baseColor;
+
+            unlockImage?.CrossFadeAlpha(0f, 0f, true);
+            unlockText?.CrossFadeAlpha(0f, 0f, true);
+
+            notifCanvas?.SetActive(true);
+
+            yield return new WaitForSeconds(1);
+
+            audioSource.PlayOneShot(msgGet);
+            unlockImage?.CrossFadeAlpha(1.0f,0.5f, true);
+            unlockText?.CrossFadeAlpha(1.0f, 0.5f, true);
+
+            yield return new WaitForSeconds(4);
+
+            unlockImage?.CrossFadeAlpha(0f,0.5f, true);
+            unlockText?.CrossFadeAlpha(0f, 0.5f, true);
+
+            yield return new WaitForSeconds(1);
+
+            notifCanvas?.SetActive(false);
+        }
+
+        private IEnumerator ShowDeath()
+        {
+            deathText.text = "Document Discovered:\nCrematorium Death Record";
+
+            deathImage?.CrossFadeAlpha(0f, 0f, true);
+            deathText?.CrossFadeAlpha(0f, 0f, true);
+
+            deathCanvas?.SetActive(true);
+
+            yield return new WaitForSeconds(2);
+
+            audioSource.PlayOneShot(msgGet);
+            deathImage?.CrossFadeAlpha(1.0f,0.5f, true);
+            deathText?.CrossFadeAlpha(1.0f, 0.5f, true);
+
+            yield return new WaitForSeconds(4);
+
+            deathImage?.CrossFadeAlpha(0f, 0.5f, true);
+            deathText?.CrossFadeAlpha(0f, 0.5f, true);
+
+            yield return new WaitForSeconds(1);
+
+            deathCanvas?.SetActive(false);
         }
 
         [ContextMenu("UnlockUSB1")]
@@ -745,7 +810,7 @@ namespace SUNSET16.UI
         [ContextMenu("UnlockEntry2")]
         public void TestUnlock2()
         {
-            UnlockEntry("test_2");
+            UnlockEntry("albert_evacuation");
         }
 
         [ContextMenu("UnlockOtherEntries")]
@@ -777,6 +842,7 @@ namespace SUNSET16.UI
         [ContextMenu("Simulate Crematorium")]
         public void UnlockDeathRecord()
         {
+            UnlockEntry("usb_log_3");
             UnlockEntry("usb_albert_death");
         }
 

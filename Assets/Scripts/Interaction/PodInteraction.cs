@@ -135,7 +135,14 @@ namespace SUNSET16.Interaction
             if (DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.HasCompletedTodayNightSequence)
                 return noNightChatPrompt[Random.Range(0, noNightChatPrompt.Count)];
 
-            if (DayManager.Instance != null && PillStateManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() >= 3)
+            if (DayManager.Instance != null && PillStateManager.Instance != null 
+                && DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() >= 3
+                && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.GetFinishedDialogue())
+                return noNightChatPrompt[Random.Range(0, noNightChatPrompt.Count)];
+
+            if (DayManager.Instance != null && PillStateManager.Instance != null 
+                && DayManager.Instance.CurrentPhase == DayPhase.Night && PillStateManager.Instance.GetPillsRefusedCount() >= 3
+                && DialogueUIManager.Instance != null && DialogueUIManager.Instance.GetFinishedDialogue())
                 return goodEnding[Random.Range(0, goodEnding.Count)];
 
             return sleepPrompt;

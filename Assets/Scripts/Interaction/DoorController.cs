@@ -374,7 +374,7 @@ namespace SUNSET16.Core
             {
                 string ending = PillStateManager.Instance.DetermineEnding();
                 if (DayManager.Instance != null && DayManager.Instance.CurrentPhase == DayPhase.Night
-                    && DialogueUIManager.Instance != null && !DialogueUIManager.Instance.GetFinishedDialogue())
+                    && DialogueUIManager.Instance != null && DialogueUIManager.Instance.GetFinishedDialogue())
                 {
                     if (ending == "Good")
                         return goodEndingExitBark.Count > 0
